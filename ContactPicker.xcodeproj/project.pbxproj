@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1921B6332485521500B0D711 /* ContactViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1921B6322485521500B0D711 /* ContactViewCell.m */; };
-		1925D8BF2485E5EA00603A0D /* ContactViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1925D8BE2485E5EA00603A0D /* ContactViewCell.xib */; };
-		1925D8C22485E90D00603A0D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1925D8C12485E90D00603A0D /* ContactTableViewController.m */; };
 		193E332D2484F31A00C5735D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E332C2484F31A00C5735D /* AppDelegate.m */; };
 		193E33302484F31A00C5735D /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E332F2484F31A00C5735D /* SceneDelegate.m */; };
 		193E33362484F31A00C5735D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 193E33342484F31A00C5735D /* Main.storyboard */; };
@@ -24,6 +22,8 @@
 		5E4BA252D51243FE77F2531D /* Pods_ContactPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36F7078139262F81109265F /* Pods_ContactPicker.framework */; };
 		95899A3C192949E34BEF3575 /* Pods_ContactPickerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D7FEF726EDB6C241B328504 /* Pods_ContactPickerTests.framework */; };
 		AED34822F38035F924ED39B7 /* Pods_ContactPicker_ContactPickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE83A607870CC1DFB3ADE84 /* Pods_ContactPicker_ContactPickerUITests.framework */; };
+		B0076342248610C100239F3D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableViewController.m */; };
+		B00763452486167000239F3D /* ListContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ListContactViewModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,9 +48,6 @@
 		0E3D5A28CCD9FF89236BFF0D /* Pods-ContactPickerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPickerTests.debug.xcconfig"; path = "Target Support Files/Pods-ContactPickerTests/Pods-ContactPickerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1921B6312485521500B0D711 /* ContactViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewCell.h; sourceTree = "<group>"; };
 		1921B6322485521500B0D711 /* ContactViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewCell.m; sourceTree = "<group>"; };
-		1925D8BE2485E5EA00603A0D /* ContactViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactViewCell.xib; sourceTree = "<group>"; };
-		1925D8C02485E90D00603A0D /* ContactTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewController.h; sourceTree = "<group>"; };
-		1925D8C12485E90D00603A0D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
 		193E33282484F31A00C5735D /* ContactPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		193E332B2484F31A00C5735D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		193E332C2484F31A00C5735D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -79,6 +76,10 @@
 		9EE83A607870CC1DFB3ADE84 /* Pods_ContactPicker_ContactPickerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactPicker_ContactPickerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A36F7078139262F81109265F /* Pods_ContactPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC584A46E84B94BC7FFB89C3 /* Pods-ContactPicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.release.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.release.xcconfig"; sourceTree = "<group>"; };
+		B0076340248610C100239F3D /* ContactTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewController.h; sourceTree = "<group>"; };
+		B0076341248610C100239F3D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
+		B00763432486167000239F3D /* ListContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListContactViewModel.h; sourceTree = "<group>"; };
+		B00763442486167000239F3D /* ListContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListContactViewModel.m; sourceTree = "<group>"; };
 		B28327E258220F637D739AFC /* Pods-ContactPicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.debug.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,6 +196,8 @@
 			children = (
 				193E336624851C7B00C5735D /* ContactViewModel.h */,
 				193E336724851C8400C5735D /* ContactViewModel.m */,
+				B00763432486167000239F3D /* ListContactViewModel.h */,
+				B00763442486167000239F3D /* ListContactViewModel.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -204,9 +207,8 @@
 			children = (
 				1921B6312485521500B0D711 /* ContactViewCell.h */,
 				1921B6322485521500B0D711 /* ContactViewCell.m */,
-				1925D8BE2485E5EA00603A0D /* ContactViewCell.xib */,
-				1925D8C02485E90D00603A0D /* ContactTableViewController.h */,
-				1925D8C12485E90D00603A0D /* ContactTableViewController.m */,
+				B0076340248610C100239F3D /* ContactTableViewController.h */,
+				B0076341248610C100239F3D /* ContactTableViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -335,7 +337,6 @@
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
 				193E33362484F31A00C5735D /* Main.storyboard in Resources */,
-				1925D8BF2485E5EA00603A0D /* ContactViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,10 +466,11 @@
 			files = (
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
 				193E336824851C8400C5735D /* ContactViewModel.m in Sources */,
-				1925D8C22485E90D00603A0D /* ContactTableViewController.m in Sources */,
+				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,
 				1921B6332485521500B0D711 /* ContactViewCell.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
 				193E3365248514A400C5735D /* ContactModel.m in Sources */,
+				B00763452486167000239F3D /* ListContactViewModel.m in Sources */,
 				193E333E2484F31C00C5735D /* main.m in Sources */,
 				193E33302484F31A00C5735D /* SceneDelegate.m in Sources */,
 			);

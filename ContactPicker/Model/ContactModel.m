@@ -9,8 +9,32 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "ContactModel.h"
+#define GENERATE_IMAGE_API @"https://dummyimage.com/600x400/dbc418/fff&text="
+
+@interface ContactModel()
+//-(void) getImageFrom: (NSString*) url forName: (NSString*) name completion: (void (^)(UIImage*)) handle;
+@end
 
 @implementation ContactModel
+
+//- (void) getImageFrom:(NSString *)url
+//              forName: (NSString*) name
+//           completion: (void (^)(UIImage*)) handle
+//{
+//    NSString *targetUrl = [NSString stringWithFormat:@"%@%@", url, name];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setHTTPMethod:@"GET"];
+//    [request setURL:[NSURL URLWithString:targetUrl]];
+//
+//    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:
+//      ^(NSData * _Nullable data,
+//        NSURLResponse * _Nullable response,
+//        NSError * _Nullable error) {
+//
+//        UIImage* image = [UIImage imageWithData:data];
+//        handle(image);
+//    }] resume];
+//}
 
 -(id) initWithName:(NSString *)name
             avatar:(UIImage *)avatar
@@ -18,6 +42,12 @@
     _name = name;
     _avatar = avatar;
     _activeTime = activeTime;
+    
+//    if (!_avatar) {
+//        [self getImageFrom: GENERATE_IMAGE_API forName: [name substringToIndex:1] completion:^(UIImage * image) {
+//            self->_avatar = image;
+//        }];
+//    }
     return self;
 }
 
