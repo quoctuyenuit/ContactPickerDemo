@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactTableViewController"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="81" id="1I4-dA-Ggu" customClass="ContactViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="81"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1I4-dA-Ggu" id="3so-Tq-l8p">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="81"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kE2-RH-KRn">
+                        <rect key="frame" x="16" y="8" width="65" height="65"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="kE2-RH-KRn" secondAttribute="height" multiplier="1:1" id="IOA-We-1x2"/>
+                        </constraints>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qdk-Cz-STb">
+                        <rect key="frame" x="89" y="13" width="317" height="55"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8 phút trước" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3JU-Dl-2eb">
+                                <rect key="frame" x="8" y="34" width="96" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nguyen Van A" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFU-vc-jv6">
+                                <rect key="frame" x="8" y="0.0" width="129" height="26"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="3JU-Dl-2eb" secondAttribute="bottom" id="10a-PT-MA3"/>
+                            <constraint firstItem="3JU-Dl-2eb" firstAttribute="top" secondItem="BFU-vc-jv6" secondAttribute="bottom" constant="8" id="Pkh-fY-OKi"/>
+                            <constraint firstItem="BFU-vc-jv6" firstAttribute="top" secondItem="qdk-Cz-STb" secondAttribute="top" id="UWc-FE-WcU"/>
+                            <constraint firstItem="BFU-vc-jv6" firstAttribute="leading" secondItem="qdk-Cz-STb" secondAttribute="leading" constant="8" id="XwQ-4g-4qZ"/>
+                            <constraint firstItem="3JU-Dl-2eb" firstAttribute="leading" secondItem="qdk-Cz-STb" secondAttribute="leading" constant="8" id="Xzd-UE-Bej"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="kE2-RH-KRn" firstAttribute="top" secondItem="3so-Tq-l8p" secondAttribute="top" constant="8" id="6r5-hR-pVM"/>
+                    <constraint firstAttribute="bottom" secondItem="kE2-RH-KRn" secondAttribute="bottom" constant="8" id="CJE-IJ-7C8"/>
+                    <constraint firstItem="kE2-RH-KRn" firstAttribute="leading" secondItem="3so-Tq-l8p" secondAttribute="leading" constant="16" id="Kzu-7I-cAS"/>
+                    <constraint firstAttribute="trailing" secondItem="qdk-Cz-STb" secondAttribute="trailing" constant="8" id="peo-qt-Bei"/>
+                    <constraint firstItem="qdk-Cz-STb" firstAttribute="leading" secondItem="kE2-RH-KRn" secondAttribute="trailing" constant="8" id="q3j-1t-tyx"/>
+                    <constraint firstItem="qdk-Cz-STb" firstAttribute="centerY" secondItem="3so-Tq-l8p" secondAttribute="centerY" id="rBc-Z7-Bmn"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="115.94202898550725" y="-0.33482142857142855"/>
+        </tableViewCell>
+    </objects>
+</document>

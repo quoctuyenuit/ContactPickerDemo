@@ -1,0 +1,6 @@
+framework module Pods_ContactPicker_ContactPickerUITests {
+  umbrella header "Pods-ContactPicker-ContactPickerUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
