@@ -21,19 +21,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _viewModel = [[ListContactViewModel alloc] init];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self->searchBar.delegate = self;
+    self->searchBar.searchTextField.delegate = self;
+    
+    self->_viewModel = [[ListContactViewModel alloc] init];
     self.tableView.rowHeight = 60;
     
-    searchBar.delegate = self;
-    
-    [_viewModel.numberOfContact bindAndFire:^(NSNumber *numberOfContact) {
+//    Observe search bar and list of contacts
+    [self->_viewModel.numberOfContact bindAndFire:^(NSNumber *numberOfContact) {
+        __weak ContactTableViewController *weakSelf = self;
         [self.tableView beginUpdates];
         NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[numberOfContact intValue]-1 inSection:1]];
-        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView endUpdates];
+        [weakSelf.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+        [weakSelf.tableView endUpdates];
     }];
     
-    [_viewModel.search bindAndFire:^(NSString *text) {
+    [self->_viewModel.search bindAndFire:^(NSString *text) {
         __weak ContactTableViewController *weakSelf = self;
 //        If the listContactOnView changed --> reload tableview, if not do nothing.
         if ([self.viewModel updateListContactWithKey:text]) {
@@ -61,13 +66,13 @@
     
     [cell config:model];
     
-    // Configure the cell...
-    
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+    [searchBar endEditing:YES];
+
 }
 
 #pragma mark - Searchbar view delegate
@@ -75,4 +80,8 @@
     self.viewModel.search.value = searchText;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [searchBar endEditing:YES];
+    return YES;
+}
 @end

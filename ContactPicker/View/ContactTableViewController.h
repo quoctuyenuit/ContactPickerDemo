@@ -11,7 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableViewController : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
+@interface ContactTableViewController : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property ListContactViewModel *viewModel;
 @end
 

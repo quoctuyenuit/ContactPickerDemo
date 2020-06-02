@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "ContactModel.h"
-#define GENERATE_IMAGE_API @"https://dummyimage.com/600x400/dbc418/fff&text="
+//#define GENERATE_IMAGE_API @"https://dummyimage.com/600x400/dbc418/fff&text="
 
 @interface ContactModel()
 //-(void) getImageFrom: (NSString*) url forName: (NSString*) name completion: (void (^)(UIImage*)) handle;
