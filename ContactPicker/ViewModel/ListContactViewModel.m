@@ -9,49 +9,87 @@
 #import "ListContactViewModel.h"
 #import "ContactViewModel.h"
 #import "ContactModel.h"
+#import <Contacts/Contacts.h>
 
 @interface ListContactViewModel() {
+    NSMutableArray *groupOfContacts;
 }
 
--(NSArray<ContactViewModel*>*) dummyListContact;
-
+//-(NSArray<ContactViewModel*>*) dummyListContact;
 @end
 
 @implementation ListContactViewModel
 -(id) init {
     self.search = [[DataBinding<NSString*> alloc] initWithValue:@""];
-    _listContact = [self dummyListContact];
-    _listContactOnView = [NSMutableArray arrayWithArray:_listContact];
+    self.numberOfContact = [[DataBinding<NSNumber*> alloc] initWithValue:0];
+    _listContact = [[NSMutableArray alloc] init];
+    _listContactOnView = _listContact;
     return self;
 }
 
-- (NSArray<ContactViewModel *> *)dummyListContact {
-    ContactViewModel* model = [[ContactViewModel alloc] initWithModel:[[ContactModel alloc] initWithName:@"Nguyen Quoc Tuyen" avatar:nil activeTime:200]];
-    
-    ContactViewModel* model2 = [[ContactViewModel alloc] initWithModel:[[ContactModel alloc] initWithName:@"Nguyen Van Thi" avatar: [UIImage imageNamed: @"default_avatar"] activeTime:200]];
-    
-    return [NSArray arrayWithObjects:model, model2, nil];
+- (void)getAllContact {
+    if ([CNContactStore class]) {
+        CNContactStore *addressBook = [[CNContactStore alloc] init];
+        
+        NSArray *keysToFetch = @[CNContactGivenNameKey,
+                                 CNContactPhoneNumbersKey,
+                                 CNContactFamilyNameKey,
+                                 CNContactImageDataAvailableKey,
+                                 CNContactThumbnailImageDataKey];
+        
+        CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:keysToFetch];
+        
+        [addressBook enumerateContactsWithFetchRequest:fetchRequest
+                                                 error:nil
+                                            usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
+            
+            
+            NSString *name = [NSString stringWithFormat:@"%@ %@", contact.givenName, contact.familyName];
+            UIImage *avatar = nil;
+            
+            if (contact.imageDataAvailable)
+            {
+                NSData *imageData = contact.imageData;
+                avatar = [UIImage imageWithData:imageData];
+            }
+            
+            float activeTime = 300;
+            
+            ContactViewModel* contactModel = [[ContactViewModel alloc]
+                                              initWithModel:[[ContactModel alloc]
+                                                             initWithName:name
+                                                             avatar: avatar
+                                                             activeTime:activeTime]];
+            
+            [self->_listContact addObject:contactModel];
+            self.numberOfContact.value = [NSNumber numberWithInteger:self->_listContact.count];
+        }];
+    }
 }
 
+#pragma mark Public function
 -(int) getNumberOfContact {
-    return (int)_listContactOnView.count;
+    return (int)self->_listContactOnView.count;
 }
 
 - (ContactViewModel *)getContactAt:(int)index {
-    if (index < _listContactOnView.count) {
-        return _listContactOnView[index];
+    if (index < self->_listContactOnView.count) {
+        return self->_listContactOnView[index];
     }
     return nil;
 }
 
 - (BOOL)updateListContactWithKey:(NSString *)key {
-    NSUInteger beforeLength = _listContactOnView.count;
-    [_listContactOnView removeAllObjects];
-    for (ContactViewModel* contact in _listContact) {
+    if (self->_listContact.count == 0) {
+        return false;
+    }
+    NSUInteger beforeLength = self->_listContactOnView.count;
+    self->_listContactOnView = [[NSMutableArray alloc] init];
+    for (ContactViewModel* contact in self->_listContact) {
         if ([contact contactStartWith: key])
-            [_listContactOnView addObject:contact];
+            [self->_listContactOnView addObject:contact];
     }
     
-    return (beforeLength != _listContactOnView.count);
+    return (beforeLength != self->_listContactOnView.count);
 }
 @end

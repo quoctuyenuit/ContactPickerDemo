@@ -13,11 +13,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ListContactViewModel : NSObject {
-    NSArray<ContactViewModel*> *_listContact;
     NSMutableArray<ContactViewModel*> *_listContactOnView;
+    NSMutableArray<ContactViewModel*> *_listContact;
 }
 
 @property DataBinding<NSString*>* search;
+@property DataBinding<NSNumber*>* numberOfContact;
 
 -(id) init;
 
@@ -26,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(ContactViewModel*) getContactAt: (int) index;
 
 -(BOOL) updateListContactWithKey: (NSString*) key;
-
+-(void) getAllContact;
 @end
 
 NS_ASSUME_NONNULL_END

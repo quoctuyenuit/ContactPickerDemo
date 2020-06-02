@@ -26,6 +26,13 @@
     
     searchBar.delegate = self;
     
+    [_viewModel.numberOfContact bindAndFire:^(NSNumber *numberOfContact) {
+        [self.tableView beginUpdates];
+        NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[numberOfContact intValue]-1 inSection:1]];
+        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView endUpdates];
+    }];
+    
     [_viewModel.search bindAndFire:^(NSString *text) {
         __weak ContactTableViewController *weakSelf = self;
 //        If the listContactOnView changed --> reload tableview, if not do nothing.
@@ -33,6 +40,8 @@
             [weakSelf.tableView reloadData];
         }
     }];
+    
+    [self.viewModel getAllContact];
 }
 
 #pragma mark - Table view data source
