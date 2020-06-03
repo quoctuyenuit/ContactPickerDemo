@@ -11,7 +11,7 @@
 #import "ListContactViewModel.h"
 #import "DataBinding.h"
 
-@interface ContactTableViewController () {
+@interface ContactTableViewController() {
     __weak IBOutlet UISearchBar *searchBar;
 }
 @end
@@ -72,7 +72,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     [searchBar endEditing:YES];
-
+    ContactViewCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
+    [selectedCell select];
 }
 
 #pragma mark - Searchbar view delegate

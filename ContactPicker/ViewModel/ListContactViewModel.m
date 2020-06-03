@@ -15,7 +15,6 @@
     NSMutableArray *groupOfContacts;
 }
 
-//-(NSArray<ContactViewModel*>*) dummyListContact;
 @end
 
 @implementation ListContactViewModel

@@ -32,6 +32,10 @@
     // Configure the view for the selected state
 }
 
+- (void) select {
+    self.checkButton.checked = !self.checkButton.checked;
+}
+
 - (void) getImageFrom:(NSString *)url
               forName: (NSString*) name
            completion: (void (^)(UIImage*)) handle

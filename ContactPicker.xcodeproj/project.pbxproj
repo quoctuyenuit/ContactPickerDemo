@@ -24,6 +24,8 @@
 		AED34822F38035F924ED39B7 /* Pods_ContactPicker_ContactPickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE83A607870CC1DFB3ADE84 /* Pods_ContactPicker_ContactPickerUITests.framework */; };
 		B0076342248610C100239F3D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableViewController.m */; };
 		B00763452486167000239F3D /* ListContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ListContactViewModel.m */; };
+		B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */; };
+		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,9 @@
 		B0076341248610C100239F3D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
 		B00763432486167000239F3D /* ListContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListContactViewModel.h; sourceTree = "<group>"; };
 		B00763442486167000239F3D /* ListContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListContactViewModel.m; sourceTree = "<group>"; };
+		B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckBoxButtonView.xib; sourceTree = "<group>"; };
+		B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonView.h; sourceTree = "<group>"; };
+		B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckBoxButtonView.m; sourceTree = "<group>"; };
 		B28327E258220F637D739AFC /* Pods-ContactPicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.debug.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,12 +210,23 @@
 		193E33622485145E00C5735D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1921B6312485521500B0D711 /* ContactViewCell.h */,
-				1921B6322485521500B0D711 /* ContactViewCell.m */,
+				B0ABD435248748C200E557E1 /* Subviews */,
 				B0076340248610C100239F3D /* ContactTableViewController.h */,
 				B0076341248610C100239F3D /* ContactTableViewController.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B0ABD435248748C200E557E1 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				1921B6312485521500B0D711 /* ContactViewCell.h */,
+				1921B6322485521500B0D711 /* ContactViewCell.m */,
+				B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */,
+				B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */,
+				B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		BE7630302F7D1C202857C695 /* Pods */ = {
@@ -335,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
+				B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
 				193E33362484F31A00C5735D /* Main.storyboard in Resources */,
 			);
@@ -467,6 +484,7 @@
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
 				193E336824851C8400C5735D /* ContactViewModel.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,
+				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				1921B6332485521500B0D711 /* ContactViewCell.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
 				193E3365248514A400C5735D /* ContactModel.m in Sources */,

@@ -19,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="100" width="414" height="762"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContactViewCell" rowHeight="60" id="SAp-nn-J6i" customClass="ContactViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" indentationWidth="10" reuseIdentifier="ContactViewCell" rowHeight="60" id="SAp-nn-J6i" customClass="ContactViewCell">
                                         <rect key="frame" x="0.0" y="28" width="414" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SAp-nn-J6i" id="e6A-T4-fuq">
@@ -48,13 +48,23 @@
                                                             <color key="textColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NVg-SG-cmh" customClass="CheckBoxButtonView">
+                                                            <rect key="frame" x="296" y="11" width="25" height="25"/>
+                                                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="NVg-SG-cmh" secondAttribute="height" multiplier="1:1" id="Pj6-EI-gvI"/>
+                                                                <constraint firstAttribute="width" constant="25" id="aeL-65-sbl"/>
+                                                            </constraints>
+                                                        </view>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="waK-sv-B0P" firstAttribute="top" secondItem="bst-vZ-tcU" secondAttribute="bottom" constant="5" id="9C3-eS-EkW"/>
+                                                        <constraint firstItem="NVg-SG-cmh" firstAttribute="centerY" secondItem="u4b-we-Uy2" secondAttribute="centerY" id="AYi-VY-HLZ"/>
                                                         <constraint firstAttribute="bottom" secondItem="waK-sv-B0P" secondAttribute="bottom" id="Zhb-H1-0Qe"/>
                                                         <constraint firstItem="bst-vZ-tcU" firstAttribute="top" secondItem="u4b-we-Uy2" secondAttribute="top" id="dMH-MC-aiQ"/>
                                                         <constraint firstItem="bst-vZ-tcU" firstAttribute="leading" secondItem="u4b-we-Uy2" secondAttribute="leading" constant="8" id="fKC-yT-b37"/>
+                                                        <constraint firstAttribute="trailing" secondItem="NVg-SG-cmh" secondAttribute="trailing" constant="16" id="gUZ-g4-a2w"/>
                                                         <constraint firstItem="waK-sv-B0P" firstAttribute="leading" secondItem="u4b-we-Uy2" secondAttribute="leading" constant="8" id="qDx-JF-8E1"/>
                                                     </constraints>
                                                 </view>
@@ -70,6 +80,7 @@
                                         <connections>
                                             <outlet property="activeTime" destination="waK-sv-B0P" id="HUD-e1-DUV"/>
                                             <outlet property="avatar" destination="0MC-Ru-1lm" id="CgV-8v-tfZ"/>
+                                            <outlet property="checkButton" destination="NVg-SG-cmh" id="PZN-Oh-Czr"/>
                                             <outlet property="name" destination="bst-vZ-tcU" id="I0D-ZT-2Dm"/>
                                         </connections>
                                     </tableViewCell>
