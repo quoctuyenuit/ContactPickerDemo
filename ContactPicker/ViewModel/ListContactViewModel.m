@@ -21,12 +21,14 @@
 - (id)init {
     self.search = [[DataBinding<NSString*> alloc] initWithValue:@""];
     self.numberOfContact = [[DataBinding<NSNumber*> alloc] initWithValue:0];
-    _listContact = [[NSMutableArray alloc] init];
-    _listContactOnView = _listContact;
+    self->_listContact = [[NSMutableArray alloc] init];
+    self->_listContactOnView = _listContact;
     return self;
 }
 
 - (void)getAllContact {
+    [self->_listContact removeAllObjects];
+    
     if ([CNContactStore class]) {
         CNContactStore *addressBook = [[CNContactStore alloc] init];
         
@@ -52,6 +54,7 @@
                 avatar = [UIImage imageWithData:imageData];
             }
             
+//            Dummpy active time
             float activeTime = 300;
             
             ContactViewModel* contactModel = [[ContactViewModel alloc]

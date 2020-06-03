@@ -19,6 +19,7 @@
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+    self.becomeActiveObservable = [[DataBinding<NSNumber*> alloc] initWithValue:[[NSNumber alloc] initWithInt:0]];
 }
 
 
@@ -33,6 +34,8 @@
 - (void)sceneDidBecomeActive:(UIScene *)scene {
     // Called when the scene has moved from an inactive state to an active state.
     // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+    int currentValue = [self.becomeActiveObservable.value intValue];
+    self.becomeActiveObservable.value = [NSNumber numberWithInt:currentValue + 1];
 }
 
 

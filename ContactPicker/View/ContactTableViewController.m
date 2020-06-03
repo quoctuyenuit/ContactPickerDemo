@@ -10,6 +10,7 @@
 #import "ContactViewCell.h"
 #import "ListContactViewModel.h"
 #import "DataBinding.h"
+#import "SceneDelegate.h"
 
 @interface ContactTableViewController() {
     __weak IBOutlet UISearchBar *searchBar;
@@ -32,10 +33,7 @@
 //    Observe search bar and list of contacts
     [self->_viewModel.numberOfContact bindAndFire:^(NSNumber *numberOfContact) {
         __weak ContactTableViewController *weakSelf = self;
-        [self.tableView beginUpdates];
-        NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[numberOfContact intValue]-1 inSection:1]];
-        [weakSelf.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
-        [weakSelf.tableView endUpdates];
+        [weakSelf.tableView reloadData];
     }];
     
     [self->_viewModel.search bindAndFire:^(NSString *text) {
@@ -46,7 +44,11 @@
         }
     }];
     
-    [self->_viewModel getAllContact];
+    UIWindowScene* windowScene = (UIWindowScene*)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject;
+    SceneDelegate* sceneDelegate = (SceneDelegate*)windowScene.delegate;
+    [sceneDelegate.becomeActiveObservable bindAndFire:^(NSNumber * value) {
+        [self->_viewModel getAllContact];
+    }];
 }
 
 #pragma mark - Table view data source
