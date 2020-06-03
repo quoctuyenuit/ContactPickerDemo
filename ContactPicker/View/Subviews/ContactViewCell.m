@@ -16,14 +16,34 @@
 
 -(void) setup;
 -(void) getImageFrom: (NSString*) url forName: (NSString*) name completion: (void (^)(UIImage*)) handle;
+-(void) customInit;
 @end
 
 @implementation ContactViewCell
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self customInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self customInit];
+    }
+    return self;
+}
+
+#pragma mark Override methods
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    [self setup];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,8 +52,23 @@
     // Configure the view for the selected state
 }
 
-- (void) select {
-    self.checkButton.checked = !self.checkButton.checked;
+- (void)drawRect:(CGRect)rect {
+    [self setup];
+    [super drawRect: rect];
+}
+
+#pragma mark Addition methods
+
+- (void) customInit {
+    [[NSBundle mainBundle] loadNibNamed:@"ContactViewCell" owner:self options:nil];
+    [self addSubview:self.contentView];
+    self.contentView.frame = self.bounds;
+}
+
+- (void)setup {
+    _avatar.layer.cornerRadius = _avatar.bounds.size.width/2;
+    _avatar.layer.borderWidth = 1;
+    _avatar.layer.borderColor = UIColor.grayColor.CGColor;
 }
 
 - (void) getImageFrom:(NSString *)url
@@ -55,13 +90,8 @@
     }] resume];
 }
 
-- (void)setup {
-    _avatar.layer.cornerRadius = _avatar.bounds.size.width/2;
-    _avatar.layer.borderWidth = 1;
-    _avatar.layer.borderColor = UIColor.grayColor.CGColor;
-}
-
 -(void) config:(ContactViewModel*) model {
+//    If contact dont have avatar --> generate avatar from name
     if (!model.avatar) {
         [self getImageFrom:GENERATE_IMAGE_API forName:[model.name substringToIndex:1] completion:^(UIImage * image) {
             
@@ -74,6 +104,10 @@
     self.avatar.image = model.avatar;
     self.name.text = model.name;
     self.activeTime.text = model.activeTime;
+}
+
+- (void) select {
+    self.checkButton.checked = !self.checkButton.checked;
 }
 
 @end

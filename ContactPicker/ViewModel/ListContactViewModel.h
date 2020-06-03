@@ -20,14 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property DataBinding<NSString*>* search;
 @property DataBinding<NSNumber*>* numberOfContact;
 
--(id) init;
+- (id)init;
 
--(int) getNumberOfContact;
+- (int)getNumberOfContact;
 
--(ContactViewModel*) getContactAt: (int) index;
+- (ContactViewModel*)getContactAt: (int) index;
 
--(BOOL) updateListContactWithKey: (NSString*) key;
--(void) getAllContact;
+- (BOOL)updateListContactWithKey: (NSString*) key;
+
+- (void)getAllContact;
 @end
 
 NS_ASSUME_NONNULL_END

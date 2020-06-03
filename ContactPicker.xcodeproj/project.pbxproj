@@ -26,6 +26,7 @@
 		B00763452486167000239F3D /* ListContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ListContactViewModel.m */; };
 		B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */; };
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
+		B0ABD43724874EA300E557E1 /* ContactViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0ABD43624874EA300E557E1 /* ContactViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckBoxButtonView.xib; sourceTree = "<group>"; };
 		B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonView.h; sourceTree = "<group>"; };
 		B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckBoxButtonView.m; sourceTree = "<group>"; };
+		B0ABD43624874EA300E557E1 /* ContactViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactViewCell.xib; sourceTree = "<group>"; };
 		B28327E258220F637D739AFC /* Pods-ContactPicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.debug.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -222,9 +224,10 @@
 			children = (
 				1921B6312485521500B0D711 /* ContactViewCell.h */,
 				1921B6322485521500B0D711 /* ContactViewCell.m */,
-				B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */,
+				B0ABD43624874EA300E557E1 /* ContactViewCell.xib */,
 				B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */,
 				B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */,
+				B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
 				193E33362484F31A00C5735D /* Main.storyboard in Resources */,
+				B0ABD43724874EA300E557E1 /* ContactViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

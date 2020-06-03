@@ -21,7 +21,7 @@
 @property (nonatomic, readwrite) NSString* name;
 @property (nonatomic, readwrite) UIImage* avatar;
 @property (nonatomic, readwrite) float activateTime;
--(id) initWithName: (NSString*) name
+- (id)initWithName: (NSString*) name
                  avatar: (UIImage*) avatar
              activeTime: (float) activeTime;
 

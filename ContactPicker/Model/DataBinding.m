@@ -23,29 +23,29 @@
     return self;
 }
 
--(id) value {
+- (id)value {
     return _value;
 }
 
--(void) setValue:(id)value {
+- (void)setValue:(id)value {
     _value = value;
     [self fire];
 }
 
 //=================================================================================
 
--(void) binding:(void (^)(id)) hdl {
+- (void)binding:(void (^)(id)) hdl {
     [_handlers addObject:hdl];
 }
 
--(void) fire {
+- (void)fire {
     typedef void (^Handler)(id);
     for (Handler hdl in _handlers) {
         hdl(_value);
     }
 }
 
--(void) bindAndFire:(void (^)(id)) hdl {
+- (void)bindAndFire:(void (^)(id)) hdl {
     [self binding:hdl];
     [self fire];
 }

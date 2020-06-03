@@ -46,7 +46,7 @@
         }
     }];
     
-    [self.viewModel getAllContact];
+    [self->_viewModel getAllContact];
 }
 
 #pragma mark - Table view data source
@@ -56,16 +56,15 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return[_viewModel getNumberOfContact];
+    return[self->_viewModel getNumberOfContact];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ContactViewCell *cell = (ContactViewCell*)[tableView dequeueReusableCellWithIdentifier:@"ContactViewCell" forIndexPath:indexPath];
-    
+   
+    ContactViewCell *cell = (ContactViewCell*)[tableView dequeueReusableCellWithIdentifier:@"ContactViewCell"
+                                                                              forIndexPath:indexPath];
     ContactViewModel* model = [_viewModel getContactAt: (int)indexPath.row];
-    
     [cell config:model];
-    
     return cell;
 }
 

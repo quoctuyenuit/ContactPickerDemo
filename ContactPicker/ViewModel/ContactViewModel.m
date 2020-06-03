@@ -13,19 +13,19 @@
 
 @interface ContactViewModel()
 
--(NSString*) formatTime: (float) timeInterval;
+- (NSString*)formatTime: (float) timeInterval;
 @end
 
 @implementation ContactViewModel
 
--(id) initWithModel:(ContactModel*)model {
+- (id)initWithModel:(ContactModel*)model {
     self.avatar = model.avatar;
     self.name = model.name;
     self.activeTime = [self formatTime:model.activateTime];
     return self;
 }
 
--(NSString*) formatTime:(float)timeInterval {
+- (NSString*)formatTime:(float)timeInterval {
     NSDate *lastUpdate = [[NSDate alloc] initWithTimeIntervalSince1970:timeInterval];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

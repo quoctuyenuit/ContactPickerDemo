@@ -14,11 +14,11 @@
     NSMutableArray<void (^)(DataType)> *_handlers;
 }
 
-@property(nonatomic, readwrite) DataType value;
--(id) initWithValue: (DataType) value;
--(void) binding: (void (^)(DataType)) hdl;
--(void) fire;
--(void) bindAndFire: (void (^)(DataType)) hdl;
+@property(atomic, readwrite) DataType value;
+- (id)initWithValue: (DataType) value;
+- (void)binding: (void (^)(DataType)) hdl;
+- (void)fire;
+- (void)bindAndFire: (void (^)(DataType)) hdl;
 
 @end
 

@@ -16,8 +16,8 @@
 @property UIImage* avatar;
 @property NSString* name;
 @property NSString* activeTime;
--(id) initWithModel: (ContactModel*) model;
--(BOOL) contactStartWith: (NSString*) key;
+- (id)initWithModel: (ContactModel*) model;
+- (BOOL)contactStartWith: (NSString*) key;
 @end
 
 #endif /* ContactViewModel_h */

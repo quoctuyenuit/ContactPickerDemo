@@ -18,7 +18,7 @@
 @end
 
 @implementation ListContactViewModel
--(id) init {
+- (id)init {
     self.search = [[DataBinding<NSString*> alloc] initWithValue:@""];
     self.numberOfContact = [[DataBinding<NSNumber*> alloc] initWithValue:0];
     _listContact = [[NSMutableArray alloc] init];
@@ -67,7 +67,7 @@
 }
 
 #pragma mark Public function
--(int) getNumberOfContact {
+- (int)getNumberOfContact {
     return (int)self->_listContactOnView.count;
 }
 
