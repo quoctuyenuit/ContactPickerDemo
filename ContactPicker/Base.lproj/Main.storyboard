@@ -8,6 +8,21 @@
     </dependencies>
     <scenes>
         <!--Contact Table View Controller-->
+        <scene sceneID="4q8-Ef-0xo">
+            <objects>
+                <viewController id="JrC-kI-vAU" customClass="ContactTableViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="a2b-ip-Bed">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="uUw-1f-K0c"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r9g-pd-voh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-392" y="-304"/>
+        </scene>
+        <!--Contact Table View Controller-->
         <scene sceneID="i2z-ym-pZM">
             <objects>
                 <viewController id="Hgt-iO-XNj" customClass="ContactTableViewController" sceneMemberID="viewController">
@@ -15,11 +30,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iMh-kq-TnO">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iMh-kq-TnO">
                                 <rect key="frame" x="0.0" y="100" width="414" height="762"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" indentationWidth="10" reuseIdentifier="ContactViewCell" rowHeight="60" id="SAp-nn-J6i" customClass="ContactViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" indentationWidth="10" reuseIdentifier="ContactViewCell" rowHeight="60" id="SAp-nn-J6i" customClass="ContactTableViewCell">
                                         <rect key="frame" x="0.0" y="28" width="414" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SAp-nn-J6i" id="e6A-T4-fuq">
@@ -48,8 +63,8 @@
                         <viewLayoutGuide key="safeArea" id="gxK-Oy-YxR"/>
                     </view>
                     <connections>
-                        <outlet property="searchBar" destination="4Xk-ip-vxZ" id="i1d-jq-Vc2"/>
-                        <outlet property="tableView" destination="iMh-kq-TnO" id="9lq-Li-t8L"/>
+                        <outlet property="searchBar" destination="4Xk-ip-vxZ" id="bp0-7Z-Rz5"/>
+                        <outlet property="tableView" destination="iMh-kq-TnO" id="JMr-oP-EVz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A9t-UM-gtQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

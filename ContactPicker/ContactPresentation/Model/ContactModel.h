@@ -13,17 +13,14 @@
 #import <Foundation/Foundation.h>
 
 @interface ContactModel: NSObject {
+    NSString *_identifier;
     NSString *_name;
-    UIImage *_avatar;
-    float _activeTime;
 }
 
+@property (nonatomic, readwrite) NSString* identifier;
 @property (nonatomic, readwrite) NSString* name;
-@property (nonatomic, readwrite) UIImage* avatar;
-@property (nonatomic, readwrite) float activateTime;
-- (id)initWithName: (NSString*) name
-                 avatar: (UIImage*) avatar
-             activeTime: (float) activeTime;
+
+- (id)initWithIdentifier: (NSString *) identifier name: (NSString *) name;
 
 @end
 

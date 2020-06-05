@@ -9,26 +9,32 @@
 #import <Foundation/Foundation.h>
 #import "DataBinding.h"
 #import "ContactViewModel.h"
+#import "ContactBusProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^ViewHandler)(BOOL, int);
+
 @interface ListContactViewModel : NSObject {
-    NSMutableArray<ContactViewModel*> *_listContactOnView;
-    NSMutableArray<ContactViewModel*> *_listContact;
+    NSMutableArray<ContactViewModel *> *_listContactOnView;
+    NSMutableArray<ContactViewModel *> *_listContact;
+    id<ContactBusProtocol> _contactBus;
 }
 
 @property DataBinding<NSString*>* search;
-@property DataBinding<NSNumber*>* numberOfContact;
+//@property DataBinding<NSNumber*>* numberOfContact;
 
-- (id)init;
+- (id)initWithBus: (id<ContactBusProtocol>) bus;
 
-- (int)getNumberOfContact;
+- (void)loadContacts: (ViewHandler) completion;
+
+- (void)loadBatch: (ViewHandler) completion;
+
+- (int)getNumberOfContacts;
 
 - (ContactViewModel*)getContactAt: (int) index;
 
-- (BOOL)updateListContactWithKey: (NSString*) key;
-
-- (void)getAllContact;
+- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(BOOL)) handler;
 @end
 
 NS_ASSUME_NONNULL_END

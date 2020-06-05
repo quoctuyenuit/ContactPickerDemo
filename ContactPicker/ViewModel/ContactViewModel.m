@@ -13,29 +13,41 @@
 
 @interface ContactViewModel()
 
-- (NSString*)formatTime: (float) timeInterval;
 @end
 
 @implementation ContactViewModel
 
-- (id)initWithModel:(ContactModel*)model {
-    self.avatar = model.avatar;
-    self.name = model.name;
-    self.activeTime = [self formatTime:model.activateTime];
+- (id)initWithIdentifier:(NSString *)identifier
+                    name:(NSString *)name
+             description:(NSString *)description {
+    
+    return [self initWithIdentifier:identifier name:name description:description avatar:nil isChecked:NO];
+}
+
+- (id)initWithIdentifier:(NSString *)identifier
+                    name:(NSString *)name
+             description:(NSString *)description
+                  avatar:(UIImage * _Nullable)image {
+    
+    return [self initWithIdentifier:identifier name:name description:description avatar:image isChecked:NO];
+    
+}
+
+- (id)initWithIdentifier:(NSString *)identifier
+                    name:(NSString *)name
+             description:(NSString *)description
+                  avatar:(UIImage * _Nullable)image
+               isChecked:(BOOL)isChecked {
+    
+    self.identifier = identifier;
+    self.name = name;
+    self.contactDescription = description;
+    self.avatar = image;
+    self.isChecked = isChecked;
     return self;
 }
 
-- (NSString*)formatTime:(float)timeInterval {
-    NSDate *lastUpdate = [[NSDate alloc] initWithTimeIntervalSince1970:timeInterval];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-    
-    return [dateFormatter stringFromDate:lastUpdate];
-}
-
-- (BOOL)contactStartWith:(NSString *)key {
+- (BOOL)contactHasPrefix:(NSString *)key {
     if ([key isEqualToString:@""]) {
         return true;
     }

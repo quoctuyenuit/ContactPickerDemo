@@ -1,22 +1,21 @@
 //
-//  ContactViewModel.h
+//  ContactViewEntity.h
 //  ContactPicker
 //
-//  Created by LAP11963 on 6/1/20.
+//  Created by Quốc Tuyến on 6/4/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#ifndef ContactViewModel_h
-#define ContactViewModel_h
-#import "DataBinding.h"
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "ContactModel.h"
 
-@interface ContactViewModel : NSObject
-@property(nonatomic, readwrite) NSString * identifier;
+NS_ASSUME_NONNULL_BEGIN
+
+@interface ContactViewEntity : NSObject
+@property(nonatomic, readwrite) NSString* identifier;
 @property(nonatomic, readwrite) NSString * name;
 @property(nonatomic, readwrite) NSString * contactDescription;
-@property(nonatomic, readwrite) UIImage * _Nullable avatar;
+@property(nonatomic, readwrite) UIImage * avatar;
 @property(nonatomic, readwrite) BOOL isChecked;
 @property(nonatomic, readwrite) void (^waitImageToExcuteQueue)(UIImage *, NSString * );
 
@@ -36,7 +35,6 @@
                      name: (NSString *) name
               description: (NSString *) description;
 
-- (BOOL)contactHasPrefix: (NSString *) key;
 @end
 
-#endif /* ContactViewModel_h */
+NS_ASSUME_NONNULL_END
