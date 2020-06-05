@@ -16,12 +16,14 @@
 @property (nonatomic, readwrite) NSString * contactID;
 @property (nonatomic, readwrite) NSString * contactName;
 @property (nonatomic, readwrite) NSString * contactFamilyName;
+@property (nonatomic, readwrite) NSData * contactImage;
 @property (nonatomic, readwrite) NSArray<NSString *> * contactPhones;
 @property (nonatomic, readwrite) NSArray<NSString *> * contactEmails;
 
 - (id)init: (NSString *) contactID
       name: (NSString *) givenName
 familyName: (NSString *) familyName
+     image: (NSData *) image
      phones: (NSArray<NSString *> *) phone
      emails: (NSArray<NSString *> *) email;
 

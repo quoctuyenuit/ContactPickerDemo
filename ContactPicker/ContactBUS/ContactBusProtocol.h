@@ -20,7 +20,6 @@
 - (void) requestPermission: (void (^)(BOOL)) completion;
 - (void) loadContacts: (void (^)(BOOL)) completion;
 - (void) loadBatch: (void (^)(NSArray<ContactBusEntity *> *)) handler;
-- (void) getImageFor: (NSString*) identifier completion: (void (^)(UIImage*)) handler;
 - (void) searchContactByName: (NSString *) name completion: (void (^)(NSArray *)) handler;
 @end
 

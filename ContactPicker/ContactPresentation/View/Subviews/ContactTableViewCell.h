@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "ContactViewModel.h"
 #import "CheckBoxButtonView.h"
+#import "ContactAvatarImageView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactTableViewCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet UIImageView *avatar;
+@property (strong, nonatomic) IBOutlet ContactAvatarImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *firstLabel;
 @property (strong, nonatomic) IBOutlet UILabel *secondLabel;
 @property (strong, nonatomic) IBOutlet CheckBoxButtonView *checkBox;

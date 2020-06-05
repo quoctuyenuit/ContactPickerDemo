@@ -14,8 +14,6 @@
 
 
 @interface ContactAdapter() {
-    
-    NSCache *imageCache;
     NSCache *contactCache;
     NSMutableArray * listIdentifiersLoaded;
     id<ImageGeneratorProtocol> imageGeneratorAPI;
@@ -33,7 +31,6 @@
 @synthesize contactChangedObservable;
 
 - (id) initWidthAPI: (id<ImageGeneratorProtocol>) imageAPI {
-    self->imageCache = [[NSCache alloc] init];
     self->contactCache = [[NSCache alloc] init];
     self->imageGeneratorAPI = imageAPI;
     self->imageRequestQueue = [[NSMutableDictionary alloc] init];
@@ -178,30 +175,31 @@
     NSString* familyName = contact.familyName;
     NSMutableArray<NSString*> *phoneNumbers = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray<NSString*> *emails = [contact.emailAddresses valueForKey:@"value"];
-    
+    NSData * imageData = nil;
     if (contact.imageData) {
-        NSData *imageData = contact.imageData;
-        [self->imageCache setObject:imageData forKey:identifier];
-    } else {
-        [self->contactWaitToImage addObject:identifier];
-        NSString* name = givenName.length >= 2 ? [givenName substringToIndex:2] : [givenName substringToIndex:1];
-        [imageGeneratorAPI generateImageFromName:name completion:^(NSData * imageData, BOOL isSuccess) {
-            if (isSuccess == YES) {
-                [self->imageCache setObject:imageData forKey:identifier];
-                
-                NSMutableArray* queue = [self->imageRequestQueue objectForKey:identifier];
-                
-                for (void (^hdl)(NSData*)  in queue) {
-                    hdl(imageData);
-                }
-            }
-            [self->contactWaitToImage removeObject:identifier];
-        }];
+        imageData = contact.imageData;
     }
+//    else {
+//        [self->contactWaitToImage addObject:identifier];
+//        NSString* name = givenName.length >= 2 ? [givenName substringToIndex:2] : [givenName substringToIndex:1];
+//        [imageGeneratorAPI generateImageFromName:name completion:^(NSData * imageData, BOOL isSuccess) {
+//            if (isSuccess == YES) {
+//                [self->imageCache setObject:imageData forKey:identifier];
+//
+//                NSMutableArray* queue = [self->imageRequestQueue objectForKey:identifier];
+//
+//                for (void (^hdl)(NSData*)  in queue) {
+//                    hdl(imageData);
+//                }
+//            }
+//            [self->contactWaitToImage removeObject:identifier];
+//        }];
+//    }
     
     ContactDAL *contactDAL = [[ContactDAL alloc] init:contactId
                                               name:givenName
-                                        familyName:familyName
+                                           familyName:familyName
+                                                image: imageData
                                             phones:phoneNumbers
                                             emails:emails];
     
@@ -210,22 +208,5 @@
     return contactDAL;
     
 }
-
-- (void)loadImageFromId:(NSString *)identifier completion:(void (^)(NSData *))completion {
-    NSData* imageData = [self->imageCache objectForKey:identifier];
-    if (imageData) {
-        completion(imageData);
-    } else if ([self->contactWaitToImage containsObject:identifier]) {
-        NSMutableArray* queueOfID = [self->imageRequestQueue objectForKey:identifier];
-        if (queueOfID == nil) {
-            queueOfID = [NSMutableArray arrayWithArray:@[completion]];
-            [self->imageRequestQueue setObject:queueOfID forKey:identifier];
-        } else {
-            [queueOfID addObject:completion];
-        }
-//
-    }
-}
-
 
 @end

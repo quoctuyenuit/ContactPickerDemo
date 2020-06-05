@@ -7,6 +7,7 @@
 //
 
 #import "ContactTableViewCell.h"
+#import "ContactAvatarImageView.h"
 
 @interface ContactTableViewCell()
 - (void) setupView;
@@ -45,15 +46,19 @@
     self.firstLabel.text = entity.name;
     self.secondLabel.text = entity.contactDescription;
     self.checkBox.checked = entity.isChecked;
-    self.avatar.image = nil;
+    NSString* keyName = entity.name.length >= 2 ? [entity.name substringToIndex:2] : [entity.name substringToIndex:1];
+    
+    [self.avatar configImage:nil forLabel:keyName];
+    
+    self.avatar.imageView.image = nil;
     if (entity.avatar) {
-        self.avatar.image = entity.avatar;
+        [self.avatar configImage:entity.avatar forLabel:@""];
     } else {
         __weak ContactTableViewCell* weakSelf = self;
         entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
             dispatch_sync(dispatch_get_main_queue(), ^{
                 if (identifier == entity.identifier) {
-                    weakSelf.avatar.image = image;
+                    weakSelf.avatar.imageView.image = image;
                 }
             });
         };

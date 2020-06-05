@@ -22,6 +22,8 @@
 		AED34822F38035F924ED39B7 /* Pods_ContactPicker_ContactPickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE83A607870CC1DFB3ADE84 /* Pods_ContactPicker_ContactPickerUITests.framework */; };
 		B0076342248610C100239F3D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableViewController.m */; };
 		B00763452486167000239F3D /* ListContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ListContactViewModel.m */; };
+		B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */; };
+		B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */; };
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
 		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AE224888E05008D05F4 /* NSArrayExtension.m */; };
@@ -85,6 +87,9 @@
 		B0076341248610C100239F3D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
 		B00763432486167000239F3D /* ListContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListContactViewModel.h; sourceTree = "<group>"; };
 		B00763442486167000239F3D /* ListContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListContactViewModel.m; sourceTree = "<group>"; };
+		B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarImageView.h; sourceTree = "<group>"; };
+		B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarImageView.m; sourceTree = "<group>"; };
+		B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactAvatarImageView.xib; sourceTree = "<group>"; };
 		B02A510B2487EB5500B9CC1B /* ContactBusEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusEntity.h; sourceTree = "<group>"; };
 		B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusEntity.m; sourceTree = "<group>"; };
 		B02A510E2487EF2000B9CC1B /* ContactBus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBus.h; sourceTree = "<group>"; };
@@ -281,6 +286,9 @@
 				B0979AEB24889BB5008D05F4 /* ContactTableViewCell.h */,
 				B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */,
 				B0979AF72488DFD4008D05F4 /* ContactTableViewCell.xib */,
+				B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */,
+				B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */,
+				B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -446,6 +454,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */,
 				B0979AF82488DFD4008D05F4 /* ContactTableViewCell.xib in Resources */,
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
 				B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */,
@@ -590,6 +599,7 @@
 				B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */,
 				B0979AF624889E77008D05F4 /* ContactViewEntity.m in Sources */,
 				193E33302484F31A00C5735D /* SceneDelegate.m in Sources */,
+				B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */,
 				B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */,
 				B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */,
 				B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */,

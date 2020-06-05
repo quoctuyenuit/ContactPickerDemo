@@ -62,16 +62,7 @@
 
 
 - (ContactViewModel *)parseContactEntity:(ContactBusEntity *)entity {
-    ContactViewModel *model =  [[ContactViewModel alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp"];
-    
-    //            Request contact image
-    [self->_contactBus getImageFor:model.identifier completion:^(UIImage *image) {
-        model.avatar = image;
-        if (model.waitImageToExcuteQueue != nil)
-        {
-            model.waitImageToExcuteQueue(image, model.identifier);
-        }
-    }];
+    ContactViewModel *model =  [[ContactViewModel alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp" avatar: [UIImage imageWithData: entity.contactImage]];
     
     return model;
 }

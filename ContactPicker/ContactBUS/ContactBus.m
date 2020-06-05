@@ -97,13 +97,6 @@
     }];
 }
 
-- (void)getImageFor:(NSString *)identifier completion:(void (^)(UIImage *))handler {
-    [self->contactAdapter loadImageFromId:identifier completion:^(NSData *imageData) {
-        UIImage *image = [UIImage imageWithData:imageData];
-        handler(image);
-    }];
-}
-
 - (void)searchContactByName:(NSString *)name completion:(void (^)(NSArray *))handler {
     NSArray * listContactNeed = [self->listContactRequestedInfor filter:^BOOL(ContactDAL*  _Nonnull obj) {
         NSString * contactName = [NSString stringWithFormat:@"%@ %@", obj.contactName, obj.contactFamilyName];
