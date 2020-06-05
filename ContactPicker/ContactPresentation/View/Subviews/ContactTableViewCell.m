@@ -44,14 +44,15 @@
 - (void)configForModel:(ContactViewModel *)entity {
     self.firstLabel.text = entity.name;
     self.secondLabel.text = entity.contactDescription;
+    self.checkBox.checked = entity.isChecked;
     self.avatar.image = nil;
     if (entity.avatar) {
         self.avatar.image = entity.avatar;
     } else {
+        __weak ContactTableViewCell* weakSelf = self;
         entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
             dispatch_sync(dispatch_get_main_queue(), ^{
                 if (identifier == entity.identifier) {
-                    __weak ContactTableViewCell* weakSelf = self;
                     weakSelf.avatar.image = image;
                 }
             });

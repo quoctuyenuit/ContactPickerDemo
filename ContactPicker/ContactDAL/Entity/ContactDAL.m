@@ -29,4 +29,22 @@ familyName:(NSString *)familyName
     return [self init:contactID name:name familyName:familyName phones:nil emails:nil];
 }
 
+- (BOOL)isEqual:(ContactDAL *)other
+{
+    if (other == self) {
+        return YES;
+    } else {
+        return  ([self.contactID isEqualToString:other.contactID] &&
+                 [self.contactName isEqualToString:other.contactName] &&
+                 [self.contactFamilyName isEqualToString:other.contactFamilyName] &&
+                 [self.contactPhones isEqualToArray:other.contactPhones] &&
+                 [self.contactEmails isEqualToArray:other.contactEmails]);
+    }
+}
+
+- (NSUInteger)hash
+{
+    return [self.contactName hash];
+}
+
 @end

@@ -21,7 +21,10 @@ typedef void (^ViewHandler)(BOOL, int);
     id<ContactBusProtocol> _contactBus;
 }
 
-@property DataBinding<NSString*>* search;
+@property DataBinding<NSString *> * search;
+@property DataBinding<NSArray *> * updateContacts;
+@property NSMutableArray<ContactViewModel *> * listContact;
+@property NSMutableArray<ContactViewModel *> * listContactOnView;
 //@property DataBinding<NSNumber*>* numberOfContact;
 
 - (id)initWithBus: (id<ContactBusProtocol>) bus;
@@ -35,6 +38,8 @@ typedef void (^ViewHandler)(BOOL, int);
 - (ContactViewModel*)getContactAt: (int) index;
 
 - (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(BOOL)) handler;
+
+- (void) refreshListContact;
 @end
 
 NS_ASSUME_NONNULL_END

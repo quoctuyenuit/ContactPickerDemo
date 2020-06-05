@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "ContactViewModel.h"
-#import "ContactModel.h"
 #import <UIKit/UIKit.h>
 
 @interface ContactViewModel()
@@ -52,5 +51,20 @@
         return true;
     }
     return [[self.name lowercaseString] hasPrefix: [key lowercaseString]];
+}
+
+- (BOOL)isEqual:(ContactViewModel *)other
+{
+    if (other == self) {
+        return YES;
+    } else {
+        return ([self.name isEqualToString:other.name] &&
+                [self.contactDescription isEqualToString:other.contactDescription]);
+    }
+}
+
+- (NSUInteger)hash
+{
+    return [self->_name hash];
 }
 @end

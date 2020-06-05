@@ -17,16 +17,20 @@
     
     NSCache *imageCache;
     NSCache *contactCache;
+    NSMutableArray * listIdentifiersLoaded;
     id<ImageGeneratorProtocol> imageGeneratorAPI;
     NSMutableDictionary<NSString*, NSMutableArray<void (^)(NSData *)> *> * imageRequestQueue;
     NSMutableArray<NSString*> * contactWaitToImage;
 }
 
 - (ContactDAL*) parseToContactDAL: (CNContact *) contact forID: (NSString *) identifier;
+- (void) contactDidChangedEvent: (NSNotification *) notification;
 
 @end
 
 @implementation ContactAdapter
+
+@synthesize contactChangedObservable;
 
 - (id) initWidthAPI: (id<ImageGeneratorProtocol>) imageAPI {
     self->imageCache = [[NSCache alloc] init];
@@ -34,7 +38,18 @@
     self->imageGeneratorAPI = imageAPI;
     self->imageRequestQueue = [[NSMutableDictionary alloc] init];
     self->contactWaitToImage = [[NSMutableArray alloc] init];
+    self->listIdentifiersLoaded = [[NSMutableArray alloc] init];
+    self->contactChangedObservable = [[DataBinding alloc] initWithValue: nil];
+    
+//    [CNContactStoreDidChangeNotification addObserver:self forKeyPath:@"test" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(contactDidChangedEvent:) name:CNContactStoreDidChangeNotification object:nil];
     return self;
+}
+
+- (void) contactDidChangedEvent: (NSNotification *) notification {
+    [self loadContactByBatch:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact) {
+        self->contactChangedObservable.value = listUpdatedContact;
+    }];
 }
 
 - (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, BOOL)) completion {
@@ -52,6 +67,7 @@
                                                      error:nil
                                                 usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
                 [listContacts addObject: [[ContactDAL alloc] initWithID:contact.identifier name:contact.givenName familyName:contact.familyName]];
+                [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
             
             
@@ -210,5 +226,6 @@
 //
     }
 }
+
 
 @end

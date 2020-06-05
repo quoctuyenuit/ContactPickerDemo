@@ -23,8 +23,7 @@
 - (void) customInit;
 - (void) setupView;
 - (void) insertCells: (int) index withSize: (int) size;
-//- (void) loadBatchUp: (int) currentIndex;
-//- (void) loadBatchDown: (int) currentIndex;
+- (void) loadContacts;
 @end
 
 @implementation ContactTableViewController
@@ -48,13 +47,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self->viewModel loadContacts: ^(BOOL isSuccess, int length) {
-        [self->viewModel loadBatch: ^(BOOL loadBatchDone, int batchLength) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
-        }];
-    }];
+    [self loadContacts];
     
     [self->viewModel.search bindAndFire:^(NSString * searchText) {
         [self->viewModel searchContactWithKeyName:searchText completion:^(BOOL isNeedReload) {
@@ -64,6 +57,29 @@
                 });
             }
         }];
+    }];
+    
+    [self->viewModel.updateContacts binding:^(NSArray * listIndexNeedUpdate) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+            for (int i = 0; i < listIndexNeedUpdate.count; i++) {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+            
+//            [self.tableView reloadData];
+            [self.tableView beginUpdates];
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation: (UITableViewRowAnimationNone)];
+            [self.tableView endUpdates];
+        });
+    }];
+    
+}
+
+- (void)loadContacts {
+    [self->viewModel loadContacts: ^(BOOL isSuccess, int length) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }];
 }
 
@@ -127,6 +143,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     ContactTableViewCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
+    ContactViewModel * model = [self->viewModel getContactAt:(int)indexPath.row];
+    model.isChecked = !model.isChecked;
+    
     [selectedCell setSelect];
 }
 

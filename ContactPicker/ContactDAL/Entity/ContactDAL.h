@@ -28,6 +28,7 @@ familyName: (NSString *) familyName
 - (id) initWithID: (NSString *) contactID
              name: (NSString *) name
        familyName: (NSString *) familyName;
+
 @end
 
 #endif /* ContactDAL_h */

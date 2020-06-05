@@ -15,6 +15,7 @@
 
 @property (nonatomic, readwrite) int currentIndexBatch;
 
+@property void (^contactChangedObservable)(NSArray *);
 @required
 - (void) requestPermission: (void (^)(BOOL)) completion;
 - (void) loadContacts: (void (^)(BOOL)) completion;

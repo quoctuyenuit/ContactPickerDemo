@@ -49,4 +49,13 @@
     }];
     return [mutableArray copy];
 }
+
+- (id)firstObjectWith:(BOOL (^)(id _Nonnull))block {
+    for (id obj in self) {
+        if (block(obj))
+            return obj;
+    }
+    
+    return nil;
+}
 @end

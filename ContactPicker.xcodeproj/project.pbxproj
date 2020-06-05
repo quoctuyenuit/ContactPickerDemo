@@ -15,7 +15,6 @@
 		193E333E2484F31C00C5735D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E333D2484F31C00C5735D /* main.m */; };
 		193E33482484F31C00C5735D /* ContactPickerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E33472484F31C00C5735D /* ContactPickerTests.m */; };
 		193E33532484F31C00C5735D /* ContactPickerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E33522484F31C00C5735D /* ContactPickerUITests.m */; };
-		193E3365248514A400C5735D /* ContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E3364248514A400C5735D /* ContactModel.m */; };
 		193E336824851C8400C5735D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E336724851C8400C5735D /* ContactViewModel.m */; };
 		193E336B24851CD000C5735D /* DataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E336A24851CD000C5735D /* DataBinding.m */; };
 		5E4BA252D51243FE77F2531D /* Pods_ContactPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36F7078139262F81109265F /* Pods_ContactPicker.framework */; };
@@ -72,8 +71,6 @@
 		193E334E2484F31C00C5735D /* ContactPickerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactPickerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		193E33522484F31C00C5735D /* ContactPickerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactPickerUITests.m; sourceTree = "<group>"; };
 		193E33542484F31C00C5735D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		193E33632485149300C5735D /* ContactModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactModel.h; sourceTree = "<group>"; };
-		193E3364248514A400C5735D /* ContactModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactModel.m; sourceTree = "<group>"; };
 		193E336624851C7B00C5735D /* ContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModel.h; sourceTree = "<group>"; };
 		193E336724851C8400C5735D /* ContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModel.m; sourceTree = "<group>"; };
 		193E336924851CC800C5735D /* DataBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataBinding.h; sourceTree = "<group>"; };
@@ -215,8 +212,6 @@
 		193E33602485142F00C5735D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				193E33632485149300C5735D /* ContactModel.h */,
-				193E3364248514A400C5735D /* ContactModel.m */,
 				193E336924851CC800C5735D /* DataBinding.h */,
 				193E336A24851CD000C5735D /* DataBinding.m */,
 			);
@@ -590,7 +585,6 @@
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
 				B0ABD4492487B42100E557E1 /* ImageGeneratorAPIAdapter.m in Sources */,
-				193E3365248514A400C5735D /* ContactModel.m in Sources */,
 				B00763452486167000239F3D /* ListContactViewModel.m in Sources */,
 				193E333E2484F31C00C5735D /* main.m in Sources */,
 				B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */,

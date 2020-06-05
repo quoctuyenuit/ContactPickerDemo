@@ -27,12 +27,22 @@
 @implementation ContactBus
 @synthesize currentIndexBatch;
 
+@synthesize contactChangedObservable;
 
 - (id)initWithAdapter:(id<ContactAdapterProtocol>)adapter {
     self->contactAdapter = adapter;
     self->busBatchSize = 20;
     self->currentIndexBatch = 0;
     self->listContactRequestedInfor = [[NSMutableArray alloc] init];
+     __weak ContactBus * weakSelf = self;
+    [self->contactAdapter.contactChangedObservable binding:^(NSArray<ContactDAL *> * listContactDAL) {
+        NSArray * listContactBusEntity = [listContactDAL map:^ContactBusEntity* _Nonnull(ContactDAL *  _Nonnull obj) {
+            return [[ContactBusEntity alloc] initWithData: obj];
+        }];
+        if (weakSelf.contactChangedObservable) {
+            weakSelf.contactChangedObservable(listContactBusEntity);
+        }
+    }];
     return self;
 }
 

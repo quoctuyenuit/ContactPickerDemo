@@ -10,7 +10,6 @@
 #define ContactViewModel_h
 #import "DataBinding.h"
 #import <UIKit/UIKit.h>
-#import "ContactModel.h"
 
 @interface ContactViewModel : NSObject
 @property(nonatomic, readwrite) NSString * identifier;
