@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ContactViewModel.h"
+#import "ContactViewEntity.h"
 #import "CheckBoxButtonView.h"
 #import "ContactAvatarImageView.h"
 
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet UILabel *secondLabel;
 @property (strong, nonatomic) IBOutlet CheckBoxButtonView *checkBox;
 
-- (void) configForModel: (ContactViewModel *) entity;
+- (void) configForModel: (ContactViewEntity *) entity;
 - (void) setSelect;
 @end
 

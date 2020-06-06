@@ -1,70 +1,132 @@
 //
-//  ContactViewModel.m
+//  ListContactViewModel.m
 //  ContactPicker
 //
-//  Created by LAP11963 on 6/1/20.
+//  Created by LAP13528 on 6/2/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ContactViewModel.h"
-#import <UIKit/UIKit.h>
+#import "ContactViewEntity.h"
+#import <Contacts/Contacts.h>
+#import "NSArrayExtension.h"
 
-@interface ContactViewModel()
+@interface ContactViewModel() {
+}
 
+- (id) finalizeInit;
+- (ContactViewEntity *) parseContactEntity: (ContactBusEntity *) entity;
 @end
 
 @implementation ContactViewModel
 
-- (id)initWithIdentifier:(NSString *)identifier
-                    name:(NSString *)name
-             description:(NSString *)description {
-    
-    return [self initWithIdentifier:identifier name:name description:description avatar:nil isChecked:NO];
-}
+@synthesize listContact = _listContact;
+@synthesize listContactOnView = _listContactOnView;
 
-- (id)initWithIdentifier:(NSString *)identifier
-                    name:(NSString *)name
-             description:(NSString *)description
-                  avatar:(UIImage * _Nullable)image {
-    
-    return [self initWithIdentifier:identifier name:name description:description avatar:image isChecked:NO];
-    
-}
-
-- (id)initWithIdentifier:(NSString *)identifier
-                    name:(NSString *)name
-             description:(NSString *)description
-                  avatar:(UIImage * _Nullable)image
-               isChecked:(BOOL)isChecked {
-    
-    self.identifier = identifier;
-    self.name = name;
-    self.contactDescription = description;
-    self.avatar = image;
-    self.isChecked = isChecked;
+- (id)initWithBus:(id<ContactBusProtocol>)bus {
+    self->_contactBus = bus;
+    self = [self finalizeInit];
     return self;
 }
 
-- (BOOL)contactHasPrefix:(NSString *)key {
+- (id)finalizeInit {
+    self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
+    self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
+    
+    [self refreshListContact];
+    __weak ContactViewModel * weakSelf = self;
+    
+    self->_contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
+        
+        NSMutableArray * listIndexNeedUpdate = [[NSMutableArray alloc] init];
+        NSArray * contactsViewModelUpdated = [contactsUpdated map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+            return [weakSelf parseContactEntity:obj];
+        }];
+        
+        [contactsViewModelUpdated enumerateObjectsUsingBlock:^(ContactViewEntity*  _Nonnull newEntity, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            for (int i = 0; i < weakSelf.listContactOnView.count ; i++ ) {
+                ContactViewEntity * oldEntity = weakSelf.listContactOnView[i];
+                if ([oldEntity.identifier isEqualToString:newEntity.identifier] && ![oldEntity isEqual:newEntity]) {
+                    [listIndexNeedUpdate addObject:[NSNumber numberWithInt:i]];
+                    weakSelf.listContactOnView[i] = newEntity;
+                }
+            }
+        }];
+        
+        weakSelf.updateContacts.value = listIndexNeedUpdate;
+    };
+    
+    return self;
+}
+
+
+- (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
+    ContactViewEntity *model =  [[ContactViewEntity alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp" avatar: [UIImage imageWithData: entity.contactImage]];
+    
+    return model;
+}
+
+
+- (void)refreshListContact {
+    self->_listContact = [[NSMutableArray alloc] init];
+    self->_listContactOnView = _listContact;
+}
+
+- (void)loadContacts:(ViewHandler)completion {
+    [self refreshListContact];
+    [self->_contactBus loadContacts:^(BOOL isSuccess) {
+        if (isSuccess) {
+            [self loadBatch:completion];
+        }
+    }];
+}
+
+- (void)loadBatch:(ViewHandler)completion {
+    [self->_contactBus loadBatch:^(NSArray<ContactBusEntity *> * listContactBusEntity) {
+        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+            return [self parseContactEntity:obj];
+        }];
+        
+        [self->_listContact addObjectsFromArray:batchOfContact];
+        completion(YES, (int)batchOfContact.count);
+    }];
+}
+
+#pragma mark Public function
+- (int)getNumberOfContacts {
+    return (int)self->_listContactOnView.count;
+}
+
+- (ContactViewEntity *)getContactAt:(int)index {
+    if (index < self->_listContactOnView.count) {
+        return self->_listContactOnView[index];
+    }
+    return nil;
+}
+
+- (void)searchContactWithKeyName:(NSString *)key completion:(void (^)(BOOL))handler {
+    if (self->_listContact.count == 0) {
+        handler(NO);
+        return;
+    }
+    NSUInteger beforeLength = self->_listContactOnView.count;
     if ([key isEqualToString:@""]) {
-        return true;
+        self->_listContactOnView = self->_listContact;
+        handler(beforeLength != self->_listContactOnView.count);
+        return;
     }
-    return [[self.name lowercaseString] hasPrefix: [key lowercaseString]];
-}
-
-- (BOOL)isEqual:(ContactViewModel *)other
-{
-    if (other == self) {
-        return YES;
-    } else {
-        return ([self.name isEqualToString:other.name] &&
-                [self.contactDescription isEqualToString:other.contactDescription]);
-    }
-}
-
-- (NSUInteger)hash
-{
-    return [self->_name hash];
+    
+    [self->_contactBus searchContactByName:key completion:^(NSArray * listContactBusEntity) {
+        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+            return [self parseContactEntity:obj];
+        }];
+        
+        self->_listContactOnView = [[NSMutableArray alloc] init];
+        
+        self->_listContactOnView = [NSMutableArray arrayWithArray:batchOfContact];
+        
+        handler(YES);
+    }];
 }
 @end

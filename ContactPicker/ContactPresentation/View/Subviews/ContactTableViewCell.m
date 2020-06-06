@@ -42,7 +42,7 @@
     self.avatar.layer.cornerRadius = self.avatar.bounds.size.width / 2;
 }
 
-- (void)configForModel:(ContactViewModel *)entity {
+- (void)configForModel:(ContactViewEntity *)entity {
     self.firstLabel.text = entity.name;
     self.secondLabel.text = entity.contactDescription;
     self.checkBox.checked = entity.isChecked;

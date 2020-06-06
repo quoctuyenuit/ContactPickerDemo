@@ -7,20 +7,15 @@
 //
 
 #import "ContactTableViewController.h"
-#import "ListContactViewModel.h"
+#import "ContactViewModel.h"
 #import "ContactTableViewCell.h"
 #import "NSArrayExtension.h"
-#import "ContactViewModel.h"
-
-#import "ContactBus.h"
-#import "ContactAdapter.h"
-#import "ImageGeneratorAPIAdapter.h"
+#import "ContactViewEntity.h"
 
 @interface ContactTableViewController() {
-    ListContactViewModel* viewModel;
+    ContactViewModel* viewModel;
     NSString * cellReuseIdentifier;
 }
-- (void) customInit;
 - (void) setupView;
 - (void) insertCells: (int) index withSize: (int) size;
 - (void) loadContacts;
@@ -28,18 +23,34 @@
 
 @implementation ContactTableViewController
 
-#pragma mark - Override function
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    if (self) {
-        [self customInit];
-    }
-    return self;
+#pragma mark - Custom function
+
+- (void)setupView {
+    self.tableView.showsHorizontalScrollIndicator = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.view.backgroundColor = UIColor.whiteColor;
+    UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:@"ContactViewCell"];
+    self.tableView.rowHeight = 60;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (void) insertCells: (int) index withSize: (int) size {
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    for (int i = index; i < index + size; i++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+    }
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(UITableViewRowAnimationNone)];
+    [self.tableView endUpdates];
+}
+
+#pragma mark - Override function
+
+- (id)initWithViewModel:(ContactViewModel *)viewModel {
+    self = [super initWithNibName:nil bundle:nil];
+    self->viewModel = viewModel;
+    return self;
 }
 
 - (void)viewDidLoad {
@@ -49,16 +60,6 @@
     self.tableView.dataSource = self;
     [self loadContacts];
     
-    [self->viewModel.search bindAndFire:^(NSString * searchText) {
-        [self->viewModel searchContactWithKeyName:searchText completion:^(BOOL isNeedReload) {
-            if (isNeedReload) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }
-        }];
-    }];
-    
     [self->viewModel.updateContacts binding:^(NSArray * listIndexNeedUpdate) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
@@ -66,7 +67,6 @@
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
             }
             
-//            [self.tableView reloadData];
             [self.tableView beginUpdates];
             [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation: (UITableViewRowAnimationNone)];
             [self.tableView endUpdates];
@@ -85,34 +85,7 @@
 
 - (void)loadView {
     [super loadView];
-    self.view.backgroundColor = UIColor.whiteColor;
     [self setupView];
-}
-
-#pragma mark - Custom function
-
-- (void)customInit {
-    self->viewModel = [[ListContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] initWidthAPI:[[ImageGeneratorAPIAdapter alloc] init]]]];
-    
-}
-
-- (void) insertCells: (int) index withSize: (int) size {
-    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-    for (int i = index; i < index + size; i++) {
-        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-    }
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(UITableViewRowAnimationNone)];
-    [self.tableView endUpdates];
-}
-
-- (void)setupView {
-    UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:@"ContactViewCell"];
-    self.tableView.rowHeight = 60;
-    
-    self.searchBar.delegate = self;
-    self.searchBar.searchTextField.delegate = self;
 }
 
 #pragma mark - Table view data source
@@ -134,7 +107,7 @@
         cell = [[ContactTableViewCell alloc] initWithFrame:CGRectZero];
     }
     
-    ContactViewModel *entity = [self->viewModel getContactAt: (int)indexPath.row];
+    ContactViewEntity *entity = [self->viewModel getContactAt: (int)indexPath.row];
     [cell configForModel:entity];
     
     return cell;
@@ -143,8 +116,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     ContactTableViewCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
-    ContactViewModel * model = [self->viewModel getContactAt:(int)indexPath.row];
-    model.isChecked = !model.isChecked;
+    ContactViewEntity * entity = [self->viewModel getContactAt:(int)indexPath.row];
+    entity.isChecked = !entity.isChecked;
     
     [selectedCell setSelect];
 }
@@ -161,13 +134,4 @@
     }
 }
 
-#pragma mark - Searchbar view delegate
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    self->viewModel.search.value = searchText;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.searchBar endEditing:YES];
-    return YES;
-}
 @end

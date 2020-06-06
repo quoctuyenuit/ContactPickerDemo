@@ -15,26 +15,26 @@
 		193E333E2484F31C00C5735D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E333D2484F31C00C5735D /* main.m */; };
 		193E33482484F31C00C5735D /* ContactPickerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E33472484F31C00C5735D /* ContactPickerTests.m */; };
 		193E33532484F31C00C5735D /* ContactPickerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E33522484F31C00C5735D /* ContactPickerUITests.m */; };
-		193E336824851C8400C5735D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E336724851C8400C5735D /* ContactViewModel.m */; };
+		193E336824851C8400C5735D /* ContactViewEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E336724851C8400C5735D /* ContactViewEntity.m */; };
 		193E336B24851CD000C5735D /* DataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E336A24851CD000C5735D /* DataBinding.m */; };
 		5E4BA252D51243FE77F2531D /* Pods_ContactPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36F7078139262F81109265F /* Pods_ContactPicker.framework */; };
 		95899A3C192949E34BEF3575 /* Pods_ContactPickerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D7FEF726EDB6C241B328504 /* Pods_ContactPickerTests.framework */; };
 		AED34822F38035F924ED39B7 /* Pods_ContactPicker_ContactPickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EE83A607870CC1DFB3ADE84 /* Pods_ContactPicker_ContactPickerUITests.framework */; };
 		B0076342248610C100239F3D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableViewController.m */; };
-		B00763452486167000239F3D /* ListContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ListContactViewModel.m */; };
+		B00763452486167000239F3D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
 		B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */; };
 		B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */; };
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
 		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AE224888E05008D05F4 /* NSArrayExtension.m */; };
 		B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */; };
-		B0979AF624889E77008D05F4 /* ContactViewEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AF524889E77008D05F4 /* ContactViewEntity.m */; };
 		B0979AF82488DFD4008D05F4 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0979AF72488DFD4008D05F4 /* ContactTableViewCell.xib */; };
 		B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */; };
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
 		B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43B24878BEA00E557E1 /* ContactDAL.m */; };
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
 		B0ABD4492487B42100E557E1 /* ImageGeneratorAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD4482487B42100E557E1 /* ImageGeneratorAPIAdapter.m */; };
+		B0E8CAE7248B3C220096ACBA /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E8CAE6248B3C220096ACBA /* ContactViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +73,8 @@
 		193E334E2484F31C00C5735D /* ContactPickerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactPickerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		193E33522484F31C00C5735D /* ContactPickerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactPickerUITests.m; sourceTree = "<group>"; };
 		193E33542484F31C00C5735D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		193E336624851C7B00C5735D /* ContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModel.h; sourceTree = "<group>"; };
-		193E336724851C8400C5735D /* ContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModel.m; sourceTree = "<group>"; };
+		193E336624851C7B00C5735D /* ContactViewEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewEntity.h; sourceTree = "<group>"; };
+		193E336724851C8400C5735D /* ContactViewEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewEntity.m; sourceTree = "<group>"; };
 		193E336924851CC800C5735D /* DataBinding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataBinding.h; sourceTree = "<group>"; };
 		193E336A24851CD000C5735D /* DataBinding.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataBinding.m; sourceTree = "<group>"; };
 		1A1F6351977649D0DFD32CE0 /* Pods-ContactPicker-ContactPickerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker-ContactPickerUITests.debug.xcconfig"; path = "Target Support Files/Pods-ContactPicker-ContactPickerUITests/Pods-ContactPicker-ContactPickerUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -85,8 +85,8 @@
 		AC584A46E84B94BC7FFB89C3 /* Pods-ContactPicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.release.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.release.xcconfig"; sourceTree = "<group>"; };
 		B0076340248610C100239F3D /* ContactTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewController.h; sourceTree = "<group>"; };
 		B0076341248610C100239F3D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
-		B00763432486167000239F3D /* ListContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListContactViewModel.h; sourceTree = "<group>"; };
-		B00763442486167000239F3D /* ListContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListContactViewModel.m; sourceTree = "<group>"; };
+		B00763432486167000239F3D /* ContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModel.h; sourceTree = "<group>"; };
+		B00763442486167000239F3D /* ContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModel.m; sourceTree = "<group>"; };
 		B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarImageView.h; sourceTree = "<group>"; };
 		B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarImageView.m; sourceTree = "<group>"; };
 		B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactAvatarImageView.xib; sourceTree = "<group>"; };
@@ -99,8 +99,6 @@
 		B0979AE224888E05008D05F4 /* NSArrayExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtension.m; sourceTree = "<group>"; };
 		B0979AEB24889BB5008D05F4 /* ContactTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
 		B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
-		B0979AF424889E77008D05F4 /* ContactViewEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewEntity.h; sourceTree = "<group>"; };
-		B0979AF524889E77008D05F4 /* ContactViewEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewEntity.m; sourceTree = "<group>"; };
 		B0979AF72488DFD4008D05F4 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTableViewCell.xib; sourceTree = "<group>"; };
 		B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckBoxButtonView.xib; sourceTree = "<group>"; };
 		B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonView.h; sourceTree = "<group>"; };
@@ -113,6 +111,9 @@
 		B0ABD4462487B33800E557E1 /* APIAdapterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIAdapterProtocol.h; sourceTree = "<group>"; };
 		B0ABD4472487B42100E557E1 /* ImageGeneratorAPIAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageGeneratorAPIAdapter.h; sourceTree = "<group>"; };
 		B0ABD4482487B42100E557E1 /* ImageGeneratorAPIAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageGeneratorAPIAdapter.m; sourceTree = "<group>"; };
+		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
+		B0E8CAE5248B3C220096ACBA /* ContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		B0E8CAE6248B3C220096ACBA /* ContactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		B28327E258220F637D739AFC /* Pods-ContactPicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.debug.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -226,10 +227,11 @@
 		193E33612485144C00C5735D /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				193E336624851C7B00C5735D /* ContactViewModel.h */,
-				193E336724851C8400C5735D /* ContactViewModel.m */,
-				B00763432486167000239F3D /* ListContactViewModel.h */,
-				B00763442486167000239F3D /* ListContactViewModel.m */,
+				193E336624851C7B00C5735D /* ContactViewEntity.h */,
+				193E336724851C8400C5735D /* ContactViewEntity.m */,
+				B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */,
+				B00763432486167000239F3D /* ContactViewModel.h */,
+				B00763442486167000239F3D /* ContactViewModel.m */,
 			);
 			name = ViewModel;
 			path = ../ViewModel;
@@ -250,8 +252,8 @@
 			isa = PBXGroup;
 			children = (
 				B0979AEA24889B94008D05F4 /* Subviews */,
-				B0076340248610C100239F3D /* ContactTableViewController.h */,
-				B0076341248610C100239F3D /* ContactTableViewController.m */,
+				B0E8CAE5248B3C220096ACBA /* ContactViewController.h */,
+				B0E8CAE6248B3C220096ACBA /* ContactViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -268,8 +270,6 @@
 		B0979AE424889876008D05F4 /* ContactPresentation */ = {
 			isa = PBXGroup;
 			children = (
-				B0979AF424889E77008D05F4 /* ContactViewEntity.h */,
-				B0979AF524889E77008D05F4 /* ContactViewEntity.m */,
 				B02EE7E12489DA38006AA3D8 /* View */,
 				193E33612485144C00C5735D /* ViewModel */,
 				193E33602485142F00C5735D /* Model */,
@@ -289,6 +289,8 @@
 				B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */,
 				B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */,
 				B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */,
+				B0076340248610C100239F3D /* ContactTableViewController.h */,
+				B0076341248610C100239F3D /* ContactTableViewController.m */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -589,17 +591,17 @@
 			files = (
 				B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */,
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
-				193E336824851C8400C5735D /* ContactViewModel.m in Sources */,
+				193E336824851C8400C5735D /* ContactViewEntity.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
 				B0ABD4492487B42100E557E1 /* ImageGeneratorAPIAdapter.m in Sources */,
-				B00763452486167000239F3D /* ListContactViewModel.m in Sources */,
+				B00763452486167000239F3D /* ContactViewModel.m in Sources */,
 				193E333E2484F31C00C5735D /* main.m in Sources */,
 				B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */,
-				B0979AF624889E77008D05F4 /* ContactViewEntity.m in Sources */,
 				193E33302484F31A00C5735D /* SceneDelegate.m in Sources */,
 				B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */,
+				B0E8CAE7248B3C220096ACBA /* ContactViewController.m in Sources */,
 				B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */,
 				B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */,
 				B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */,
@@ -775,6 +777,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ContactPicker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -792,6 +795,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ContactPicker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

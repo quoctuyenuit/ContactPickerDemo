@@ -6,19 +6,19 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ListContactViewModel.h"
 #import "ContactViewModel.h"
+#import "ContactViewEntity.h"
 #import <Contacts/Contacts.h>
 #import "NSArrayExtension.h"
 
-@interface ListContactViewModel() {
+@interface ContactViewModel() {
 }
 
 - (id) finalizeInit;
-- (ContactViewModel *) parseContactEntity: (ContactBusEntity *) entity;
+- (ContactViewEntity *) parseContactEntity: (ContactBusEntity *) entity;
 @end
 
-@implementation ListContactViewModel
+@implementation ContactViewModel
 
 @synthesize listContact = _listContact;
 @synthesize listContactOnView = _listContactOnView;
@@ -34,22 +34,22 @@
     self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
     
     [self refreshListContact];
-    __weak ListContactViewModel * weakSelf = self;
+    __weak ContactViewModel * weakSelf = self;
     
     self->_contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
         
         NSMutableArray * listIndexNeedUpdate = [[NSMutableArray alloc] init];
-        NSArray * contactsViewModelUpdated = [contactsUpdated map:^ContactViewModel* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+        NSArray * contactsViewModelUpdated = [contactsUpdated map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
             return [weakSelf parseContactEntity:obj];
         }];
         
-        [contactsViewModelUpdated enumerateObjectsUsingBlock:^(ContactViewModel*  _Nonnull newModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        [contactsViewModelUpdated enumerateObjectsUsingBlock:^(ContactViewEntity*  _Nonnull newEntity, NSUInteger idx, BOOL * _Nonnull stop) {
             
             for (int i = 0; i < weakSelf.listContactOnView.count ; i++ ) {
-                ContactViewModel * oldModel = weakSelf.listContactOnView[i];
-                if ([oldModel.identifier isEqualToString:newModel.identifier] && ![oldModel isEqual:newModel]) {
+                ContactViewEntity * oldEntity = weakSelf.listContactOnView[i];
+                if ([oldEntity.identifier isEqualToString:newEntity.identifier] && ![oldEntity isEqual:newEntity]) {
                     [listIndexNeedUpdate addObject:[NSNumber numberWithInt:i]];
-                    weakSelf.listContactOnView[i] = newModel;
+                    weakSelf.listContactOnView[i] = newEntity;
                 }
             }
         }];
@@ -61,8 +61,8 @@
 }
 
 
-- (ContactViewModel *)parseContactEntity:(ContactBusEntity *)entity {
-    ContactViewModel *model =  [[ContactViewModel alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp" avatar: [UIImage imageWithData: entity.contactImage]];
+- (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
+    ContactViewEntity *model =  [[ContactViewEntity alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp" avatar: [UIImage imageWithData: entity.contactImage]];
     
     return model;
 }
@@ -84,7 +84,7 @@
 
 - (void)loadBatch:(ViewHandler)completion {
     [self->_contactBus loadBatch:^(NSArray<ContactBusEntity *> * listContactBusEntity) {
-        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewModel* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
             return [self parseContactEntity:obj];
         }];
         
@@ -98,7 +98,7 @@
     return (int)self->_listContactOnView.count;
 }
 
-- (ContactViewModel *)getContactAt:(int)index {
+- (ContactViewEntity *)getContactAt:(int)index {
     if (index < self->_listContactOnView.count) {
         return self->_listContactOnView[index];
     }
@@ -118,7 +118,7 @@
     }
     
     [self->_contactBus searchContactByName:key completion:^(NSArray * listContactBusEntity) {
-        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewModel* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
             return [self parseContactEntity:obj];
         }];
         

@@ -38,7 +38,6 @@
     self->listIdentifiersLoaded = [[NSMutableArray alloc] init];
     self->contactChangedObservable = [[DataBinding alloc] initWithValue: nil];
     
-//    [CNContactStoreDidChangeNotification addObserver:self forKeyPath:@"test" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(contactDidChangedEvent:) name:CNContactStoreDidChangeNotification object:nil];
     return self;
 }
@@ -47,6 +46,21 @@
     [self loadContactByBatch:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact) {
         self->contactChangedObservable.value = listUpdatedContact;
     }];
+}
+
+- (void)requestPermission:(void (^)(BOOL))completion {
+    if ([CNContactStore class]) {
+        CNContactStore *addressBook = [[CNContactStore alloc] init];
+        [addressBook requestAccessForEntityType:CNEntityTypeContacts
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (error == nil) {
+                completion(granted);
+            } else {
+                completion(granted);
+                NSLog(@"%@", error);
+            }
+        }];
+    }
 }
 
 - (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, BOOL)) completion {
@@ -100,21 +114,6 @@
             completion([self parseToContactDAL:contact forID: identifier]);
         }
     });
-}
-
-- (void)requestPermission:(void (^)(BOOL))completion {
-    if ([CNContactStore class]) {
-        CNContactStore *addressBook = [[CNContactStore alloc] init];
-        [addressBook requestAccessForEntityType:CNEntityTypeContacts
-                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
-            if (error == nil) {
-                completion(granted);
-            } else {
-                completion(granted);
-                NSLog(@"%@", error);
-            }
-        }];
-    }
 }
 
 - (void)loadContactByBatch:(NSArray<NSString *> *)listIdentifiers completion:(void (^)(NSArray *))completion {
@@ -179,22 +178,6 @@
     if (contact.imageData) {
         imageData = contact.imageData;
     }
-//    else {
-//        [self->contactWaitToImage addObject:identifier];
-//        NSString* name = givenName.length >= 2 ? [givenName substringToIndex:2] : [givenName substringToIndex:1];
-//        [imageGeneratorAPI generateImageFromName:name completion:^(NSData * imageData, BOOL isSuccess) {
-//            if (isSuccess == YES) {
-//                [self->imageCache setObject:imageData forKey:identifier];
-//
-//                NSMutableArray* queue = [self->imageRequestQueue objectForKey:identifier];
-//
-//                for (void (^hdl)(NSData*)  in queue) {
-//                    hdl(imageData);
-//                }
-//            }
-//            [self->contactWaitToImage removeObject:identifier];
-//        }];
-//    }
     
     ContactDAL *contactDAL = [[ContactDAL alloc] init:contactId
                                               name:givenName

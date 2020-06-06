@@ -1,41 +1,44 @@
 //
-//  ContactViewModel.h
+//  ListContactViewModel.h
 //  ContactPicker
 //
-//  Created by LAP11963 on 6/1/20.
+//  Created by LAP13528 on 6/2/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#ifndef ContactViewModel_h
-#define ContactViewModel_h
+#import <Foundation/Foundation.h>
 #import "DataBinding.h"
-#import <UIKit/UIKit.h>
+#import "ContactViewEntity.h"
+#import "ContactBusProtocol.h"
 
-@interface ContactViewModel : NSObject
-@property(nonatomic, readwrite) NSString * identifier;
-@property(nonatomic, readwrite) NSString * name;
-@property(nonatomic, readwrite) NSString * contactDescription;
-@property(nonatomic, readwrite) UIImage * _Nullable avatar;
-@property(nonatomic, readwrite) BOOL isChecked;
-@property(nonatomic, readwrite) void (^waitImageToExcuteQueue)(UIImage *, NSString * );
+NS_ASSUME_NONNULL_BEGIN
 
-- (id) initWithIdentifier: (NSString *) identifier
-                     name: (NSString *) name
-              description: (NSString *) description
-                   avatar: (UIImage * _Nullable) image
-                isChecked: (BOOL) isChecked;
-                  
+typedef void (^ViewHandler)(BOOL, int);
 
-- (id) initWithIdentifier: (NSString *) identifier
-                     name: (NSString *) name
-              description: (NSString *) description
-                   avatar: (UIImage * _Nullable) image;
+@interface ContactViewModel : NSObject {
+    NSMutableArray<ContactViewEntity *> *_listContactOnView;
+    NSMutableArray<ContactViewEntity *> *_listContact;
+    id<ContactBusProtocol> _contactBus;
+}
 
-- (id) initWithIdentifier: (NSString *) identifier
-                     name: (NSString *) name
-              description: (NSString *) description;
+@property DataBinding<NSString *> * search;
+@property DataBinding<NSArray *> * updateContacts;
+@property NSMutableArray<ContactViewEntity *> * listContact;
+@property NSMutableArray<ContactViewEntity *> * listContactOnView;
 
-- (BOOL)contactHasPrefix: (NSString *) key;
+- (id)initWithBus: (id<ContactBusProtocol>) bus;
+
+- (void)loadContacts: (ViewHandler) completion;
+
+- (void)loadBatch: (ViewHandler) completion;
+
+- (int)getNumberOfContacts;
+
+- (ContactViewEntity*)getContactAt: (int) index;
+
+- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(BOOL)) handler;
+
+- (void) refreshListContact;
 @end
 
-#endif /* ContactViewModel_h */
+NS_ASSUME_NONNULL_END
