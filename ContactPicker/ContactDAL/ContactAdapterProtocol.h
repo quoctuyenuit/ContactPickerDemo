@@ -16,6 +16,7 @@
 @property DataBinding<NSArray<ContactDAL *> *> *contactChangedObservable;
 @required
 - (void) requestPermission: (void (^)(BOOL)) completion;
+
 - (void) loadContacts: (void (^)(NSArray<ContactDAL *> * , BOOL)) completion;
 
 - (void) loadContactById: (NSString *) identifier

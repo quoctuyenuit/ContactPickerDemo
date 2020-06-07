@@ -6,7 +6,6 @@ target 'ContactPicker' do
   use_frameworks!
 
   # Pods for ContactPicker
-  pod 'SnapKit', '~> 5.0.0'
   target 'ContactPickerTests' do
     inherit! :search_paths
     # Pods for testing

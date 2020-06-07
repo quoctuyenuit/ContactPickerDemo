@@ -16,9 +16,13 @@
 @property (nonatomic, readwrite) int currentIndexBatch;
 
 @property void (^contactChangedObservable)(NSArray *);
+
 @required - (void) requestPermission: (void (^)(BOOL)) completion;
+
 @required - (void) loadContacts: (void (^)(BOOL)) completion;
+
 @required - (void) loadBatch: (void (^)(NSArray<ContactBusEntity *> *)) handler;
+
 @required - (void) searchContactByName: (NSString *) name completion: (void (^)(NSArray *)) handler;
 @end
 

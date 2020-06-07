@@ -21,7 +21,12 @@
 @implementation ContactViewModel
 
 @synthesize listContact = _listContact;
+
 @synthesize listContactOnView = _listContactOnView;
+
+@synthesize search;
+
+@synthesize updateContacts;
 
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     self->_contactBus = bus;
@@ -30,10 +35,12 @@
 }
 
 - (id)finalizeInit {
+    self->_listContact = [[NSMutableArray alloc] init];
+    self->_listContactOnView = _listContact;
+    
     self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
     
-    [self refreshListContact];
     __weak ContactViewModel * weakSelf = self;
     
     self->_contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
@@ -60,21 +67,18 @@
     return self;
 }
 
-
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
     ContactViewEntity *model =  [[ContactViewEntity alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp" avatar: [UIImage imageWithData: entity.contactImage]];
     
     return model;
 }
 
-
-- (void)refreshListContact {
-    self->_listContact = [[NSMutableArray alloc] init];
-    self->_listContactOnView = _listContact;
+#pragma mark Public function
+- (void)requestPermission:(void (^)(BOOL))completion {
+    [self->_contactBus requestPermission:completion];
 }
 
-- (void)loadContacts:(ViewHandler)completion {
-    [self refreshListContact];
+- (void)loadContacts:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
     [self->_contactBus loadContacts:^(BOOL isSuccess) {
         if (isSuccess) {
             [self loadBatch:completion];
@@ -82,7 +86,7 @@
     }];
 }
 
-- (void)loadBatch:(ViewHandler)completion {
+- (void)loadBatch:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
     [self->_contactBus loadBatch:^(NSArray<ContactBusEntity *> * listContactBusEntity) {
         NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
             return [self parseContactEntity:obj];
@@ -93,7 +97,6 @@
     }];
 }
 
-#pragma mark Public function
 - (int)getNumberOfContacts {
     return (int)self->_listContactOnView.count;
 }
@@ -129,4 +132,5 @@
         handler(YES);
     }];
 }
+
 @end

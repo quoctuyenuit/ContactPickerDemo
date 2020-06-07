@@ -7,18 +7,17 @@
 //
 
 #import "ContactTableViewController.h"
-#import "ContactViewModel.h"
+#import "ContactViewModelProtocol.h"
 #import "ContactTableViewCell.h"
 #import "NSArrayExtension.h"
 #import "ContactViewEntity.h"
 
 @interface ContactTableViewController() {
-    ContactViewModel* viewModel;
+    id<ContactViewModelProtocol> viewModel;
     NSString * cellReuseIdentifier;
 }
 - (void) setupView;
 - (void) insertCells: (int) index withSize: (int) size;
-- (void) loadContacts;
 @end
 
 @implementation ContactTableViewController
@@ -47,7 +46,7 @@
 
 #pragma mark - Override function
 
-- (id)initWithViewModel:(ContactViewModel *)viewModel {
+- (id)initWithViewModel:(id<ContactViewModelProtocol>)viewModel {
     self = [super initWithNibName:nil bundle:nil];
     self->viewModel = viewModel;
     return self;
@@ -58,7 +57,6 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self loadContacts];
     
     [self->viewModel.updateContacts binding:^(NSArray * listIndexNeedUpdate) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -73,14 +71,6 @@
         });
     }];
     
-}
-
-- (void)loadContacts {
-    [self->viewModel loadContacts: ^(BOOL isSuccess, int length) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-    }];
 }
 
 - (void)loadView {
@@ -120,6 +110,7 @@
     entity.isChecked = !entity.isChecked;
     
     [selectedCell setSelect];
+    [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -133,5 +124,7 @@
         }];
     }
 }
+
+@synthesize keyboardAppearanceDelegate;
 
 @end

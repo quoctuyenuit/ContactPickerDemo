@@ -33,6 +33,7 @@
     self->contactAdapter = adapter;
     self->busBatchSize = 20;
     self->currentIndexBatch = 0;
+    
     self->listContactRequestedInfor = [[NSMutableArray alloc] init];
      __weak ContactBus * weakSelf = self;
     [self->contactAdapter.contactChangedObservable binding:^(NSArray<ContactDAL *> * listContactDAL) {

@@ -8,11 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "ContactAdapterProtocol.h"
-#import "APIAdapterProtocol.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactAdapter : NSObject<ContactAdapterProtocol>
-- (id)initWidthAPI: (id<ImageGeneratorProtocol>) imageAPI;
+- (id)init;
 @end
 
 NS_ASSUME_NONNULL_END

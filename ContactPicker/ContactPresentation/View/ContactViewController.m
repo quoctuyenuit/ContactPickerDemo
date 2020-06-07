@@ -9,63 +9,84 @@
 #import "ContactViewController.h"
 #import "ContactTableViewController.h"
 #import "ContactViewModel.h"
-
-#import "ContactBus.h"
-#import "ContactAdapter.h"
-#import "ImageGeneratorAPIAdapter.h"
+#import "ResponseInformationViewController.h"
+#import "KeyboardAppearanceDelegate.h"
 
 @interface ContactViewController () {
-    ContactTableViewController * contactTableController;
+    UIViewController<KeyboardAppearanceProtocol> * contentViewController;
     ContactViewModel * viewModel;
 }
-- (UITableViewController *) loadContactTableView;
 - (void) setupViews;
 - (void) setupEvents;
+- (UIViewController<KeyboardAppearanceProtocol> *) loadContactTableViewController;
+- (UIViewController<KeyboardAppearanceProtocol> *) loadFailLoadingContactViewController;
+- (UIViewController<KeyboardAppearanceProtocol> *) loadEmptyViewController;
 @end
 
 @implementation ContactViewController
 
++ (ContactViewController *)instantiateWith:(id<ContactViewModelProtocol>)viewModel {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    ContactViewController * selfInstance = [mainStoryboard instantiateViewControllerWithIdentifier:@"contactTableViewController"];
+    selfInstance->viewModel = viewModel;
+    return selfInstance;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] initWidthAPI:[[ImageGeneratorAPIAdapter alloc] init]]]];
-    self->contactTableController = [[ContactTableViewController alloc] initWithViewModel:viewModel];
-
-    [self setupViews];
-    [self setupEvents];
     
+    [self->viewModel loadContacts:^(BOOL isSuccess, int numberOfContacts) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!isSuccess) {
+                self->contentViewController = [self loadFailLoadingContactViewController];
+            } else if (numberOfContacts == 0) {
+                self->contentViewController = [self loadEmptyViewController];
+            } else {
+                self->contentViewController = [self loadContactTableViewController];
+            }
+            [self setupViews];
+            [self setupEvents];
+        });
+    }];
 }
 
 - (void)setupViews {
-    [self addChildViewController:self->contactTableController];
-    [self.view addSubview:self->contactTableController.view];
+    self.searchBar.delegate = self;
+    self.searchBar.searchTextField.delegate = self;
+    self->contentViewController.keyboardAppearanceDelegate = self;
     
-    self->contactTableController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    [self->contactTableController.view.topAnchor constraintEqualToAnchor:self.searchBar.bottomAnchor].active = YES;
-    [self->contactTableController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
-    [self->contactTableController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
-    [self->contactTableController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
-}
-
-- (UITableViewController *)loadContactTableView {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ContactTableViewStoryboard" bundle:nil];
-    UITableViewController *contactTableViewController = (UITableViewController*)[storyboard instantiateViewControllerWithIdentifier:@"ContactTableViewController"];
-    return contactTableViewController;
+    [self addChildViewController:self->contentViewController];
+    [self.view addSubview:self->contentViewController.view];
+    
+    self->contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self->contentViewController.view.topAnchor constraintEqualToAnchor:self.searchBar.bottomAnchor].active = YES;
+    [self->contentViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
+    [self->contentViewController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
+    [self->contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
 }
 
 - (void)setupEvents {
-    self.searchBar.delegate = self;
-    self.searchBar.searchTextField.delegate = self;
-    
     [self->viewModel.search bindAndFire:^(NSString * searchText) {
         [self->viewModel searchContactWithKeyName:searchText completion:^(BOOL isNeedReload) {
             if (isNeedReload) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self->contactTableController.tableView reloadData];
+                    [((ContactTableViewController *)self->contentViewController).tableView reloadData];
                 });
             }
         }];
     }];
+}
+     
+- (UIViewController *)loadContactTableViewController {
+     return [[ContactTableViewController alloc] initWithViewModel:self->viewModel];
+}
+
+- (UIViewController *)loadEmptyViewController {
+    return [ResponseInformationViewController instantiateWith:ResponseViewTypeEmptyContact];
+}
+
+- (UIViewController *)loadFailLoadingContactViewController {
+    return [ResponseInformationViewController instantiateWith:ResponseViewTypeFailLoadingContact];
 }
 
 #pragma mark - Searchbar view delegate
@@ -76,6 +97,11 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self.searchBar endEditing:YES];
     return YES;
+}
+
+#pragma mark - KeyboardAppearanceProtocol view delegate
+- (void)hideKeyboard {
+    [self.searchBar endEditing:YES];
 }
 
 @end

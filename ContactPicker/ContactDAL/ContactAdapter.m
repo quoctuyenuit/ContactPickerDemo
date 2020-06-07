@@ -9,14 +9,12 @@
 #import "ContactAdapter.h"
 #import <Contacts/Contacts.h>
 #import "ContactDAL.h"
-#import "APIAdapterProtocol.h"
 #import "NSArrayExtension.h"
 
 
 @interface ContactAdapter() {
     NSCache *contactCache;
     NSMutableArray * listIdentifiersLoaded;
-    id<ImageGeneratorProtocol> imageGeneratorAPI;
     NSMutableDictionary<NSString*, NSMutableArray<void (^)(NSData *)> *> * imageRequestQueue;
     NSMutableArray<NSString*> * contactWaitToImage;
 }
@@ -30,9 +28,8 @@
 
 @synthesize contactChangedObservable;
 
-- (id) initWidthAPI: (id<ImageGeneratorProtocol>) imageAPI {
+- (id) init {
     self->contactCache = [[NSCache alloc] init];
-    self->imageGeneratorAPI = imageAPI;
     self->imageRequestQueue = [[NSMutableDictionary alloc] init];
     self->contactWaitToImage = [[NSMutableArray alloc] init];
     self->listIdentifiersLoaded = [[NSMutableArray alloc] init];
