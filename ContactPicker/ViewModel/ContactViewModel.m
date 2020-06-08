@@ -10,6 +10,7 @@
 #import "ContactViewEntity.h"
 #import <Contacts/Contacts.h>
 #import "NSArrayExtension.h"
+#import <UIKit/UIKit.h>
 
 @interface ContactViewModel() {
 }
@@ -68,9 +69,15 @@
 }
 
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
-    ContactViewEntity *model =  [[ContactViewEntity alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp" avatar: [UIImage imageWithData: entity.contactImage]];
-    
-    return model;
+    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp"];
+    [self->_contactBus getImageFromId:entity.contactID completion:^(NSData * imageData) {
+        UIImage * image = [UIImage imageWithData:imageData];
+        viewEntity.avatar = image;
+        if (viewEntity.waitImageToExcuteQueue) {
+            viewEntity.waitImageToExcuteQueue(image, entity.contactID);
+        }
+    }];
+    return viewEntity;
 }
 
 #pragma mark Public function
@@ -82,6 +89,8 @@
     [self->_contactBus loadContacts:^(BOOL isSuccess) {
         if (isSuccess) {
             [self loadBatch:completion];
+        } else {
+            completion(isSuccess, 0);
         }
     }];
 }
@@ -132,5 +141,4 @@
         handler(YES);
     }];
 }
-
 @end

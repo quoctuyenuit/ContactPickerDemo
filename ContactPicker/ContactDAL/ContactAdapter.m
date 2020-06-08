@@ -13,6 +13,7 @@
 
 
 @interface ContactAdapter() {
+    NSCache *imageCache;
     NSCache *contactCache;
     NSMutableArray * listIdentifiersLoaded;
     NSMutableDictionary<NSString*, NSMutableArray<void (^)(NSData *)> *> * imageRequestQueue;
@@ -29,6 +30,7 @@
 @synthesize contactChangedObservable;
 
 - (id) init {
+    self->imageCache = [[NSCache alloc] init];
     self->contactCache = [[NSCache alloc] init];
     self->imageRequestQueue = [[NSMutableDictionary alloc] init];
     self->contactWaitToImage = [[NSMutableArray alloc] init];
@@ -77,7 +79,6 @@
                 [listContacts addObject: [[ContactDAL alloc] initWithID:contact.identifier name:contact.givenName familyName:contact.familyName]];
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
-            
             
             completion([listContacts copy], YES);
         } else
@@ -171,15 +172,21 @@
     NSString* familyName = contact.familyName;
     NSMutableArray<NSString*> *phoneNumbers = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray<NSString*> *emails = [contact.emailAddresses valueForKey:@"value"];
-    NSData * imageData = nil;
+    
     if (contact.imageData) {
-        imageData = contact.imageData;
+        [self->imageCache setObject:contact.imageData forKey:contactId];
+        
+        NSArray * blocksQueue = [self->waitImageBlockQueue objectForKey:contactId];
+        if (blocksQueue) {
+            for (void (^block)(NSData *) in blocksQueue) {
+                block(contact.imageData);
+            }
+        }
     }
     
     ContactDAL *contactDAL = [[ContactDAL alloc] init:contactId
                                               name:givenName
                                            familyName:familyName
-                                                image: imageData
                                             phones:phoneNumbers
                                             emails:emails];
     
@@ -187,6 +194,20 @@
     
     return contactDAL;
     
+}
+
+- (void)getImageFromId:(NSString *)identifier completion:(void (^)(NSData *))handler {
+    NSData * imageData = [self->imageCache objectForKey:identifier];
+    if (imageData) {
+        handler(imageData);
+    } else {
+        NSMutableArray * queue = [self->waitImageBlockQueue objectForKey:identifier];
+        if (queue) {
+            [queue addObject:[handler copy]];
+        } else {
+            [self->waitImageBlockQueue setObject:[[NSMutableArray alloc] initWithObjects:[handler copy], nil] forKey:identifier];
+        }
+    }
 }
 
 @end

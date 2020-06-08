@@ -10,7 +10,9 @@
 #import "ContactAdapterProtocol.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactAdapter : NSObject<ContactAdapterProtocol>
+@interface ContactAdapter : NSObject<ContactAdapterProtocol> {
+    NSMutableDictionary<NSString * , NSMutableArray<void (^)(NSData *)> *> * waitImageBlockQueue;
+}
 - (id)init;
 @end
 

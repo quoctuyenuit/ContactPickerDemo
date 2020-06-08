@@ -114,7 +114,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == [self->viewModel getNumberOfContacts] - 5) {
+    if (indexPath.row == [self->viewModel getNumberOfContacts] - 10) {
         int itemsOnViewCount = [self->viewModel getNumberOfContacts];
         [self->viewModel loadBatch: ^(BOOL loadDone, int batchLength) {
             dispatch_async(dispatch_get_main_queue(), ^{

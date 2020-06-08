@@ -25,6 +25,8 @@
 - (void) loadContactByBatch: (NSArray<NSString *> *) listIdentifiers
                  completion: (void (^)(NSArray *)) completion;
 
+- (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData *)) handler;
+
 @end
 
 #endif /* ContactAdapterProtocol_h */

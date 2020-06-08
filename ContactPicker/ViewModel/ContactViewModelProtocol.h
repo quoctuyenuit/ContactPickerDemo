@@ -9,6 +9,7 @@
 #ifndef ContactViewModelProtocol_h
 #define ContactViewModelProtocol_h
 #import "ContactViewEntity.h"
+#import <UIKit/UIKit.h>
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *> * search;

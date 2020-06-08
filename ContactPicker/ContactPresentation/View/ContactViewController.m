@@ -11,6 +11,7 @@
 #import "ContactViewModel.h"
 #import "ResponseInformationViewController.h"
 #import "KeyboardAppearanceDelegate.h"
+#import "Logging.h"
 
 @interface ContactViewController () {
     UIViewController<KeyboardAppearanceProtocol> * contentViewController;

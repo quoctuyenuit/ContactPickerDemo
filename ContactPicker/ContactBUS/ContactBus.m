@@ -30,13 +30,13 @@
 @synthesize contactChangedObservable;
 
 - (id)initWithAdapter:(id<ContactAdapterProtocol>)adapter {
-    self->contactAdapter = adapter;
+    self->_contactAdapter = adapter;
     self->busBatchSize = 20;
     self->currentIndexBatch = 0;
     
     self->listContactRequestedInfor = [[NSMutableArray alloc] init];
      __weak ContactBus * weakSelf = self;
-    [self->contactAdapter.contactChangedObservable binding:^(NSArray<ContactDAL *> * listContactDAL) {
+    [self->_contactAdapter.contactChangedObservable binding:^(NSArray<ContactDAL *> * listContactDAL) {
         NSArray * listContactBusEntity = [listContactDAL map:^ContactBusEntity* _Nonnull(ContactDAL *  _Nonnull obj) {
             return [[ContactBusEntity alloc] initWithData: obj];
         }];
@@ -62,7 +62,7 @@
 }
 
 - (void)getContactBatchWithIdentifiers:(NSArray *)identifiers completion:(void (^)(NSArray<ContactBusEntity *> *))handler {
-    [self->contactAdapter loadContactByBatch:identifiers completion:^(NSArray<ContactDAL*> * listContacts) {
+    [self->_contactAdapter loadContactByBatch:identifiers completion:^(NSArray<ContactDAL*> * listContacts) {
         
         NSArray* listContactBusEntitys = [listContacts map:^ContactBusEntity* _Nonnull(ContactDAL*  _Nonnull obj) {
             return [[ContactBusEntity alloc] initWithData:obj];
@@ -80,11 +80,11 @@
 }
 
 - (void)requestPermission:(void (^)(BOOL))completion {
-    [self->contactAdapter requestPermission:completion];
+    [self->_contactAdapter requestPermission:completion];
 }
 
 - (void)loadContacts:(void (^)(BOOL))completion {
-    [self->contactAdapter loadContacts:^(NSArray<ContactDAL *> * listContactRequestedInfor, BOOL isSuccess) {
+    [self->_contactAdapter loadContacts:^(NSArray<ContactDAL *> * listContactRequestedInfor, BOOL isSuccess) {
 //        self->listContactIdentifiers = listContactIdentifiers;
 //        NSMutableArray* dummyData = [NSMutableArray new];
         
@@ -96,6 +96,23 @@
         [self->listContactRequestedInfor addObjectsFromArray: listContactRequestedInfor];
         completion(isSuccess);
     }];
+}
+
+- (void)loadBatch:(void (^)(NSArray<ContactBusEntity *> *))handler {
+    if (self->currentIndexBatch >= self->listContactRequestedInfor.count)
+        return;
+    
+    int gap = (int)self->listContactRequestedInfor.count - self->currentIndexBatch;
+    int batchSize = gap >= self->busBatchSize ? self->busBatchSize : gap;
+    
+    [self getContactBatchStartWith:self->currentIndexBatch batchSize: batchSize completion:^(NSArray<ContactBusEntity *> * listContacts) {
+        self->currentIndexBatch += listContacts.count;
+        handler(listContacts);
+    }];
+}
+
+- (void)getImageFromId:(NSString *)identifier completion:(void (^)(NSData *))handler {
+    [self->_contactAdapter getImageFromId:identifier completion:handler];
 }
 
 - (void)searchContactByName:(NSString *)name completion:(void (^)(NSArray *))handler {
@@ -113,19 +130,6 @@
     }];
     
     [self getContactBatchWithIdentifiers:batchIdentifiers completion:handler];
-}
-
-- (void)loadBatch:(void (^)(NSArray<ContactBusEntity *> *))handler {
-    if (self->currentIndexBatch >= self->listContactRequestedInfor.count)
-        return;
-    
-    int gap = (int)self->listContactRequestedInfor.count - self->currentIndexBatch;
-    int batchSize = gap >= self->busBatchSize ? self->busBatchSize : gap;
-    
-    [self getContactBatchStartWith:self->currentIndexBatch batchSize: batchSize completion:^(NSArray<ContactBusEntity *> * listContacts) {
-        self->currentIndexBatch += listContacts.count;
-        handler(listContacts);
-    }];
 }
 
 @end

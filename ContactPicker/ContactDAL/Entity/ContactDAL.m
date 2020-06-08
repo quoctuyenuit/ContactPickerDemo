@@ -14,20 +14,18 @@
 - (id)init:(NSString *)contactID
       name:(NSString *)givenName
 familyName:(NSString *)familyName
-     image: (NSData *) image
      phones:(NSArray<NSString *> *)phone
      emails:(NSArray<NSString *> *)email
 {
     self.contactID = contactID;
     self.contactName = givenName;
     self.contactFamilyName = familyName;
-    self.contactImage = image;
     self.contactPhones = phone;
     self.contactEmails = email;
     return self;
 }
 
 - (id)initWithID:(NSString *)contactID name:(NSString *)name familyName: (NSString *) familyName {
-    return [self init:contactID name:name familyName:familyName image: nil phones:nil emails:nil];
+    return [self init:contactID name:name familyName:familyName phones:nil emails:nil];
 }
 @end

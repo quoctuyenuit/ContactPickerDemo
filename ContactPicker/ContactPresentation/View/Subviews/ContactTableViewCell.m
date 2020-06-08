@@ -48,12 +48,11 @@
     self.checkBox.checked = entity.isChecked;
     NSString* keyName = entity.name.length >= 2 ? [entity.name substringToIndex:2] : [entity.name substringToIndex:1];
     
-    [self.avatar configImage:nil forLabel:keyName];
-    
     self.avatar.imageView.image = nil;
     if (entity.avatar) {
         [self.avatar configImage:entity.avatar forLabel:@""];
     } else {
+        [self.avatar configImage:nil forLabel:keyName];
         __weak ContactTableViewCell* weakSelf = self;
         entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
             dispatch_sync(dispatch_get_main_queue(), ^{

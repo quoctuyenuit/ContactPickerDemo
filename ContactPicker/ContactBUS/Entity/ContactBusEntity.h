@@ -14,9 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ContactBusEntity : NSObject
 @property (nonatomic, readwrite) NSString* contactID;
 @property (nonatomic, readwrite) NSString* contactName;
-@property (nonatomic, readwrite) NSData* contactImage;
 
-- (id) initWith: (NSString *) contactID name: (NSString*) name image: (NSData *) imageData;
+- (id) initWith: (NSString *) contactID name: (NSString*) name;
 - (id) initWithData: (ContactDAL *) contactDAL;
 - (BOOL) fitWithName: (NSString *) name;
 @end
