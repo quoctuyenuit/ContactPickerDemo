@@ -15,6 +15,7 @@ typedef enum : NSUInteger {
     ResponseViewTypePermissionDenied,
     ResponseViewTypeEmptyContact,
     ResponseViewTypeFailLoadingContact,
+    ResponseViewTypeSomethingWrong
 } ResponseViewType;
 
 @interface ResponseInformationViewController : UIViewController<KeyboardAppearanceProtocol> {
@@ -28,6 +29,7 @@ typedef enum : NSUInteger {
 extern NSString * const _Nonnull PermissionDeniedMsg;
 extern NSString * const _Nonnull EmptyContactMsg;
 extern NSString * const _Nonnull FailLoadingContactMsg;
+extern NSString * const _Nonnull SomethingWrongMsg;
 
 + (ResponseInformationViewController *) instantiateWith: (ResponseViewType) viewType;
 

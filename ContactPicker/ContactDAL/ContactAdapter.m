@@ -42,27 +42,28 @@
 }
 
 - (void) contactDidChangedEvent: (NSNotification *) notification {
-    [self loadContactByBatch:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact) {
-        self->contactChangedObservable.value = listUpdatedContact;
+    [self loadBatchOfContacts:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact, NSError * error) {
+        if (!error) {
+            self->contactChangedObservable.value = listUpdatedContact;
+        }
     }];
 }
 
-- (void)requestPermission:(void (^)(BOOL))completion {
+- (void)requestPermission:(void (^)(BOOL, NSError * _Nullable)) handler {
     if ([CNContactStore class]) {
         CNContactStore *addressBook = [[CNContactStore alloc] init];
         [addressBook requestAccessForEntityType:CNEntityTypeContacts
                               completionHandler:^(BOOL granted, NSError * _Nullable error) {
-            if (error == nil) {
-                completion(granted);
-            } else {
-                completion(granted);
-                NSLog(@"%@", error);
-            }
+            handler(granted, error);
         }];
+    } else {
+        NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
+        NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+        handler(NO, error);
     }
 }
 
-- (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, BOOL)) completion {
+- (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, NSError * _Nullable)) handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *listContacts = [[NSMutableArray alloc] init];
         
@@ -80,19 +81,24 @@
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
             
-            completion([listContacts copy], YES);
-        } else
-            completion(nil, NO);
+            handler([listContacts copy], nil);
+        } else {
+            NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
+            NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            handler(nil, error);
+        }
+        
     });
 }
 
 - (void) loadContactById: (NSString *) identifier
-             completion: (void (^)(ContactDAL *))completion {
+             completion: (void (^)(ContactDAL *, NSError * _Nullable))handler {
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         ContactDAL *contactInCache = [self->contactCache objectForKey:identifier];
         if (contactInCache) {
-            completion(contactInCache);
+            handler(contactInCache, nil);
             return;
         }
         
@@ -109,13 +115,28 @@
                                                                keysToFetch:keysToFetch
                                                                      error:nil];
             
-            completion([self parseToContactDAL:contact forID: identifier]);
+            if (!contact) {
+                NSDictionary * userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"Dont have contact with identifier: %@", identifier]};
+                NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                handler(nil, error);
+            } else {
+                handler([self parseToContactDAL:contact forID: identifier], nil);
+            }
+            
+        } else {
+            NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
+            NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            handler(nil, error);
         }
     });
 }
 
-- (void)loadContactByBatch:(NSArray<NSString *> *)listIdentifiers completion:(void (^)(NSArray *))completion {
+- (void)loadBatchOfContacts:(NSArray<NSString *> *)listIdentifiers
+                completion:(void (^)(NSArray *, NSError * _Nullable))handler {
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+        
         NSMutableArray * identifiersNeedLoad = [[NSMutableArray alloc] init];
         NSMutableArray * results = [[NSMutableArray alloc] init];
         
@@ -130,7 +151,7 @@
         }
         
         if (identifiersNeedLoad.count == 0) {
-            completion(results);
+            handler(results, nil);
             return;
         }
         
@@ -150,14 +171,16 @@
             NSPredicate* predicate = [CNContact predicateForContactsWithIdentifiers:identifiersNeedLoad];
             NSArray<CNContact*> * contacts = [addressBook unifiedContactsMatchingPredicate:predicate keysToFetch:keysToFetch error:nil];
             
-            
             NSArray * listContactLoaded = [contacts map:^ContactDAL* _Nonnull(CNContact*  _Nonnull obj) {
                 return [self parseToContactDAL:obj forID:obj.identifier];
             }];
             
             [results addObjectsFromArray:listContactLoaded];
-            
-            completion(results);
+            handler(results, nil);
+        } else {
+            NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
+            NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            handler(nil, error);
         }
         
     });
@@ -173,7 +196,7 @@
     NSMutableArray<NSString*> *phoneNumbers = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray<NSString*> *emails = [contact.emailAddresses valueForKey:@"value"];
     
-    if (contact.imageData) {
+    if (contact.imageDataAvailable) {
         [self->imageCache setObject:contact.imageData forKey:contactId];
         
         NSArray * blocksQueue = [self->waitImageBlockQueue objectForKey:contactId];

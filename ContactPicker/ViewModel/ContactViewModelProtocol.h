@@ -15,11 +15,11 @@
 @property DataBinding<NSString *> * search;
 @property DataBinding<NSArray *> * updateContacts;
 
-- (void) requestPermission: (void (^)(BOOL)) completion;
+- (void) requestPermission: (void (^)(BOOL, NSError *)) completion;
 
 - (void)loadContacts: (void (^)(BOOL isSuccess, int numberOfContacts)) completion;
 
-- (void)loadBatch: (void (^)(BOOL isSuccess, int numberOfContacts)) completion;
+- (void)loadBatchOfContacts: (void (^)(BOOL isSuccess, int numberOfContacts)) completion;
 
 - (int)getNumberOfContacts;
 

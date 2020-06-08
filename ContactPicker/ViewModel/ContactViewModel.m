@@ -11,6 +11,7 @@
 #import <Contacts/Contacts.h>
 #import "NSArrayExtension.h"
 #import <UIKit/UIKit.h>
+#import "Logging.h"
 
 @interface ContactViewModel() {
 }
@@ -69,40 +70,48 @@
 }
 
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
-    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithIdentifier:entity.contactID name:entity.contactName description:@"temp"];
-    [self->_contactBus getImageFromId:entity.contactID completion:^(NSData * imageData) {
+    NSString * fullName = [NSString stringWithFormat:@"%@ %@", entity.givenName, entity.familyName];
+    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithIdentifier:entity.identifier name:fullName description:@"temp"];
+    [
+     self->_contactBus getImageFromId:entity.identifier completion:^(NSData * imageData) {
         UIImage * image = [UIImage imageWithData:imageData];
         viewEntity.avatar = image;
         if (viewEntity.waitImageToExcuteQueue) {
-            viewEntity.waitImageToExcuteQueue(image, entity.contactID);
+            viewEntity.waitImageToExcuteQueue(image, entity.identifier);
         }
     }];
     return viewEntity;
 }
 
 #pragma mark Public function
-- (void)requestPermission:(void (^)(BOOL))completion {
+- (void)requestPermission:(void (^)(BOOL, NSError *))completion {
     [self->_contactBus requestPermission:completion];
 }
 
 - (void)loadContacts:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
-    [self->_contactBus loadContacts:^(BOOL isSuccess) {
-        if (isSuccess) {
-            [self loadBatch:completion];
+    [self->_contactBus loadContacts:^(NSError * error) {
+        if (error) {
+            completion(NO, 0);
+            [Logging error:[NSString stringWithFormat:@"Load contact failt, error: %@", error.localizedDescription]];
         } else {
-            completion(isSuccess, 0);
+            [self loadBatchOfContacts:completion];
         }
     }];
 }
 
-- (void)loadBatch:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
-    [self->_contactBus loadBatch:^(NSArray<ContactBusEntity *> * listContactBusEntity) {
-        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
-            return [self parseContactEntity:obj];
-        }];
-        
-        [self->_listContact addObjectsFromArray:batchOfContact];
-        completion(YES, (int)batchOfContact.count);
+- (void)loadBatchOfContacts:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
+    [self->_contactBus loadBatchOfContacts:^(NSArray<ContactBusEntity *> * listContactBusEntity, NSError * error) {
+        if (error) {
+            completion(NO, 0);
+            [Logging error:[NSString stringWithFormat:@"Load batch contact failt, error: %@", error.localizedDescription]];
+        } else {
+            NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+                return [self parseContactEntity:obj];
+            }];
+            
+            [self->_listContact addObjectsFromArray:batchOfContact];
+            completion(YES, (int)batchOfContact.count);
+        }
     }];
 }
 
@@ -129,16 +138,19 @@
         return;
     }
     
-    [self->_contactBus searchContactByName:key completion:^(NSArray * listContactBusEntity) {
-        NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
-            return [self parseContactEntity:obj];
-        }];
-        
-        self->_listContactOnView = [[NSMutableArray alloc] init];
-        
-        self->_listContactOnView = [NSMutableArray arrayWithArray:batchOfContact];
-        
-        handler(YES);
+    [self->_contactBus searchContactByName:key completion:^(NSArray * listContactBusEntity, NSError * error) {
+        if (error) {
+            handler(NO);
+            [Logging error:[NSString stringWithFormat:@"Load batch with error in search, error: %@", error.localizedDescription]];
+        } else {
+            NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
+                return [self parseContactEntity:obj];
+            }];
+            
+            self->_listContactOnView = [[NSMutableArray alloc] initWithArray:batchOfContact];
+            
+            handler(YES);
+        }
     }];
 }
 @end

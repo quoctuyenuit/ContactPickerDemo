@@ -24,7 +24,6 @@
               description: (NSString *_Nullable) description
                    avatar: (UIImage *_Nullable) image
                 isChecked: (BOOL) isChecked;
-                  
 
 - (id _Nullable) initWithIdentifier: (NSString *_Nonnull) identifier
                                name: (NSString *_Nullable) name

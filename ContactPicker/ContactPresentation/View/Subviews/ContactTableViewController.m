@@ -22,6 +22,8 @@
 
 @implementation ContactTableViewController
 
+@synthesize keyboardAppearanceDelegate;
+
 #pragma mark - Custom function
 
 - (void)setupView {
@@ -116,7 +118,7 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == [self->viewModel getNumberOfContacts] - 10) {
         int itemsOnViewCount = [self->viewModel getNumberOfContacts];
-        [self->viewModel loadBatch: ^(BOOL loadDone, int batchLength) {
+        [self->viewModel loadBatchOfContacts: ^(BOOL loadDone, int batchLength) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([self->viewModel getNumberOfContacts] > itemsOnViewCount) // If actually append item on view
                     [self insertCells: [self->viewModel getNumberOfContacts] - batchLength withSize: batchLength];
@@ -124,7 +126,5 @@
         }];
     }
 }
-
-@synthesize keyboardAppearanceDelegate;
 
 @end

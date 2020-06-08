@@ -12,8 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactBus : NSObject<ContactBusProtocol> {
-    id<ContactAdapterProtocol> _contactAdapter;
-    
+    id<ContactAdapterProtocol> _contactAdapter; 
 }
 
 - (id) initWithAdapter: (id<ContactAdapterProtocol>) adapter;

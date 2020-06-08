@@ -15,12 +15,14 @@
 #import "ContactBus.h"
 #import "ContactAdapter.h"
 
+#import "Logging.h"
+
 @interface MainViewController () {
     UIViewController * contentViewController;
     id<ContactViewModelProtocol> viewModel;
 }
 - (UIViewController *) loadContactViewController;
-- (UIViewController *) loadPermissionDeniedViewController;
+- (UIViewController *) loadResponseInforView: (ResponseViewType) type;
 - (void) setupView;
 @end
 
@@ -32,13 +34,19 @@
     
     self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
     
-    [self->viewModel requestPermission:^(BOOL granted) {
-        if (granted) {
-            self->contentViewController = [self loadContactViewController];
-        } else {
-            self->contentViewController = [self loadPermissionDeniedViewController];
-        }
+    [self->viewModel requestPermission:^(BOOL granted, NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                self->contentViewController = [self loadContactViewController];
+            } else {
+                if (error.code == 1) {
+                    self->contentViewController = [self loadResponseInforView:ResponseViewTypeSomethingWrong];
+                    [Logging error:error.localizedDescription];
+                } else {
+                    self->contentViewController = [self loadResponseInforView: ResponseViewTypePermissionDenied];
+                }
+            }
+            
             [self setupView];
         });
         
@@ -46,14 +54,13 @@
 }
 
 
+- (UIViewController *)loadResponseInforView:(ResponseViewType)type {
+    return [ResponseInformationViewController instantiateWith:type];
+}
 
 - (UIViewController *)loadContactViewController {
     self.view.backgroundColor = UIColor.whiteColor;
     return [ContactViewController instantiateWith:self->viewModel];
-}
-
-- (UIViewController *)loadPermissionDeniedViewController {
-    return [ResponseInformationViewController instantiateWith:ResponseViewTypePermissionDenied];
 }
 
 - (void)setupView {

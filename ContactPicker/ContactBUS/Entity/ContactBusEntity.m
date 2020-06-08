@@ -9,15 +9,17 @@
 #import "ContactBusEntity.h"
 
 @implementation ContactBusEntity
-- (id)initWith:(NSString *)contactID name:(NSString *)name {
-    self.contactID = contactID;
-    self.contactName = name;
+- (id)initWith:(NSString *)identifier givenName:(NSString *)givenName familyName:(NSString *)familyName {
+    self.identifier = identifier;
+    self.givenName = givenName;
+    self.familyName = familyName;
     return self;
 }
 
 - (id)initWithData:(ContactDAL *)contactDAL {
-    self.contactName = [NSString stringWithFormat:@"%@ %@", contactDAL.contactName, contactDAL.contactFamilyName];
-    self.contactID = contactDAL.contactID;
+    self.identifier = contactDAL.contactID;
+    self.givenName = contactDAL.contactName;
+    self.familyName = contactDAL.contactFamilyName;
     return self;
 }
 
@@ -25,6 +27,6 @@
     if ([name isEqualToString:@""]) {
         return YES;
     }
-    return [[self.contactName lowercaseString] hasPrefix:[name lowercaseString]];
+    return [[self.givenName lowercaseString] hasPrefix:[name lowercaseString]];
 }
 @end

@@ -54,4 +54,8 @@
 + (void)exeption:(NSString *)msg {
     DebugLog(@"%@ \n[Exeption] %@", [self findCallerMethod], msg);
 }
+
++ (void)error:(NSString *)msg {
+    DebugLog(@"%@ \n[Error] %@", [self findCallerMethod], msg);
+}
 @end

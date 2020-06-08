@@ -12,6 +12,7 @@
 - (void) setupPermissionDeniedView;
 - (void) setupEmptyContactView;
 - (void) setupFailLoadingContactView;
+- (void) setupSomethingWrongView;
 - (void) setupView;
 @end
 
@@ -20,6 +21,7 @@
 NSString * const _Nonnull PermissionDeniedMsg = @"Ứng dụng chưa được cấp quyền :(";
 NSString * const _Nonnull EmptyContactMsg = @"Danh bạ rỗng!";
 NSString * const _Nonnull FailLoadingContactMsg = @"Không thể tải danh bạ :(";
+NSString * const _Nonnull SomethingWrongMsg = @"Xin lỗi, đã có lỗi xảy ra :(";
 
 + (ResponseInformationViewController *)instantiateWith:(ResponseViewType)viewType {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -40,6 +42,11 @@ NSString * const _Nonnull FailLoadingContactMsg = @"Không thể tải danh bạ
             
         case ResponseViewTypeFailLoadingContact:
             [self setupFailLoadingContactView];
+            break;
+            
+        case ResponseViewTypeSomethingWrong:
+            [self setupSomethingWrongView];
+            break;
             
         default:
             break;
@@ -62,6 +69,13 @@ NSString * const _Nonnull FailLoadingContactMsg = @"Không thể tải danh bạ
 - (void)setupFailLoadingContactView {
     self.responseIconView.image = [UIImage imageNamed:@"fail_ico"];
     self.messageLabel.text = FailLoadingContactMsg;
+    self.openSettingBtn.enabled = NO;
+    self.openSettingBtn.alpha = 0;
+}
+
+- (void)setupSomethingWrongView {
+    self.responseIconView.image = [UIImage imageNamed:@"fail_ico"];
+    self.messageLabel.text = SomethingWrongMsg;
     self.openSettingBtn.enabled = NO;
     self.openSettingBtn.alpha = 0;
 }

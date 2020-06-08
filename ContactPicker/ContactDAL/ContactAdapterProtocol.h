@@ -13,17 +13,15 @@
 #import "DataBinding.h"
 
 @protocol ContactAdapterProtocol <NSObject>
-@property DataBinding<NSArray<ContactDAL *> *> *contactChangedObservable;
+@property DataBinding<NSArray<ContactDAL *> *> * contactChangedObservable;
 @required
-- (void) requestPermission: (void (^)(BOOL)) completion;
+- (void) requestPermission: (void (^)(BOOL, NSError * )) handler;
 
-- (void) loadContacts: (void (^)(NSArray<ContactDAL *> * , BOOL)) completion;
+- (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, NSError * )) handler;
 
-- (void) loadContactById: (NSString *) identifier
-              completion: (void (^) (ContactDAL *)) completion;
+- (void) loadContactById: (NSString *) identifier completion: (void (^) (ContactDAL *, NSError * )) handler;
 
-- (void) loadContactByBatch: (NSArray<NSString *> *) listIdentifiers
-                 completion: (void (^)(NSArray *)) completion;
+- (void) loadBatchOfContacts: (NSArray<NSString *> *) listIdentifiers completion: (void (^)(NSArray *, NSError *)) handler;
 
 - (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData *)) handler;
 
