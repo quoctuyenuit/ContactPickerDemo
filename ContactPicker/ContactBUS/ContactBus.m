@@ -15,8 +15,12 @@
 
 @interface ContactBus() {
     int busBatchSize;
-    NSMutableArray<ContactBusEntity *> * listContactRequestedInfor;
+    NSMutableArray<ContactBusEntity *> * listContactsBuffer;
+    NSMutableArray<ContactBusEntity *> * listContactsOrigin;
     BOOL contactIsLoaded;
+    BOOL contactIsLoadDone;
+    BOOL searchIsWaiting;
+    NSOperationQueue * search_queue;
 }
 
 - (void) getContactBatchStartWith: (int) index
@@ -39,8 +43,17 @@
     self->busBatchSize = 20;
     self->currentIndexBatch = 0;
     self->contactIsLoaded = NO;
+    self->contactIsLoadDone = NO;
+    self->searchIsWaiting = NO;
     
-    self->listContactRequestedInfor = [[NSMutableArray alloc] init];
+    self->listContactsOrigin = [[NSMutableArray alloc] init];
+    self->listContactsBuffer = self->listContactsOrigin;
+//    dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
+//        DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -1
+//    );
+    self->search_queue = [NSOperationQueue new];
+    self->search_queue.maxConcurrentOperationCount = 1;
+    
      __weak ContactBus * weakSelf = self;
     [self->_contactAdapter.contactChangedObservable binding:^(NSArray<ContactDAL *> * listContactDAL) {
         NSArray * listContactBusEntity = [listContactDAL map:^ContactBusEntity* _Nonnull(ContactDAL *  _Nonnull obj) {
@@ -56,9 +69,15 @@
 - (void)getContactBatchStartWith:(int)index
                        batchSize: (int) batchSize
                       completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
-    int batchSizeNeeded = (index + batchSize) >= self->listContactRequestedInfor.count ?  (int)self->listContactRequestedInfor.count - index : batchSize;
+    int batchSizeNeeded = (index + batchSize) >= self->listContactsBuffer.count ?  (int)self->listContactsBuffer.count - index : batchSize;
     
-    NSArray* batch = [self->listContactRequestedInfor subarrayWithRange:NSMakeRange(index, batchSizeNeeded)];
+    NSMutableArray * batch = [[NSMutableArray alloc] init];
+    
+    for (int i = index; i < index + batchSizeNeeded; i++) {
+        [batch addObject:self->listContactsBuffer[i]];
+    }
+    
+//    NSArray* batch = [self->listContactsBuffer subarrayWithRange:NSMakeRange(index, batchSizeNeeded)];
     
     NSArray *batchIdentifiers = [batch map:^NSString* _Nonnull(ContactBusEntity*  _Nonnull obj) {
         return obj.identifier;
@@ -96,18 +115,19 @@
     [self->_contactAdapter requestPermission:handler];
 }
 
-- (void)loadContacts:(void (^)(NSError *))handler {
-    [self->_contactAdapter loadContacts:^(NSArray<ContactDAL *> * listContactRequestedInfor, NSError * error) {
+- (void)loadContacts:(void (^)(NSError *, BOOL isDone))handler {
+    [self->_contactAdapter loadContacts:^(NSArray<ContactDAL *> * listContactRequestedInfor, NSError * error, BOOL isDone) {
         if (error) {
-            handler(error);
+            handler(error, YES);
             [Logging exeption:error.localizedDescription];
         } else {
             NSArray * listContactBusEntities = [listContactRequestedInfor map:^ContactBusEntity * _Nonnull(ContactDAL * _Nonnull obj) {
                 return [[ContactBusEntity alloc] initWithData:obj];
             }];
-            [self->listContactRequestedInfor addObjectsFromArray: listContactBusEntities];
+            [self->listContactsOrigin addObjectsFromArray: listContactBusEntities];
             self->contactIsLoaded = YES;
-            handler(nil);
+            handler(nil, isDone);
+            self->contactIsLoadDone = isDone;
         }
     }];
 }
@@ -126,10 +146,10 @@
         return;
     }
     
-    if (self->currentIndexBatch >= self->listContactRequestedInfor.count)
+    if (self->currentIndexBatch >= self->listContactsBuffer.count)
         return;
     
-    int gap = (int)self->listContactRequestedInfor.count - self->currentIndexBatch;
+    int gap = (int)self->listContactsBuffer.count - self->currentIndexBatch;
     int batchSize = gap >= self->busBatchSize ? self->busBatchSize : gap;
     
     [self getContactBatchStartWith:self->currentIndexBatch batchSize: batchSize completion:^(NSArray<ContactBusEntity *> * listContacts, NSError * error) {
@@ -147,25 +167,46 @@
     [self->_contactAdapter getImageById:identifier completion:handler];
 }
 
-- (void)searchContactByName:(NSString *)name completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        
-        
-        
-        
-        NSArray * listContactNeed = [self->listContactRequestedInfor filter:^BOOL(ContactBusEntity*  _Nonnull obj) {
-            NSString * contactName = [NSString stringWithFormat:@"%@ %@", obj.givenName, obj.familyName];
-            
-            if ([name isEqualToString:@""])
-                return YES;
-            
-            return [[contactName lowercaseString] hasPrefix:[name lowercaseString]];
-        }];
-        
-        [self getContactBatchWithContacts:listContactNeed completion:handler];
+- (void)searchContactByName:(NSString *)name completion:(void (^)(void))handler {
     
-    });
+//    Clean queue
+    self->searchIsWaiting = NO;
+    self->search_queue.suspended = YES;
+    [self->search_queue cancelAllOperations];
+    self->search_queue.suspended = NO;
+    
+    self->searchIsWaiting = NO;
+    
+    [self->search_queue addOperationWithBlock: ^{
+        self->currentIndexBatch = 0;
+        
+        if ([name isEqualToString:@""]) {
+            self->listContactsBuffer = self->listContactsOrigin;
+            handler();
+            return;
+        }
+        
+        self->searchIsWaiting = YES;
+        int i = 0;
+        self->listContactsBuffer = [[NSMutableArray alloc] init];
+        
+        while ((i < self->listContactsOrigin.count || !self->contactIsLoadDone) && self->searchIsWaiting) {
+            
+            if (i < self->listContactsOrigin.count) {
+                ContactBusEntity * contact = self->listContactsOrigin[i];
+                NSString * contactName = [NSString stringWithFormat:@"%@ %@", contact.givenName, contact.familyName];
+                
+                if ([name isEqualToString:@""] || [[contactName lowercaseString] hasPrefix:[name lowercaseString]]) {    
+                    [self->listContactsBuffer addObject:contact];
+                }
+                
+                if ((self->listContactsBuffer.count == self->busBatchSize || i == self->listContactsOrigin.count - 1) && self->searchIsWaiting) {
+                    handler();
+                }
+                i++;
+            }
+        }
+    }];
 }
 
 - (void)getAllContacts:(BOOL)isDetail completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
@@ -177,9 +218,9 @@
     }
     
     if (isDetail) {
-        [self getContactBatchWithContacts:self->listContactRequestedInfor completion:handler];
+        [self getContactBatchWithContacts:self->listContactsBuffer completion:handler];
     } else {
-        handler(self->listContactRequestedInfor, nil);
+        handler(self->listContactsBuffer, nil);
     }
 }
 

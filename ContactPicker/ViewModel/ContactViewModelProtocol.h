@@ -25,7 +25,9 @@
 
 - (ContactViewEntity *) getContactAt: (int) index;
 
-- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(BOOL isNeedReload)) handler;
+- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(void)) handler;
+
+- (void) refresh;
 
 @end
 

@@ -15,6 +15,7 @@
 
 @interface ContactViewModel() {
     BOOL _contactIsLoaded;
+    NSArray * backupListContact;
 }
 
 - (id) finalizeInit;
@@ -23,9 +24,7 @@
 
 @implementation ContactViewModel
 
-@synthesize listContact = _listContact;
-
-@synthesize listContactOnView = _listContactOnView;
+@synthesize listContacts = _listContacts;
 
 @synthesize search;
 
@@ -39,8 +38,7 @@
 }
 
 - (id)finalizeInit {
-    self->_listContact = [[NSMutableArray alloc] init];
-    self->_listContactOnView = _listContact;
+    self.listContacts = [[NSMutableArray alloc] init];
     
     self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
@@ -56,11 +54,11 @@
         
         [contactsViewModelUpdated enumerateObjectsUsingBlock:^(ContactViewEntity*  _Nonnull newEntity, NSUInteger idx, BOOL * _Nonnull stop) {
             
-            for (int i = 0; i < weakSelf.listContactOnView.count ; i++ ) {
-                ContactViewEntity * oldEntity = weakSelf.listContactOnView[i];
+            for (int i = 0; i < weakSelf.listContacts.count ; i++ ) {
+                ContactViewEntity * oldEntity = weakSelf.listContacts[i];
                 if ([oldEntity.identifier isEqualToString:newEntity.identifier] && ![oldEntity isEqual:newEntity]) {
                     [listIndexNeedUpdate addObject:[NSNumber numberWithInt:i]];
-                    weakSelf.listContactOnView[i] = newEntity;
+                    weakSelf.listContacts[i] = newEntity;
                 }
             }
         }];
@@ -94,7 +92,7 @@
 }
 
 - (void)loadContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
-    [self->_contactBus loadContacts:^(NSError * error) {
+    [self->_contactBus loadContacts:^(NSError * error, BOOL isDone) {
         if (error) {
             completion(NO, error, 0);
             [Logging error:[NSString stringWithFormat:@"Load contact failt, error: %@", error.localizedDescription]];
@@ -107,6 +105,17 @@
     }];
 }
 
+- (void)addContacts:(NSArray *)batchOfContact {
+    [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (ContactViewEntity * backupObj in self->backupListContact) {
+            if ([backupObj.identifier isEqualToString:obj.identifier]) {
+                obj.isChecked = backupObj.isChecked;
+            }
+        }
+    }];
+    [self.listContacts addObjectsFromArray:batchOfContact];
+}
+
 - (void)loadBatchOfDetailedContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
     [self->_contactBus loadBatchOfDetailedContacts:^(NSArray<ContactBusEntity *> * listContactBusEntity, NSError * error) {
         if (error) {
@@ -117,48 +126,39 @@
                 return [self parseContactEntity:obj];
             }];
             
-            [self->_listContact addObjectsFromArray:batchOfContact];
+            [self addContacts:batchOfContact];
             completion(YES, nil, (int)batchOfContact.count);
         }
     }];
 }
 
 - (int)getNumberOfContacts {
-    return (int)self->_listContactOnView.count;
+    return (int)self.listContacts.count;
 }
 
 - (ContactViewEntity *)getContactAt:(int)index {
-    if (index < self->_listContactOnView.count) {
-        return self->_listContactOnView[index];
+    if (index < self.listContacts.count) {
+        return self.listContacts[index];
     }
     return nil;
 }
 
-- (void)searchContactWithKeyName:(NSString *)key completion:(void (^)(BOOL))handler {
-    if (self->_listContact.count == 0) {
-        handler(NO);
-        return;
-    }
-    NSUInteger beforeLength = self->_listContactOnView.count;
-    if ([key isEqualToString:@""]) {
-        self->_listContactOnView = self->_listContact;
-        handler(beforeLength != self->_listContactOnView.count);
-        return;
-    }
-    
-    [self->_contactBus searchContactByName:key completion:^(NSArray * listContactBusEntity, NSError * error) {
-        if (error) {
-            handler(NO);
-            [Logging error:[NSString stringWithFormat:@"Load batch with error in search, error: %@", error.localizedDescription]];
-        } else {
-            NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
-                return [self parseContactEntity:obj];
+- (void)searchContactWithKeyName:(NSString *)key completion:(void (^)(void))handler {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self refresh];
+        handler();
+        [self->_contactBus searchContactByName:key completion:^(void) {
+            [self loadBatchOfDetailedContacts:^(BOOL isSuccess, NSError *error, int numberOfContacts) {
+                if (!error) {
+                    handler();
+                }
             }];
-            
-            self->_listContactOnView = [[NSMutableArray alloc] initWithArray:batchOfContact];
-            
-            handler(YES);
-        }
-    }];
+        }];
+    });
+}
+
+- (void)refresh {
+    self->backupListContact = self.listContacts;
+    self.listContacts = [[NSMutableArray alloc] init];
 }
 @end

@@ -21,7 +21,7 @@
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
-- (void) loadContacts: (void (^)(NSError * error)) completion;
+- (void) loadContacts: (void (^)(NSError * error, BOOL isDone)) completion;
 
 - (void) loadBatchOfDetailedContacts: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
@@ -29,7 +29,7 @@
 
 - (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData * imageData, NSError * error)) handler;
 
-- (void) searchContactByName: (NSString *) name completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
+- (void) searchContactByName: (NSString *) name completion: (void (^)(void)) handler;
 
 - (void) getAllContacts: (BOOL) isDetail completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 @end

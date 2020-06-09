@@ -65,8 +65,14 @@
     }
 }
 
-- (void)loadContacts:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *))handler {
+- (void)loadContacts:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *, BOOL))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
+            DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, -1
+        );
+        dispatch_queue_t callBackQueue = dispatch_queue_create("response_batch", priorityAttribute);
+        
+        
         NSMutableArray *listContacts = [[NSMutableArray alloc] init];
         
         if ([CNContactStore class]) {
@@ -84,11 +90,11 @@
                 [listContacts addObject: [[ContactDAL alloc] initWithID:contact.identifier name:contact.givenName familyName:contact.familyName]];
                 
                 
-                if (listContacts.count >= 10) {
+                if (listContacts.count >= 20) {
                     NSArray * batch = [listContacts copy];
                     [listContacts removeAllObjects];
-                    dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
-                        handler(batch, nil);
+                    dispatch_sync(callBackQueue, ^{
+                        handler(batch, nil, NO);
                     });
                 }
                 
@@ -96,19 +102,19 @@
             }];
             
 //            Add dummy data
-            [self createDummyData:1000000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
-                dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
-                   handler([listDummyData copy], nil);
+            [self createDummyData:100000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
+                dispatch_sync(callBackQueue, ^{
+                   handler([listDummyData copy], nil, NO);
                 });
             }];
             
-            dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
-               handler([listContacts copy], nil);
+            dispatch_sync(callBackQueue, ^{
+               handler([listContacts copy], nil, YES);
             });
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
             NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
-            handler(nil, error);
+            handler(nil, error, YES);
         }
         
     });

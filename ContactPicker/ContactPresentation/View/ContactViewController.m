@@ -77,17 +77,7 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
 }
 
 - (void)setupEvents {
-    [self->viewModel.search bindAndFire:^(NSString * searchText) {
-        
-        [self->viewModel searchContactWithKeyName:searchText completion:^(BOOL isNeedReload) {
-            if (isNeedReload) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [((ContactTableViewController *)self->contentViewController).tableView reloadData];
-                });
-            }
-        }];
-        
-    }];
+    
 }
      
 - (UIViewController *)loadContactTableViewController {

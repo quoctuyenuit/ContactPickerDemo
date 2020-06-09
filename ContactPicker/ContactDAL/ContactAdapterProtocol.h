@@ -22,7 +22,8 @@
 - (void) requestPermission: (void (^)(BOOL isSuccess, NSError * error)) handler;
 
 //Load identifier and name of contacts from CNContactStore. The result will callback by bactch
-- (void) loadContacts: (void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error)) handler;
+//isDone is YES when all of the contacts have loaded done
+- (void) loadContacts: (void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error, BOOL isDone)) handler;
 
 //Load detail of a contact by identifier, if contact already in cache take it otherwise load it from CNContactStore
 - (void) loadContactById: (NSString *) identifier completion: (void (^) (id<ContactDALProtocol> contactDAL, NSError * error)) handler;

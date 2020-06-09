@@ -38,12 +38,15 @@
 
 - (void) insertCells: (int) index withSize: (int) size {
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-    for (int i = index; i < index + size; i++) {
+    for (int i = [self->viewModel getNumberOfContacts] - size; i < index + size; i++) {
         [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
     }
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(UITableViewRowAnimationNone)];
-    [self.tableView endUpdates];
+    
+    [self.tableView reloadData];
+//    [self.tableView beginUpdates];
+//    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(UITableViewRowAnimationNone)];
+//    [self.tableView endUpdates];
+    
 }
 
 #pragma mark - Override function
@@ -71,6 +74,16 @@
             [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation: (UITableViewRowAnimationNone)];
             [self.tableView endUpdates];
         });
+    }];
+    
+    [self->viewModel.search binding:^(NSString * searchText) {
+        [self->viewModel searchContactWithKeyName:searchText completion:^(void) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+        }];
+        
     }];
     
 }
@@ -120,9 +133,11 @@
         int itemsOnViewCount = [self->viewModel getNumberOfContacts];
         [self->viewModel loadBatchOfDetailedContacts: ^(BOOL isSuccess, NSError * error, int batchLength) {
             if (isSuccess) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   @synchronized(self) {
                     if ([self->viewModel getNumberOfContacts] > itemsOnViewCount) // If actually append item on view
                         [self insertCells: [self->viewModel getNumberOfContacts] - batchLength withSize: batchLength];
+                   }
                 });
             }
         }];
