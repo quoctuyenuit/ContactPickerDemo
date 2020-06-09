@@ -28,4 +28,14 @@ familyName:(NSString *)familyName
 - (id)initWithID:(NSString *)contactID name:(NSString *)name familyName: (NSString *) familyName {
     return [self init:contactID name:name familyName:familyName phones:nil emails:nil];
 }
+@synthesize contactEmails;
+
+@synthesize contactFamilyName;
+
+@synthesize contactID;
+
+@synthesize contactName;
+
+@synthesize contactPhones;
+
 @end

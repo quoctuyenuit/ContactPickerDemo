@@ -100,13 +100,13 @@
     XCTestExpectation * emptyExpectation = [self expectationWithDescription:@"load contact by batch with empty"];
     XCTestExpectation * wrongDataExpectation = [self expectationWithDescription:@"load contact by batch with wrong data"];
     
-    [self.contactAdapter loadBatchOfContacts:@[] completion:^(NSArray * contacts, NSError * error) {
+    [self.contactAdapter loadBatchOfDetailedContacts:@[] completion:^(NSArray * contacts, NSError * error) {
         XCTAssertTrue(contacts.count == 0, @"Load non-empty contacts from empty identifiers");
         XCTAssertNil(error, @"Load batch contact with empty identifiers have error");
         [emptyExpectation fulfill];
     }];
     
-    [self.contactAdapter loadBatchOfContacts:@[@"123"] completion:^(NSArray * contacts, NSError * error) {
+    [self.contactAdapter loadBatchOfDetailedContacts:@[@"123"] completion:^(NSArray * contacts, NSError * error) {
         XCTAssertTrue(contacts.count == 0, @"Load contact by batch had load wrong infor");
         XCTAssertNil(error, @"Load contact by batch have error");
         [wrongDataExpectation fulfill];
@@ -131,7 +131,7 @@
         XCTAssertTrue(identifiers.count == 3, @"Map in NSArray extension is wrong");
         
         [loadContactsExpectation fulfill];
-        [self.contactAdapter loadBatchOfContacts:identifiers completion:^(NSArray * batchOfContact, NSError * error) {
+        [self.contactAdapter loadBatchOfDetailedContacts:identifiers completion:^(NSArray * batchOfContact, NSError * error) {
             XCTAssertNotNil(batchOfContact, @"Contacts from list valid id is nil");
             XCTAssertTrue(batchOfContact.count == 3, @"Load missing contacts in batch");
             XCTAssertNil(error, @"Load contact from valid id have error");

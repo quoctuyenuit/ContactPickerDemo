@@ -19,7 +19,7 @@
 
 - (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
 
-- (void) loadBatchOfContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
+- (void) loadBatchOfDetailedContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
 
 - (int) getNumberOfContacts;
 

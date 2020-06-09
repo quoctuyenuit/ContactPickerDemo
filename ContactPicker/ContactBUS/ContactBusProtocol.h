@@ -23,7 +23,7 @@
 
 - (void) loadContacts: (void (^)(NSError * error)) completion;
 
-- (void) loadBatchOfContacts: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
+- (void) loadBatchOfDetailedContacts: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
 - (void) loadContactById: (NSString *) identifier completion: (void (^) (ContactBusEntity *, NSError * )) handler;
 

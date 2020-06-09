@@ -18,7 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id) initWith: (NSString *) identifier givenName: (NSString*) givenName familyName: (NSString *) familyName;
 - (id) initWithData: (ContactDAL *) contactDAL;
-- (BOOL) fitWithName: (NSString *) name;
 @end
 
 NS_ASSUME_NONNULL_END

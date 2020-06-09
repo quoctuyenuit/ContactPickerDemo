@@ -10,14 +10,11 @@
 
 #import <Foundation/Foundation.h>
 #import <Contacts/Contacts.h>
+#import "ContactDALProtocol.h"
 
 
-@interface ContactDAL : NSObject
-@property (nonatomic, readwrite) NSString * contactID;
-@property (nonatomic, readwrite) NSString * contactName;
-@property (nonatomic, readwrite) NSString * contactFamilyName;
-@property (nonatomic, readwrite) NSArray<NSString *> * contactPhones;
-@property (nonatomic, readwrite) NSArray<NSString *> * contactEmails;
+@interface ContactDAL : NSObject<ContactDALProtocol>
+
 
 - (id)init: (NSString *) contactID
       name: (NSString *) givenName

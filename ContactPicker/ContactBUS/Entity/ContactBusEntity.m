@@ -23,13 +23,6 @@
     return self;
 }
 
-- (BOOL)fitWithName:(NSString *)name {
-    if ([name isEqualToString:@""]) {
-        return YES;
-    }
-    return [[self.givenName lowercaseString] hasPrefix:[name lowercaseString]];
-}
-
 - (NSComparisonResult)compare:(ContactBusEntity *)other
 {
     return [self.givenName compare:other.givenName];

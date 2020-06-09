@@ -69,7 +69,7 @@
 
 - (void)getContactBatchWithIdentifiers:(NSArray *)identifiers completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
     
-    [self->_contactAdapter loadBatchOfContacts:identifiers completion:^(NSArray<ContactDAL*> * listContacts, NSError * error) {
+    [self->_contactAdapter loadBatchOfDetailedContacts:identifiers completion:^(NSArray<ContactDAL*> * listContacts, NSError * error) {
         if (error) {
             handler(nil, error);
             [Logging exeption:error.localizedDescription];
@@ -118,7 +118,7 @@
     }];
 }
 
-- (void)loadBatchOfContacts:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
+- (void)loadBatchOfDetailedContacts:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
     if (!self->contactIsLoaded) {
         NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Contacts have not load yet"};
         NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:2 userInfo:userInfo];
@@ -148,17 +148,24 @@
 }
 
 - (void)searchContactByName:(NSString *)name completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
-    
-    NSArray * listContactNeed = [self->listContactRequestedInfor filter:^BOOL(ContactBusEntity*  _Nonnull obj) {
-        NSString * contactName = [NSString stringWithFormat:@"%@ %@", obj.givenName, obj.familyName];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        if ([name isEqualToString:@""])
-            return YES;
         
-        return [[contactName lowercaseString] hasPrefix:[name lowercaseString]];
-    }];
+        
+        
+        
+        NSArray * listContactNeed = [self->listContactRequestedInfor filter:^BOOL(ContactBusEntity*  _Nonnull obj) {
+            NSString * contactName = [NSString stringWithFormat:@"%@ %@", obj.givenName, obj.familyName];
+            
+            if ([name isEqualToString:@""])
+                return YES;
+            
+            return [[contactName lowercaseString] hasPrefix:[name lowercaseString]];
+        }];
+        
+        [self getContactBatchWithContacts:listContactNeed completion:handler];
     
-    [self getContactBatchWithContacts:listContactNeed completion:handler];
+    });
 }
 
 - (void)getAllContacts:(BOOL)isDetail completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {

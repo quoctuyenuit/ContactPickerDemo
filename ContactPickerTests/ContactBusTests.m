@@ -99,7 +99,7 @@
 - (void) testLoadBatchOfContactWithInvalidInput {
     XCTestExpectation * emptyExpectation = [self expectationWithDescription:@"load contact by batch with empty"];
     
-    [self.contactBus loadBatchOfContacts:^(NSArray<ContactBusEntity *> * contacts, NSError * error) {
+    [self.contactBus loadBatchOfDetailedContacts:^(NSArray<ContactBusEntity *> * contacts, NSError * error) {
         XCTAssertNil(contacts, @"Contact haven't load but can load batch");
         XCTAssertNotNil(error, @"Contact haven't load but not raise error");
         [emptyExpectation fulfill];
@@ -113,7 +113,7 @@
     
     [self.contactBus loadContacts:^(NSError * error) {
         XCTAssertNil(error, @"Load contact have error");
-        [self.contactBus loadBatchOfContacts:^(NSArray<ContactBusEntity *> * contacts, NSError * error) {
+        [self.contactBus loadBatchOfDetailedContacts:^(NSArray<ContactBusEntity *> * contacts, NSError * error) {
             XCTAssertNotNil(contacts, @"Contacts is loaded but cant load batch");
             XCTAssertNil(error, @"Contacts is loaded but load batch have error");
             [emptyExpectation fulfill];

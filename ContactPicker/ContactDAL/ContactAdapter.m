@@ -8,8 +8,8 @@
 
 #import "ContactAdapter.h"
 #import <Contacts/Contacts.h>
-#import "ContactDAL.h"
 #import "NSArrayExtension.h"
+#import "ContactDALProtocol.h"
 
 
 @interface ContactAdapter() {
@@ -23,7 +23,7 @@
 - (ContactDAL *) parseToContactDAL: (CNContact *) contact forID: (NSString *) identifier;
 - (void) contactDidChangedEvent: (NSNotification *) notification;
 
-- (NSArray *) createDummyData: (int) number;
+- (void) createDummyData: (int) number batchSize: (int) size delegate: (void (^)(NSArray<ContactDAL *> *)) handler;
 
 @end
 
@@ -44,7 +44,7 @@
 }
 
 - (void) contactDidChangedEvent: (NSNotification *) notification {
-    [self loadBatchOfContacts:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact, NSError * error) {
+    [self loadBatchOfDetailedContacts:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact, NSError * error) {
         if (!error) {
             self->contactChangedObservable.value = listUpdatedContact;
         }
@@ -65,7 +65,7 @@
     }
 }
 
-- (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, NSError * _Nullable)) handler {
+- (void)loadContacts:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *listContacts = [[NSMutableArray alloc] init];
         
@@ -83,13 +83,28 @@
                                                 usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
                 [listContacts addObject: [[ContactDAL alloc] initWithID:contact.identifier name:contact.givenName familyName:contact.familyName]];
                 
+                
+                if (listContacts.count >= 10) {
+                    NSArray * batch = [listContacts copy];
+                    [listContacts removeAllObjects];
+                    dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
+                        handler(batch, nil);
+                    });
+                }
+                
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
             
 //            Add dummy data
-            [listContacts addObjectsFromArray:[self createDummyData:100]];
+            [self createDummyData:1000000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
+                dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
+                   handler([listDummyData copy], nil);
+                });
+            }];
             
-            handler([listContacts copy], nil);
+            dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
+               handler([listContacts copy], nil);
+            });
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
             NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
@@ -100,9 +115,7 @@
 }
 
 
-- (void) loadContactById: (NSString *) identifier
-             completion: (void (^)(ContactDAL *, NSError * _Nullable))handler {
-    
+- (void)loadContactById:(NSString *)identifier completion:(void (^)(id<ContactDALProtocol>, NSError *))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         ContactDAL *contactInCache = [self->contactCache objectForKey:identifier];
@@ -138,7 +151,8 @@
     });
 }
 
-- (void)loadBatchOfContacts:(NSArray<NSString *> *)listIdentifiers completion:(void (^)(NSArray<ContactDAL *> *, NSError *))handler {
+- (void)loadBatchOfDetailedContacts:(NSArray<NSString *> *)listIdentifiers
+                 completion:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *))handler {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray * identifiersNeedLoad = [[NSMutableArray alloc] init];
@@ -251,16 +265,26 @@
 
 #pragma mark Create Dummy Data
 
-- (NSArray *)createDummyData: (int) number {
+- (void)createDummyData:(int)number batchSize:(int) size delegate:(void (^)(NSArray<ContactDAL *> *))handler {
     NSMutableArray * dummyData = [[NSMutableArray alloc] init];
-    for (int i = 0; i < number; i++) {
+    
+    int i = 0;
+    while (i < number) {
         NSString * identifier = [[NSProcessInfo processInfo] globallyUniqueString];
         ContactDAL * dummyContact = [[ContactDAL alloc] initWithID:identifier name:[NSString stringWithFormat:@"%d dummy %d", i, i] familyName:@""];
         
-        [dummyData addObject:dummyContact];
         [self->contactCache setObject:dummyContact forKey: identifier];
+        [dummyData addObject:dummyContact];
+        
+        if (dummyData.count >= size || i == number) {
+            NSArray * batch = [dummyData copy];
+            [dummyData removeAllObjects];
+            dispatch_sync(dispatch_queue_create("response_batch", DISPATCH_QUEUE_CONCURRENT), ^{
+                handler(batch);
+            });
+        }
+        i++;
     }
-    return dummyData;
 }
 
 @end

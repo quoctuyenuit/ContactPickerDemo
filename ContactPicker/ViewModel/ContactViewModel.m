@@ -14,6 +14,7 @@
 #import "Logging.h"
 
 @interface ContactViewModel() {
+    BOOL _contactIsLoaded;
 }
 
 - (id) finalizeInit;
@@ -33,6 +34,7 @@
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     self->_contactBus = bus;
     self = [self finalizeInit];
+    self->_contactIsLoaded = NO;
     return self;
 }
 
@@ -97,13 +99,16 @@
             completion(NO, error, 0);
             [Logging error:[NSString stringWithFormat:@"Load contact failt, error: %@", error.localizedDescription]];
         } else {
-            [self loadBatchOfContacts:completion];
+            if (!self->_contactIsLoaded) {
+                [self loadBatchOfDetailedContacts:completion];
+                self->_contactIsLoaded = YES;
+            }
         }
     }];
 }
 
-- (void)loadBatchOfContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
-    [self->_contactBus loadBatchOfContacts:^(NSArray<ContactBusEntity *> * listContactBusEntity, NSError * error) {
+- (void)loadBatchOfDetailedContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
+    [self->_contactBus loadBatchOfDetailedContacts:^(NSArray<ContactBusEntity *> * listContactBusEntity, NSError * error) {
         if (error) {
             completion(NO, error, 0);
             [Logging error:[NSString stringWithFormat:@"Load batch contact failt, error: %@", error.localizedDescription]];
