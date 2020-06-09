@@ -20,8 +20,10 @@
     NSMutableArray<NSString*> * contactWaitToImage;
 }
 
-- (ContactDAL*) parseToContactDAL: (CNContact *) contact forID: (NSString *) identifier;
+- (ContactDAL *) parseToContactDAL: (CNContact *) contact forID: (NSString *) identifier;
 - (void) contactDidChangedEvent: (NSNotification *) notification;
+
+- (NSArray *) createDummyData: (int) number;
 
 @end
 
@@ -70,7 +72,9 @@
         if ([CNContactStore class]) {
             CNContactStore *addressBook = [[CNContactStore alloc] init];
             
-            NSArray *keysToFetch = @[CNContactIdentifierKey, CNContactGivenNameKey, CNContactFamilyNameKey];
+            NSArray *keysToFetch = @[CNContactIdentifierKey,
+                                     CNContactGivenNameKey,
+                                     CNContactFamilyNameKey];
             
             CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:keysToFetch];
             
@@ -78,8 +82,12 @@
                                                      error:nil
                                                 usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
                 [listContacts addObject: [[ContactDAL alloc] initWithID:contact.identifier name:contact.givenName familyName:contact.familyName]];
+                
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
+            
+//            Add dummy data
+            [listContacts addObjectsFromArray:[self createDummyData:100]];
             
             handler([listContacts copy], nil);
         } else {
@@ -90,6 +98,7 @@
         
     });
 }
+
 
 - (void) loadContactById: (NSString *) identifier
              completion: (void (^)(ContactDAL *, NSError * _Nullable))handler {
@@ -108,9 +117,7 @@
             NSArray *keysToFetch = @[CNContactGivenNameKey,
                                      CNContactPhoneNumbersKey,
                                      CNContactFamilyNameKey,
-                                     CNContactEmailAddressesKey,
-                                     CNContactImageDataAvailableKey,
-                                     CNContactThumbnailImageDataKey];
+                                     CNContactEmailAddressesKey];
             CNContact* contact = [addressBook unifiedContactWithIdentifier: identifier
                                                                keysToFetch:keysToFetch
                                                                      error:nil];
@@ -131,12 +138,9 @@
     });
 }
 
-- (void)loadBatchOfContacts:(NSArray<NSString *> *)listIdentifiers
-                completion:(void (^)(NSArray *, NSError * _Nullable))handler {
+- (void)loadBatchOfContacts:(NSArray<NSString *> *)listIdentifiers completion:(void (^)(NSArray<ContactDAL *> *, NSError *))handler {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
-        
         NSMutableArray * identifiersNeedLoad = [[NSMutableArray alloc] init];
         NSMutableArray * results = [[NSMutableArray alloc] init];
         
@@ -160,13 +164,9 @@
             CNContactStore *addressBook = [[CNContactStore alloc] init];
             
             NSArray *keysToFetch = @[CNContactGivenNameKey,
-                                     CNContactIdentifierKey,
                                      CNContactPhoneNumbersKey,
                                      CNContactFamilyNameKey,
-                                     CNContactEmailAddressesKey,
-                                     CNContactImageDataAvailableKey,
-                                     CNContactImageDataKey,
-                                     CNContactThumbnailImageDataKey];
+                                     CNContactEmailAddressesKey];
             
             NSPredicate* predicate = [CNContact predicateForContactsWithIdentifiers:identifiersNeedLoad];
             NSArray<CNContact*> * contacts = [addressBook unifiedContactsMatchingPredicate:predicate keysToFetch:keysToFetch error:nil];
@@ -186,7 +186,47 @@
     });
 }
 
-#pragma mark PARSE ContactDAL
+- (void)getImageById:(NSString *)identifier completion:(void (^)(NSData *, NSError * error))handler {
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSData * imageData = [self->imageCache objectForKey:identifier];
+        if (imageData) {
+            handler(imageData, nil);
+            return;
+        }
+        
+        if ([CNContactStore class]) {
+            CNContactStore *addressBook = [[CNContactStore alloc] init];
+            
+            NSArray *keysToFetch = @[CNContactImageDataAvailableKey,
+                                     CNContactImageDataKey,
+                                     CNContactThumbnailImageDataKey];
+            CNContact* contact = [addressBook unifiedContactWithIdentifier: identifier
+                                                               keysToFetch:keysToFetch
+                                                                     error:nil];
+            
+            if (!contact) {
+                NSDictionary * userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"Dont have contact with identifier: %@", identifier]};
+                NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                handler(nil, error);
+            } else {
+                if (contact.imageDataAvailable) {
+                    [self->imageCache setObject:contact.imageData forKey:identifier];
+                    
+                    handler(contact.imageData, nil);
+                }
+            }
+            
+        } else {
+            NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
+            NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            handler(nil, error);
+        }
+    });
+}
+
+#pragma mark parse ContactDAL
 
 - (ContactDAL *)parseToContactDAL:(CNContact *)contact
                             forID: (NSString *) identifier {
@@ -196,16 +236,6 @@
     NSMutableArray<NSString*> *phoneNumbers = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray<NSString*> *emails = [contact.emailAddresses valueForKey:@"value"];
     
-    if (contact.imageDataAvailable) {
-        [self->imageCache setObject:contact.imageData forKey:contactId];
-        
-        NSArray * blocksQueue = [self->waitImageBlockQueue objectForKey:contactId];
-        if (blocksQueue) {
-            for (void (^block)(NSData *) in blocksQueue) {
-                block(contact.imageData);
-            }
-        }
-    }
     
     ContactDAL *contactDAL = [[ContactDAL alloc] init:contactId
                                               name:givenName
@@ -219,18 +249,18 @@
     
 }
 
-- (void)getImageFromId:(NSString *)identifier completion:(void (^)(NSData *))handler {
-    NSData * imageData = [self->imageCache objectForKey:identifier];
-    if (imageData) {
-        handler(imageData);
-    } else {
-        NSMutableArray * queue = [self->waitImageBlockQueue objectForKey:identifier];
-        if (queue) {
-            [queue addObject:[handler copy]];
-        } else {
-            [self->waitImageBlockQueue setObject:[[NSMutableArray alloc] initWithObjects:[handler copy], nil] forKey:identifier];
-        }
+#pragma mark Create Dummy Data
+
+- (NSArray *)createDummyData: (int) number {
+    NSMutableArray * dummyData = [[NSMutableArray alloc] init];
+    for (int i = 0; i < number; i++) {
+        NSString * identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+        ContactDAL * dummyContact = [[ContactDAL alloc] initWithID:identifier name:[NSString stringWithFormat:@"%d dummy %d", i, i] familyName:@""];
+        
+        [dummyData addObject:dummyContact];
+        [self->contactCache setObject:dummyContact forKey: identifier];
     }
+    return dummyData;
 }
 
 @end

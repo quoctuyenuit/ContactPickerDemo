@@ -15,17 +15,17 @@
 @property DataBinding<NSString *> * search;
 @property DataBinding<NSArray *> * updateContacts;
 
-- (void) requestPermission: (void (^)(BOOL, NSError *)) completion;
+- (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
-- (void)loadContacts: (void (^)(BOOL isSuccess, int numberOfContacts)) completion;
+- (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
 
-- (void)loadBatchOfContacts: (void (^)(BOOL isSuccess, int numberOfContacts)) completion;
+- (void) loadBatchOfContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
 
-- (int)getNumberOfContacts;
+- (int) getNumberOfContacts;
 
-- (ContactViewEntity *)getContactAt: (int) index;
+- (ContactViewEntity *) getContactAt: (int) index;
 
-- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(BOOL)) handler;
+- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(BOOL isNeedReload)) handler;
 
 @end
 

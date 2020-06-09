@@ -23,7 +23,8 @@
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    self.contactBus = nil;
+    [super tearDown];
 }
 
 - (void) testRequestPermission {
@@ -89,9 +90,7 @@
                 XCTAssertNil(error, @"Load contact from valid id have error");
                 [validIdentifierExpectation fulfill];
             }];
-            
         }];
-        
     }];
     
     [self waitForExpectationsWithTimeout:1 handler:nil];

@@ -118,11 +118,13 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == [self->viewModel getNumberOfContacts] - 10) {
         int itemsOnViewCount = [self->viewModel getNumberOfContacts];
-        [self->viewModel loadBatchOfContacts: ^(BOOL loadDone, int batchLength) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self->viewModel getNumberOfContacts] > itemsOnViewCount) // If actually append item on view
-                    [self insertCells: [self->viewModel getNumberOfContacts] - batchLength withSize: batchLength];
-            });
+        [self->viewModel loadBatchOfContacts: ^(BOOL isSuccess, NSError * error, int batchLength) {
+            if (isSuccess) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([self->viewModel getNumberOfContacts] > itemsOnViewCount) // If actually append item on view
+                        [self insertCells: [self->viewModel getNumberOfContacts] - batchLength withSize: batchLength];
+                });
+            }
         }];
     }
 }

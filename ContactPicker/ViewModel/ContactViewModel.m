@@ -72,12 +72,15 @@
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
     NSString * fullName = [NSString stringWithFormat:@"%@ %@", entity.givenName, entity.familyName];
     ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithIdentifier:entity.identifier name:fullName description:@"temp"];
-    [
-     self->_contactBus getImageFromId:entity.identifier completion:^(NSData * imageData) {
-        UIImage * image = [UIImage imageWithData:imageData];
-        viewEntity.avatar = image;
-        if (viewEntity.waitImageToExcuteQueue) {
-            viewEntity.waitImageToExcuteQueue(image, entity.identifier);
+    [self->_contactBus getImageFromId:entity.identifier completion:^(NSData * imageData, NSError * error) {
+        if (!error) {
+            UIImage * image = [UIImage imageWithData:imageData];
+            viewEntity.avatar = image;
+            if (viewEntity.waitImageToExcuteQueue) {
+                viewEntity.waitImageToExcuteQueue(image, entity.identifier);
+            }
+        } else {
+            [Logging error: error.localizedDescription];
         }
     }];
     return viewEntity;
@@ -88,10 +91,10 @@
     [self->_contactBus requestPermission:completion];
 }
 
-- (void)loadContacts:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
+- (void)loadContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
     [self->_contactBus loadContacts:^(NSError * error) {
         if (error) {
-            completion(NO, 0);
+            completion(NO, error, 0);
             [Logging error:[NSString stringWithFormat:@"Load contact failt, error: %@", error.localizedDescription]];
         } else {
             [self loadBatchOfContacts:completion];
@@ -99,10 +102,10 @@
     }];
 }
 
-- (void)loadBatchOfContacts:(void (^)(BOOL isSuccess, int numberOfContacts))completion {
+- (void)loadBatchOfContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
     [self->_contactBus loadBatchOfContacts:^(NSArray<ContactBusEntity *> * listContactBusEntity, NSError * error) {
         if (error) {
-            completion(NO, 0);
+            completion(NO, error, 0);
             [Logging error:[NSString stringWithFormat:@"Load batch contact failt, error: %@", error.localizedDescription]];
         } else {
             NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
@@ -110,7 +113,7 @@
             }];
             
             [self->_listContact addObjectsFromArray:batchOfContact];
-            completion(YES, (int)batchOfContact.count);
+            completion(YES, nil, (int)batchOfContact.count);
         }
     }];
 }

@@ -101,19 +101,61 @@
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.IDETestFailureBreakpoint">
          <BreakpointContent
-            uuid = "9F5BDE15-3344-4E33-80DC-42DECFA987FB"
-            shouldBeEnabled = "No"
+            uuid = "30CD595E-2636-44A6-B8CD-C67BA456B445"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactDAL/ContactAdapter.m"
+            breakpointStackSelectionBehavior = "1">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F73950E3-D4F2-4AC5-A83C-8FBAD71AC201"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ContactPicker/ViewModel/ContactViewModel.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "-loadContactById:completion:"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "-loadBatchOfContacts:"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F73950E3-D4F2-4AC5-A83C-8FBAD71AC201 - 74fe498e98e31caa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ContactViewModel loadBatchOfContacts:]"
+                  moduleName = "ContactPicker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lap13528/Downloads/projects/ContactPickerDemo/ContactPicker/ViewModel/ContactViewModel.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "106"
+                  endingLineNumber = "106"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "F73950E3-D4F2-4AC5-A83C-8FBAD71AC201 - f9670473c6039822"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__40-[ContactViewModel loadBatchOfContacts:]_block_invoke"
+                  moduleName = "ContactPicker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lap13528/Downloads/projects/ContactPickerDemo/ContactPicker/ViewModel/ContactViewModel.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "107"
+                  endingLineNumber = "107"
+                  offsetFromSymbolStart = "78">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

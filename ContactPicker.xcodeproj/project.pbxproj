@@ -37,6 +37,7 @@
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
 		B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */; };
 		B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED99248E266C001E7246 /* ContactBusTests.m */; };
+		B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */; };
 		B0E8CAE7248B3C220096ACBA /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E8CAE6248B3C220096ACBA /* ContactViewController.m */; };
 		D8DC52A4894DECE5DACF95FE /* Pods_ContactPicker_ContactPickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378A2238D88447CEA912EB0F /* Pods_ContactPicker_ContactPickerUITests.framework */; };
 /* End PBXBuildFile section */
@@ -121,6 +122,7 @@
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
+		B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModelTests.m; sourceTree = "<group>"; };
 		B0E8CAE5248B3C220096ACBA /* ContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
 		B0E8CAE6248B3C220096ACBA /* ContactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		BAE56AE928BCCB98786A1EA4 /* Pods-ContactPicker-ContactPickerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker-ContactPickerUITests.debug.xcconfig"; path = "Target Support Files/Pods-ContactPicker-ContactPickerUITests/Pods-ContactPicker-ContactPickerUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				193E33492484F31C00C5735D /* Info.plist */,
 				B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */,
 				B0E7ED99248E266C001E7246 /* ContactBusTests.m */,
+				B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */,
 			);
 			path = ContactPickerTests;
 			sourceTree = "<group>";
@@ -588,6 +591,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */,
+				B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */,
 				B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */,
 				193E33482484F31C00C5735D /* ContactPickerTests.m in Sources */,
 			);

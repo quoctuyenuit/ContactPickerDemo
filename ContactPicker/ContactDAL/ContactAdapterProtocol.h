@@ -13,17 +13,25 @@
 #import "DataBinding.h"
 
 @protocol ContactAdapterProtocol <NSObject>
+
 @property DataBinding<NSArray<ContactDAL *> *> * contactChangedObservable;
+
 @required
-- (void) requestPermission: (void (^)(BOOL, NSError * )) handler;
 
-- (void) loadContacts: (void (^)(NSArray<ContactDAL *> *, NSError * )) handler;
+- (void) requestPermission: (void (^)(BOOL isSuccess, NSError * error)) handler;
 
-- (void) loadContactById: (NSString *) identifier completion: (void (^) (ContactDAL *, NSError * )) handler;
+//Load identifier and name of contacts from CNContactStore
+- (void) loadContacts: (void (^)(NSArray<ContactDAL *> * listContacts, NSError * error)) handler;
 
-- (void) loadBatchOfContacts: (NSArray<NSString *> *) listIdentifiers completion: (void (^)(NSArray *, NSError *)) handler;
+//Load detail of a contact by identifier, if contact already in cache take it otherwise load it from CNContactStore
+- (void) loadContactById: (NSString *) identifier completion: (void (^) (ContactDAL * contactDAL, NSError * error)) handler;
 
-- (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData *)) handler;
+//Load batch of detailed contacts by list of identifiers, get contacts already in cache and load others from CNContactStore.
+//Set new contact into cache
+- (void) loadBatchOfContacts: (NSArray<NSString *> *) listIdentifiers completion: (void (^)(NSArray<ContactDAL *> * listContacts, NSError * error)) handler;
+
+//Get image by id, if image already in cache take it otherwise load it from CNContactStore
+- (void) getImageById: (NSString *) identifier completion: (void (^)(NSData * imageData, NSError * error)) handler;
 
 @end
 

@@ -143,8 +143,8 @@
     }];
 }
 
-- (void)getImageFromId:(NSString *)identifier completion:(void (^)(NSData *))handler {
-    [self->_contactAdapter getImageFromId:identifier completion:handler];
+- (void)getImageFromId:(NSString *)identifier completion:(void (^)(NSData * imageData, NSError * error))handler {
+    [self->_contactAdapter getImageById:identifier completion:handler];
 }
 
 - (void)searchContactByName:(NSString *)name completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {

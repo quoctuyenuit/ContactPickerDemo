@@ -17,14 +17,19 @@
     UIViewController<KeyboardAppearanceProtocol> * contentViewController;
     ContactViewModel * viewModel;
 }
+extern NSString * const loadingMsg;
+
 - (void) setupViews;
 - (void) setupEvents;
 - (UIViewController<KeyboardAppearanceProtocol> *) loadContactTableViewController;
 - (UIViewController<KeyboardAppearanceProtocol> *) loadFailLoadingContactViewController;
 - (UIViewController<KeyboardAppearanceProtocol> *) loadEmptyViewController;
+- (UIAlertController *) createLoadingView: (NSString *) msg;
 @end
 
 @implementation ContactViewController
+
+NSString * const loadingMsg = @"Đang tải danh bạ...";
 
 + (ContactViewController *)instantiateWith:(id<ContactViewModelProtocol>)viewModel {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -36,8 +41,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self->viewModel loadContacts:^(BOOL isSuccess, int numberOfContacts) {
+    UIAlertController * alert = [self createLoadingView: loadingMsg];
+    [self presentViewController:alert animated:true completion:nil];
+    
+    [self->viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [alert dismissViewControllerAnimated:YES completion:nil];
+            
             if (!isSuccess) {
                 self->contentViewController = [self loadFailLoadingContactViewController];
             } else if (numberOfContacts == 0) {
@@ -88,6 +98,19 @@
 
 - (UIViewController *)loadFailLoadingContactViewController {
     return [ResponseInformationViewController instantiateWith:ResponseViewTypeFailLoadingContact];
+}
+
+- (UIAlertController *)createLoadingView: (NSString *) msg {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
+                                                                    message:msg
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    alert.view.tintColor = UIColor.blackColor;
+    UIActivityIndicatorView * loadingIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(10, 5, 50, 50)];
+    loadingIndicator.hidesWhenStopped = YES;
+    loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleMedium;
+    [loadingIndicator startAnimating];
+    [alert.view addSubview:loadingIndicator];
+    return alert;
 }
 
 #pragma mark - Searchbar view delegate

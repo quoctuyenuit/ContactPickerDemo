@@ -19,15 +19,15 @@
 
 @required
 
-- (void) requestPermission: (void (^)(BOOL, NSError *)) completion;
+- (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
-- (void) loadContacts: (void (^)(NSError *)) completion;
+- (void) loadContacts: (void (^)(NSError * error)) completion;
 
 - (void) loadBatchOfContacts: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
 - (void) loadContactById: (NSString *) identifier completion: (void (^) (ContactBusEntity *, NSError * )) handler;
 
-- (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData *)) handler;
+- (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData * imageData, NSError * error)) handler;
 
 - (void) searchContactByName: (NSString *) name completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
