@@ -13,7 +13,7 @@
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *> * search;
-@property DataBinding<NSArray *> * updateContacts;
+@property DataBinding<NSNumber *> * updateContacts;
 @property DataBinding<NSNumber *> *numberOfSelectedContacts;
 @property DataBinding<NSNumber *> *cellNeedUpdate;
 
@@ -31,7 +31,9 @@
 
 - (void) selectectContactAtIndex: (int) index;
 
-- (void) removeSelectedContact: (ContactViewEntity *) contact;
+- (void) selectectContactIdentifier: (NSString *) identifier;
+
+- (void) removeSelectedContact: (NSString *) identifier;
 
 @end
 

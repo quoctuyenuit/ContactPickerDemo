@@ -28,6 +28,8 @@
 
 @synthesize listSelectedContacts = _listSelectedContacts;
 
+@synthesize contactBus = _contactBus;
+
 @synthesize search;
 
 @synthesize updateContacts;
@@ -46,9 +48,11 @@
     
 //    Data binding initialization
     self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
-    self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
+    self.updateContacts = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.numberOfSelectedContacts = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.cellNeedUpdate = [[DataBinding<NSNumber *> alloc] initWithValue:nil];
+    
+    [self setupEvents];
     
     return self;
 }
@@ -58,30 +62,38 @@
     
 //    Listen Contact store changed
     self->_contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
-        
-        NSMutableArray * listIndexNeedUpdate = [[NSMutableArray alloc] init];
-        NSArray * contactsViewModelUpdated = [contactsUpdated map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
-            return [weakSelf parseContactEntity:obj];
+        //            Update avatar for current contacts
+        [weakSelf.listContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [weakSelf.contactBus getImageFromId:obj.identifier completion:^(NSData *imageData, NSError *error) {
+                if (!error) {
+                    UIImage * image = [UIImage imageWithData:imageData];
+                    obj.avatar = image;
+                    if (obj.waitImageToExcuteQueue) {
+                        obj.waitImageToExcuteQueue(image, obj.identifier);
+                    }
+                } else {
+                    [Logging error: error.localizedDescription];
+                }
+            }];
         }];
         
-        [contactsViewModelUpdated enumerateObjectsUsingBlock:^(ContactViewEntity*  _Nonnull newEntity, NSUInteger idx, BOOL * _Nonnull stop) {
-            
+        [contactsUpdated enumerateObjectsUsingBlock:^(ContactBusEntity*  _Nonnull updatedEntity, NSUInteger idx, BOOL * _Nonnull stop) {
             for (int i = 0; i < weakSelf.listContacts.count ; i++ ) {
                 ContactViewEntity * oldEntity = weakSelf.listContacts[i];
-                if ([oldEntity.identifier isEqualToString:newEntity.identifier] && ![oldEntity isEqual:newEntity]) {
-                    [listIndexNeedUpdate addObject:[NSNumber numberWithInt:i]];
-                    weakSelf.listContacts[i] = newEntity;
+                if ([oldEntity.identifier isEqualToString:updatedEntity.identifier] && ![oldEntity isEqualWithBusEntity:updatedEntity]) {
+                    [weakSelf.listContacts[i] updateContactWith:updatedEntity];
                 }
             }
         }];
         
-        weakSelf.updateContacts.value = listIndexNeedUpdate;
+        weakSelf.updateContacts.value = [NSNumber numberWithInt:[weakSelf.updateContacts.value intValue] + 1];
     };
 }
 
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
     NSString * fullName = [NSString stringWithFormat:@"%@ %@", entity.givenName, entity.familyName];
     ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithIdentifier:entity.identifier name:fullName description:@"temp"];
+    
     [self->_contactBus getImageFromId:entity.identifier completion:^(NSData * imageData, NSError * error) {
         if (!error) {
             UIImage * image = [UIImage imageWithData:imageData];
@@ -97,13 +109,17 @@
 }
 
 - (void)addContacts:(NSArray *)batchOfContact {
-    [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        for (ContactViewEntity * backupObj in self->backupListContact) {
-            if ([backupObj.identifier isEqualToString:obj.identifier]) {
-                obj.isChecked = backupObj.isChecked;
+    for (int i = 0; i < self.listSelectedContacts.count; i++) {
+        ContactViewEntity * selectedContact = self.listSelectedContacts[i];
+        
+        for (int j = 0; j < batchOfContact.count; j++) {
+            ContactViewEntity * newContact = batchOfContact[j];
+            
+            if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
+                newContact.isChecked = selectedContact.isChecked;
             }
         }
-    }];
+    }
     [self.listContacts addObjectsFromArray:batchOfContact];
 }
 
@@ -180,19 +196,38 @@
     self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
 
-- (void)removeSelectedContact:(ContactViewEntity *)contact {
+- (void)selectectContactIdentifier:(NSString *) identifier {
+    for (int i = 0; i< self.listContacts.count; i++) {
+        if ([self.listContacts[i].identifier isEqualToString:identifier]) {
+            [self selectectContactAtIndex:i];
+            return;
+        }
+    }
+}
+
+- (void)removeSelectedContact:(NSString *)identifier {
+    
+    ContactViewEntity * contact = [self.listSelectedContacts firstObjectWith:^BOOL(ContactViewEntity*  _Nonnull obj) {
+        return [obj.identifier isEqualToString:identifier];
+    }];
+    
     if ([self.listSelectedContacts containsObject:contact]) {
         [self.listSelectedContacts removeObject:contact];
     }
     
-    contact.isChecked = NO;
+    if (![self.listContacts containsObject:contact]) {
+        contact = [self.listContacts firstObjectWith:^BOOL(ContactViewEntity*  _Nonnull obj) {
+            return [obj.identifier isEqualToString:identifier];
+        }];
+    }
     
+   
+    contact.isChecked = NO;
     int index = (int)[self.listContacts indexOfObject:contact];
     
     self.cellNeedUpdate.value = [NSNumber numberWithInt:index];
     
     self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
-
 
 @end

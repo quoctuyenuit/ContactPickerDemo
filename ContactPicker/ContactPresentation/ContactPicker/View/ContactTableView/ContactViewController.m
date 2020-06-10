@@ -16,16 +16,17 @@
 
 @interface ContactViewController () {
     UIViewController<KeyboardAppearanceProtocol> * contentViewController;
+    HorizontalListItemView * keyboardInputView;
     ContactViewModel * viewModel;
 }
 extern NSString * const loadingMsg;
 
 - (void) setupViews;
-- (void) setupEvents;
 - (UIViewController<KeyboardAppearanceProtocol> *) loadContactTableViewController;
 - (UIViewController<KeyboardAppearanceProtocol> *) loadFailLoadingContactViewController;
 - (UIViewController<KeyboardAppearanceProtocol> *) loadEmptyViewController;
 - (UIAlertController *) createLoadingView: (NSString *) msg;
+- (void) reloadCollectionView;
 @end
 
 @implementation ContactViewController
@@ -63,27 +64,38 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     [self->viewModel.numberOfSelectedContacts bindAndFire:^(NSNumber * number) {
         if ([number intValue] == 0) {
             self.contactSelectedArea.alpha = 0;
+            self->keyboardInputView.alpha = 0;
         } else {
             self.contactSelectedArea.alpha = 1;
+            self->keyboardInputView.alpha = 1;
         }
     }];
 }
 
 - (void)setupViews {
+    self->keyboardInputView = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
+    self->keyboardInputView.alpha = 0;
     self.searchBar.delegate = self;
     self.searchBar.searchTextField.delegate = self;
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
+    self.contactSelectedArea.collectionView.delegate = self;
+    self.contactSelectedArea.collectionView.dataSource = self;
+    self->keyboardInputView.collectionView.delegate = self;
+    self->keyboardInputView.collectionView.dataSource = self;
+    
     
     UINib * collectionCellNib = [UINib nibWithNibName:@"ContactCollectionCell" bundle:nil];
-    [self.collectionView registerNib:collectionCellNib forCellWithReuseIdentifier:@"ContactCollectionCell"];
+    [self.contactSelectedArea.collectionView registerNib:collectionCellNib forCellWithReuseIdentifier:@"ContactCollectionCell"];
+    [self->keyboardInputView.collectionView registerNib:collectionCellNib forCellWithReuseIdentifier:@"ContactCollectionCell"];
     
     self.contactSelectedArea.layer.shadowColor = UIColor.grayColor.CGColor;
     self.contactSelectedArea.layer.shadowOpacity = 1;
     self.contactSelectedArea.layer.shadowOffset = CGSizeMake(1, 0);
     
-//    self.searchBar.inputAccessoryView = [self.contactSelectedArea copy];
+    self->keyboardInputView.layer.shadowColor = UIColor.grayColor.CGColor;
+    self->keyboardInputView.layer.shadowOpacity = 1;
+    self->keyboardInputView.layer.shadowOffset = CGSizeMake(1, 0);
     
+    self.searchBar.inputAccessoryView = self->keyboardInputView;
     
     self->contentViewController.keyboardAppearanceDelegate = self;
     
@@ -95,6 +107,8 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     [self->contentViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
     [self->contentViewController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
     [self->contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    
+    [self.view bringSubviewToFront:self.contactSelectedArea];
 }
      
 - (UIViewController *)loadContactTableViewController {
@@ -139,18 +153,13 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     [self.searchBar endEditing:YES];
 }
 
+#pragma mark - Contact table delegate
+
 - (void)didSelectContact:(ContactViewEntity *)contact {
-    [self.collectionView reloadData];
-    [self.view bringSubviewToFront:self.contactSelectedArea];
-   
+    [self reloadCollectionView];
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self->viewModel.listContacts.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
-}
-
-#pragma mark Collection view delegate and datasource
+#pragma mark - Collection view delegate and datasource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
@@ -174,7 +183,22 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
 }
 
 - (void)removeCell:(ContactViewEntity *)entity {
-    [self->viewModel removeSelectedContact:entity];
-    [self.collectionView reloadData];
+    [self->viewModel removeSelectedContact:entity.identifier];
+    [self reloadCollectionView];
+}
+
+- (void)reloadCollectionView {
+    [self.contactSelectedArea.collectionView reloadData];
+    [self->keyboardInputView.collectionView reloadData];
+    if (self->viewModel.listSelectedContacts.count > 0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            
+            [self.contactSelectedArea.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self->viewModel.listSelectedContacts.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionRight
+                                                                    animated:NO];
+            [self->keyboardInputView.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self->viewModel.listSelectedContacts.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionRight
+                                                                   animated:NO];
+            
+        }];
+    }
 }
 @end

@@ -15,7 +15,7 @@
 
 @protocol ContactAdapterProtocol <NSObject>
 
-@property DataBinding<NSArray<id<ContactDALProtocol>> *> * contactChangedObservable;
+@property DataBinding<NSNumber *> * contactChangedObservable;
 
 @required
 
@@ -23,7 +23,7 @@
 
 //Load identifier and name of contacts from CNContactStore. The result will callback by bactch
 //isDone is YES when all of the contacts have loaded done
-- (void) loadContacts: (void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error, BOOL isDone)) handler;
+- (void) loadContacts: (int) batchSize completion:(void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error, BOOL isDone)) handler;
 
 //Load detail of a contact by identifier, if contact already in cache take it otherwise load it from CNContactStore
 - (void) loadContactById: (NSString *) identifier completion: (void (^) (id<ContactDALProtocol> contactDAL, NSError * error)) handler;

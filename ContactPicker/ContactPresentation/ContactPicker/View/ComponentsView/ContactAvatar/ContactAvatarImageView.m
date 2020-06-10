@@ -53,6 +53,10 @@
     self.mainContentView.layer.cornerRadius = self.imageView.bounds.size.width / 2;
     self.mainContentView.layer.borderWidth = 1;
     self.mainContentView.layer.borderColor = UIColor.grayColor.CGColor;
+    
+    self.imageView.layer.cornerRadius = self.imageView.bounds.size.width / 2;
+    self.imageView.layer.borderWidth = 1;
+    self.imageView.layer.borderColor = UIColor.grayColor.CGColor;
 }
 
 - (void)showImage {
@@ -67,6 +71,7 @@
 
 - (void)configImage:(UIImage * _Nullable)image forLabel:(NSString *)label {
     self.imageView.image = image;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.label.text = label;
     
     self.imageView.alpha = (image == nil) ? 0 : 1;

@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ContactViewModel.h"
+#import "ContactViewmodel.h"
 #import "ContactBus.h"
 #import "ContactAdapter.h"
 #import "ContactBusEntity.h"
@@ -42,8 +42,8 @@
     XCTestExpectation * loadExpectation = [self expectationWithDescription:@"load contact expectation"];
     [self.viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
         XCTAssertTrue(isSuccess, @"Load contacts is failt");
-        XCTAssertNotNil(self.viewModel.listContact, @"listContact is nil after load contacts");
-        XCTAssertTrue(self.viewModel.listContact.count > 0, @"Contacts empty");
+        XCTAssertNotNil(self.viewModel.listContacts, @"listContact is nil after load contacts");
+        XCTAssertTrue(self.viewModel.listContacts.count > 0, @"Contacts empty");
         [loadExpectation fulfill];
     }];
     
@@ -56,7 +56,7 @@
     [self.viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
         XCTAssertTrue(isSuccess, @"Load contacts is failt");
         [loadExpectation fulfill];
-        [self.viewModel loadBatchOfContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
+        [self.viewModel loadBatchOfDetailedContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
             XCTAssertTrue(isSuccess, @"Load contacts is failt");
             XCTAssertNil(error, @"Load contacts have error");
             [loadBatchExpectation fulfill];

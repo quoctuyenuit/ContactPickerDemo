@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CheckBoxButtonDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 @property (nonatomic, readwrite) BOOL checked;
+
+@property (weak, nonatomic) id<CheckBoxButtonDelegate> delegate;
+
 @end
 
 NS_ASSUME_NONNULL_END

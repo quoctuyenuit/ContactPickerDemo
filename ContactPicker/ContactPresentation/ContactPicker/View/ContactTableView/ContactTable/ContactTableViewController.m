@@ -37,12 +37,11 @@
 }
 
 - (void) insertCells: (int) index withSize: (int) size {
-    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-    for (int i = [self->viewModel getNumberOfContacts] - size; i < index + size; i++) {
-        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-    }
-    
-    [self.tableView reloadData];
+//    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+//    for (int i = [self->viewModel getNumberOfContacts] - size; i < index + size; i++) {
+//        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+//    }
+//
 //    [self.tableView beginUpdates];
 //    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(UITableViewRowAnimationNone)];
 //    [self.tableView endUpdates];
@@ -63,16 +62,9 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    [self->viewModel.updateContacts binding:^(NSArray * listIndexNeedUpdate) {
+    [self->viewModel.updateContacts binding:^(NSNumber * number) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-            for (int i = 0; i < listIndexNeedUpdate.count; i++) {
-                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-            }
-            
-            [self.tableView beginUpdates];
-            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation: (UITableViewRowAnimationNone)];
-            [self.tableView endUpdates];
+            [self.tableView reloadData];
         });
     }];
     
@@ -122,6 +114,10 @@
     ContactViewEntity *entity = [self->viewModel getContactAt: (int)indexPath.row];
     [cell configForModel:entity];
     
+    if (!cell.delegate) {
+        cell.delegate = self;
+    }
+    
     return cell;
 }
 
@@ -139,18 +135,19 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == [self->viewModel getNumberOfContacts] - 10) {
-        int itemsOnViewCount = [self->viewModel getNumberOfContacts];
         [self->viewModel loadBatchOfDetailedContacts: ^(BOOL isSuccess, NSError * error, int batchLength) {
             if (isSuccess) {
                dispatch_async(dispatch_get_main_queue(), ^{
-                   @synchronized(self) {
-                    if ([self->viewModel getNumberOfContacts] > itemsOnViewCount) // If actually append item on view
-                        [self insertCells: [self->viewModel getNumberOfContacts] - batchLength withSize: batchLength];
-                   }
+                   [self.tableView reloadData];
                 });
             }
         }];
     }
+}
+
+- (void)didSelectContact:(ContactViewEntity *)contact {
+    [self->viewModel selectectContactIdentifier:contact.identifier];
+    [self.contactDelegate didSelectContact:contact];
 }
 
 @end

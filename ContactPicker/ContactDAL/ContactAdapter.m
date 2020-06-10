@@ -44,11 +44,7 @@
 }
 
 - (void) contactDidChangedEvent: (NSNotification *) notification {
-    [self loadBatchOfDetailedContacts:self->listIdentifiersLoaded completion:^(NSArray<ContactDAL *> * listUpdatedContact, NSError * error) {
-        if (!error) {
-            self->contactChangedObservable.value = listUpdatedContact;
-        }
-    }];
+    self->contactChangedObservable.value = [NSNumber numberWithInt:[self->contactChangedObservable.value intValue] + 1];
 }
 
 - (void)requestPermission:(void (^)(BOOL, NSError * _Nullable)) handler {
@@ -65,7 +61,8 @@
     }
 }
 
-- (void)loadContacts:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *, BOOL))handler {
+- (void)loadContacts:(int) batchSize
+          completion:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *, BOOL))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
             DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, -1
@@ -90,7 +87,7 @@
                 [listContacts addObject: [[ContactDAL alloc] initWithID:contact.identifier name:contact.givenName familyName:contact.familyName]];
                 
                 
-                if (listContacts.count >= 20) {
+                if (listContacts.count >= batchSize) {
                     NSArray * batch = [listContacts copy];
                     [listContacts removeAllObjects];
                     dispatch_sync(callBackQueue, ^{

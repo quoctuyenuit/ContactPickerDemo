@@ -39,6 +39,8 @@
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
 		B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43B24878BEA00E557E1 /* ContactDAL.m */; };
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
+		B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
+		B0C1C24A2490F3D800634829 /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */; };
 		B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED99248E266C001E7246 /* ContactBusTests.m */; };
 		B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */; };
@@ -131,6 +133,7 @@
 		B0ABD43D24878DFB00E557E1 /* ContactAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAdapter.h; sourceTree = "<group>"; };
 		B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapter.m; sourceTree = "<group>"; };
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
+		B0C1C24B249101A100634829 /* CheckBoxButtonDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonDelegate.h; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
 		B0DAEBCC24908F9C0002A4D0 /* ContactTableDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableDelegate.h; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 				B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */,
 				B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */,
 				B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */,
+				B0C1C24B249101A100634829 /* CheckBoxButtonDelegate.h */,
 			);
 			path = CheckBox;
 			sourceTree = "<group>";
@@ -686,6 +690,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */,
+				B0C1C24A2490F3D800634829 /* ContactBus.m in Sources */,
+				B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */,
 				B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */,
 				B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */,
 				193E33482484F31C00C5735D /* ContactPickerTests.m in Sources */,

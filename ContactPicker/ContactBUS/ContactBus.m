@@ -28,6 +28,7 @@
                        completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
 - (void) getContactBatchWithIdentifiers: (NSArray *) identifiers completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
+
 - (void) getContactBatchWithContacts: (NSArray<ContactBusEntity *> *) contacts completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
 @end
@@ -51,17 +52,20 @@
 //    dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
 //        DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -1
 //    );
+//    self.contactChangedObservable = [[DataBinding alloc] initWithValue:^(NSArray *){}];
     self->search_queue = [NSOperationQueue new];
     self->search_queue.maxConcurrentOperationCount = 1;
     
      __weak ContactBus * weakSelf = self;
-    [self->_contactAdapter.contactChangedObservable binding:^(NSArray<ContactDAL *> * listContactDAL) {
-        NSArray * listContactBusEntity = [listContactDAL map:^ContactBusEntity* _Nonnull(ContactDAL *  _Nonnull obj) {
-            return [[ContactBusEntity alloc] initWithData: obj];
+    [self->_contactAdapter.contactChangedObservable binding:^(NSNumber * changed) {
+        
+        [self getContactBatchStartWith:0 batchSize:self->currentIndexBatch completion:^(NSArray<ContactBusEntity *> * listUpdatedContact, NSError * error) {
+            if (!error) {
+                if (weakSelf.contactChangedObservable) {
+                    weakSelf.contactChangedObservable(listUpdatedContact);
+                }
+            }
         }];
-        if (weakSelf.contactChangedObservable) {
-            weakSelf.contactChangedObservable(listContactBusEntity);
-        }
     }];
     return self;
 }
@@ -116,7 +120,8 @@
 }
 
 - (void)loadContacts:(void (^)(NSError *, BOOL isDone))handler {
-    [self->_contactAdapter loadContacts:^(NSArray<ContactDAL *> * listContactRequestedInfor, NSError * error, BOOL isDone) {
+    [self->_contactAdapter loadContacts: self->busBatchSize
+                             completion:^(NSArray<ContactDAL *> * listContactRequestedInfor, NSError * error, BOOL isDone) {
         if (error) {
             handler(error, YES);
             [Logging exeption:error.localizedDescription];
@@ -191,7 +196,7 @@
         self->listContactsBuffer = [[NSMutableArray alloc] init];
         
         while ((i < self->listContactsOrigin.count || !self->contactIsLoadDone) && self->searchIsWaiting) {
-            
+            NSLog(@"%@", name);
             if (i < self->listContactsOrigin.count) {
                 ContactBusEntity * contact = self->listContactsOrigin[i];
                 NSString * contactName = [NSString stringWithFormat:@"%@ %@", contact.givenName, contact.familyName];

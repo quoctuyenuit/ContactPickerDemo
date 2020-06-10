@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(atomic) NSMutableArray<ContactViewEntity *> * listContacts;
 @property(atomic) NSMutableArray<ContactViewEntity *> * listSelectedContacts;
+@property(nonatomic) id<ContactBusProtocol> contactBus;
 
 - (id)initWithBus: (id<ContactBusProtocol>) bus;
 @end

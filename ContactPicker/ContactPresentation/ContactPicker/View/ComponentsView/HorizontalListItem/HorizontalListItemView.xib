@@ -8,8 +8,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HorizontalListItemView">
             <connections>
+                <outlet property="button" destination="zAy-rt-XEK" id="85o-6S-lF8"/>
+                <outlet property="collectionView" destination="Hn2-kw-5dc" id="Fp5-lG-rUp"/>
                 <outlet property="mainContentView" destination="iN0-l3-epB" id="4fN-RC-mGF"/>
-                <outlet property="scrollContentView" destination="nFx-F8-C3f" id="3lQ-Bv-b1A"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -17,45 +18,42 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NsX-5Z-hHQ">
-                    <rect key="frame" x="8" y="8" width="332" height="92"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nFx-F8-C3f">
-                            <rect key="frame" x="0.0" y="0.0" width="332" height="92"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        </view>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="nFx-F8-C3f" firstAttribute="leading" secondItem="NsX-5Z-hHQ" secondAttribute="leading" id="IOT-yg-jxr"/>
-                        <constraint firstAttribute="trailing" secondItem="nFx-F8-C3f" secondAttribute="trailing" id="IdN-66-T4T"/>
-                        <constraint firstItem="nFx-F8-C3f" firstAttribute="height" secondItem="NsX-5Z-hHQ" secondAttribute="height" id="aEi-1v-cyi"/>
-                        <constraint firstItem="nFx-F8-C3f" firstAttribute="width" relation="greaterThanOrEqual" secondItem="NsX-5Z-hHQ" secondAttribute="width" id="hhS-Zt-Th5"/>
-                        <constraint firstAttribute="bottom" secondItem="nFx-F8-C3f" secondAttribute="bottom" id="ijo-76-EIM"/>
-                        <constraint firstItem="nFx-F8-C3f" firstAttribute="top" secondItem="NsX-5Z-hHQ" secondAttribute="top" id="rtA-K9-AKN"/>
-                    </constraints>
-                </scrollView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zAy-rt-XEK">
                     <rect key="frame" x="348" y="29" width="50" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="zAy-rt-XEK" secondAttribute="height" multiplier="1:1" id="YnJ-oq-KT9"/>
                         <constraint firstAttribute="width" priority="750" constant="50" id="tYS-50-yS2"/>
                     </constraints>
-                    <state key="normal" title="Button"/>
+                    <state key="normal" backgroundImage="arrow_ico"/>
                 </button>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Hn2-kw-5dc">
+                    <rect key="frame" x="16" y="8" width="324" height="92"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IlL-Bl-RA2">
+                        <size key="itemSize" width="55" height="55"/>
+                        <size key="estimatedItemSize" width="55" height="55"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="zAy-rt-XEK" secondAttribute="trailing" constant="16" id="1FT-kH-sJv"/>
                 <constraint firstItem="zAy-rt-XEK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="2K1-ND-9Hp"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="zAy-rt-XEK" secondAttribute="bottom" constant="8" id="4XJ-MI-rVY"/>
-                <constraint firstItem="NsX-5Z-hHQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="AcT-hj-GlB"/>
                 <constraint firstItem="zAy-rt-XEK" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="KZH-4D-dQ1"/>
-                <constraint firstItem="NsX-5Z-hHQ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="WeM-i4-FYY"/>
-                <constraint firstItem="zAy-rt-XEK" firstAttribute="leading" secondItem="NsX-5Z-hHQ" secondAttribute="trailing" constant="8" id="YUd-IW-6gx"/>
-                <constraint firstAttribute="bottom" secondItem="NsX-5Z-hHQ" secondAttribute="bottom" constant="8" id="pul-Bs-5lE"/>
+                <constraint firstItem="Hn2-kw-5dc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="NyL-SB-hIA"/>
+                <constraint firstAttribute="bottom" secondItem="Hn2-kw-5dc" secondAttribute="bottom" constant="8" id="e1C-d9-amu"/>
+                <constraint firstItem="Hn2-kw-5dc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="hAl-OC-YXi"/>
+                <constraint firstItem="zAy-rt-XEK" firstAttribute="leading" secondItem="Hn2-kw-5dc" secondAttribute="trailing" constant="8" id="tnj-7x-70S"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="131.8840579710145" y="207.58928571428569"/>
         </view>
     </objects>
+    <resources>
+        <image name="arrow_ico" width="32" height="32"/>
+    </resources>
 </document>

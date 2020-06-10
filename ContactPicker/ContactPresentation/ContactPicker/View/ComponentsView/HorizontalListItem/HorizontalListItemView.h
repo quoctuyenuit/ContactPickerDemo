@@ -14,15 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HorizontalListItemView : UIView
 @property (strong, nonatomic) IBOutlet UIView *mainContentView;
-@property (weak, nonatomic) IBOutlet UIView *scrollContentView;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIButton *button;
 
-- (void) reloadData;
-@end
-
-@protocol HorizontalListItemViewDataSource <NSObject>
-
-- (NSInteger) numberOfItems: (HorizontalListItemView *) listView;
-//- (void) itemForIndex: (HorizontalListItemView *) listView
 
 @end
 

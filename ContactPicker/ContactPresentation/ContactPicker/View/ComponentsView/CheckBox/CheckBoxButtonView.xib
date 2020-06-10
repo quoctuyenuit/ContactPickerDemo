@@ -21,9 +21,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="207" height="207"/>
                     <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                     <state key="normal" backgroundImage="unchecked_img"/>
+                    <connections>
+                        <action selector="checkAction:" destination="-1" eventType="touchUpInside" id="NK4-zU-G1z"/>
+                    </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="QjG-Om-Oi5" firstAttribute="top" secondItem="MkZ-Ee-64k" secondAttribute="top" id="6bC-HF-Yzj"/>
                 <constraint firstAttribute="bottom" secondItem="QjG-Om-Oi5" secondAttribute="bottom" id="PNy-BE-xsN"/>
@@ -35,6 +38,6 @@
         </view>
     </objects>
     <resources>
-        <image name="unchecked_img" width="255.5" height="254.5"/>
+        <image name="unchecked_img" width="24" height="24"/>
     </resources>
 </document>

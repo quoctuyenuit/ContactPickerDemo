@@ -9,9 +9,9 @@
 #import "ContactTableViewCell.h"
 #import "ContactAvatarImageView.h"
 
-@interface ContactTableViewCell()
-- (void) setupView;
-- (void) updateView;
+@interface ContactTableViewCell() {
+    ContactViewEntity * currentContact;
+}
 @end
 
 @implementation ContactTableViewCell
@@ -19,7 +19,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    [self updateView];
+    self.checkBox.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -28,21 +28,10 @@
     // Configure the view for the selected state
 }
 
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    [self updateView];
-}
-
-- (void)setupView {
-    self.avatar.layer.borderWidth = 1;
-    self.avatar.layer.borderColor = UIColor.grayColor.CGColor;
-}
-
-- (void)updateView {
-    self.avatar.layer.cornerRadius = self.avatar.bounds.size.width / 2;
-}
 
 - (void)configForModel:(ContactViewEntity *)entity {
+    self->currentContact = entity;
+    
     self.firstLabel.text = entity.name;
     self.secondLabel.text = entity.contactDescription;
     self.checkBox.checked = entity.isChecked;
@@ -70,5 +59,9 @@
 
 - (NSString *)reuseIdentifier {
     return @"ContactViewCell";
+}
+
+- (void)check:(BOOL)isChecked {
+    [self.delegate didSelectContact:self->currentContact];
 }
 @end

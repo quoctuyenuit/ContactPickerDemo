@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ContactViewEntity()
-
+- (NSString *) parseNameFromBus: (ContactBusEntity *) entity;
 @end
 
 @implementation ContactViewEntity
@@ -46,6 +46,18 @@
     return self;
 }
 
+- (id)initWithBusEntity:(ContactBusEntity *)entity {
+    return [self initWithIdentifier:entity.identifier name:[self parseName:entity] description:@"temp"];
+}
+
+- (void)updateContactWith:(ContactBusEntity *)entity {
+    self.name = [self parseName:entity];
+}
+
+- (NSString *)parseName:(ContactBusEntity *) entity {
+    return [NSString stringWithFormat:@"%@ %@", entity.givenName, entity.familyName];
+}
+
 - (BOOL)contactHasPrefix:(NSString *)key {
     if ([key isEqualToString:@""]) {
         return true;
@@ -53,18 +65,8 @@
     return [[self.name lowercaseString] hasPrefix: [key lowercaseString]];
 }
 
-- (BOOL)isEqual:(ContactViewEntity *)other
-{
-    if (other == self) {
-        return YES;
-    } else {
-        return ([self.name isEqualToString:other.name] &&
-                [self.contactDescription isEqualToString:other.contactDescription]);
-    }
+- (BOOL)isEqualWithBusEntity:(ContactBusEntity *)entity {
+    return [self.name isEqualToString:[self parseName:entity]];
 }
 
-- (NSUInteger)hash
-{
-    return [self->_name hash];
-}
 @end

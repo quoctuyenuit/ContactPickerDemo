@@ -10,7 +10,6 @@
 
 @interface CheckBoxButtonView()
 -(void) customInit;
--(void) tappedButton: (UIButton*) sender;
 @end
 
 @implementation CheckBoxButtonView
@@ -51,10 +50,14 @@
     [[NSBundle mainBundle] loadNibNamed:@"CheckBoxButtonView" owner:self options:nil];
     [self addSubview:self.contentView];
     self.contentView.frame = self.bounds;
-    [self.button addTarget:self action:@selector(tappedButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)tappedButton:(UIButton *)sender {
+
+- (IBAction)checkAction:(id)sender {
     self.checked = !self.checked;
+    [self.delegate check: self.checked];
 }
+
+@synthesize checked = _checked;
+
 @end

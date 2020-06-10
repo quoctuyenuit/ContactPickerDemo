@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableViewController : UITableViewController<KeyboardAppearanceProtocol>
+@interface ContactTableViewController : UITableViewController<KeyboardAppearanceProtocol, ContactTableDelegate>
 
 @property(weak, nonatomic) id<ContactTableDelegate> contactDelegate;
 
