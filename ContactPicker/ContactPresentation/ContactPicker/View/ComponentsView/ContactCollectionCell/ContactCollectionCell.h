@@ -12,10 +12,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol ContactCollectionCellDelegate <NSObject>
+
+- (void) removeCell: (ContactViewEntity *) entity;
+
+@end
+
 @interface ContactCollectionCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet ContactAvatarImageView *avatar;
+@property (weak, nonatomic) id<ContactCollectionCellDelegate> delegate;
 
 - (void) config: (ContactViewEntity *) entity;
+
 @end
+
+
 
 NS_ASSUME_NONNULL_END

@@ -9,7 +9,9 @@
 #import "ContactCollectionCell.h"
 #import "ContactViewEntity.h"
 
-@interface ContactCollectionCell()
+@interface ContactCollectionCell() {
+    ContactViewEntity * currentContact;
+}
 
 @end
 
@@ -20,9 +22,11 @@
     // Initialization code
 }
 - (IBAction)closeAction:(id)sender {
+    [self.delegate removeCell:self->currentContact];
 }
 
 - (void)config:(ContactViewEntity *)entity {
+    self->currentContact = entity;
     NSString* keyName = entity.name.length >= 2 ? [entity.name substringToIndex:2] : [entity.name substringToIndex:1];
     if (entity.avatar) {
         [self.avatar configImage:entity.avatar forLabel:@""];

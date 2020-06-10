@@ -85,6 +85,13 @@
         
     }];
     
+    [self->viewModel.cellNeedUpdate binding:^(NSNumber * indexChangedCell) {
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:[indexChangedCell intValue] inSection:0];
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation: (UITableViewRowAnimationNone)];
+        [self.tableView endUpdates];
+    }];
+    
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
 }
 

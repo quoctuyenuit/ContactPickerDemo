@@ -15,6 +15,7 @@
 @property DataBinding<NSString *> * search;
 @property DataBinding<NSArray *> * updateContacts;
 @property DataBinding<NSNumber *> *numberOfSelectedContacts;
+@property DataBinding<NSNumber *> *cellNeedUpdate;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
@@ -28,9 +29,9 @@
 
 - (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(void)) handler;
 
-- (void) refresh;
-
 - (void) selectectContactAtIndex: (int) index;
+
+- (void) removeSelectedContact: (ContactViewEntity *) contact;
 
 @end
 

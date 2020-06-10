@@ -18,7 +18,7 @@
     NSArray * backupListContact;
 }
 
-- (id) finalizeInit;
+- (void) setupEvents;
 - (ContactViewEntity *) parseContactEntity: (ContactBusEntity *) entity;
 @end
 
@@ -34,23 +34,29 @@
 
 @synthesize numberOfSelectedContacts;
 
+@synthesize cellNeedUpdate;
+
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     self->_contactBus = bus;
-    self = [self finalizeInit];
     self->_contactIsLoaded = NO;
-    return self;
-}
-
-- (id)finalizeInit {
+    
+//    List source initialization
     self.listContacts = [[NSMutableArray alloc] init];
     self.listSelectedContacts = [[NSMutableArray alloc] init];
     
+//    Data binding initialization
     self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
     self.numberOfSelectedContacts = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.cellNeedUpdate = [[DataBinding<NSNumber *> alloc] initWithValue:nil];
     
+    return self;
+}
+
+- (void)setupEvents {
     __weak ContactViewModel * weakSelf = self;
     
+//    Listen Contact store changed
     self->_contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
         
         NSMutableArray * listIndexNeedUpdate = [[NSMutableArray alloc] init];
@@ -71,8 +77,6 @@
         
         weakSelf.updateContacts.value = listIndexNeedUpdate;
     };
-    
-    return self;
 }
 
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
@@ -92,6 +96,17 @@
     return viewEntity;
 }
 
+- (void)addContacts:(NSArray *)batchOfContact {
+    [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (ContactViewEntity * backupObj in self->backupListContact) {
+            if ([backupObj.identifier isEqualToString:obj.identifier]) {
+                obj.isChecked = backupObj.isChecked;
+            }
+        }
+    }];
+    [self.listContacts addObjectsFromArray:batchOfContact];
+}
+
 #pragma mark Public function
 - (void)requestPermission:(void (^)(BOOL, NSError *))completion {
     [self->_contactBus requestPermission:completion];
@@ -109,17 +124,6 @@
             }
         }
     }];
-}
-
-- (void)addContacts:(NSArray *)batchOfContact {
-    [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        for (ContactViewEntity * backupObj in self->backupListContact) {
-            if ([backupObj.identifier isEqualToString:obj.identifier]) {
-                obj.isChecked = backupObj.isChecked;
-            }
-        }
-    }];
-    [self.listContacts addObjectsFromArray:batchOfContact];
 }
 
 - (void)loadBatchOfDetailedContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
@@ -151,7 +155,8 @@
 
 - (void)searchContactWithKeyName:(NSString *)key completion:(void (^)(void))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self refresh];
+        self->backupListContact = self.listContacts;
+        self.listContacts = [[NSMutableArray alloc] init];
         handler();
         [self->_contactBus searchContactByName:key completion:^(void) {
             [self loadBatchOfDetailedContacts:^(BOOL isSuccess, NSError *error, int numberOfContacts) {
@@ -161,11 +166,6 @@
             }];
         }];
     });
-}
-
-- (void)refresh {
-    self->backupListContact = self.listContacts;
-    self.listContacts = [[NSMutableArray alloc] init];
 }
 
 - (void)selectectContactAtIndex:(int)index {
@@ -179,4 +179,20 @@
     }
     self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
+
+- (void)removeSelectedContact:(ContactViewEntity *)contact {
+    if ([self.listSelectedContacts containsObject:contact]) {
+        [self.listSelectedContacts removeObject:contact];
+    }
+    
+    contact.isChecked = NO;
+    
+    int index = (int)[self.listContacts indexOfObject:contact];
+    
+    self.cellNeedUpdate.value = [NSNumber numberWithInt:index];
+    
+    self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
+}
+
+
 @end

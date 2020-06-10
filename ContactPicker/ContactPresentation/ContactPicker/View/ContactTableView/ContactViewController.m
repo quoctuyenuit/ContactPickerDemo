@@ -142,6 +142,12 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
 - (void)didSelectContact:(ContactViewEntity *)contact {
     [self.collectionView reloadData];
     [self.view bringSubviewToFront:self.contactSelectedArea];
+   
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self->viewModel.listContacts.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 #pragma mark Collection view delegate and datasource
@@ -160,10 +166,15 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     
     [cell config:entity];
     
+    if (cell.delegate == nil) {
+        cell.delegate = self;
+    }
+    
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"selected");
+- (void)removeCell:(ContactViewEntity *)entity {
+    [self->viewModel removeSelectedContact:entity];
+    [self.collectionView reloadData];
 }
 @end

@@ -19,6 +19,8 @@
 		193E336B24851CD000C5735D /* DataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 193E336A24851CD000C5735D /* DataBinding.m */; };
 		766633173061EA70E3B883C5 /* Pods_ContactPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938C967E9291A1F741C8611C /* Pods_ContactPicker.framework */; };
 		8DE50433BC66BAF823D7E434 /* Pods_ContactPickerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D661D34816026F9C7D33F6F /* Pods_ContactPickerTests.framework */; };
+		B0020CFA2490C7DF00899757 /* HorizontalListItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0020CF92490C7DF00899757 /* HorizontalListItemView.m */; };
+		B0020CFC2490C7EE00899757 /* HorizontalListItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0020CFB2490C7EE00899757 /* HorizontalListItemView.xib */; };
 		B0076342248610C100239F3D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableViewController.m */; };
 		B00763452486167000239F3D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
 		B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */; };
@@ -89,6 +91,9 @@
 		821BF97CA69360C6D6118DDA /* Pods-ContactPicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPicker.release.xcconfig"; path = "Target Support Files/Pods-ContactPicker/Pods-ContactPicker.release.xcconfig"; sourceTree = "<group>"; };
 		938C967E9291A1F741C8611C /* Pods_ContactPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD494FDD2307939083C42A3A /* Pods-ContactPickerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactPickerTests.release.xcconfig"; path = "Target Support Files/Pods-ContactPickerTests/Pods-ContactPickerTests.release.xcconfig"; sourceTree = "<group>"; };
+		B0020CF82490C7DF00899757 /* HorizontalListItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalListItemView.h; sourceTree = "<group>"; };
+		B0020CF92490C7DF00899757 /* HorizontalListItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalListItemView.m; sourceTree = "<group>"; };
+		B0020CFB2490C7EE00899757 /* HorizontalListItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HorizontalListItemView.xib; sourceTree = "<group>"; };
 		B0076340248610C100239F3D /* ContactTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewController.h; sourceTree = "<group>"; };
 		B0076341248610C100239F3D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
 		B00763432486167000239F3D /* ContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModel.h; sourceTree = "<group>"; };
@@ -256,6 +261,36 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B0020CF72490C79C00899757 /* HorizontalListItem */ = {
+			isa = PBXGroup;
+			children = (
+				B0020CF82490C7DF00899757 /* HorizontalListItemView.h */,
+				B0020CF92490C7DF00899757 /* HorizontalListItemView.m */,
+				B0020CFB2490C7EE00899757 /* HorizontalListItemView.xib */,
+			);
+			path = HorizontalListItem;
+			sourceTree = "<group>";
+		};
+		B0020CFD2490D17500899757 /* ContactTableView */ = {
+			isa = PBXGroup;
+			children = (
+				B0517914249085CB00B0A973 /* ContactTable */,
+				B06FBB60248C0288003BDC3C /* KeyboardAppearanceDelegate.h */,
+				B0E8CAE5248B3C220096ACBA /* ContactViewController.h */,
+				B0E8CAE6248B3C220096ACBA /* ContactViewController.m */,
+			);
+			path = ContactTableView;
+			sourceTree = "<group>";
+		};
+		B0020CFE2490D18700899757 /* ResponseInformationView */ = {
+			isa = PBXGroup;
+			children = (
+				B06FBB5A248BDE20003BDC3C /* ResponseInformationViewController.h */,
+				B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */,
+			);
+			path = ResponseInformationView;
+			sourceTree = "<group>";
+		};
 		B02A510A2487EAA700B9CC1B /* ContactBUS */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,12 +305,9 @@
 		B02EE7E12489DA38006AA3D8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B0979AEA24889B94008D05F4 /* Subviews */,
-				B06FBB60248C0288003BDC3C /* KeyboardAppearanceDelegate.h */,
-				B0E8CAE5248B3C220096ACBA /* ContactViewController.h */,
-				B0E8CAE6248B3C220096ACBA /* ContactViewController.m */,
-				B06FBB5A248BDE20003BDC3C /* ResponseInformationViewController.h */,
-				B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */,
+				B0020CFE2490D18700899757 /* ResponseInformationView */,
+				B0020CFD2490D17500899757 /* ContactTableView */,
+				B0979AEA24889B94008D05F4 /* ComponentsView */,
 				B06FBB5D248BE3AC003BDC3C /* MainViewController.h */,
 				B06FBB5E248BE3AC003BDC3C /* MainViewController.m */,
 			);
@@ -322,14 +354,14 @@
 			path = ContactTable;
 			sourceTree = "<group>";
 		};
-		B0517916249085F600B0A973 /* ItemCell */ = {
+		B0517916249085F600B0A973 /* ContactCollectionCell */ = {
 			isa = PBXGroup;
 			children = (
 				B05179172490861800B0A973 /* ContactCollectionCell.h */,
 				B05179182490861800B0A973 /* ContactCollectionCell.m */,
 				B05179192490861800B0A973 /* ContactCollectionCell.xib */,
 			);
-			path = ItemCell;
+			path = ContactCollectionCell;
 			sourceTree = "<group>";
 		};
 		B0979AE024888DEB008D05F4 /* Extensions */ = {
@@ -353,16 +385,16 @@
 			path = ContactPresentation;
 			sourceTree = "<group>";
 		};
-		B0979AEA24889B94008D05F4 /* Subviews */ = {
+		B0979AEA24889B94008D05F4 /* ComponentsView */ = {
 			isa = PBXGroup;
 			children = (
-				B0517916249085F600B0A973 /* ItemCell */,
+				B0020CF72490C79C00899757 /* HorizontalListItem */,
+				B0517916249085F600B0A973 /* ContactCollectionCell */,
 				B0517912249085A600B0A973 /* ContactTableCell */,
 				B0517913249085B400B0A973 /* ContactAvatar */,
 				B05179112490859D00B0A973 /* CheckBox */,
-				B0517914249085CB00B0A973 /* ContactTable */,
 			);
-			path = Subviews;
+			path = ComponentsView;
 			sourceTree = "<group>";
 		};
 		B0979AF124889E32008D05F4 /* Entity */ = {
@@ -527,6 +559,7 @@
 				B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */,
 				B0979AF82488DFD4008D05F4 /* ContactTableViewCell.xib in Resources */,
 				B051791B2490861800B0A973 /* ContactCollectionCell.xib in Resources */,
+				B0020CFC2490C7EE00899757 /* HorizontalListItemView.xib in Resources */,
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
 				B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
@@ -631,6 +664,7 @@
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
+				B0020CFA2490C7DF00899757 /* HorizontalListItemView.m in Sources */,
 				B00763452486167000239F3D /* ContactViewModel.m in Sources */,
 				193E333E2484F31C00C5735D /* main.m in Sources */,
 				B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */,
