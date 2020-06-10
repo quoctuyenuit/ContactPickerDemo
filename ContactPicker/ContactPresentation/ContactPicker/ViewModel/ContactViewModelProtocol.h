@@ -14,6 +14,7 @@
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *> * search;
 @property DataBinding<NSArray *> * updateContacts;
+@property DataBinding<NSNumber *> *numberOfSelectedContacts;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
@@ -28,6 +29,8 @@
 - (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(void)) handler;
 
 - (void) refresh;
+
+- (void) selectectContactAtIndex: (int) index;
 
 @end
 

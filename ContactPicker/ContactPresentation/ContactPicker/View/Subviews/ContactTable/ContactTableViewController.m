@@ -81,11 +81,11 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
             });
-            
         }];
         
     }];
     
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
 }
 
 - (void)loadView {
@@ -122,10 +122,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     ContactTableViewCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
     ContactViewEntity * entity = [self->viewModel getContactAt:(int)indexPath.row];
-    entity.isChecked = !entity.isChecked;
     
+    [self->viewModel selectectContactAtIndex:(int)indexPath.row];
     [selectedCell setSelect];
+    
     [self.keyboardAppearanceDelegate hideKeyboard];
+    [self.contactDelegate didSelectContact:entity];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

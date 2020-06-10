@@ -26,9 +26,13 @@
 
 @synthesize listContacts = _listContacts;
 
+@synthesize listSelectedContacts = _listSelectedContacts;
+
 @synthesize search;
 
 @synthesize updateContacts;
+
+@synthesize numberOfSelectedContacts;
 
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     self->_contactBus = bus;
@@ -39,9 +43,11 @@
 
 - (id)finalizeInit {
     self.listContacts = [[NSMutableArray alloc] init];
+    self.listSelectedContacts = [[NSMutableArray alloc] init];
     
     self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.updateContacts = [[DataBinding<NSArray *> alloc] initWithValue:nil];
+    self.numberOfSelectedContacts = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     
     __weak ContactViewModel * weakSelf = self;
     
@@ -160,5 +166,17 @@
 - (void)refresh {
     self->backupListContact = self.listContacts;
     self.listContacts = [[NSMutableArray alloc] init];
+}
+
+- (void)selectectContactAtIndex:(int)index {
+    ContactViewEntity * contact = self.listContacts[index];
+    contact.isChecked = !contact.isChecked;
+    
+    if (contact.isChecked) {
+        [self.listSelectedContacts addObject:contact];
+    } else if ([self.listSelectedContacts containsObject:contact]) {
+        [self.listSelectedContacts removeObject:contact];
+    }
+    self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
 @end

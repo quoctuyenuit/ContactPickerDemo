@@ -25,6 +25,8 @@
 		B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */; };
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
 		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
+		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
+		B051791B2490861800B0A973 /* ContactCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B05179192490861800B0A973 /* ContactCollectionCell.xib */; };
 		B06FBB5C248BDE20003BDC3C /* ResponseInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */; };
 		B06FBB5F248BE3AC003BDC3C /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5E248BE3AC003BDC3C /* MainViewController.m */; };
 		B0979AE324888E05008D05F4 /* NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AE224888E05008D05F4 /* NSArrayExtension.m */; };
@@ -99,6 +101,9 @@
 		B02A510E2487EF2000B9CC1B /* ContactBus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBus.h; sourceTree = "<group>"; };
 		B02A510F2487EF2000B9CC1B /* ContactBus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBus.m; sourceTree = "<group>"; };
 		B02A51112487EFB800B9CC1B /* ContactBusProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusProtocol.h; sourceTree = "<group>"; };
+		B05179172490861800B0A973 /* ContactCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCell.h; sourceTree = "<group>"; };
+		B05179182490861800B0A973 /* ContactCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionCell.m; sourceTree = "<group>"; };
+		B05179192490861800B0A973 /* ContactCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactCollectionCell.xib; sourceTree = "<group>"; };
 		B06FBB5A248BDE20003BDC3C /* ResponseInformationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseInformationViewController.h; sourceTree = "<group>"; };
 		B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResponseInformationViewController.m; sourceTree = "<group>"; };
 		B06FBB5D248BE3AC003BDC3C /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -122,6 +127,7 @@
 		B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapter.m; sourceTree = "<group>"; };
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
+		B0DAEBCC24908F9C0002A4D0 /* ContactTableDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableDelegate.h; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
 		B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModelTests.m; sourceTree = "<group>"; };
 		B0E8CAE5248B3C220096ACBA /* ContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
@@ -237,8 +243,7 @@
 				B00763432486167000239F3D /* ContactViewModel.h */,
 				B00763442486167000239F3D /* ContactViewModel.m */,
 			);
-			name = ViewModel;
-			path = ../ViewModel;
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		7E656CFFE1F3311688EA9DEE /* Frameworks */ = {
@@ -277,6 +282,56 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		B05179112490859D00B0A973 /* CheckBox */ = {
+			isa = PBXGroup;
+			children = (
+				B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */,
+				B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */,
+				B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */,
+			);
+			path = CheckBox;
+			sourceTree = "<group>";
+		};
+		B0517912249085A600B0A973 /* ContactTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				B0979AEB24889BB5008D05F4 /* ContactTableViewCell.h */,
+				B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */,
+				B0979AF72488DFD4008D05F4 /* ContactTableViewCell.xib */,
+			);
+			path = ContactTableCell;
+			sourceTree = "<group>";
+		};
+		B0517913249085B400B0A973 /* ContactAvatar */ = {
+			isa = PBXGroup;
+			children = (
+				B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */,
+				B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */,
+				B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */,
+			);
+			path = ContactAvatar;
+			sourceTree = "<group>";
+		};
+		B0517914249085CB00B0A973 /* ContactTable */ = {
+			isa = PBXGroup;
+			children = (
+				B0076340248610C100239F3D /* ContactTableViewController.h */,
+				B0076341248610C100239F3D /* ContactTableViewController.m */,
+				B0DAEBCC24908F9C0002A4D0 /* ContactTableDelegate.h */,
+			);
+			path = ContactTable;
+			sourceTree = "<group>";
+		};
+		B0517916249085F600B0A973 /* ItemCell */ = {
+			isa = PBXGroup;
+			children = (
+				B05179172490861800B0A973 /* ContactCollectionCell.h */,
+				B05179182490861800B0A973 /* ContactCollectionCell.m */,
+				B05179192490861800B0A973 /* ContactCollectionCell.xib */,
+			);
+			path = ItemCell;
+			sourceTree = "<group>";
+		};
 		B0979AE024888DEB008D05F4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -293,9 +348,7 @@
 		B0979AE424889876008D05F4 /* ContactPresentation */ = {
 			isa = PBXGroup;
 			children = (
-				B02EE7E12489DA38006AA3D8 /* View */,
-				193E33612485144C00C5735D /* ViewModel */,
-				193E33602485142F00C5735D /* Model */,
+				B0DAEBCE249091490002A4D0 /* ContactPicker */,
 			);
 			path = ContactPresentation;
 			sourceTree = "<group>";
@@ -303,17 +356,11 @@
 		B0979AEA24889B94008D05F4 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */,
-				B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */,
-				B0ABD43024873E7700E557E1 /* CheckBoxButtonView.xib */,
-				B0979AEB24889BB5008D05F4 /* ContactTableViewCell.h */,
-				B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */,
-				B0979AF72488DFD4008D05F4 /* ContactTableViewCell.xib */,
-				B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */,
-				B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */,
-				B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */,
-				B0076340248610C100239F3D /* ContactTableViewController.h */,
-				B0076341248610C100239F3D /* ContactTableViewController.m */,
+				B0517916249085F600B0A973 /* ItemCell */,
+				B0517912249085A600B0A973 /* ContactTableCell */,
+				B0517913249085B400B0A973 /* ContactAvatar */,
+				B05179112490859D00B0A973 /* CheckBox */,
+				B0517914249085CB00B0A973 /* ContactTable */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -346,6 +393,16 @@
 				B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */,
 			);
 			path = ContactDAL;
+			sourceTree = "<group>";
+		};
+		B0DAEBCE249091490002A4D0 /* ContactPicker */ = {
+			isa = PBXGroup;
+			children = (
+				B02EE7E12489DA38006AA3D8 /* View */,
+				193E33612485144C00C5735D /* ViewModel */,
+				193E33602485142F00C5735D /* Model */,
+			);
+			path = ContactPicker;
 			sourceTree = "<group>";
 		};
 		BAFFF69CB44C58BF8226E03F /* Pods */ = {
@@ -469,6 +526,7 @@
 			files = (
 				B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */,
 				B0979AF82488DFD4008D05F4 /* ContactTableViewCell.xib in Resources */,
+				B051791B2490861800B0A973 /* ContactCollectionCell.xib in Resources */,
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
 				B0ABD43124873E7700E557E1 /* CheckBoxButtonView.xib in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
@@ -567,6 +625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */,
+				B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */,
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
 				193E336824851C8400C5735D /* ContactViewEntity.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,

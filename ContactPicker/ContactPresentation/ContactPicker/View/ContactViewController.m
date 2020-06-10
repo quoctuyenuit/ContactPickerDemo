@@ -12,6 +12,7 @@
 #import "ResponseInformationViewController.h"
 #import "KeyboardAppearanceDelegate.h"
 #import "Logging.h"
+#import "ContactCollectionCell.h"
 
 @interface ContactViewController () {
     UIViewController<KeyboardAppearanceProtocol> * contentViewController;
@@ -56,14 +57,34 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
                 self->contentViewController = [self loadContactTableViewController];
             }
             [self setupViews];
-            [self setupEvents];
         });
+    }];
+    
+    [self->viewModel.numberOfSelectedContacts bindAndFire:^(NSNumber * number) {
+        if ([number intValue] == 0) {
+            self.contactSelectedArea.alpha = 0;
+        } else {
+            self.contactSelectedArea.alpha = 1;
+        }
     }];
 }
 
 - (void)setupViews {
     self.searchBar.delegate = self;
     self.searchBar.searchTextField.delegate = self;
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    
+    UINib * collectionCellNib = [UINib nibWithNibName:@"ContactCollectionCell" bundle:nil];
+    [self.collectionView registerNib:collectionCellNib forCellWithReuseIdentifier:@"ContactCollectionCell"];
+    
+    self.contactSelectedArea.layer.shadowColor = UIColor.grayColor.CGColor;
+    self.contactSelectedArea.layer.shadowOpacity = 1;
+    self.contactSelectedArea.layer.shadowOffset = CGSizeMake(1, 0);
+    
+//    self.searchBar.inputAccessoryView = [self.contactSelectedArea copy];
+    
+    
     self->contentViewController.keyboardAppearanceDelegate = self;
     
     [self addChildViewController:self->contentViewController];
@@ -75,13 +96,11 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     [self->contentViewController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
     [self->contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
 }
-
-- (void)setupEvents {
-    
-}
      
 - (UIViewController *)loadContactTableViewController {
-     return [[ContactTableViewController alloc] initWithViewModel:self->viewModel];
+    ContactTableViewController * contactTable = [[ContactTableViewController alloc] initWithViewModel:self->viewModel];
+    contactTable.contactDelegate = self;
+    return contactTable;
 }
 
 - (UIViewController *)loadEmptyViewController {
@@ -120,4 +139,31 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     [self.searchBar endEditing:YES];
 }
 
+- (void)didSelectContact:(ContactViewEntity *)contact {
+    [self.collectionView reloadData];
+    [self.view bringSubviewToFront:self.contactSelectedArea];
+}
+
+#pragma mark Collection view delegate and datasource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self->viewModel.listSelectedContacts.count;
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCollectionCell" forIndexPath:indexPath];
+    
+    ContactViewEntity * entity = self->viewModel.listSelectedContacts[(int)indexPath.item];
+    
+    [cell config:entity];
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"selected");
+}
 @end

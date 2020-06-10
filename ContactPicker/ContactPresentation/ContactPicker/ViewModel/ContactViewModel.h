@@ -18,10 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactViewModel : NSObject<ContactViewModelProtocol> {
     NSMutableArray<ContactViewEntity *> *_listContacts;
+    NSMutableArray<ContactViewEntity *> *_listSelectedContacts;
     id<ContactBusProtocol> _contactBus;
 }
 
 @property(atomic) NSMutableArray<ContactViewEntity *> * listContacts;
+@property(atomic) NSMutableArray<ContactViewEntity *> * listSelectedContacts;
 
 - (id)initWithBus: (id<ContactBusProtocol>) bus;
 @end
