@@ -15,7 +15,6 @@
 
 @interface ContactViewModel() {
     BOOL _contactIsLoaded;
-    NSArray * backupListContact;
 }
 
 - (void) setupEvents;
@@ -36,6 +35,8 @@
 
 @synthesize numberOfSelectedContactObservable;
 
+@synthesize numberOfContactObservable;
+
 @synthesize indexCellNeedUpdateObservable;
 
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
@@ -50,6 +51,7 @@
     self.searchObservable = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.contactBookObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.numberOfSelectedContactObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.numberOfContactObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.indexCellNeedUpdateObservable = [[DataBinding<NSNumber *> alloc] initWithValue:nil];
     
     [self setupEvents];
@@ -121,6 +123,7 @@
         }
     }
     [self.listContacts addObjectsFromArray:batchOfContact];
+    self.numberOfContactObservable.value = [NSNumber numberWithUnsignedInteger:self.listContacts.count];
 }
 
 #pragma mark Public function
@@ -145,7 +148,8 @@
 - (void)loadBatchOfDetailedContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
     [self->_contactBus loadBatchOfDetailedContacts:^(NSArray<ContactBusEntity *> * listContactBusEntity, NSError * error) {
         if (error) {
-            completion(NO, error, 0);
+            if (completion)
+                completion(NO, error, 0);
             [Logging error:[NSString stringWithFormat:@"Load batch contact failt, error: %@", error.localizedDescription]];
         } else {
             NSArray * batchOfContact = [listContactBusEntity map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
@@ -153,7 +157,9 @@
             }];
             
             [self addContacts:batchOfContact];
-            completion(YES, nil, (int)batchOfContact.count);
+            
+            if (completion)
+                completion(YES, nil, (int)batchOfContact.count);
         }
     }];
 }
@@ -171,7 +177,6 @@
 
 - (void)searchContactWithKeyName:(NSString *)key completion:(void (^)(void))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        self->backupListContact = self.listContacts;
         self.listContacts = [[NSMutableArray alloc] init];
         handler();
         [self->_contactBus searchContactByName:key completion:^(void) {
