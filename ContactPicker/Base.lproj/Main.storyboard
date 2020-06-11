@@ -19,27 +19,16 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jzc-XA-7Tr" customClass="HorizontalListItemView">
-                                <rect key="frame" x="0.0" y="782" width="414" height="80"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="VN4-WU-77A"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Jzc-XA-7Tr" firstAttribute="leading" secondItem="uUw-1f-K0c" secondAttribute="leading" id="Cae-wx-Si5"/>
                             <constraint firstItem="Rhx-yM-UuP" firstAttribute="top" secondItem="uUw-1f-K0c" secondAttribute="top" id="RrQ-ha-6Bc"/>
-                            <constraint firstItem="uUw-1f-K0c" firstAttribute="trailing" secondItem="Jzc-XA-7Tr" secondAttribute="trailing" id="TAA-sX-klD"/>
                             <constraint firstItem="Rhx-yM-UuP" firstAttribute="trailing" secondItem="uUw-1f-K0c" secondAttribute="trailing" id="UuN-gv-KKF"/>
-                            <constraint firstItem="Jzc-XA-7Tr" firstAttribute="bottom" secondItem="uUw-1f-K0c" secondAttribute="bottom" id="aRr-eg-xhj"/>
                             <constraint firstItem="Rhx-yM-UuP" firstAttribute="leading" secondItem="uUw-1f-K0c" secondAttribute="leading" id="qLw-hp-0eB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uUw-1f-K0c"/>
                     </view>
                     <connections>
-                        <outlet property="contactSelectedArea" destination="Jzc-XA-7Tr" id="TZ2-3H-xZM"/>
                         <outlet property="searchBar" destination="Rhx-yM-UuP" id="GoM-DZ-kRE"/>
                     </connections>
                 </viewController>

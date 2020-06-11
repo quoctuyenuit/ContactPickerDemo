@@ -5,34 +5,57 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.RuntimeIssueBreakpoint">
+         <BreakpointContent
+            uuid = "84DF1F6B-D3B6-47C5-A842-EAE5BC50A993"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            breakpointStackSelectionBehavior = "1"
+            type = "65535">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            uuid = "93845786-5FA2-4402-9718-F0EAB241C29F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            breakpointStackSelectionBehavior = "1"
+            scope = "1"
+            stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F3550945-9A4D-48F2-810C-393F5BA33F0A"
+            uuid = "DC28BDCF-0DA4-4E74-B981-F0B93DD17BDD"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/ContactTableView/ContactViewController.m"
+            filePath = "ContactPicker/ContactPresentation/ContactPicker/ViewModel/ContactViewEntity.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "-initWithIdentifier:givenName:familyName:description:avatar:isChecked:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5E922777-0BA3-4EF5-A87B-0369BD915F88"
-            shouldBeEnabled = "Yes"
+            uuid = "39FDE421-4567-4A90-BC04-54991F1898C8"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/ContactTableView/ContactViewController.m"
+            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/ComponentsView/ContactAvatar/ContactAvatarImageView.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
-            landmarkName = "-removeCell:"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "-configImage:forLabel:withColor:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

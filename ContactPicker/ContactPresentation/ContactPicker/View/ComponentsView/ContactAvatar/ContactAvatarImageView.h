@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) showImage;
 - (void) showLabel;
-- (void) configImage: (UIImage * _Nullable) image forLabel: (NSString *) label;
+- (void) configImage: (UIImage * _Nullable) image forLabel: (NSString *) label withColor: (UIColor *) color;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -39,6 +39,10 @@
 
 @synthesize indexCellNeedUpdateObservable;
 
+@synthesize selectedContactRemoveObservable;
+
+@synthesize selectedContactAddedObservable;
+
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     self->_contactBus = bus;
     self->_contactIsLoaded = NO;
@@ -53,6 +57,9 @@
     self.numberOfSelectedContactObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.numberOfContactObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.indexCellNeedUpdateObservable = [[DataBinding<NSNumber *> alloc] initWithValue:nil];
+    
+    self.selectedContactAddedObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.selectedContactRemoveObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     
     [self setupEvents];
     
@@ -93,8 +100,7 @@
 }
 
 - (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
-    NSString * fullName = [NSString stringWithFormat:@"%@ %@", entity.givenName, entity.familyName];
-    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithIdentifier:entity.identifier name:fullName description:@"temp"];
+    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithBusEntity:entity];
     
     [self->_contactBus getImageFromId:entity.identifier completion:^(NSData * imageData, NSError * error) {
         if (!error) {
@@ -175,16 +181,13 @@
     return nil;
 }
 
-- (void)searchContactWithKeyName:(NSString *)key completion:(void (^)(void))handler {
+- (void)searchContactWithKeyName:(NSString *)key {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         self.listContacts = [[NSMutableArray alloc] init];
-        handler();
+        self.numberOfContactObservable.value = [NSNumber numberWithInt:0];
+        
         [self->_contactBus searchContactByName:key completion:^(void) {
-            [self loadBatchOfDetailedContacts:^(BOOL isSuccess, NSError *error, int numberOfContacts) {
-                if (!error) {
-                    handler();
-                }
-            }];
+            [self loadBatchOfDetailedContacts:nil];
         }];
     });
 }
@@ -195,8 +198,11 @@
     
     if (contact.isChecked) {
         [self.listSelectedContacts addObject:contact];
+        self.selectedContactAddedObservable.value = [NSNumber numberWithUnsignedInteger:self.listSelectedContacts.count - 1];
     } else if ([self.listSelectedContacts containsObject:contact]) {
-        [self.listSelectedContacts removeObject:contact];
+        NSUInteger index = [self.listSelectedContacts indexOfObject:contact];
+        [self.listSelectedContacts removeObjectAtIndex:index];
+        self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:index];
     }
     self.numberOfSelectedContactObservable.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
@@ -217,7 +223,9 @@
     }];
     
     if ([self.listSelectedContacts containsObject:contact]) {
-        [self.listSelectedContacts removeObject:contact];
+        NSUInteger index = [self.listSelectedContacts indexOfObject:contact];
+        [self.listSelectedContacts removeObjectAtIndex:index];
+        self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:index];
     }
     
     if (![self.listContacts containsObject:contact]) {

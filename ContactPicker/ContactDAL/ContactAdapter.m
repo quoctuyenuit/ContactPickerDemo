@@ -98,12 +98,12 @@
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
             
-//            Add dummy data
-            [self createDummyData:100000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
-                dispatch_sync(callBackQueue, ^{
-                   handler([listDummyData copy], nil, NO);
-                });
-            }];
+////            Add dummy data
+//            [self createDummyData:100 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
+//                dispatch_sync(callBackQueue, ^{
+//                   handler([listDummyData copy], nil, NO);
+//                });
+//            }];
             
             dispatch_sync(callBackQueue, ^{
                handler([listContacts copy], nil, YES);

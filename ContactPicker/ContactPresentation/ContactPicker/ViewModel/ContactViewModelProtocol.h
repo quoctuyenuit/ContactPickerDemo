@@ -14,7 +14,12 @@
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *> * searchObservable;
 @property DataBinding<NSNumber *> * contactBookObservable;
+
 @property DataBinding<NSNumber *> * numberOfSelectedContactObservable;
+
+@property DataBinding<NSNumber *> * selectedContactRemoveObservable;
+@property DataBinding<NSNumber *> * selectedContactAddedObservable;
+
 @property DataBinding<NSNumber *> * numberOfContactObservable;
 @property DataBinding<NSNumber *> * indexCellNeedUpdateObservable;
 
@@ -29,7 +34,7 @@
 
 - (ContactViewEntity *) getContactAt: (int) index;
 
-- (void) searchContactWithKeyName: (NSString *) key completion: (void (^)(void)) handler;
+- (void) searchContactWithKeyName: (NSString *) key;
 
 - (void) selectectContactAtIndex: (int) index;
 

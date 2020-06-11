@@ -9,15 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "ContactViewModelProtocol.h"
 #import "KeyboardAppearanceDelegate.h"
-#import "ContactTableDelegate.h"
 #import "ContactCollectionCell.h"
 #import "HorizontalListItemView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate, KeyboardAppearanceDelegate, ContactTableDelegate, UICollectionViewDelegate, UICollectionViewDataSource, ContactCollectionCellDelegate>
+@interface ContactViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate, KeyboardAppearanceDelegate, UICollectionViewDelegate, UICollectionViewDataSource, ContactCollectionCellDelegate>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (weak, nonatomic) IBOutlet HorizontalListItemView *contactSelectedArea;
+
 + (ContactViewController *) instantiateWith: (id<ContactViewModelProtocol>) viewModel;
 @end
 

@@ -135,7 +135,6 @@
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
 		B0C1C24B249101A100634829 /* CheckBoxButtonDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonDelegate.h; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
-		B0DAEBCC24908F9C0002A4D0 /* ContactTableDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableDelegate.h; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
 		B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModelTests.m; sourceTree = "<group>"; };
 		B0E8CAE5248B3C220096ACBA /* ContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
@@ -353,7 +352,6 @@
 			children = (
 				B0076340248610C100239F3D /* ContactTableViewController.h */,
 				B0076341248610C100239F3D /* ContactTableViewController.m */,
-				B0DAEBCC24908F9C0002A4D0 /* ContactTableDelegate.h */,
 			);
 			path = ContactTable;
 			sourceTree = "<group>";

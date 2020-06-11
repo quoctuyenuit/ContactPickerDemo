@@ -13,6 +13,25 @@
 #import <UIKit/UIKit.h>
 #import "Logging.h"
 
+@interface LoadContactWaiter : NSObject
+@property int startIndex;
+@property int size;
+@property void (^handler)(NSArray<ContactBusEntity *> *, NSError *);
+
+- (id) initWithIndex: (int) index size: (int) size handler: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
+@end
+
+@implementation LoadContactWaiter
+- (id)initWithIndex:(int)index size:(int)size handler: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler {
+    self.startIndex = index;
+    self.size = size;
+    self.handler = handler;
+    return self;
+}
+@end
+
+
+
 @interface ContactBus() {
     int busBatchSize;
     NSMutableArray<ContactBusEntity *> * listContactsBuffer;
@@ -21,6 +40,7 @@
     BOOL contactIsLoadDone;
     BOOL searchIsWaiting;
     NSOperationQueue * search_queue;
+    NSMutableArray * listLoadContactWaiter;
 }
 
 - (void) getContactBatchStartWith: (int) index
@@ -31,6 +51,7 @@
 
 - (void) getContactBatchWithContacts: (NSArray<ContactBusEntity *> *) contacts completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
+- (void) reloadMissingContact;
 @end
 
 @implementation ContactBus
@@ -47,12 +68,11 @@
     self->contactIsLoadDone = NO;
     self->searchIsWaiting = NO;
     
+    self->listLoadContactWaiter = [[NSMutableArray alloc] init];
+    
     self->listContactsOrigin = [[NSMutableArray alloc] init];
     self->listContactsBuffer = self->listContactsOrigin;
-//    dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
-//        DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -1
-//    );
-//    self.contactChangedObservable = [[DataBinding alloc] initWithValue:^(NSArray *){}];
+
     self->search_queue = [NSOperationQueue new];
     self->search_queue.maxConcurrentOperationCount = 1;
     
@@ -70,6 +90,25 @@
     return self;
 }
 
+- (void)reloadMissingContact {
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [self->listLoadContactWaiter enumerateObjectsUsingBlock:^(LoadContactWaiter * _Nonnull waiter, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self getContactBatchStartWith:waiter.startIndex batchSize:waiter.size completion:^(NSArray<ContactBusEntity *> * listContact, NSError * error) {
+                waiter.handler(listContact, error);
+                if (listContact.count == waiter.size) {
+                    [self->listLoadContactWaiter removeObject:waiter];
+                } else {
+                    waiter.size = waiter.size - (int)listContact.count;
+                }
+            }];
+        }];
+        
+        if (self->listLoadContactWaiter.count > 0) {
+            [self reloadMissingContact];
+        }
+    });
+}
+
 - (void)getContactBatchStartWith:(int)index
                        batchSize: (int) batchSize
                       completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
@@ -80,8 +119,6 @@
     for (int i = index; i < index + batchSizeNeeded; i++) {
         [batch addObject:self->listContactsBuffer[i]];
     }
-    
-//    NSArray* batch = [self->listContactsBuffer subarrayWithRange:NSMakeRange(index, batchSizeNeeded)];
     
     NSArray *batchIdentifiers = [batch map:^NSString* _Nonnull(ContactBusEntity*  _Nonnull obj) {
         return obj.identifier;
@@ -157,6 +194,11 @@
     int gap = (int)self->listContactsBuffer.count - self->currentIndexBatch;
     int batchSize = gap >= self->busBatchSize ? self->busBatchSize : gap;
     
+    if (batchSize < self->busBatchSize) {
+        LoadContactWaiter * waiter = [[LoadContactWaiter alloc] initWithIndex:self->currentIndexBatch + batchSize size:self->busBatchSize - batchSize handler:[handler copy]];
+        [self->listLoadContactWaiter addObject:waiter];
+    }
+    
     [self getContactBatchStartWith:self->currentIndexBatch batchSize: batchSize completion:^(NSArray<ContactBusEntity *> * listContacts, NSError * error) {
         if (error) {
             handler(nil, error);
@@ -203,6 +245,7 @@
                 
                 if ([name isEqualToString:@""] || [[contactName lowercaseString] hasPrefix:[name lowercaseString]]) {    
                     [self->listContactsBuffer addObject:contact];
+//                    [self reloadMissingContact];
                 }
                 
                 if ((self->listContactsBuffer.count == self->busBatchSize || i == self->listContactsOrigin.count - 1) && self->searchIsWaiting) {

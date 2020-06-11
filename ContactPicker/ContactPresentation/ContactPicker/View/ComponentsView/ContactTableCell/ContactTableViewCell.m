@@ -19,7 +19,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    self.checkBox.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -28,20 +27,21 @@
     // Configure the view for the selected state
 }
 
-
 - (void)configForModel:(ContactViewEntity *)entity {
     self->currentContact = entity;
     
-    self.firstLabel.text = entity.name;
+    self.firstLabel.text = entity.fullName;
     self.secondLabel.text = entity.contactDescription;
     self.checkBox.checked = entity.isChecked;
-    NSString* keyName = entity.name.length >= 2 ? [entity.name substringToIndex:2] : [entity.name substringToIndex:1];
+    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
+    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
+    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
     
     self.avatar.imageView.image = nil;
     if (entity.avatar) {
-        [self.avatar configImage:entity.avatar forLabel:@""];
+        [self.avatar configImage:entity.avatar forLabel:@"" withColor:entity.backgroundColor];
     } else {
-        [self.avatar configImage:nil forLabel:keyName];
+        [self.avatar configImage:nil forLabel:keyName withColor:entity.backgroundColor];
         __weak ContactTableViewCell* weakSelf = self;
         entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -59,9 +59,5 @@
 
 - (NSString *)reuseIdentifier {
     return @"ContactViewCell";
-}
-
-- (void)check:(BOOL)isChecked {
-    [self.delegate didSelectContact:self->currentContact];
 }
 @end

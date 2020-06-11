@@ -8,7 +8,9 @@
 
 #import "ContactAvatarImageView.h"
 
-@interface ContactAvatarImageView()
+@interface ContactAvatarImageView() {
+    CAGradientLayer *gradient;
+}
 - (void) customeInit;
 - (void) setupView;
 @end
@@ -42,6 +44,10 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.backgroundColor = UIColor.clearColor;
+    self->gradient = [CAGradientLayer layer];
+    gradient.frame = self.mainContentView.bounds;
+    gradient.cornerRadius = gradient.bounds.size.width / 2;
+    [self.mainContentView.layer insertSublayer:gradient atIndex:1];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -69,12 +75,12 @@
     self.label.alpha = 1;
 }
 
-- (void)configImage:(UIImage * _Nullable)image forLabel:(NSString *)label {
+- (void)configImage:(UIImage * _Nullable)image forLabel:(NSString *)label withColor:(nonnull UIColor *)color {
     self.imageView.image = image;
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.label.text = label;
-    
+    self.label.text = [label uppercaseString];
     self.imageView.alpha = (image == nil) ? 0 : 1;
     self.label.alpha = ([label isEqualToString: @""]) ? 0 : 1;
+    gradient.colors = @[(id)[UIColor lightGrayColor].CGColor, (id)color.CGColor];
 }
 @end

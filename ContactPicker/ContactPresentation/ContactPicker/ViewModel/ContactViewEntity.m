@@ -11,62 +11,60 @@
 #import <UIKit/UIKit.h>
 
 @interface ContactViewEntity()
-- (NSString *) parseNameFromBus: (ContactBusEntity *) entity;
+- (NSString *) parseName: (NSString *) givenName familyName:(NSString *) familyName;
+- (UIColor *) randomColor;
 @end
 
 @implementation ContactViewEntity
 
 - (id)initWithIdentifier:(NSString *)identifier
-                    name:(NSString *)name
-             description:(NSString *)description {
-    
-    return [self initWithIdentifier:identifier name:name description:description avatar:nil isChecked:NO];
-}
-
-- (id)initWithIdentifier:(NSString *)identifier
-                    name:(NSString *)name
-             description:(NSString *)description
-                  avatar:(UIImage * _Nullable)image {
-    
-    return [self initWithIdentifier:identifier name:name description:description avatar:image isChecked:NO];
-    
-}
-
-- (id)initWithIdentifier:(NSString *)identifier
-                    name:(NSString *)name
-             description:(NSString *)description
+               givenName:(NSString * _Nullable)givenName
+              familyName:(NSString * _Nullable)familyName
+             description:(NSString * _Nullable)description
                   avatar:(UIImage * _Nullable)image
                isChecked:(BOOL)isChecked {
     
     self.identifier = identifier;
-    self.name = name;
+    self.givenName = givenName;
+    self.familyName = familyName;
     self.contactDescription = description;
     self.avatar = image;
     self.isChecked = isChecked;
+    self.backgroundColor = [self randomColor];
     return self;
 }
 
 - (id)initWithBusEntity:(ContactBusEntity *)entity {
-    return [self initWithIdentifier:entity.identifier name:[self parseName:entity] description:@"temp"];
+    return [self initWithIdentifier:entity.identifier givenName:entity.givenName familyName:entity.familyName description:@"" avatar:nil isChecked:NO];
+}
+
+- (NSString *) fullName {
+    return [self parseName:self.givenName familyName:self.familyName];
 }
 
 - (void)updateContactWith:(ContactBusEntity *)entity {
-    self.name = [self parseName:entity];
+    self.givenName = entity.givenName;
+    self.familyName = entity.familyName;
 }
 
-- (NSString *)parseName:(ContactBusEntity *) entity {
-    return [NSString stringWithFormat:@"%@ %@", entity.givenName, entity.familyName];
+- (NSString *)parseName:(NSString *)givenName familyName:(NSString *)familyName {
+    return [NSString stringWithFormat:@"%@ %@", givenName, familyName];
 }
 
 - (BOOL)contactHasPrefix:(NSString *)key {
     if ([key isEqualToString:@""]) {
         return true;
     }
-    return [[self.name lowercaseString] hasPrefix: [key lowercaseString]];
+    return [[self.fullName lowercaseString] hasPrefix: [key lowercaseString]];
 }
 
 - (BOOL)isEqualWithBusEntity:(ContactBusEntity *)entity {
-    return [self.name isEqualToString:[self parseName:entity]];
+    return ([self.givenName isEqualToString:entity.givenName] &&
+            [self.familyName isEqualToString:entity.familyName]);
+}
+
+- (UIColor *) randomColor {
+    return [UIColor colorWithHue:drand48() saturation:1.0 brightness:1.0 alpha:1.0];
 }
 
 @end
