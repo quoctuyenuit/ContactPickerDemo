@@ -235,4 +235,5 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
         [self->contactSelectedArea layoutIfNeeded];
     }];
 }
+
 @end

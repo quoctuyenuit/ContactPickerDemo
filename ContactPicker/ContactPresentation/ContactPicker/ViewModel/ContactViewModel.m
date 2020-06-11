@@ -90,7 +90,7 @@
             for (int i = 0; i < weakSelf.listContacts.count ; i++ ) {
                 ContactViewEntity * oldEntity = weakSelf.listContacts[i];
                 if ([oldEntity.identifier isEqualToString:updatedEntity.identifier] && ![oldEntity isEqualWithBusEntity:updatedEntity]) {
-                    [weakSelf.listContacts[i] updateContactWith:updatedEntity];
+                    [weakSelf.listContacts[i] updateContactWithBus:updatedEntity];
                 }
             }
         }];
@@ -117,18 +117,22 @@
 }
 
 - (void)addContacts:(NSArray *)batchOfContact {
-    for (int i = 0; i < self.listSelectedContacts.count; i++) {
-        ContactViewEntity * selectedContact = self.listSelectedContacts[i];
+//    for (int i = 0; i < self.listSelectedContacts.count; i++) {
+    [self.listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
+//        ContactViewEntity * selectedContact = self.listSelectedContacts[i];
         
         for (int j = 0; j < batchOfContact.count; j++) {
             ContactViewEntity * newContact = batchOfContact[j];
             
             if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
-                newContact.isChecked = selectedContact.isChecked;
+                [newContact updateContactWithBus:selectedContact];
             }
         }
-    }
+    }];
+    
     [self.listContacts addObjectsFromArray:batchOfContact];
+    
+    
     self.numberOfContactObservable.value = [NSNumber numberWithUnsignedInteger:self.listContacts.count];
 }
 

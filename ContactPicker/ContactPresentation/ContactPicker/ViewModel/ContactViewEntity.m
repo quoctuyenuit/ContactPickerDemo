@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ContactViewEntity.h"
 #import <UIKit/UIKit.h>
+#import "GradientColors.h"
 
 @interface ContactViewEntity()
 - (NSString *) parseName: (NSString *) givenName familyName:(NSString *) familyName;
@@ -30,7 +31,7 @@
     self.contactDescription = description;
     self.avatar = image;
     self.isChecked = isChecked;
-    self.backgroundColor = [self randomColor];
+    self.backgroundColor = [[GradientColors instantiate] randomColor];
     return self;
 }
 
@@ -42,9 +43,18 @@
     return [self parseName:self.givenName familyName:self.familyName];
 }
 
-- (void)updateContactWith:(ContactBusEntity *)entity {
+- (void)updateContactWithBus:(ContactBusEntity *)entity {
     self.givenName = entity.givenName;
     self.familyName = entity.familyName;
+}
+
+- (void)updateContact:(ContactViewEntity *)entity {
+    self.givenName = entity.givenName;
+    self.familyName = entity.familyName;
+    self.isChecked = entity.isChecked;
+    self.avatar = entity.avatar;
+    self.backgroundColor = entity.backgroundColor;
+    self.contactDescription = entity.contactDescription;
 }
 
 - (NSString *)parseName:(NSString *)givenName familyName:(NSString *)familyName {

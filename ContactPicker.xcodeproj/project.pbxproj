@@ -42,6 +42,8 @@
 		B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
 		B0C1C24A2490F3D800634829 /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */; };
+		B0D9F90F249244EA000B66A1 /* GradientColors.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D9F90E249244EA000B66A1 /* GradientColors.m */; };
+		B0D9F9122492459A000B66A1 /* UIColorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D9F9112492459A000B66A1 /* UIColorExtension.m */; };
 		B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED99248E266C001E7246 /* ContactBusTests.m */; };
 		B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */; };
 		B0E8CAE7248B3C220096ACBA /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E8CAE6248B3C220096ACBA /* ContactViewController.m */; };
@@ -135,6 +137,10 @@
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
 		B0C1C24B249101A100634829 /* CheckBoxButtonDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonDelegate.h; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
+		B0D9F90D249244EA000B66A1 /* GradientColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientColors.h; sourceTree = "<group>"; };
+		B0D9F90E249244EA000B66A1 /* GradientColors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientColors.m; sourceTree = "<group>"; };
+		B0D9F9102492459A000B66A1 /* UIColorExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIColorExtension.h; sourceTree = "<group>"; };
+		B0D9F9112492459A000B66A1 /* UIColorExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIColorExtension.m; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
 		B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModelTests.m; sourceTree = "<group>"; };
 		B0E8CAE5248B3C220096ACBA /* ContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
@@ -375,6 +381,10 @@
 				B0979AE224888E05008D05F4 /* NSArrayExtension.m */,
 				B0A0A3F4248DDEAA00AB53BB /* Logging.h */,
 				B0A0A3F5248DDEAA00AB53BB /* Logging.m */,
+				B0D9F90D249244EA000B66A1 /* GradientColors.h */,
+				B0D9F90E249244EA000B66A1 /* GradientColors.m */,
+				B0D9F9102492459A000B66A1 /* UIColorExtension.h */,
+				B0D9F9112492459A000B66A1 /* UIColorExtension.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -662,8 +672,10 @@
 				B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */,
 				B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */,
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
+				B0D9F9122492459A000B66A1 /* UIColorExtension.m in Sources */,
 				193E336824851C8400C5735D /* ContactViewEntity.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,
+				B0D9F90F249244EA000B66A1 /* GradientColors.m in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
 				B0020CFA2490C7DF00899757 /* HorizontalListItemView.m in Sources */,

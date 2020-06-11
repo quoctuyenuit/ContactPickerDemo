@@ -11,6 +11,7 @@
 #import "DataBinding.h"
 #import <UIKit/UIKit.h>
 #import "ContactBusEntity.h"
+#import "UIColorExtension.h"
 
 @interface ContactViewEntity : NSObject
 @property(nonatomic, readwrite) NSString * _Nonnull identifier;
@@ -19,7 +20,7 @@
 @property(nonatomic, readwrite) NSString * _Nullable familyName;
 @property(nonatomic, readwrite) NSString * _Nullable contactDescription;
 @property(nonatomic, readwrite) UIImage * _Nullable avatar;
-@property(nonatomic, readwrite) UIColor * _Nullable backgroundColor;
+@property(nonatomic, readwrite) NSArray * _Nullable backgroundColor;
 @property(nonatomic, readwrite) BOOL isChecked;
 @property(nonatomic, readwrite) void (^ _Nullable waitImageToExcuteQueue)(UIImage *_Nonnull, NSString *_Nonnull );
 
@@ -32,7 +33,9 @@
 
 - (id _Nonnull ) initWithBusEntity: (ContactBusEntity *) entity;
 
-- (void) updateContactWith: (ContactBusEntity *) entity;
+- (void) updateContactWithBus: (ContactBusEntity *) entity;
+
+- (void) updateContact: (ContactViewEntity *) entity;
 
 - (BOOL)contactHasPrefix: (NSString *_Nonnull) key;
 
