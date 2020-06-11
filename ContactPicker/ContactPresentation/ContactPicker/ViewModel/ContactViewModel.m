@@ -30,13 +30,13 @@
 
 @synthesize contactBus = _contactBus;
 
-@synthesize search;
+@synthesize searchObservable;
 
-@synthesize updateContacts;
+@synthesize contactBookObservable;
 
-@synthesize numberOfSelectedContacts;
+@synthesize numberOfSelectedContactObservable;
 
-@synthesize cellNeedUpdate;
+@synthesize indexCellNeedUpdateObservable;
 
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     self->_contactBus = bus;
@@ -47,10 +47,10 @@
     self.listSelectedContacts = [[NSMutableArray alloc] init];
     
 //    Data binding initialization
-    self.search = [[DataBinding<NSString *> alloc] initWithValue:@""];
-    self.updateContacts = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.numberOfSelectedContacts = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.cellNeedUpdate = [[DataBinding<NSNumber *> alloc] initWithValue:nil];
+    self.searchObservable = [[DataBinding<NSString *> alloc] initWithValue:@""];
+    self.contactBookObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.numberOfSelectedContactObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.indexCellNeedUpdateObservable = [[DataBinding<NSNumber *> alloc] initWithValue:nil];
     
     [self setupEvents];
     
@@ -86,7 +86,7 @@
             }
         }];
         
-        weakSelf.updateContacts.value = [NSNumber numberWithInt:[weakSelf.updateContacts.value intValue] + 1];
+        weakSelf.contactBookObservable.value = [NSNumber numberWithInt:[weakSelf.contactBookObservable.value intValue] + 1];
     };
 }
 
@@ -193,7 +193,7 @@
     } else if ([self.listSelectedContacts containsObject:contact]) {
         [self.listSelectedContacts removeObject:contact];
     }
-    self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
+    self.numberOfSelectedContactObservable.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
 
 - (void)selectectContactIdentifier:(NSString *) identifier {
@@ -225,9 +225,9 @@
     contact.isChecked = NO;
     int index = (int)[self.listContacts indexOfObject:contact];
     
-    self.cellNeedUpdate.value = [NSNumber numberWithInt:index];
+    self.indexCellNeedUpdateObservable.value = [NSNumber numberWithInt:index];
     
-    self.numberOfSelectedContacts.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
+    self.numberOfSelectedContactObservable.value = [NSNumber numberWithInt:(int)self.listSelectedContacts.count];
 }
 
 @end

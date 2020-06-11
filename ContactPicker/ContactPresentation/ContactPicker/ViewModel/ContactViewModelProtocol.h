@@ -12,10 +12,12 @@
 #import <UIKit/UIKit.h>
 
 @protocol ContactViewModelProtocol <NSObject>
-@property DataBinding<NSString *> * search;
-@property DataBinding<NSNumber *> * updateContacts;
-@property DataBinding<NSNumber *> *numberOfSelectedContacts;
-@property DataBinding<NSNumber *> *cellNeedUpdate;
+@property DataBinding<NSString *> * searchObservable;
+@property DataBinding<NSNumber *> * contactBookObservable;
+@property DataBinding<NSNumber *> * numberOfSelectedContactObservable;
+@property DataBinding<NSNumber *> * numberOfContactObservable;
+@property DataBinding<NSNumber *> * indexCellNeedUpdateObservable;
+
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 

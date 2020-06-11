@@ -18,6 +18,7 @@
 }
 - (void) setupView;
 - (void) insertCells: (int) index withSize: (int) size;
+- (BOOL) checkNeedLoadBatch: (BOOL) hasIndexPath index: (int) index;
 @end
 
 @implementation ContactTableViewController
@@ -48,6 +49,20 @@
     
 }
 
+- (BOOL)checkNeedLoadBatch: (BOOL) hasIndexPath index:(int)index {
+    int offset = 10;
+    if (hasIndexPath) {
+        return index > [self->viewModel getNumberOfContacts] - offset;
+    } else {
+        NSArray<NSIndexPath *> * visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
+        if (visibleIndexPaths.count > 0) {
+            int lastIndex = (int)visibleIndexPaths.lastObject.row;
+            return lastIndex > [self->viewModel getNumberOfContacts] - offset;
+        }
+        return NO;
+    }
+}
+
 #pragma mark - Override function
 
 - (id)initWithViewModel:(id<ContactViewModelProtocol>)viewModel {
@@ -62,13 +77,13 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    [self->viewModel.updateContacts binding:^(NSNumber * number) {
+    [self->viewModel.contactBookObservable binding:^(NSNumber * number) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
     }];
     
-    [self->viewModel.search binding:^(NSString * searchText) {
+    [self->viewModel.searchObservable binding:^(NSString * searchText) {
         [self->viewModel searchContactWithKeyName:searchText completion:^(void) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
@@ -77,7 +92,7 @@
         
     }];
     
-    [self->viewModel.cellNeedUpdate binding:^(NSNumber * indexChangedCell) {
+    [self->viewModel.indexCellNeedUpdateObservable binding:^(NSNumber * indexChangedCell) {
         NSIndexPath * indexPath = [NSIndexPath indexPathForRow:[indexChangedCell intValue] inSection:0];
         [self.tableView beginUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation: (UITableViewRowAnimationNone)];
@@ -131,10 +146,11 @@
     
     [self.keyboardAppearanceDelegate hideKeyboard];
     [self.contactDelegate didSelectContact:entity];
+    
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == [self->viewModel getNumberOfContacts] - 10) {
+    if ([self checkNeedLoadBatch:YES index:(int)indexPath.row]) {
         [self->viewModel loadBatchOfDetailedContacts: ^(BOOL isSuccess, NSError * error, int batchLength) {
             if (isSuccess) {
                dispatch_async(dispatch_get_main_queue(), ^{

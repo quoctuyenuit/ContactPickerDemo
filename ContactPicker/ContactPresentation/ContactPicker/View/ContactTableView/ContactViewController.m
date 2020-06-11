@@ -61,7 +61,7 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
         });
     }];
     
-    [self->viewModel.numberOfSelectedContacts bindAndFire:^(NSNumber * number) {
+    [self->viewModel.numberOfSelectedContactObservable bindAndFire:^(NSNumber * number) {
         if ([number intValue] == 0) {
             self.contactSelectedArea.alpha = 0;
             self->keyboardInputView.alpha = 0;
@@ -140,7 +140,7 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
 
 #pragma mark - Searchbar view delegate
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    self->viewModel.search.value = searchText;
+    self->viewModel.searchObservable.value = searchText;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
