@@ -70,23 +70,16 @@
         [strongSelf->_viewModel searchContactWithKeyName:searchText];
     }];
     
-    [self->_viewModel.contactAddedObservable bindAndFire:^(NSArray<NSIndexPath *> * indexPaths) {
+    [self->_viewModel.dataSourceHasChanged bindAndFire:^(NSNumber * number) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
-//            [self.tableView beginUpdates];
-//            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-//            [self.tableView endUpdates];
-//
         });
     }];
     
     
-    [self->_viewModel.indexCellNeedUpdateObservable binding:^(NSIndexPath * indexPath) {
-        //[weakSelf.tableView performBatchUpdates:^{
-//        [weakSelf tableView:weakSelf.tableView didSelectRowAtIndexPath:indexPath];
-//        [weakSelf.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-            [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation: UITableViewRowAnimationFade];
-        //} completion:nil];
+    [self->_viewModel.cellNeedRemoveSelectedObservable binding:^(NSIndexPath * indexPath) {
+        ContactTableViewCell * cell = [weakSelf.tableView cellForRowAtIndexPath:indexPath];
+        [cell setSelect];
     }];
     
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;

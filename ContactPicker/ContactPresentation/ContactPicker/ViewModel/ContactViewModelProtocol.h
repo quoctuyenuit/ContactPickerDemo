@@ -18,8 +18,8 @@
 @property DataBinding<NSNumber *> * selectedContactRemoveObservable;
 @property DataBinding<NSNumber *> * selectedContactAddedObservable;
 
-@property DataBinding<NSArray<NSIndexPath *> *> * contactAddedObservable;
-@property DataBinding<NSIndexPath *> * indexCellNeedUpdateObservable;
+@property DataBinding<NSNumber *> * dataSourceHasChanged;
+@property DataBinding<NSIndexPath *> * cellNeedRemoveSelectedObservable;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 

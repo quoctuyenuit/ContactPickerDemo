@@ -40,28 +40,12 @@
 
 - (void)testLoadContacts {
     XCTestExpectation * loadExpectation = [self expectationWithDescription:@"load contact expectation"];
-    [self.viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
+    
+    [self.viewModel loadContacts:^(BOOL isSuccess, NSError *error, int numberOfContacts) {
         XCTAssertTrue(isSuccess, @"Load contacts is failt");
-        XCTAssertNotNil(self.viewModel.listContacts, @"listContact is nil after load contacts");
-        XCTAssertTrue(self.viewModel.listContacts.count > 0, @"Contacts empty");
-        [loadExpectation fulfill];
+         [loadExpectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5 handler:nil];
-}
-
-- (void)testLoadBatchOfContacts {
-    XCTestExpectation * loadExpectation = [self expectationWithDescription:@"load contact expectation"];
-    XCTestExpectation * loadBatchExpectation = [self expectationWithDescription:@"load batch of contact expectation"];
-    [self.viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
-        XCTAssertTrue(isSuccess, @"Load contacts is failt");
-        [loadExpectation fulfill];
-        [self.viewModel loadBatchOfDetailedContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
-            XCTAssertTrue(isSuccess, @"Load contacts is failt");
-            XCTAssertNil(error, @"Load contacts have error");
-            [loadBatchExpectation fulfill];
-        }];
-    }];
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 

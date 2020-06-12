@@ -37,9 +37,9 @@
 
 @synthesize contactBookObservable;
 
-@synthesize contactAddedObservable;
+@synthesize dataSourceHasChanged;
 
-@synthesize indexCellNeedUpdateObservable;
+@synthesize cellNeedRemoveSelectedObservable;
 
 @synthesize selectedContactRemoveObservable;
 
@@ -62,8 +62,8 @@
 //    Data binding initialization
     self.searchObservable = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.contactBookObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.contactAddedObservable = [[DataBinding<NSArray<NSIndexPath *> *> alloc] initWithValue:[[NSArray<NSIndexPath *> alloc] init]];
-    self.indexCellNeedUpdateObservable = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
+    self.dataSourceHasChanged = [[DataBinding<NSArray<NSIndexPath *> *> alloc] initWithValue:[[NSArray<NSIndexPath *> alloc] init]];
+    self.cellNeedRemoveSelectedObservable = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
     
     self.selectedContactAddedObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.selectedContactRemoveObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
@@ -143,8 +143,6 @@
     dispatch_sync(self->_updateViewQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            NSMutableArray * insertedIndexPaths = [[NSMutableArray alloc] init];
-            
             [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull newContact, NSUInteger idx, BOOL * _Nonnull stop) {
                 [strongSelf.listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
@@ -157,12 +155,10 @@
                 NSMutableArray * contactsInSection = [strongSelf.contactsBackup objectForKey:key];
                 
                 [contactsInSection addObject:newContact];
-                [insertedIndexPaths addObject:[NSIndexPath indexPathForRow:contactsInSection.count - 1
-                                                                 inSection:[self->_listSectionKeys indexOfObject:key]]];
             }];
             
             [Logging info:[NSString stringWithFormat: @"Load more %lu contact(s)", (unsigned long)batchOfContact.count]];
-            strongSelf.contactAddedObservable.value = insertedIndexPaths;
+            strongSelf.dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
             [NSThread sleepForTimeInterval:0.3];
         }
     });
@@ -234,7 +230,7 @@
             //        [NSThread sleepForTimeInterval:0.1];
             if ([key isEqualToString:@""]) {
                 strongSelf.contactsOnView = strongSelf.contactsBackup;
-                strongSelf->contactAddedObservable.value = @[[NSIndexPath indexPathForRow:0 inSection:0]];
+                strongSelf->dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
                 return;
             }
             int i = 0;
@@ -258,7 +254,7 @@
                     [newSection addObject:contact];
                     
                     dispatch_sync(strongSelf->_searchResponseQueue, ^{
-                        strongSelf->contactAddedObservable.value = @[[NSIndexPath indexPathForRow:0 inSection:0]];
+                        strongSelf->dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
                         [NSThread sleepForTimeInterval:0.1];
                     });
                 }
@@ -268,7 +264,7 @@
             }
             
             if (!haveResult) {
-                strongSelf->contactAddedObservable.value = @[[NSIndexPath indexPathForRow:0 inSection:0]];
+                strongSelf->dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
                 return;
             }
         }
@@ -308,7 +304,7 @@
     contact.isChecked = NO;
     NSIndexPath * index = [self indexOfContact:contact];
     
-    self.indexCellNeedUpdateObservable.value = index;
+    self.cellNeedRemoveSelectedObservable.value = index;
 }
 
 - (NSArray *)getAllSectionNames {
