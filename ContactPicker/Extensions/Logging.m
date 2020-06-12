@@ -48,14 +48,14 @@
 }
 
 + (void)info:(NSString *)msg {
-//    DebugLog(@"%@ \n[Information] %@", [self findCallerMethod], msg);
+    DebugLog(@"%@ \n[Information] %@", [self findCallerMethod], msg);
 }
 
 + (void)exeption:(NSString *)msg {
-//    DebugLog(@"%@ \n[Exeption] %@", [self findCallerMethod], msg);
+    DebugLog(@"%@ \n[Exeption] %@", [self findCallerMethod], msg);
 }
 
 + (void)error:(NSString *)msg {
-//    DebugLog(@"%@ \n[Error] %@", [self findCallerMethod], msg);
+    DebugLog(@"%@ \n[Error] %@", [self findCallerMethod], msg);
 }
 @end

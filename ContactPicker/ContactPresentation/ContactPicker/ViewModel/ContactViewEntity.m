@@ -77,4 +77,18 @@
     return [UIColor colorWithHue:drand48() saturation:1.0 brightness:1.0 alpha:1.0];
 }
 
+- (BOOL)isEqual:(ContactViewEntity *)other
+{
+    if (other == self) {
+        return YES;
+    } else {
+        return [self.identifier isEqualToString:other.identifier];
+    }
+}
+
+- (NSUInteger)hash
+{
+    return [self.identifier hash];
+}
+
 @end

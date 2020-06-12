@@ -44,7 +44,7 @@
         [self.avatar configImage:nil forLabel:keyName withColor:entity.backgroundColor];
         __weak ContactTableViewCell* weakSelf = self;
         entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 if (identifier == entity.identifier) {
                     weakSelf.avatar.imageView.image = image;
                 }

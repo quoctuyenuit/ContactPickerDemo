@@ -23,17 +23,24 @@
 
 //Load identifier and name of contacts from CNContactStore. The result will callback by bactch
 //isDone is YES when all of the contacts have loaded done
-- (void) loadContacts: (int) batchSize completion:(void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error, BOOL isDone)) handler;
+- (void) loadContacts: (int) batchSize
+           completion:(void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error, BOOL isDone)) handler;
 
 //Load detail of a contact by identifier, if contact already in cache take it otherwise load it from CNContactStore
-- (void) loadContactById: (NSString *) identifier completion: (void (^) (id<ContactDALProtocol> contactDAL, NSError * error)) handler;
+- (void) loadContactById: (NSString *) identifier
+                isReload:(BOOL) isReload
+              completion: (void (^) (id<ContactDALProtocol> contactDAL, NSError * error)) handler;
 
 //Load batch of detailed contacts by list of identifiers, get contacts already in cache and load others from CNContactStore.
 //Set new contact into cache
-- (void) loadBatchOfDetailedContacts: (NSArray<NSString *> *) listIdentifiers completion: (void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error)) handler;
+- (void) loadBatchOfDetailedContacts: (NSArray<NSString *> *) listIdentifiers
+                            isReload:(BOOL) isReload
+                          completion: (void (^)(NSArray<id<ContactDALProtocol>> * listContacts, NSError * error)) handler;
 
 //Get image by id, if image already in cache take it otherwise load it from CNContactStore
-- (void) getImageById: (NSString *) identifier completion: (void (^)(NSData * imageData, NSError * error)) handler;
+- (void) getImageById: (NSString *) identifier
+             isReload:(BOOL) isReload
+           completion: (void (^)(NSData * imageData, NSError * error)) handler;
 
 @end
 

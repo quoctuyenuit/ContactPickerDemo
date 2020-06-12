@@ -17,7 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
        block:(id (^)(id obj1, id obj2))block;
 - (NSArray *)flatMap:(id (^)(id obj))block;
 
-- (id) firstObjectWith: (BOOL (^)(id obj)) block;
+- (id _Nullable) firstObjectWith: (BOOL (^)(id obj)) block;
+
+- (BOOL) containsObjectWith: (BOOL (^)(id obj)) block;
 @end
 
 NS_ASSUME_NONNULL_END

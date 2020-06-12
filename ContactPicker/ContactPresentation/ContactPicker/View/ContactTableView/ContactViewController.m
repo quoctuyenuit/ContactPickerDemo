@@ -231,7 +231,7 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
         self->contactSelectedArea.alpha = 0;
         self->keyboardInputView.alpha = 0;
     } completion:^(BOOL finished) {
-        self->contactSelectedHeightConstraint.constant = self.view.safeAreaInsets.bottom;
+        self->contactSelectedHeightConstraint.constant = 0;
         [self->contactSelectedArea layoutIfNeeded];
     }];
 }

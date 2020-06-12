@@ -15,32 +15,31 @@
 @property DataBinding<NSString *> * searchObservable;
 @property DataBinding<NSNumber *> * contactBookObservable;
 
-@property DataBinding<NSNumber *> * numberOfSelectedContactObservable;
-
 @property DataBinding<NSNumber *> * selectedContactRemoveObservable;
 @property DataBinding<NSNumber *> * selectedContactAddedObservable;
 
-@property DataBinding<NSNumber *> * numberOfContactObservable;
-@property DataBinding<NSNumber *> * indexCellNeedUpdateObservable;
-
+@property DataBinding<NSArray<NSIndexPath *> *> * contactAddedObservable;
+@property DataBinding<NSIndexPath *> * indexCellNeedUpdateObservable;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
 - (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
 
-- (void) loadBatchOfDetailedContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
+- (int) numberOfContactInSection: (NSInteger) section;
 
-- (int) getNumberOfContacts;
+- (NSInteger) numberOfSection;
 
-- (ContactViewEntity *) getContactAt: (int) index;
+- (ContactViewEntity *) contactAtIndex: (NSIndexPath *) indexPath;
 
 - (void) searchContactWithKeyName: (NSString *) key;
 
-- (void) selectectContactAtIndex: (int) index;
-
-- (void) selectectContactIdentifier: (NSString *) identifier;
+- (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
 
 - (void) removeSelectedContact: (NSString *) identifier;
+
+- (NSString *) titleForHeaderInSection: (NSInteger) section;
+
+- (NSArray *) getAllSectionNames;
 
 @end
 

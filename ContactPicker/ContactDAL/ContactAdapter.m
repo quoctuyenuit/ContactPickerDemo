@@ -16,7 +16,6 @@
     NSCache *imageCache;
     NSCache *contactCache;
     NSMutableArray * listIdentifiersLoaded;
-    NSMutableDictionary<NSString*, NSMutableArray<void (^)(NSData *)> *> * imageRequestQueue;
     NSMutableArray<NSString*> * contactWaitToImage;
 }
 
@@ -34,7 +33,6 @@
 - (id) init {
     self->imageCache = [[NSCache alloc] init];
     self->contactCache = [[NSCache alloc] init];
-    self->imageRequestQueue = [[NSMutableDictionary alloc] init];
     self->contactWaitToImage = [[NSMutableArray alloc] init];
     self->listIdentifiersLoaded = [[NSMutableArray alloc] init];
     self->contactChangedObservable = [[DataBinding alloc] initWithValue: nil];
@@ -61,14 +59,12 @@
     }
 }
 
-- (void)loadContacts:(int) batchSize
-          completion:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *, BOOL))handler {
+- (void)loadContacts:(int) batchSize completion:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *, BOOL))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
             DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, -1
         );
         dispatch_queue_t callBackQueue = dispatch_queue_create("response_batch", priorityAttribute);
-        
         
         NSMutableArray *listContacts = [[NSMutableArray alloc] init];
         
@@ -77,7 +73,9 @@
             
             NSArray *keysToFetch = @[CNContactIdentifierKey,
                                      CNContactGivenNameKey,
-                                     CNContactFamilyNameKey];
+                                     CNContactFamilyNameKey,
+                                     CNContactPhoneNumbersKey,
+                                     CNContactEmailAddressesKey];
             
             CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:keysToFetch];
             
@@ -98,16 +96,18 @@
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
             
-////            Add dummy data
-//            [self createDummyData:100 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
-//                dispatch_sync(callBackQueue, ^{
-//                   handler([listDummyData copy], nil, NO);
-//                });
-//            }];
+
             
             dispatch_sync(callBackQueue, ^{
                handler([listContacts copy], nil, YES);
             });
+            
+//            //            Add dummy data
+//            [self createDummyData:1000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
+//                dispatch_sync(callBackQueue, ^{
+//                   handler([listDummyData copy], nil, NO);
+//                });
+//            }];
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
             NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
@@ -118,13 +118,15 @@
 }
 
 
-- (void)loadContactById:(NSString *)identifier completion:(void (^)(id<ContactDALProtocol>, NSError *))handler {
+- (void)loadContactById:(NSString *)identifier isReload:(BOOL) isReload completion:(void (^)(id<ContactDALProtocol>, NSError *))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        ContactDAL *contactInCache = [self->contactCache objectForKey:identifier];
-        if (contactInCache) {
-            handler(contactInCache, nil);
-            return;
+        if (!isReload) {
+            ContactDAL *contactInCache = [self->contactCache objectForKey:identifier];
+            if (contactInCache) {
+                handler(contactInCache, nil);
+                return;
+            }
         }
         
         if ([CNContactStore class]) {
@@ -155,25 +157,30 @@
 }
 
 - (void)loadBatchOfDetailedContacts:(NSArray<NSString *> *)listIdentifiers
+                           isReload: (BOOL) isReload
                  completion:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *))handler {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray * identifiersNeedLoad = [[NSMutableArray alloc] init];
         NSMutableArray * results = [[NSMutableArray alloc] init];
         
-//        Check if cache have this contact then just take it.
-        for (NSString * identifier in listIdentifiers) {
-            ContactDAL *contactInCache = [self->contactCache objectForKey:identifier];
-            if (contactInCache) {
-                [results addObject:contactInCache];
-            } else {
-                [identifiersNeedLoad addObject:identifier];
+        if (!isReload) {
+            //        Check if cache have this contact then just take it.
+            for (NSString * identifier in listIdentifiers) {
+                ContactDAL *contactInCache = [self->contactCache objectForKey:identifier];
+                if (contactInCache) {
+                    [results addObject:contactInCache];
+                } else {
+                    [identifiersNeedLoad addObject:identifier];
+                }
             }
-        }
-        
-        if (identifiersNeedLoad.count == 0) {
-            handler(results, nil);
-            return;
+            
+            if (identifiersNeedLoad.count == 0) {
+                handler(results, nil);
+                return;
+            }
+        } else {
+            identifiersNeedLoad = [[NSMutableArray alloc] initWithArray: listIdentifiers];
         }
         
 //        Load contact from CNContactStore
@@ -203,14 +210,16 @@
     });
 }
 
-- (void)getImageById:(NSString *)identifier completion:(void (^)(NSData *, NSError * error))handler {
+- (void)getImageById:(NSString *)identifier isReload: (BOOL) isReload completion:(void (^)(NSData *, NSError * error))handler {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSData * imageData = [self->imageCache objectForKey:identifier];
-        if (imageData) {
-            handler(imageData, nil);
-            return;
+        if (!isReload) {
+            NSData * imageData = [self->imageCache objectForKey:identifier];
+            if (imageData) {
+                handler(imageData, nil);
+                return;
+            }
         }
         
         if ([CNContactStore class]) {

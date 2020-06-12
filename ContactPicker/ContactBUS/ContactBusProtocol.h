@@ -21,17 +21,20 @@
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
-- (void) loadContacts: (void (^)(NSError * error, BOOL isDone)) completion;
+- (void) loadContacts: (void (^)(NSArray<ContactBusEntity *> *, NSError * error, BOOL isDone)) handler;
 
-- (void) loadBatchOfDetailedContacts: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
+- (void) loadBatchOfDetailedContacts: (NSArray<NSString *> *) identifiers
+                            isReload:(BOOL) isReload
+                          completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 
-- (void) loadContactById: (NSString *) identifier completion: (void (^) (ContactBusEntity *, NSError * )) handler;
+- (void) loadContactById: (NSString *) identifier
+                isReload:(BOOL) isReload
+              completion: (void (^) (ContactBusEntity *, NSError * )) handler;
 
-- (void) getImageFromId: (NSString *) identifier completion: (void (^)(NSData * imageData, NSError * error)) handler;
+- (void) getImageFromId: (NSString *) identifier
+               isReload:(BOOL) isReload
+             completion: (void (^)(NSData * imageData, NSError * error)) handler;
 
-- (void) searchContactByName: (NSString *) name completion: (void (^)(void)) handler;
-
-- (void) getAllContacts: (BOOL) isDetail completion: (void (^)(NSArray<ContactBusEntity *> *, NSError *)) handler;
 @end
 
 #endif /* ContactBusProtocol_h */
