@@ -73,6 +73,11 @@
                                                              selector:@selector(loadSourceContactByTimer)
                                                              userInfo:nil repeats:YES];
     
+    self->_searchUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                                   target:self
+                                                                 selector:@selector(loadSearchContactByTimer)
+                                                                 userInfo:nil repeats:YES];
+    
     self->_updateViewQueue = dispatch_queue_create("update queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
     self->_searchResponseQueue = dispatch_queue_create("search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
     self->_loadIntoBufferQueue = dispatch_queue_create("load contact into buffer queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
@@ -118,11 +123,11 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [strongSelf loadContactFromSearchBuffer];
-            if (strongSelf->_isSearchDone) {
-                [strongSelf->_searchUpdateTimer invalidate];
-                strongSelf->_searchUpdateTimer = nil;
-                return;
-            }
+//            if (strongSelf->_isSearchDone) {
+//                [strongSelf->_searchUpdateTimer invalidate];
+//                strongSelf->_searchUpdateTimer = nil;
+//                return;
+//            }
         }
     });
 }
@@ -148,12 +153,17 @@
 
 - (void)loadContactFromSearchBuffer {
     __weak typeof(self) weakSelf = self;
-    [self loadContactFromBuffer:self->_contactSearchBuffer atIndex:self->_contactHadShowFromSearch into:self->_contactsOnView completion:^(NSUInteger contactsAddedCount) {
+    NSUInteger length = self->_contactSearchBuffer.count - self->_contactHadShowFromSearch;
+    if (length > 100)
+        length = 100;
+    NSArray<ContactViewEntity *> * batch = [self->_contactSearchBuffer subarrayWithRange:NSMakeRange(self->_contactHadShowFromSearch, length)];
+    
+    [self addContacts:batch forDic:self->_contactsOnView completion:^(NSUInteger contactsAddedCount) {
         __strong typeof(weakSelf) strongBlockSelf = weakSelf;
         
         if (strongBlockSelf) {
             strongBlockSelf->_contactHadShowFromSearch += contactsAddedCount;
-            [Logging info:[NSString stringWithFormat: @"Show from search more %lu contact(s)", contactsAddedCount]];
+            [Logging info:[NSString stringWithFormat: @"Load more %lu contact(s)", contactsAddedCount]];
             strongBlockSelf.dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:contactsAddedCount];
         }
     }];
@@ -161,27 +171,22 @@
 
 - (void)loadContactFromSourceBuffer {
     __weak typeof(self) weakSelf = self;
-    [self loadContactFromBuffer:self->_contactsBufferFromBus atIndex:self->_contactHadLoadedCount into:self->_contactsBackup completion:^(NSUInteger contactAddedCount) {
+    NSUInteger length = self->_contactsBufferFromBus.count - self->_contactHadLoadedCount;
+    if (length > 100)
+        length = 100;
+    NSArray<ContactViewEntity *> * batch = [self->_contactsBufferFromBus subarrayWithRange:NSMakeRange(self->_contactHadLoadedCount, length)];
+    
+    [self addContacts:batch forDic:self->_contactsBackup completion:^(NSUInteger contactsAddedCount) {
         __strong typeof(weakSelf) strongBlockSelf = weakSelf;
         
         if (strongBlockSelf) {
-            strongBlockSelf->_contactHadLoadedCount += contactAddedCount;
-            if (self->_isSearching) {
-                [Logging info:[NSString stringWithFormat: @"Load more %lu contact(s)", contactAddedCount]];
-                strongBlockSelf.dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:contactAddedCount];
+            strongBlockSelf->_contactHadLoadedCount += contactsAddedCount;
+            if (strongBlockSelf->_isSearching) {
+                [Logging info:[NSString stringWithFormat: @"Load more %lu contact(s)", contactsAddedCount]];
+                strongBlockSelf.dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:contactsAddedCount];
             }
         }
-        
     }];
-}
-
-- (void)loadContactFromBuffer: (NSArray *) buffer atIndex: (int) index into: (NSMutableDictionary *) dic completion: (void(^)(NSUInteger)) handler {
-    NSUInteger length = buffer.count - index;
-    if (length > 100)
-        length = 100;
-    
-    NSArray<ContactViewEntity *> * batch = [buffer subarrayWithRange:NSMakeRange(index, length)];
-    [self addContacts:batch forDic:dic completion:handler];
 }
 
 - (void) addContactIntoBufferDic:(NSArray<ContactBusEntity *> *) listContacts {
@@ -349,15 +354,18 @@
     self->_waitingSearchResult = key;
     self->_isSearching = YES;
     self->_isSearchDone = NO;
-    
-    if (self->_searchUpdateTimer) {
-        [self->_searchUpdateTimer invalidate];
-        self->_searchUpdateTimer = nil;
-    }
-    self->_searchUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1
-                                                                target:self
-                                                              selector:@selector(loadSearchContactByTimer)
-                                                              userInfo:nil repeats:YES];
+    self->_contactHadShowFromSearch = 0;
+    self->_contactSearchBuffer = [[NSMutableArray alloc] init];
+//    if (self->_searchUpdateTimer) {
+//        [self->_searchUpdateTimer invalidate];
+//        self->_searchUpdateTimer = nil;
+//
+//        self->_searchUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1
+//                                                                       target:self
+//                                                                     selector:@selector(loadSearchContactByTimer)
+//                                                                     userInfo:nil repeats:YES];
+//    }
+   
     
     __weak typeof(self) weakSelf = self;
     
@@ -378,6 +386,7 @@
             NSMutableArray * section = [strongSelf->_contactsBufferDic objectForKey:contactKey];
             
             [strongSelf refreshContactOnView];
+            
             handler();
             BOOL haveResult = NO;
             
@@ -388,14 +397,15 @@
                     [strongSelf->_contactSearchBuffer addObject:contact];
                     if (!haveResult) {
                         haveResult = YES;
+                        [strongSelf loadContactFromSearchBuffer];
                         
-                        NSString * key = [strongSelf makeKeyFromName:contact.fullName];
-                        
-                        NSMutableArray * contactsInSection = [strongSelf.contactsOnView objectForKey:key];
-                        
-                        [contactsInSection addObject:contact];
-                        
-                        strongSelf->dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
+//                        NSString * key = [strongSelf makeKeyFromName:contact.fullName];
+//
+//                        NSMutableArray * contactsInSection = [strongSelf.contactsOnView objectForKey:key];
+//
+//                        [contactsInSection addObject:contact];
+//
+//                        strongSelf->dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
                     }
                 }
                 
