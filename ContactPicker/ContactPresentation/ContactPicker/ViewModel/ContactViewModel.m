@@ -16,9 +16,14 @@
 @interface ContactViewModel() {
     BOOL _contactIsLoaded;
     BOOL _loadContactIsDone;
+    int _contactHadLoadedCount;
     dispatch_queue_t _updateViewQueue;
     dispatch_queue_t _searchResponseQueue;
+    dispatch_queue_t _loadIntoBufferQueue;
+    
     NSString * _waitingSearchResult;
+    NSTimer * _loadContactTimer;
+    NSMutableArray<ContactBusEntity *> * _contactsBufferFromBus;
 }
 
 - (void) setupEvents;
@@ -49,20 +54,28 @@
     self->_contactBus = bus;
     self->_contactIsLoaded = NO;
     self->_loadContactIsDone = NO;
+    self->_contactHadLoadedCount = 0;
+    self->_loadContactTimer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                               target:self
+                                                             selector:@selector(loadContactsByTimer)
+                                                             userInfo:nil repeats:YES];
     
     self->_updateViewQueue = dispatch_queue_create("update queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
     self->_searchResponseQueue = dispatch_queue_create("search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
+    self->_loadIntoBufferQueue = dispatch_queue_create("load contact into buffer queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
+    
 //    List source initialization
     self.contactsOnView = [[NSMutableDictionary alloc] init];
     self.contactsBackup = self.contactsOnView;
     
     self.listSelectedContacts = [[NSMutableArray alloc] init];
     self->_listSectionKeys = [[NSMutableArray alloc] init];
+    self->_contactsBufferFromBus = [[NSMutableArray alloc] init];
     
 //    Data binding initialization
     self.searchObservable = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.contactBookObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.dataSourceHasChanged = [[DataBinding<NSArray<NSIndexPath *> *> alloc] initWithValue:[[NSArray<NSIndexPath *> alloc] init]];
+    self.dataSourceHasChanged = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     self.cellNeedRemoveSelectedObservable = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
     
     self.selectedContactAddedObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
@@ -81,6 +94,35 @@
     [self setupEvents];
     
     return self;
+}
+
+- (void)loadContactsByTimer {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSLog(@"timer fired");
+        [self loadContactsFromBuffer];
+        
+        if (self->_loadContactIsDone && self->_contactHadLoadedCount == self->_contactsBufferFromBus.count) {
+            [self->_loadContactTimer invalidate];
+            self->_loadContactTimer = nil;
+            [Logging info:@"Contact has loaded done, timer is stoped"];
+            return;
+        }
+    });
+}
+
+- (void)loadContactsFromBuffer {
+    NSUInteger length = self->_contactsBufferFromBus.count - self->_contactHadLoadedCount;
+    
+    if (length > 100)
+        length = 100;
+    
+    NSArray<ContactBusEntity *> * batch = [self->_contactsBufferFromBus subarrayWithRange:NSMakeRange(self->_contactHadLoadedCount, length)];
+    
+    NSArray<ContactViewEntity *> * batchViewEntities = [batch map:^ContactViewEntity * _Nonnull(ContactBusEntity * _Nonnull obj) {
+        return [self parseContactEntity:obj];
+    }];
+    
+    [self addContacts:batchViewEntities];
 }
 
 - (void)setupEvents {
@@ -137,13 +179,14 @@
     return viewEntity;
 }
 
-- (void)storeContacts:(NSArray *)batchOfContact {
+- (void)addContacts:(NSArray *)batchOfContact {
     __weak typeof(self) weakSelf = self;
     
     dispatch_sync(self->_updateViewQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull newContact, NSUInteger idx, BOOL * _Nonnull stop) {
+                
                 [strongSelf.listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
                         [newContact updateContact:selectedContact];
@@ -159,7 +202,8 @@
             
             [Logging info:[NSString stringWithFormat: @"Load more %lu contact(s)", (unsigned long)batchOfContact.count]];
             strongSelf.dataSourceHasChanged.value = [NSNumber numberWithUnsignedInteger:0];
-            [NSThread sleepForTimeInterval:0.3];
+            //            [NSThread sleepForTimeInterval:0.3];
+            strongSelf->_contactHadLoadedCount += batchOfContact.count;
         }
     });
 }
@@ -178,16 +222,19 @@
                 completion(NO, error, 0);
                 [Logging error:[NSString stringWithFormat:@"Load contact failt, error: %@", error.localizedDescription]];
             } else {
-                NSArray * batchOfContact = [listContactFromBus map:^ContactViewEntity* _Nonnull(ContactBusEntity*  _Nonnull obj) {
-                    return [self parseContactEntity:obj];
-                }];
-                [self storeContacts:batchOfContact];
                 
-                if (!self->_contactIsLoaded) {
-                    completion(YES, nil, (int)batchOfContact.count);
-                    self->_contactIsLoaded = YES;
-                }
-                self->_loadContactIsDone = isDone;
+                dispatch_async(self->_loadIntoBufferQueue, ^{
+                    [self->_contactsBufferFromBus addObjectsFromArray:listContactFromBus];
+                    
+                    
+                    if (!self->_contactIsLoaded) {
+                        [self loadContactsFromBuffer];
+                        completion(YES, nil, self->_contactHadLoadedCount);
+                        self->_contactIsLoaded = YES;
+                    }
+                    self->_loadContactIsDone = isDone;
+                });
+            
             }
         }
     }];

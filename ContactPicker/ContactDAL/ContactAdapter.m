@@ -62,7 +62,7 @@
 - (void)loadContacts:(int) batchSize completion:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *, BOOL))handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class(
-            DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_BACKGROUND, -1
+            DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -1
         );
         dispatch_queue_t callBackQueue = dispatch_queue_create("response_batch", priorityAttribute);
         
@@ -96,18 +96,16 @@
                 [self->listIdentifiersLoaded addObject:contact.identifier];
             }];
             
-
+            //            Add dummy data
+            [self createDummyData:1000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
+                dispatch_async(callBackQueue, ^{
+                   handler([listDummyData copy], nil, NO);
+                });
+            }];
             
-            dispatch_sync(callBackQueue, ^{
+            dispatch_async(callBackQueue, ^{
                handler([listContacts copy], nil, YES);
             });
-            
-//            //            Add dummy data
-//            [self createDummyData:1000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
-//                dispatch_sync(callBackQueue, ^{
-//                   handler([listDummyData copy], nil, NO);
-//                });
-//            }];
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
             NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
