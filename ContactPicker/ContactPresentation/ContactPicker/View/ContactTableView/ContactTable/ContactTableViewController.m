@@ -16,8 +16,6 @@
     id<ContactViewModelProtocol> _viewModel;
 }
 - (void) setupView;
-- (void) insertCells: (int) index withSize: (int) size;
-- (BOOL) checkNeedLoadBatch: (BOOL) hasIndexPath index: (int) index;
 @end
 
 @implementation ContactTableViewController
@@ -67,7 +65,11 @@
     
     [self->_viewModel.searchObservable binding:^(NSString * searchText) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf->_viewModel searchContactWithKeyName:searchText];
+        [strongSelf->_viewModel searchContactWithKeyName:searchText callBack:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        }];
     }];
     
     [self->_viewModel.dataSourceHasChanged bindAndFire:^(NSNumber * number) {
@@ -118,8 +120,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     ContactTableViewCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
-    
-    ContactViewEntity * entity = [self->_viewModel contactAtIndex:indexPath];
     
     [self->_viewModel selectectContactAtIndex:indexPath];
     

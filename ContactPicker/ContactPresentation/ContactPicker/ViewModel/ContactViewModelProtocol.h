@@ -31,7 +31,7 @@
 
 - (ContactViewEntity *) contactAtIndex: (NSIndexPath *) indexPath;
 
-- (void) searchContactWithKeyName: (NSString *) key;
+- (void) searchContactWithKeyName: (NSString *) key callBack: (void (^)(void)) handler;
 
 - (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
 
