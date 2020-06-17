@@ -17,6 +17,7 @@
                         <subviews>
                             <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Tìm kiếm" translatesAutoresizingMaskIntoConstraints="NO" id="Rhx-yM-UuP">
                                 <rect key="frame" x="0.0" y="44" width="414" height="56"/>
+                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                         </subviews>
@@ -54,7 +55,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fail_ico" translatesAutoresizingMaskIntoConstraints="NO" id="sWv-eY-ZBi">
-                                        <rect key="frame" x="128.5" y="0.0" width="100" height="100"/>
+                                        <rect key="frame" x="128.5" y="0.5" width="100" height="99"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="EQy-nc-zB5"/>
                                             <constraint firstAttribute="height" constant="100" id="eFw-fY-fIx"/>
@@ -100,10 +101,10 @@
             </objects>
             <point key="canvasLocation" x="784" y="-304"/>
         </scene>
-        <!--Main View Controller-->
+        <!--Main View ControllerU Ikit-->
         <scene sceneID="ZYf-Bb-vri">
             <objects>
-                <viewController storyboardIdentifier="mainViewController" id="8nr-cf-scf" customClass="MainViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="mainViewController" id="8nr-cf-scf" customClass="MainViewControllerUIkit" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="h5h-Rv-Bmm">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

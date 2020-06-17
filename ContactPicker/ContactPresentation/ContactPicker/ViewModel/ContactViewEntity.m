@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ContactViewEntity.h"
 #import <UIKit/UIKit.h>
-#import "GradientColors.h"
+#import "Utilities.h"
 
 @interface ContactViewEntity()
 - (NSString *) parseName: (NSString *) givenName familyName:(NSString *) familyName;
@@ -89,6 +89,14 @@
 - (NSUInteger)hash
 {
     return [self.identifier hash];
+}
+
+- (NSAttributedString *)fullNameAttributedStringFontSize:(CGFloat)fontSize {
+    return [NSAttributedString attributedStringWithString:self.fullName fontSize:fontSize color:[UIColor contactNameColor] firstWordColor:nil];
+}
+
+- (NSAttributedString *)descriptionAttributedStringFontSize:(CGFloat)fontSize {
+    return [NSAttributedString attributedStringWithString:self.contactDescription fontSize:fontSize color:[UIColor contactNameColor] firstWordColor:nil];
 }
 
 @end

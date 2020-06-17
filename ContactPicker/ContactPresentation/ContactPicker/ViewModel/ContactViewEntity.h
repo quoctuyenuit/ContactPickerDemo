@@ -11,7 +11,9 @@
 #import "DataBinding.h"
 #import <UIKit/UIKit.h>
 #import "ContactBusEntity.h"
-#import "UIColorExtension.h"
+#import "Utilities.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactViewEntity : NSObject
 @property(nonatomic, readwrite) NSString * _Nonnull identifier;
@@ -40,6 +42,10 @@
 - (BOOL)contactHasPrefix: (NSString *_Nonnull) key;
 
 - (BOOL) isEqualWithBusEntity: (ContactBusEntity *) entity;
+
+- (NSAttributedString *)fullNameAttributedStringFontSize:(CGFloat) fontSize;
+- (NSAttributedString *)descriptionAttributedStringFontSize:(CGFloat) fontSize;
 @end
 
+NS_ASSUME_NONNULL_END
 #endif /* ContactViewModel_h */

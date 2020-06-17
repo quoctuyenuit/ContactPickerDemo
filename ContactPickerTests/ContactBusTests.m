@@ -10,7 +10,7 @@
 #import "ContactBus.h"
 #import "ContactAdapter.h"
 #import "ContactBusEntity.h"
-#import "NSArrayExtension.h"
+#import "Utilities.h"
 
 @interface ContactBusTests : XCTestCase
 @property (nonatomic) ContactBus * contactBus;

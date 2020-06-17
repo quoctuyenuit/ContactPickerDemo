@@ -8,7 +8,7 @@
 
 #import "ContactAdapter.h"
 #import <Contacts/Contacts.h>
-#import "NSArrayExtension.h"
+#import "Utilities.h"
 #import "ContactDALProtocol.h"
 
 
@@ -97,12 +97,12 @@
             }];
             
             //            Add dummy data
-            [self createDummyData:1000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
-                dispatch_async(callBackQueue, ^{
-                   handler([listDummyData copy], nil, NO);
-                });
-            }];
-            
+//            [self createDummyData:1000 batchSize:100 delegate:^(NSArray<ContactDAL *> * listDummyData) {
+//                dispatch_async(callBackQueue, ^{
+//                   handler([listDummyData copy], nil, NO);
+//                });
+//            }];
+//            
             dispatch_async(callBackQueue, ^{
                handler([listContacts copy], nil, YES);
             });

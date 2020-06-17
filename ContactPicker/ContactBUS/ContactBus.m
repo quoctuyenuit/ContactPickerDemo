@@ -8,7 +8,7 @@
 
 #import "ContactBus.h"
 #import "ContactDAL.h"
-#import "NSArrayExtension.h"
+#import "Utilities.h"
 #import "ContactBusEntity.h"
 #import <UIKit/UIKit.h>
 #import "Logging.h"

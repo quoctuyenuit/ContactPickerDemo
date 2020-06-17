@@ -12,6 +12,5 @@
 @interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
 
 @property (strong, nonatomic) UIWindow * window;
-@property (strong, nonatomic) DataBinding<NSNumber*> *becomeActiveObservable;
 @end
 

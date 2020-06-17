@@ -74,32 +74,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CB398F1A-5A75-49C6-B0D8-52B913162089"
-            shouldBeEnabled = "No"
+            uuid = "E773CA2C-4EBE-4E6A-B5C4-BE4F66D1681E"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/ViewModel/ContactViewModel.m"
+            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/UIKit/ContactTableView/ContactTable/ContactTableViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "-loadSearchContactByTimer"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "-viewDidLoad"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3BF37234-62B0-4673-9ECE-E62BA8341AB0"
+            uuid = "D3AB6A70-0C66-45B3-888C-CBC1291526A1"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/ViewModel/ContactViewModel.m"
+            filePath = "ContactPicker/Extensions/Utilities.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "359"
-            endingLineNumber = "359"
-            landmarkName = "-searchContactWithKeyName:callBack:"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "-gradientBackgroundColor:direction:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72A047A8-59ED-4ADC-821A-C9185AA3E0A2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ContactPicker/Extensions/Utilities.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "-gradientBackgroundColor:direction:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

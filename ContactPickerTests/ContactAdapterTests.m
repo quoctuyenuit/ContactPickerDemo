@@ -11,7 +11,7 @@
 #import "ContactBus.h"
 #import "ContactDAL.h"
 #import <Contacts/Contacts.h>
-#import "NSArrayExtension.h"
+#import "Utilities.h"
 
 @interface ContactAdapterTests : XCTestCase
 @property (nonatomic) ContactAdapter * contactAdapter;

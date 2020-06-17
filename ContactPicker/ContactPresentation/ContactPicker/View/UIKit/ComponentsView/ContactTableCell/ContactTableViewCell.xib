@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ContactViewCell" rowHeight="100" id="KGk-i7-Jjw" userLabel="ContactTableViewCell" customClass="ContactTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0je-Ph-Wlu">
+                        <rect key="frame" x="123" y="21.5" width="189" height="47"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIJ-6I-YDV">
+                                <rect key="frame" x="8" y="0.0" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEt-mB-Bbq">
+                                <rect key="frame" x="8" y="26" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TIJ-6I-YDV" firstAttribute="leading" secondItem="0je-Ph-Wlu" secondAttribute="leading" constant="8" id="AJ1-f3-xwl"/>
+                            <constraint firstItem="TIJ-6I-YDV" firstAttribute="top" secondItem="0je-Ph-Wlu" secondAttribute="top" id="BOy-62-3um"/>
+                            <constraint firstItem="hEt-mB-Bbq" firstAttribute="top" secondItem="TIJ-6I-YDV" secondAttribute="bottom" constant="5" id="Fab-YK-eDl"/>
+                            <constraint firstItem="hEt-mB-Bbq" firstAttribute="leading" secondItem="0je-Ph-Wlu" secondAttribute="leading" constant="8" id="Fzz-as-gTc"/>
+                            <constraint firstAttribute="bottom" secondItem="hEt-mB-Bbq" secondAttribute="bottom" id="mfq-Pn-x5V"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sEz-9e-NPo" customClass="ContactAvatarImageView">
+                        <rect key="frame" x="57" y="20" width="50" height="50"/>
+                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="750" constant="50" id="Gzr-m9-B7a"/>
+                            <constraint firstAttribute="width" secondItem="sEz-9e-NPo" secondAttribute="height" multiplier="1:1" id="hVW-qg-eK7"/>
+                        </constraints>
+                    </view>
+                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rvA-vA-aGO" customClass="CheckBoxButtonView">
+                        <rect key="frame" x="16" y="32.5" width="25" height="25"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="N9k-4f-yxQ"/>
+                            <constraint firstAttribute="width" constant="25" id="pLH-Fc-sQc"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="sEz-9e-NPo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="2q1-AJ-UEK"/>
+                    <constraint firstItem="sEz-9e-NPo" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="A7k-Du-sfs"/>
+                    <constraint firstItem="rvA-vA-aGO" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="KC1-Y7-lT6"/>
+                    <constraint firstItem="rvA-vA-aGO" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="R23-tu-qhr"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sEz-9e-NPo" secondAttribute="bottom" constant="8" id="U47-HS-2xM"/>
+                    <constraint firstAttribute="trailing" secondItem="0je-Ph-Wlu" secondAttribute="trailing" constant="8" id="VYH-Rt-4ac"/>
+                    <constraint firstItem="sEz-9e-NPo" firstAttribute="leading" secondItem="rvA-vA-aGO" secondAttribute="trailing" constant="16" id="XFD-wf-DE7"/>
+                    <constraint firstItem="0je-Ph-Wlu" firstAttribute="leading" secondItem="sEz-9e-NPo" secondAttribute="trailing" constant="16" id="psY-Zq-GnK"/>
+                    <constraint firstItem="0je-Ph-Wlu" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="xPM-un-1Up"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="avatar" destination="sEz-9e-NPo" id="RBL-5n-TIY"/>
+                <outlet property="checkBox" destination="rvA-vA-aGO" id="RBC-Sy-jW2"/>
+                <outlet property="contactDescriptionLabel" destination="hEt-mB-Bbq" id="sUP-O3-YNU"/>
+                <outlet property="contactNameLabel" destination="TIJ-6I-YDV" id="jRQ-od-euf"/>
+            </connections>
+            <point key="canvasLocation" x="131.8840579710145" y="62.946428571428569"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -18,7 +18,8 @@
 @property DataBinding<NSNumber *> * selectedContactRemoveObservable;
 @property DataBinding<NSNumber *> * selectedContactAddedObservable;
 
-@property DataBinding<NSNumber *> * dataSourceHasChanged;
+@property DataBinding<NSArray<NSIndexPath *> *> * contactHadAddedObservable;
+@property DataBinding<NSNumber *> * dataSourceNeedReloadObservable;
 @property DataBinding<NSIndexPath *> * cellNeedRemoveSelectedObservable;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
@@ -31,7 +32,7 @@
 
 - (ContactViewEntity *) contactAtIndex: (NSIndexPath *) indexPath;
 
-- (void) searchContactWithKeyName: (NSString *) key callBack: (void (^)(void)) handler;
+- (void) searchContactWithKeyName: (NSString *) key;
 
 - (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
 
