@@ -15,7 +15,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="116"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="122"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cej-nD-4if">
@@ -44,7 +44,7 @@
                             </collectionViewFlowLayout>
                         </collectionView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Hn2-kw-5dc" secondAttribute="bottom" id="JCj-pw-87z"/>
                         <constraint firstAttribute="height" priority="750" constant="80" id="Jwf-Sf-5Sa"/>
@@ -67,7 +67,7 @@
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="cej-nD-4if" secondAttribute="bottom" id="Yjf-vu-eEP"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="131.8840579710145" y="190.84821428571428"/>
+            <point key="canvasLocation" x="131.8840579710145" y="192.85714285714286"/>
         </view>
     </objects>
     <resources>

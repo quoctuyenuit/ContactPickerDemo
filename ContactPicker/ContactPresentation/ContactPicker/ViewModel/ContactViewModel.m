@@ -47,8 +47,6 @@
 
 @implementation ContactViewModel
 
-@synthesize listSelectedContacts = _listSelectedContacts;
-
 @synthesize contactBus = _contactBus;
 
 @synthesize searchObservable;
@@ -93,7 +91,7 @@
     self.contactsOnView = [[NSMutableDictionary alloc] init];
     self.contactsBackup = self.contactsOnView;
     
-    self.listSelectedContacts = [[NSMutableArray alloc] init];
+    _listSelectedContacts = [[NSMutableArray alloc] init];
     self->_listSectionKeys = [[NSMutableArray alloc] init];
     self->_contactsBufferFromBus = [[NSMutableArray alloc] init];
     self->_contactSearchBuffer = [[NSMutableArray alloc] init];
@@ -234,7 +232,7 @@
             NSMutableArray<NSIndexPath *> * updatedIndexPaths = [[NSMutableArray alloc] init];
             [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull newContact, NSUInteger idx, BOOL * _Nonnull stop) {
                 
-                [strongSelf.listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
+                [strongSelf->_listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
                         [newContact updateContact:selectedContact];
                     }
@@ -433,24 +431,24 @@
     contact.isChecked = !contact.isChecked;
     
     if (contact.isChecked) {
-        [self.listSelectedContacts addObject:contact];
-        self.selectedContactAddedObservable.value = [NSNumber numberWithUnsignedInteger:self.listSelectedContacts.count - 1];
-    } else if ([self.listSelectedContacts containsObject:contact]) {
-        NSUInteger index = [self.listSelectedContacts indexOfObject:contact];
-        [self.listSelectedContacts removeObjectAtIndex:index];
+        [_listSelectedContacts addObject:contact];
+        self.selectedContactAddedObservable.value = [NSNumber numberWithUnsignedInteger:_listSelectedContacts.count - 1];
+    } else if ([_listSelectedContacts containsObject:contact]) {
+        NSUInteger index = [_listSelectedContacts indexOfObject:contact];
+        [_listSelectedContacts removeObjectAtIndex:index];
         self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:index];
     }
 }
 
 - (void)removeSelectedContact:(NSString *)identifier {
     
-    ContactViewEntity * contact = [self.listSelectedContacts firstObjectWith:^BOOL(ContactViewEntity*  _Nonnull obj) {
+    ContactViewEntity * contact = [_listSelectedContacts firstObjectWith:^BOOL(ContactViewEntity*  _Nonnull obj) {
         return [obj.identifier isEqualToString:identifier];
     }];
     
-    if ([self.listSelectedContacts containsObject:contact]) {
-        NSUInteger index = [self.listSelectedContacts indexOfObject:contact];
-        [self.listSelectedContacts removeObjectAtIndex:index];
+    if ([_listSelectedContacts containsObject:contact]) {
+        NSUInteger index = [_listSelectedContacts indexOfObject:contact];
+        [_listSelectedContacts removeObjectAtIndex:index];
         self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:index];
     }
     
@@ -516,6 +514,15 @@
     }
     NSString * key = @"#";
     [self.contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
+}
+
+#pragma mark - Selected contact implement
+- (NSInteger)numberOfSelectedContacts {
+    return _listSelectedContacts.count;
+}
+
+- (ContactViewEntity *)selectedContactAtIndex:(NSInteger)index {
+    return [_listSelectedContacts objectAtIndex:index];
 }
 
 @end

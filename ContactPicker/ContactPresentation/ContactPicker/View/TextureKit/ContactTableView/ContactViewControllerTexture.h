@@ -10,10 +10,12 @@
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "ContactViewModelProtocol.h"
 #import "KeyboardAppearanceDelegate.h"
+#import "ContactCollectionCellProtocol.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactViewControllerTexture : ASViewController <UISearchBarDelegate, UITextFieldDelegate, KeyboardAppearanceDelegate>
+@interface ContactViewControllerTexture : ASViewController <UISearchBarDelegate, UITextFieldDelegate, KeyboardAppearanceDelegate, ASCollectionDelegate, ASCollectionDataSource, ContactCollectionCellDelegate>
 - (instancetype) initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
 @end
 

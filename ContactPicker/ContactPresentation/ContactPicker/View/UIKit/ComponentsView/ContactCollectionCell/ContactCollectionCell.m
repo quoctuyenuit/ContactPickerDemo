@@ -34,14 +34,17 @@
     NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
     
     if (entity.avatar) {
-        [self.avatar configImage:entity.avatar forLabel:@"" withColor:entity.backgroundColor];
+        [self.avatar configImage:entity.avatar forLabel:@"" withColor:nil];
     } else {
         [self.avatar configImage:nil forLabel:keyName withColor:entity.backgroundColor];
         __weak ContactCollectionCell* weakSelf = self;
         entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                if (identifier == entity.identifier) {
-                    weakSelf.avatar.imageView.image = image;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    if ([identifier isEqualToString: strongSelf->_currentContact.identifier]) {
+                        [strongSelf.avatar configImage:image forLabel:@"" withColor:nil];
+                    }
                 }
             });
         };

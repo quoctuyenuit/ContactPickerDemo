@@ -9,32 +9,92 @@
 #import "HorizontalListNode.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 
-#define DEBUG_MODE      1
-#define BUTTON_SIZE     CGSizeMake(50, 50)
-//#define 
+#define DEBUG_MODE          0
+#define BUTTON_SIZE         CGSizeMake(50, 50)
+#define COLLECTION_HEIGHT   60
+#define BOUND_HEIGHT        80
+#define LEFT_PADDING        16
+#define RIGHT_PADDING       16
+#define InsetForCollection  UIEdgeInsetsMake(0, LEFT_PADDING, 0, 0)
+#define InsetForButton      UIEdgeInsetsMake(0, 0, 0, RIGHT_PADDING)
 
 
 @implementation HorizontalListNode {
     ASButtonNode            * _actionButton;
+    ASDisplayNode           * _boundNode;
 }
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _actionButton       = [[ASButtonNode alloc] init];
-        _collectionNode     = [[ASCollectionNode alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
-        self.automaticallyManagesSubnodes = YES;
+        
+        UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
+        [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        
+        
+        _actionButton           = [[ASButtonNode alloc] init];
+        _collectionNode         = [[ASCollectionNode alloc] initWithCollectionViewLayout: layout];
+        _boundNode              = [[ASDisplayNode alloc] init];
+        self.backgroundColor    = UIColor.whiteColor;
+        
+        _collectionNode.showsHorizontalScrollIndicator = NO;
+        
+        [_actionButton setBackgroundImage:[UIImage imageNamed:@"arrow_ico"] forState:UIControlStateNormal];
+        
+        [_boundNode addSubnode:_collectionNode];
+        [_boundNode addSubnode:_actionButton];
+        [self addSubnode:_boundNode];
+        [self layoutInBound];
+        
 #if DEBUG_MODE
         _actionButton.backgroundColor           = UIColor.greenColor;
         _collectionNode.backgroundColor         = UIColor.redColor;
+        _boundNode.backgroundColor              = UIColor.blueColor;
 #endif
     }
     return self;
 }
 
-//- (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize {
-//    
-//}
+- (void)layoutInBound {
+    __weak typeof(self) weakSelf = self;
+    
+    _boundNode.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            ASLayoutSpec * collectionViewLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForCollection
+                                                                                         child:
+                                                   [strongSelf->_collectionNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+                style.preferredSize = CGSizeMake(strongSelf.calculatedSize.width, COLLECTION_HEIGHT);
+            }]];
+            
+            ASLayoutSpec * buttonLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForButton
+                                                                                 child:
+                                           [strongSelf->_actionButton styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+                style.preferredSize = BUTTON_SIZE;
+            }]];
+            
+            return [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionHorizontal
+                                                           spacing:8
+                                                    justifyContent:ASStackLayoutJustifyContentCenter
+                                                        alignItems:ASStackLayoutAlignItemsCenter
+                                                          children:@[[collectionViewLayout styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+                style.flexGrow = 10;
+            }], buttonLayout]];
+        }
+        return nil;
+    };
+}
 
-
+- (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize {
+    __weak typeof(self) weakSelf = self;
+    
+    return [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionHorizontal
+                                                   spacing:0
+                                            justifyContent:ASStackLayoutJustifyContentStart
+                                                alignItems:ASStackLayoutAlignItemsStart
+                                                  children: @[[_boundNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+        style.preferredSize = CGSizeMake(weakSelf.calculatedSize.width, BOUND_HEIGHT);
+        style.flexGrow = 10;
+    }]]];
+}
 @end

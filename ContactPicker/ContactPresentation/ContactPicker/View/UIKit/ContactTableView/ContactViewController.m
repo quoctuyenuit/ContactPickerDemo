@@ -18,7 +18,7 @@
     UIViewController<KeyboardAppearanceProtocol>    * _contentViewController;
     HorizontalListItemView                          * _keyboardInputView;
     HorizontalListItemView                          * _contactSelectedArea;
-    ContactViewModel                                * _viewModel;
+    id<ContactViewModelProtocol>                      _viewModel;
     NSLayoutConstraint                              * _contactSelectedHeightConstraint;
 }
 extern NSString * const loadingMsg;
@@ -47,50 +47,60 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     UIAlertController * alert = [self createLoadingView: loadingMsg];
     [self presentViewController:alert animated:true completion:nil];
     
+    __weak typeof(self) weakSelf = self;
+    
     [self->_viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [alert dismissViewControllerAnimated:YES completion:nil];
-            
-            if (!isSuccess) {
-                self->_contentViewController = [self loadFailLoadingContactViewController];
-            } else if (numberOfContacts == 0) {
-                self->_contentViewController = [self loadEmptyViewController];
-            } else {
-                self->_contentViewController = [self loadContactTableViewController];
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf) {
+                [alert dismissViewControllerAnimated:YES completion:nil];
+                
+                if (!isSuccess) {
+                    strongSelf->_contentViewController = [strongSelf loadFailLoadingContactViewController];
+                } else if (numberOfContacts == 0) {
+                    strongSelf->_contentViewController = [strongSelf loadEmptyViewController];
+                } else {
+                    strongSelf->_contentViewController = [strongSelf loadContactTableViewController];
+                }
+                [strongSelf setupViews];
             }
-            [self setupViews];
         });
     }];
     
     [self->_viewModel.selectedContactAddedObservable binding:^(NSNumber * index) {
-        if ([index intValue] == 0) {
-            [self showSelectedArea];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            if ([index intValue] == 0) {
+                [strongSelf showSelectedArea];
+            }
+            
+            NSIndexPath * indexPath = [NSIndexPath indexPathForItem:[index intValue] inSection:0];
+            
+            [strongSelf->_contactSelectedArea.collectionView insertItemsAtIndexPaths:@[indexPath]];
+            [strongSelf->_keyboardInputView.collectionView insertItemsAtIndexPaths:@[indexPath]];
+                
+            [strongSelf->_contactSelectedArea.collectionView scrollToItemAtIndexPath:indexPath
+                                                                    atScrollPosition:UICollectionViewScrollPositionRight
+                                                                            animated:YES];
+            [strongSelf->_keyboardInputView.collectionView scrollToItemAtIndexPath:indexPath
+                                                                  atScrollPosition:UICollectionViewScrollPositionRight
+                                                                          animated:YES];
+                
         }
-        
-        NSIndexPath * indexPath = [NSIndexPath indexPathForItem:[index intValue] inSection:0];
-        
-        [self->_contactSelectedArea.collectionView insertItemsAtIndexPaths:@[indexPath]];
-        [self->_keyboardInputView.collectionView insertItemsAtIndexPaths:@[indexPath]];
-        
-        [UIView animateWithDuration:0.3 animations:^{
-            
-            [self->_contactSelectedArea.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight
-                                                                     animated:NO];
-            [self->_keyboardInputView.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight
-                                                                   animated:NO];
-            
-        }];
     }];
     
     [self->_viewModel.selectedContactRemoveObservable binding:^(NSNumber * index) {
-        if (self->_viewModel.listSelectedContacts.count == 0) {
-            [self hideSelectedArea];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            if ([strongSelf->_viewModel numberOfSelectedContacts] == 0) {
+                [strongSelf hideSelectedArea];
+            }
+            
+            NSIndexPath * indexPath = [NSIndexPath indexPathForItem:[index intValue] inSection:0];
+            [strongSelf->_contactSelectedArea.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+            
+            [strongSelf->_keyboardInputView.collectionView deleteItemsAtIndexPaths:@[indexPath]];
         }
-        
-        NSIndexPath * indexPath = [NSIndexPath indexPathForItem:[index intValue] inSection:0];
-        [self->_contactSelectedArea.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        
-        [self->_keyboardInputView.collectionView deleteItemsAtIndexPaths:@[indexPath]];
     }];
     
 }
@@ -196,13 +206,13 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self->_viewModel.listSelectedContacts.count;
+    return [_viewModel numberOfSelectedContacts];
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCollectionCell" forIndexPath:indexPath];
     
-    ContactViewEntity * entity = self->_viewModel.listSelectedContacts[(int)indexPath.item];
+    ContactViewEntity * entity = [_viewModel selectedContactAtIndex:indexPath.item];
     
     [cell configWithEntity:entity];
     

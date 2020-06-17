@@ -84,16 +84,18 @@
 }
 
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize {
+    __weak typeof(self) weakSelf = self;
+    
     ASCenterLayoutSpec * textLayout = [ASCenterLayoutSpec centerLayoutSpecWithCenteringOptions:ASCenterLayoutSpecCenteringXY sizingOptions:ASCenterLayoutSpecSizingOptionDefault child:[self->_label styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
         style.flexGrow = 1;
     }]];
     
     ASLayoutSpec * imageLayout = [ASOverlayLayoutSpec overlayLayoutSpecWithChild: [self->_image styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.preferredSize = self.bounds.size;
+        style.preferredSize = weakSelf.bounds.size;
     }] overlay:textLayout];
     
     return [ASOverlayLayoutSpec overlayLayoutSpecWithChild:[self->_mainBoundNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.preferredSize = self.calculatedSize;
+        style.preferredSize = weakSelf.calculatedSize;
     }] overlay:imageLayout];
 }
 

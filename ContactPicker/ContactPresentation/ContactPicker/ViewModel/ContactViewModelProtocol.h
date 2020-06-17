@@ -42,6 +42,10 @@
 
 - (NSArray *) getAllSectionNames;
 
+- (NSInteger)numberOfSelectedContacts;
+
+- (ContactViewEntity *) selectedContactAtIndex: (NSInteger) index;
+
 @end
 
 #endif /* ContactViewModelProtocol_h */
