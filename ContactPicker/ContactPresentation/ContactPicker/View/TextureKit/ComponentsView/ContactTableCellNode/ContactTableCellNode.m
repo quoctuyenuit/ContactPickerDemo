@@ -117,7 +117,7 @@
 - (void)configForModel:(ContactViewEntity *)entity {
     _contactNameLabel.attributedText          = [entity fullNameAttributedStringFontSize:CONTACT_FONT_SIZE];
     _contactDescriptionLabel.attributedText   = [entity descriptionAttributedStringFontSize:CONTACT_FONT_SIZE];
-    
+    _checkBox.isChecked = entity.isChecked;
     NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
     NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
     NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];

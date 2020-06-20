@@ -14,12 +14,12 @@
 #import "ContactViewModel.h"
 #import "ContactBus.h"
 #import "ContactAdapter.h"
-
 #import "Logging.h"
 
 #import "ContactViewControllerTexture.h"
+#import "ContactTableNodeController.h"
 
-@interface MainViewControllerUIkit () {
+@interface MainViewControllerUIkit () <UITabBarControllerDelegate> {
     UIViewController * contentViewController;
     id<ContactViewModelProtocol> viewModel;
 }
@@ -39,8 +39,8 @@
     [self->viewModel requestPermission:^(BOOL granted, NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (granted) {
-//                self->contentViewController = [self loadContactViewController];
-                self->contentViewController = [[ContactViewControllerTexture alloc] initWithViewModel:self->viewModel];
+                self->contentViewController = [self loadContactViewController];
+//                self->contentViewController = [[ContactViewControllerTexture alloc] initWithViewModel:self->viewModel];
             } else {
                 if (error.code == 1) {
                     self->contentViewController = [self loadResponseInforView:ResponseViewTypeSomethingWrong];
@@ -62,8 +62,21 @@
 }
 
 - (UIViewController *)loadContactViewController {
+    ContactViewController * uikitContactVc = [ContactViewController instantiateWith:self->viewModel];
+    uikitContactVc.tabBarItem              = [[UITabBarItem alloc] initWithTitle:@"UIKit" image:[UIImage systemImageNamed:@"archivebox.fill"] tag:0];
+    
+    
+    ContactViewControllerTexture * textureContactVc = [[ContactViewControllerTexture alloc] initWithViewModel:self->viewModel];
+    textureContactVc.tabBarItem                     = [[UITabBarItem alloc] initWithTitle:@"Texture" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:0];
+    
+    UITabBarController *tabBarController         = [[UITabBarController alloc] init];
+    tabBarController.viewControllers             = @[uikitContactVc, textureContactVc];
+    tabBarController.selectedViewController      = uikitContactVc;
+    tabBarController.delegate                    = self;
+    [[UITabBar appearance] setTintColor:[UIColor appColor]];
+    
     self.view.backgroundColor = UIColor.whiteColor;
-    return [ContactViewController instantiateWith:self->viewModel];
+    return tabBarController;
 }
 
 - (void)setupView {
@@ -75,6 +88,13 @@
     [self->contentViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
     [self->contentViewController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
     [self->contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if ([viewController conformsToProtocol:@protocol(PhotoFeedControllerProtocol)]) {
+          // FIXME: the dataModel does not currently handle clearing data during loading properly
+    //      [(id <PhotoFeedControllerProtocol>)rootViewController resetAllData];
+        }
 }
 
 @end

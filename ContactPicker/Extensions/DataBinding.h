@@ -8,6 +8,7 @@
 
 #ifndef DataBinding_h
 #define DataBinding_h
+#import <Foundation/Foundation.h>
 
 @interface DataBinding<DataType> : NSObject {
     DataType _value;
@@ -23,3 +24,4 @@
 @end
 
 #endif /* DataBinding_h */
+

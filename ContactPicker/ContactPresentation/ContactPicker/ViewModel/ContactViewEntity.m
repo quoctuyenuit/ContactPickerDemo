@@ -31,12 +31,13 @@
     self.contactDescription = description;
     self.avatar = image;
     self.isChecked = isChecked;
-    self.backgroundColor = [[GradientColors instantiate] randomColor];
+    self.backgroundColor = [[GradientColors instantiate] colorForKey:self.identifier];
     return self;
 }
 
 - (id)initWithBusEntity:(ContactBusEntity *)entity {
-    return [self initWithIdentifier:entity.identifier givenName:entity.givenName familyName:entity.familyName description:@"" avatar:nil isChecked:NO];
+    UIImage * imageData = [UIImage imageWithData:entity.imageData];
+    return [self initWithIdentifier:entity.identifier givenName:entity.givenName familyName:entity.familyName description:@"" avatar:imageData isChecked:NO];
 }
 
 - (NSString *) fullName {

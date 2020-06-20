@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "ContactViewModelProtocol.h"
 #import "KeyboardAppearanceDelegate.h"
+#import "ContactTableBaseController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableViewController : UITableViewController<KeyboardAppearanceProtocol>
-
+@interface ContactTableViewController : ContactTableBaseController
 - (id) initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
 @end
 

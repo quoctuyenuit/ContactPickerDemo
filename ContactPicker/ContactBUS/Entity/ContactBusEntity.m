@@ -9,18 +9,17 @@
 #import "ContactBusEntity.h"
 
 @implementation ContactBusEntity
-- (id)initWith:(NSString *)identifier givenName:(NSString *)givenName familyName:(NSString *)familyName {
-    self.identifier = identifier;
-    self.givenName = givenName;
-    self.familyName = familyName;
+- (id)initWithIdentifier:(NSString *)identifier givenName:(NSString *)givenName familyName:(NSString *)familyName imageData:(NSData * _Nullable)imageData {
+    self.identifier     = identifier;
+    self.givenName      = givenName;
+    self.familyName     = familyName;
+    self.imageData      = imageData;
+    
     return self;
 }
 
 - (id)initWithData:(ContactDAL *)contactDAL {
-    self.identifier = contactDAL.contactID;
-    self.givenName = contactDAL.contactName;
-    self.familyName = contactDAL.contactFamilyName;
-    return self;
+    return [self initWithIdentifier:contactDAL.identifier givenName:contactDAL.givenName familyName:contactDAL.familyName imageData:contactDAL.imageData];
 }
 
 - (NSComparisonResult)compare:(ContactBusEntity *)other

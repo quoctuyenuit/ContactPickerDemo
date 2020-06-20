@@ -54,6 +54,8 @@
     
     return roundedImage;
 }
+
+
 @end
 
 #pragma mark - UIColor Extension
@@ -73,29 +75,57 @@
 + (UIColor *)contactDescriptionColor {
     return UIColor.grayColor;
 }
+
++ (UIColor *)appColor {
+    return [UIColor colorFromHex:@"#03dbfc"];
+}
 @end
 
 
 #pragma mark - GradientColors
 
-@implementation GradientColors
+@implementation GradientColors {
+    NSCache             * _colorCache;
+    dispatch_once_t       _once;
+}
+
+- (id)initialization {
+    _colorCache = [[NSCache alloc] init];
+    _colorsTable = [[NSMutableArray alloc] init];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#7bd5f5"].CGColor, (id)[UIColor colorFromHex:@"#787ff6"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#787ff6"].CGColor, (id)[UIColor colorFromHex:@"#4adede"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#4adede"].CGColor, (id)[UIColor colorFromHex:@"#1ca7ec"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#667db6"].CGColor, (id)[UIColor colorFromHex:@"#0082c8"].CGColor, (id)[UIColor colorFromHex:@"#0082c8"].CGColor, (id)[UIColor colorFromHex:@"#667db6"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#ff9190"].CGColor, (id)[UIColor colorFromHex:@"#fdc094"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#659999"].CGColor, (id)[UIColor colorFromHex:@"#f4791f"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#ff9a9e"].CGColor, (id)[UIColor colorFromHex:@"#fecfef"].CGColor]];
+    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#c79081"].CGColor, (id)[UIColor colorFromHex:@"#dfa579"].CGColor]];
+    return self;
+}
+
 + (id)instantiate {
-    GradientColors * gc = [[GradientColors alloc] init];
-    gc->colorsTable = [[NSMutableArray alloc] init];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#7bd5f5"].CGColor, (id)[UIColor colorFromHex:@"#787ff6"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#787ff6"].CGColor, (id)[UIColor colorFromHex:@"#4adede"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#4adede"].CGColor, (id)[UIColor colorFromHex:@"#1ca7ec"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#667db6"].CGColor, (id)[UIColor colorFromHex:@"#0082c8"].CGColor, (id)[UIColor colorFromHex:@"#0082c8"].CGColor, (id)[UIColor colorFromHex:@"#667db6"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#ff9190"].CGColor, (id)[UIColor colorFromHex:@"#fdc094"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#659999"].CGColor, (id)[UIColor colorFromHex:@"#f4791f"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#ff9a9e"].CGColor, (id)[UIColor colorFromHex:@"#fecfef"].CGColor]];
-    [gc->colorsTable addObject:@[(id)[UIColor colorFromHex:@"#c79081"].CGColor, (id)[UIColor colorFromHex:@"#dfa579"].CGColor]];
-    return gc;
+    static dispatch_once_t once;
+    static id sharedInstance;
+
+    dispatch_once(&once, ^
+    {
+        sharedInstance = [[self alloc] initialization];
+    });
+    return sharedInstance;
 }
 
 - (NSArray *)randomColor {
-    NSUInteger index = arc4random_uniform((uint32_t)self->colorsTable.count);
-    return self->colorsTable[index];
+    NSUInteger index = arc4random_uniform((uint32_t)self->_colorsTable.count);
+    return self->_colorsTable[index];
+}
+
+- (NSArray *)colorForKey:(NSString *)key {
+    NSArray * color = [_colorCache objectForKey:key];
+    if (!color) {
+        color = [self randomColor];
+        [_colorCache setObject:color forKey:key];
+    }
+    return color;
 }
 @end
 
@@ -240,3 +270,23 @@
     });
 }
 @end
+
+#pragma mark - NSString Extension
+@implementation NSString(Addition)
+- (BOOL)hasPrefixLower:(NSString *)key {
+    if ([key isEqualToString:@""]) {
+        return YES;
+    }
+    return [[self lowercaseString] hasPrefix: [key lowercaseString]];
+}
+@end
+
+//#pragma GrandCentralDispatch Custom
+//@implementation GrandCentralDispatch {
+//    
+//}
+//
+//+ (GrandCentralDispatch *)main {
+//    
+//}
+//@end

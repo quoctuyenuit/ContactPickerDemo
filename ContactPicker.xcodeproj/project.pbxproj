@@ -52,6 +52,7 @@
 		B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */; };
 		B0E8CAE7248B3C220096ACBA /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E8CAE6248B3C220096ACBA /* ContactViewController.m */; };
 		B0F12CE82499FE6C00D038EC /* HorizontalListNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F12CE72499FE6C00D038EC /* HorizontalListNode.m */; };
+		B0F6FD96249E27D7004BA361 /* ContactTableBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F6FD95249E27D7004BA361 /* ContactTableBaseController.m */; };
 		B0FC11E82499D6410056F586 /* SearchNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FC11E72499D6410056F586 /* SearchNode.m */; };
 		B0FC11EC2499DAC10056F586 /* ContactCollectionCellNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FC11EB2499DAC10056F586 /* ContactCollectionCellNode.m */; };
 		D8DC52A4894DECE5DACF95FE /* Pods_ContactPicker_ContactPickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378A2238D88447CEA912EB0F /* Pods_ContactPicker_ContactPickerUITests.framework */; };
@@ -162,6 +163,9 @@
 		B0F12CE52499F39700D038EC /* ContactCollectionCellProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCellProtocol.h; sourceTree = "<group>"; };
 		B0F12CE62499FE6C00D038EC /* HorizontalListNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalListNode.h; sourceTree = "<group>"; };
 		B0F12CE72499FE6C00D038EC /* HorizontalListNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalListNode.m; sourceTree = "<group>"; };
+		B0F6FD94249E27D7004BA361 /* ContactTableBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableBaseController.h; sourceTree = "<group>"; };
+		B0F6FD95249E27D7004BA361 /* ContactTableBaseController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableBaseController.m; sourceTree = "<group>"; };
+		B0F6FD97249E285F004BA361 /* ContactTableProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableProtocol.h; sourceTree = "<group>"; };
 		B0FC11E62499D6410056F586 /* SearchNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchNode.h; sourceTree = "<group>"; };
 		B0FC11E72499D6410056F586 /* SearchNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchNode.m; sourceTree = "<group>"; };
 		B0FC11EA2499DAC10056F586 /* ContactCollectionCellNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCellNode.h; sourceTree = "<group>"; };
@@ -415,6 +419,9 @@
 				B06FBB60248C0288003BDC3C /* KeyboardAppearanceDelegate.h */,
 				B07A8D7E2498C0C100A3B27F /* ContactTableCellProtocol.h */,
 				B0F12CE52499F39700D038EC /* ContactCollectionCellProtocol.h */,
+				B0F6FD94249E27D7004BA361 /* ContactTableBaseController.h */,
+				B0F6FD95249E27D7004BA361 /* ContactTableBaseController.m */,
+				B0F6FD97249E285F004BA361 /* ContactTableProtocol.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -856,6 +863,7 @@
 				B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */,
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
 				B0C25506249798DE00ECA551 /* Utilities.m in Sources */,
+				B0F6FD96249E27D7004BA361 /* ContactTableBaseController.m in Sources */,
 				193E336824851C8400C5735D /* ContactViewEntity.m in Sources */,
 				B0C254FD2497910000ECA551 /* ContactTableNodeController.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,

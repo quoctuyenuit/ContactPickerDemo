@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
     id<ContactAdapterProtocol> _contactAdapter; 
 }
 
+- (id) initWithAdapter: (id<ContactAdapterProtocol>) adapter batchSize:(int) batchSize;
 - (id) initWithAdapter: (id<ContactAdapterProtocol>) adapter;
 @end
 

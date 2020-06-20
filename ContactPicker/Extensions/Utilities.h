@@ -25,14 +25,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIColor *) colorFromHex: (NSString *) hex;
 + (UIColor *) contactNameColor;
 + (UIColor *) contactDescriptionColor;
++ (UIColor *) appColor;
 @end
 
 #pragma mark - GradientColors
 @interface GradientColors : NSObject {
-    NSMutableArray * colorsTable;
+    NSMutableArray * _colorsTable;
 }
 
 + (id) instantiate;
+- (NSArray *) colorForKey:(NSString *) key;
 - (NSArray *) randomColor;
 @end
 
@@ -74,5 +76,16 @@ struct ASDisplayGradientPoints {
 @interface ASDisplayNode(Addition)
 - (void) gradientBackgroundColor: (NSArray<UIColor *> *) colors direction: (ASDisplayGradientDirection) direction;
 @end
+
+@interface NSString(Addition)
+- (BOOL) hasPrefixLower: (NSString *) key;
+@end
+
+//@interface GrandCentralDispatch: NSObject
+//+ (GrandCentralDispatch *) main;
+//+ (GrandCentralDispatch *) background;
+//+ (GrandCentralDispatch *) concurrent:(dispatch_queue_priority_t) priority;
+//+ (GrandCentralDispatch *) serial:(dispatch_queue_priority_t) priority;
+//@end
 
 NS_ASSUME_NONNULL_END

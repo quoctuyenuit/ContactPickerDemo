@@ -10,11 +10,12 @@
 #define ContactDALProtocol_h
 @protocol ContactDALProtocol <NSObject>
 
-@property (nonatomic, readwrite) NSString * contactID;
-@property (nonatomic, readwrite) NSString * contactName;
-@property (nonatomic, readwrite) NSString * contactFamilyName;
-@property (nonatomic, readwrite) NSArray<NSString *> * contactPhones;
-@property (nonatomic, readwrite) NSArray<NSString *> * contactEmails;
+@property (nonatomic, readwrite) NSString                   * identifier;
+@property (nonatomic, readwrite) NSString                   * givenName;
+@property (nonatomic, readwrite) NSString                   * familyName;
+@property (nonatomic, readwrite) NSArray<NSString *>        * contactPhones;
+@property (nonatomic, readwrite) NSArray<NSString *>        * contactEmails;
+@property (nonatomic, readwrite) NSData                     * imageData;
 
 @end
 

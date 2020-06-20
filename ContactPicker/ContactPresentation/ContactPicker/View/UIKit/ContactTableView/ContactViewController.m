@@ -49,12 +49,11 @@ NSString * const loadingMsg = @"Đang tải danh bạ...";
     
     __weak typeof(self) weakSelf = self;
     
-    [self->_viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
+    [self->_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [alert dismissViewControllerAnimated:YES completion:nil];
             __strong typeof(weakSelf) strongSelf = weakSelf;
             if (strongSelf) {
-                [alert dismissViewControllerAnimated:YES completion:nil];
-                
                 if (!isSuccess) {
                     strongSelf->_contentViewController = [strongSelf loadFailLoadingContactViewController];
                 } else if (numberOfContacts == 0) {

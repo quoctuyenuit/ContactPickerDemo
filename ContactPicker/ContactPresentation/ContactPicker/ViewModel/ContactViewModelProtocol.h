@@ -12,19 +12,22 @@
 #import <UIKit/UIKit.h>
 
 @protocol ContactViewModelProtocol <NSObject>
-@property DataBinding<NSString *> * searchObservable;
-@property DataBinding<NSNumber *> * contactBookObservable;
+@property DataBinding<NSString *>                   * searchObservable;
+@property DataBinding<NSNumber *>                   * contactBookObservable;
 
-@property DataBinding<NSNumber *> * selectedContactRemoveObservable;
-@property DataBinding<NSNumber *> * selectedContactAddedObservable;
+@property DataBinding<NSNumber *>                   * selectedContactRemoveObservable;
+@property DataBinding<NSNumber *>                   * selectedContactAddedObservable;
 
-@property DataBinding<NSArray<NSIndexPath *> *> * contactHadAddedObservable;
-@property DataBinding<NSNumber *> * dataSourceNeedReloadObservable;
-@property DataBinding<NSIndexPath *> * cellNeedRemoveSelectedObservable;
+@property DataBinding<NSNumber *>                   * dataSourceNeedReloadObservable;
+@property DataBinding<NSIndexPath *>                * cellNeedRemoveSelectedObservable;
+
+@property(atomic) NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> * contactsOnView;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
-- (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, int numberOfContacts)) completion;
+- (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, NSUInteger numberOfContacts)) completion;
+
+- (void) loadBatchOfContacts: (void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths)) handler;
 
 - (int) numberOfContactInSection: (NSInteger) section;
 
@@ -46,6 +49,7 @@
 
 - (ContactViewEntity *) selectedContactAtIndex: (NSInteger) index;
 
+- (NSIndexPath * _Nullable)firstContactOnView;
 @end
 
 #endif /* ContactViewModelProtocol_h */

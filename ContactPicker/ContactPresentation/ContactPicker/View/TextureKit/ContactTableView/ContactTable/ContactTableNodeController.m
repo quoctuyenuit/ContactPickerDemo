@@ -11,93 +11,39 @@
 #import "ContactViewModelProtocol.h"
 #import "ContactViewEntity.h"
 #import "ContactTableCellNode.h"
+#import "Logging.h"
 
-@interface ContactTableNodeController () <ASTableDelegate, ASTableDataSource> {
-    id<ContactViewModelProtocol> _viewModel;
-}
-@property (nonatomic, strong) ASTableNode * tableNode;
+
+#define LOADING_MSG                         @"Đang tải danh bạ..."
+
+@interface ContactTableNodeController () <ASTableDelegate, ASTableDataSource>
 @end
 
-@implementation ContactTableNodeController
+@implementation ContactTableNodeController {
+    ASTableNode                 * _tableNode;
+    id<ContactViewModelProtocol>  _viewModel;
+}
+
+
 @synthesize keyboardAppearanceDelegate;
 
 #pragma mark - Lifecycle
 
-- (instancetype) initWithModel: (ContactViewModel *) viewModel {
-    self->_tableNode = [[ASTableNode alloc] init];
-    self->_viewModel = viewModel;
+- (instancetype) initWithViewModel: (id<ContactViewModelProtocol>) viewModel {
+    _tableNode                  = [[ASTableNode alloc] init];
     self = [super initWithNode:self->_tableNode];
+    
     if (self) {
-        self->_tableNode.delegate = self;
-        self->_tableNode.dataSource = self;
+        _viewModel            = viewModel;
+        _tableNode.delegate   = self;
+        _tableNode.dataSource = self;
     }
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    __weak typeof(self) weakSelf = self;
-    
-    [self->_viewModel.contactBookObservable binding:^(NSNumber * number) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf->_tableNode reloadData];
-        });
-        }
-    }];
-    
-    [self->_viewModel.searchObservable binding:^(NSString * searchText) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf->_viewModel searchContactWithKeyName:searchText];
-        }
-    }];
-    
-    [self->_viewModel.dataSourceNeedReloadObservable binding:^(NSNumber * flag) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                [strongSelf.tableNode reloadData];
-            }
-        });
-    }];
-    
-    [self->_viewModel.contactHadAddedObservable binding:^(NSArray<NSIndexPath *> * updatedIndexPaths) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                @try {
-                    NSLog(@"contact have %d", [self->_viewModel numberOfContactInSection:26]);
-                    [strongSelf.tableNode insertRowsAtIndexPaths:updatedIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-                } @catch (NSException *exception) {
-                    [strongSelf.tableNode reloadData];
-                }
-            }
-        });
-    }];
-    
-    [self->_viewModel.cellNeedRemoveSelectedObservable binding:^(NSIndexPath * indexPath) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            ContactTableCellNode * cell = [strongSelf->_tableNode nodeForRowAtIndexPath:indexPath];
-            [cell setSelect];
-        }
-    }];
-    
-//    [self->_viewModel loadContacts:^(BOOL isSuccess, NSError * error, int numberOfContacts) {
-//        NSLog(@"First load have %d contacts", numberOfContacts);
-//    }];
-    
-}
-
 - (void)loadView {
     [super loadView];
-    self->_tableNode.view.showsHorizontalScrollIndicator = NO;
-    self->_tableNode.view.showsVerticalScrollIndicator = NO;
-    self->_tableNode.view.separatorStyle = UITableViewScrollPositionNone;
-    self->_tableNode.backgroundColor = UIColor.whiteColor;
-    self->_tableNode.view.rowHeight = 60;
+    _tableNode.leadingScreensForBatching                    = AUTO_TAIL_LOADING_NUM_SCREENFULS;
 }
 
 #pragma mark - ASTableDatasource methods
@@ -134,5 +80,58 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return [self->_viewModel numberOfContactInSection:section] > 0 ? [self->_viewModel titleForHeaderInSection:section] : nil;
+}
+
+- (void)tableNode:(ASTableNode *)tableNode willBeginBatchFetchWithContext:(ASBatchContext *)context {
+    NSLog(@"ContactTableNodeController] batFetching");
+    [context beginBatchFetching];
+    [self loadBatchContacts:context];
+}
+
+#pragma mark - Parent methods
+- (UITableView *)tableView {
+    return _tableNode.view;
+}
+
+- (id<ContactViewModelProtocol>)viewModel {
+    return _viewModel;
+}
+
+- (void)loadMoreContacts {
+    [self loadBatchContacts:nil];
+}
+
+- (void)contactHadRemoved:(NSIndexPath *)indexPath {
+    ContactTableCellNode * cell = [_tableNode nodeForRowAtIndexPath:indexPath];
+    [cell setSelect];
+}
+
+- (void)reloadContacts {
+    [_tableNode reloadData];
+    NSIndexPath * firstIndex = [_viewModel firstContactOnView];
+    if (firstIndex) {
+        [_tableNode scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+}
+
+#pragma mark - Helper methods
+
+- (void)loadBatchContacts: (ASBatchContext * _Nullable) context {
+    NSLog(@"[ContactTableNodeController] load batch");
+    __weak typeof(self) weakSelf = self;
+    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            if (error) {
+                [Logging error:error.localizedDescription];
+            } else {
+                [strongSelf insertCells:updatedIndexPaths];
+            }
+            
+            if (context) {
+                [context completeBatchFetching:YES];
+            }
+        }
+    }];
 }
 @end

@@ -15,12 +15,14 @@
 
 @interface ContactDAL : NSObject<ContactDALProtocol>
 
+@property(nonatomic, readonly) NSString * fullName;
 
-- (id)init: (NSString *) contactID
-      name: (NSString *) givenName
-familyName: (NSString *) familyName
-     phones: (NSArray<NSString *> *) phone
-     emails: (NSArray<NSString *> *) email;
+- (id)initWithIdentifier: (NSString *) contactID
+                    name: (NSString *) givenName
+              familyName: (NSString *) familyName
+                  phones: (NSArray<NSString *> *) phone
+                  emails: (NSArray<NSString *> *) email
+               imageData: (NSData *) imageData;
 
 - (id) initWithID: (NSString *) contactID
              name: (NSString *) name

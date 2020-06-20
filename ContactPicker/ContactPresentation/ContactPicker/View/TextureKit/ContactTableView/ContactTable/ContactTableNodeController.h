@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
-#import "ContactViewModel.h"
-#import "KeyboardAppearanceDelegate.h"
+#import "ContactViewModelProtocol.h"
+#import "ContactTableBaseController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableNodeController : ASViewController<KeyboardAppearanceProtocol>
-- (instancetype) initWithModel: (ContactViewModel *) viewModel;
+@interface ContactTableNodeController : ContactTableBaseController
+- (instancetype) initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
 @end
 
 NS_ASSUME_NONNULL_END

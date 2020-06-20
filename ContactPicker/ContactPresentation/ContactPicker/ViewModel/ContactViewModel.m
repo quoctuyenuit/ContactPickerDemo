@@ -13,47 +13,30 @@
 #import <UIKit/UIKit.h>
 #import "Logging.h"
 
+#define CONTACT_BATCH_SIZE              200
+#define STRONG_SELF_DEALLOCATED_MSG     @"strongSelf had deallocated"
+
 @interface ContactViewModel() {
-    BOOL _contactIsLoaded;
-    BOOL _loadContactIsDone;
-    BOOL _isSearching;
-    BOOL _isSearchDone;
-    int _contactHadLoadedCount;
-    int _contactHadShowFromSearch;
-    
-    dispatch_queue_t _updateViewQueue;
-    dispatch_queue_t _searchResponseQueue;
-    dispatch_queue_t _loadIntoBufferQueue;
-    dispatch_queue_t _loadFromSearchBufferQueue;
-    
-    NSString * _waitingSearchResult;
-    NSTimer * _loadContactTimer;
-    NSMutableArray<ContactViewEntity *> * _contactsBufferFromBus;
-//    For search
-    NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> * _contactsBufferDic;
-    NSMutableArray<ContactViewEntity *> * _contactSearchBuffer;
-    NSTimer * _searchUpdateTimer;
-    
-    NSLock * _threadLock;
+    BOOL                _loadBatchInProcessing;
+    dispatch_queue_t    _backgroundQueue;
+    dispatch_queue_t    _searchingQueue;
 }
 
 - (void) setupEvents;
 - (ContactViewEntity *) parseContactEntity: (ContactBusEntity *) entity;
 - (NSString *) makeKeyFromName: (NSString *) name;
 - (void) refreshContactOnView;
-- (void) addContactIntoBufferDic: (NSArray<ContactBusEntity *> *) listContacts;
-- (void) loadContactFromSourceBuffer;
 @end
 
 @implementation ContactViewModel
+
+@synthesize contactsOnView;
 
 @synthesize contactBus = _contactBus;
 
 @synthesize searchObservable;
 
 @synthesize contactBookObservable;
-
-@synthesize contactHadAddedObservable;
 
 @synthesize cellNeedRemoveSelectedObservable;
 
@@ -64,42 +47,23 @@
 @synthesize selectedContactAddedObservable;
 
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
-    self->_contactBus = bus;
-    self->_contactIsLoaded = NO;
-    self->_loadContactIsDone = NO;
-    self->_isSearching = NO;
-    self->_isSearchDone = NO;
-    self->_contactHadLoadedCount = 0;
-    self->_contactHadShowFromSearch = 0;
-    self->_loadContactTimer = [NSTimer scheduledTimerWithTimeInterval:1
-                                                               target:self
-                                                             selector:@selector(loadSourceContactByTimer)
-                                                             userInfo:nil repeats:YES];
+    _contactBus                 = bus;
     
-    self->_searchUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1
-                                                                   target:self
-                                                                 selector:@selector(loadSearchContactByTimer)
-                                                                 userInfo:nil repeats:YES];
+    _searchingQueue             = dispatch_queue_create("[ViewModel] searching queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     
-    self->_updateViewQueue = dispatch_queue_create("update queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
-    self->_searchResponseQueue = dispatch_queue_create("search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
-    self->_loadIntoBufferQueue = dispatch_queue_create("load contact into buffer queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
-    self->_loadFromSearchBufferQueue = dispatch_queue_create("load contact into buffer queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -2));
-       
+    _backgroundQueue            = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
+    _loadBatchInProcessing      = NO;
+    
 //    List source initialization
-    self->_contactsBufferDic = [[NSMutableDictionary alloc] init];
-    self.contactsOnView = [[NSMutableDictionary alloc] init];
-    self.contactsBackup = self.contactsOnView;
+    self.contactsOnView         = [[NSMutableDictionary alloc] init];
     
-    _listSelectedContacts = [[NSMutableArray alloc] init];
-    self->_listSectionKeys = [[NSMutableArray alloc] init];
-    self->_contactsBufferFromBus = [[NSMutableArray alloc] init];
-    self->_contactSearchBuffer = [[NSMutableArray alloc] init];
+    _listSelectedContacts           = [[NSMutableArray alloc] init];
+   _listSectionKeys          = [[NSMutableArray alloc] init];
     
 //    Data binding initialization
     self.searchObservable = [[DataBinding<NSString *> alloc] initWithValue:@""];
     self.contactBookObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.contactHadAddedObservable = [[DataBinding<NSArray<NSIndexPath *> *> alloc] initWithValue:nil];
     self.cellNeedRemoveSelectedObservable = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
     self.dataSourceNeedReloadObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     
@@ -116,154 +80,16 @@
     [self->_listSectionKeys addObject:key];
     
     
-    self->_threadLock = [[NSLock alloc] init];
-    
     [self setupEvents];
     
     return self;
-}
-
-- (void)loadSearchContactByTimer {
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSLog(@"timer fired");
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf loadContactFromSearchBuffer];
-//            if (strongSelf->_isSearchDone) {
-//                [strongSelf->_searchUpdateTimer invalidate];
-//                strongSelf->_searchUpdateTimer = nil;
-//                return;
-//            }
-        }
-    });
-}
-
-- (void)loadSourceContactByTimer {
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSLog(@"timer fired");
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            
-            [strongSelf loadContactFromSourceBuffer];
-            
-            if (strongSelf->_loadContactIsDone && strongSelf->_contactHadLoadedCount == strongSelf->_contactsBufferFromBus.count) {
-                [strongSelf->_loadContactTimer invalidate];
-                strongSelf->_loadContactTimer = nil;
-                [Logging info:@"Contact has loaded done, timer is stoped"];
-                return;
-            }
-        }
-    });
-}
-
-- (void)loadContactFromSearchBuffer {
-    dispatch_async(self->_loadFromSearchBufferQueue, ^{
-        __weak typeof(self) weakSelf = self;
-        int index = self->_contactHadShowFromSearch;
-        NSUInteger length = self->_contactSearchBuffer.count - index;
-        if (length > 100)
-            length = 100;
-        self->_contactHadShowFromSearch += (int)length;
-        NSArray<ContactViewEntity *> * batch = [self->_contactSearchBuffer subarrayWithRange:NSMakeRange(index, length)];
-        NSLog(@"[Current Thread] %@", [NSThread currentThread]);
-        [self addContacts:batch forDic:self->_contactsOnView completion:^(NSArray<NSIndexPath *> * updatedIndexPaths) {
-            __strong typeof(weakSelf) strongBlockSelf = weakSelf;
-            
-            if (strongBlockSelf) {
-                
-                
-                //            strongBlockSelf->_contactHadShowFromSearch += updatedIndexPaths.count;
-                [Logging info:[NSString stringWithFormat: @"[Searching] Load more %lu contact(s)", updatedIndexPaths.count]];
-                if (updatedIndexPaths.count > 0) {
-                    NSLog(@"Searched %d contacts", (int)updatedIndexPaths.count);
-                    strongBlockSelf.contactHadAddedObservable.value = updatedIndexPaths;
-                    
-                }
-            }
-        }];
-    });
-}
-
-- (void)loadContactFromSourceBuffer {
-    __weak typeof(self) weakSelf = self;
-    NSUInteger length = self->_contactsBufferFromBus.count - self->_contactHadLoadedCount;
-    if (length > 100)
-        length = 100;
-    NSArray<ContactViewEntity *> * batch = [self->_contactsBufferFromBus subarrayWithRange:NSMakeRange(self->_contactHadLoadedCount, length)];
-    
-    [self addContacts:batch forDic:self->_contactsBackup completion:^(NSArray<NSIndexPath *> * updatedIndexPaths) {
-        __strong typeof(weakSelf) strongBlockSelf = weakSelf;
-        
-        if (strongBlockSelf) {
-            strongBlockSelf->_contactHadLoadedCount += updatedIndexPaths.count;
-            if (!strongBlockSelf->_isSearching) {
-                [Logging info:[NSString stringWithFormat: @"[Loading] Load more %lu contact(s)", updatedIndexPaths.count]];
-                strongBlockSelf.contactHadAddedObservable.value = updatedIndexPaths;
-            }
-        }
-    }];
-}
-
-- (void) addContactIntoBufferDic:(NSArray<ContactBusEntity *> *) listContacts {
-    __weak typeof(self) weakSelf = self;
-    [listContacts enumerateObjectsUsingBlock:^(ContactBusEntity * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            NSString * key = [strongSelf makeKeyFromName:obj.givenName];
-            
-            NSMutableArray * contactsInSection = [strongSelf->_contactsBufferDic objectForKey:key];
-            if (contactsInSection)
-                [contactsInSection addObject:obj];
-            else {
-                [strongSelf->_contactsBufferDic setValue:[[NSMutableArray alloc] initWithObjects:obj, nil] forKey:key];
-            }
-        }
-    }];
-}
-
-- (void)addContacts:(NSArray *)batchOfContact forDic: (NSMutableDictionary *) dic completion: (void(^)(NSArray<NSIndexPath *> *)) handler {
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_sync(self->_updateViewQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            NSMutableArray<NSIndexPath *> * updatedIndexPaths = [[NSMutableArray alloc] init];
-            [batchOfContact enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull newContact, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                [strongSelf->_listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
-                        [newContact updateContact:selectedContact];
-                    }
-                }];
-                
-                NSString * key = [strongSelf makeKeyFromName:newContact.fullName];
-                
-                NSUInteger section = [self->_listSectionKeys indexOfObject:key];
-                
-                NSMutableArray * contactsInSection = [dic objectForKey:key];
-                
-                NSUInteger row = contactsInSection.count;
-                
-                [contactsInSection addObject:newContact];
-                
-                NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                
-                [updatedIndexPaths addObject:indexPath];
-            }];
-            
-            handler(updatedIndexPaths);
-            
-        }
-    });
 }
 
 - (void)setupEvents {
     __weak ContactViewModel * weakSelf = self;
     
 //    Listen Contact store changed
-    self->_contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
+   _contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
@@ -313,42 +139,67 @@
     return viewEntity;
 }
 
-#pragma mark Public function
+#pragma mark Protocol methods
 - (void)requestPermission:(void (^)(BOOL, NSError *))completion {
     [self->_contactBus requestPermission:completion];
 }
 
-- (void)loadContacts:(void (^)(BOOL isSuccess, NSError * error, int numberOfContacts))completion {
+- (void)loadContacts:(void (^)(BOOL isSuccess, NSError * error, NSUInteger numberOfContacts))completion {
     __weak typeof(self) weakSelf = self;
-    [self->_contactBus loadContacts:^(NSArray<ContactBusEntity *> * listContactFromBus, NSError *error, BOOL isDone) {
+    dispatch_async(_backgroundQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            if (error) {
-                completion(NO, error, 0);
-                [Logging error:[NSString stringWithFormat:@"Load contact failt, error: %@", error.localizedDescription]];
-            } else {
-                
-                dispatch_async(strongSelf->_loadIntoBufferQueue, ^{
-                    NSArray * contacts = [listContactFromBus map:^ContactViewEntity * _Nonnull(ContactBusEntity * _Nonnull obj) {
-                        return [strongSelf parseContactEntity:obj];
-                    }];
-                    [strongSelf->_contactsBufferFromBus addObjectsFromArray:contacts];
-                    [strongSelf addContactIntoBufferDic:contacts];
-                    
-                    if (!strongSelf->_contactIsLoaded) {
-                        
-//                        load contact onto view immediately in the first batch loaded
-                        [strongSelf loadContactFromSourceBuffer];
-                        
-                        completion(YES, nil, self->_contactHadLoadedCount);
-                        strongSelf->_contactIsLoaded = YES;
-                    }
-                    strongSelf->_loadContactIsDone = isDone;
-                });
             
-            }
+            [strongSelf->_contactBus loadContacts:^(NSError *error, BOOL isDone, NSUInteger numberOfContacts) {
+                if (error) {
+                    completion(NO, error, 0);
+                } else {
+                    completion(YES, nil, numberOfContacts);
+                }
+                
+               
+            }];
         }
-    }];
+    });
+}
+
+- (void)loadBatchOfContacts:(void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths))handler {
+    if (_loadBatchInProcessing) {
+        NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Load batch in processing"};
+        NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+        handler(error, nil);
+        return;
+    } else {
+        NSLog(@"[ViewModel] loadBatch");
+        _loadBatchInProcessing = YES;
+        @synchronized (self) {
+            __weak typeof(self) weakSelf = self;
+            dispatch_async(_backgroundQueue, ^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf->_contactBus loadContactByBatch:CONTACT_BATCH_SIZE completion:^(NSArray<ContactBusEntity *> * listContacts, NSError *error) {
+                        if (error) {
+                            handler(error, nil);
+                            strongSelf->_loadBatchInProcessing = NO;
+                        } else {
+                            NSArray<ContactViewEntity *> * contactsAdded = [listContacts map:^ContactViewEntity * _Nonnull(ContactBusEntity * _Nonnull obj) {
+                                return [[ContactViewEntity alloc] initWithBusEntity:obj];
+                            }];
+                            [strongSelf addContacts:contactsAdded completion:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
+                                handler(nil, updatedIndexPaths);
+                                strongSelf->_loadBatchInProcessing = NO;
+                            }];
+                        }
+                    }];
+                } else {
+                    NSDictionary * userInfo = @{NSLocalizedDescriptionKey: STRONG_SELF_DEALLOCATED_MSG};
+                    NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                    handler(error, nil);
+                    strongSelf->_loadBatchInProcessing = NO;
+                }
+            });
+        }
+    }
 }
 
 - (NSInteger)numberOfSection {
@@ -378,50 +229,26 @@
 }
 
 - (void)searchContactWithKeyName:(NSString *)key {
-    self->_waitingSearchResult = key;
-    self->_isSearching = NO;
-    self->_isSearchDone = NO;
-    self->_contactHadShowFromSearch = 0;
-    self->_contactSearchBuffer = [[NSMutableArray alloc] init];
-
     __weak typeof(self) weakSelf = self;
     
-    dispatch_async(self->_searchResponseQueue, ^{
-        self->_isSearching = YES;
-        __strong typeof(self) strongSelf = weakSelf;
+    dispatch_async(_searchingQueue, ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
         if (strongSelf) {
-            if ([key isEqualToString:@""]) {
-                strongSelf.contactsOnView = strongSelf.contactsBackup;
-                strongSelf.dataSourceNeedReloadObservable.value = [NSNumber numberWithUnsignedInteger:0];
-                self->_isSearching = NO;
-                return;
-            }
-            int i = 0;
-            
-            NSString * firstLetter = [key substringToIndex:1];
-            NSString * contactKey = [strongSelf->_listSectionKeys containsObject:firstLetter] ? firstLetter : @"#";
-            NSMutableArray * section = [strongSelf->_contactsBufferDic objectForKey:contactKey];
-            
             [strongSelf refreshContactOnView];
-            
             strongSelf.dataSourceNeedReloadObservable.value = [NSNumber numberWithUnsignedInteger:0];
-            BOOL haveResult = NO;
             
-            while (i < section.count && self->_isSearching) {
-                ContactViewEntity * contact = [section objectAtIndex:i];
-                
-                if ([contact contactHasPrefix:key]) {
-                    [strongSelf->_contactSearchBuffer addObject:contact];
-//                    if (!haveResult) {
-//                        haveResult = YES;
-//                        [strongSelf loadContactFromSearchBuffer];
-//                    }
-                }
-                
-                if (strongSelf->_loadContactIsDone || i < section.count)
-                    i++;
-            }
-            self->_isSearchDone = YES;
+            [strongSelf->_contactBus searchContactByName:key block:^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                NSLog(@"[SearchBusRespone]");
+                [strongSelf loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
+                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf && !error) {
+                        NSLog(@"[LoadBatchResponse]");
+                        strongSelf.dataSourceNeedReloadObservable.value = [NSNumber numberWithUnsignedInteger:0];
+                    }
+                }];
+            }];
         }
     });
 }
@@ -463,7 +290,7 @@
 }
 
 - (NSArray *)getAllSectionNames {
-    return self->_listSectionKeys;
+    return _listSectionKeys;
 }
 
 - (NSString *)titleForHeaderInSection:(NSInteger)section {
@@ -494,7 +321,7 @@
 }
 
 - (ContactViewEntity * _Nullable)contactWithIdentifier:(NSString *)identifier {
-    for (NSString * key in self->_listSectionKeys) {
+    for (NSString * key in _listSectionKeys) {
         ContactViewEntity * result = [[self.contactsOnView objectForKey:key] firstObjectWith:^BOOL(ContactViewEntity * _Nonnull obj) {
             return [obj.identifier isEqualToString:identifier];
         }];
@@ -504,6 +331,28 @@
 
     return nil;
 }
+
+- (NSIndexPath * _Nullable)firstContactOnView {
+    for(int i = 0; i < _listSectionKeys.count; i++) {
+        NSString * key = _listSectionKeys[i];
+        if ([contactsOnView objectForKey:key].count > 0) {
+            NSLog(@"[firstContactOnView] %ld", [contactsOnView objectForKey:key].count);
+            return [NSIndexPath indexPathForRow:0 inSection:i];
+        }
+    }
+    return nil;
+}
+
+#pragma mark - Selected contact implement
+- (NSInteger)numberOfSelectedContacts {
+    return _listSelectedContacts.count;
+}
+
+- (ContactViewEntity *)selectedContactAtIndex:(NSInteger)index {
+    return [_listSelectedContacts objectAtIndex:index];
+}
+
+#pragma mark - Helper methods
 
 - (void)refreshContactOnView {
     [Logging info:@"Refresh contactOnView"];
@@ -516,13 +365,36 @@
     [self.contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
 }
 
-#pragma mark - Selected contact implement
-- (NSInteger)numberOfSelectedContacts {
-    return _listSelectedContacts.count;
-}
-
-- (ContactViewEntity *)selectedContactAtIndex:(NSInteger)index {
-    return [_listSelectedContacts objectAtIndex:index];
+- (void)addContacts:(NSArray<ContactViewEntity *> *) contacts completion: (void (^)(NSArray<NSIndexPath *> * updatedIndexPaths)) handler {
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_async(_backgroundQueue, ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            
+            NSMutableArray<NSIndexPath *> * updatedIndexPaths = [[NSMutableArray alloc] init];
+            [contacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull newContact, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                [strongSelf->_listSelectedContacts enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull selectedContact, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([selectedContact.identifier isEqualToString:newContact.identifier]) {
+                        [newContact updateContact:selectedContact];
+                    }
+                }];
+                
+                NSString * key                      = [strongSelf makeKeyFromName:newContact.fullName];
+                NSMutableArray * contactsInSection  = [strongSelf.contactsOnView objectForKey:key];
+                
+                NSUInteger row          = contactsInSection.count;
+                NSUInteger section      = [strongSelf->_listSectionKeys indexOfObject:key];
+                NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                
+                [contactsInSection addObject:newContact];
+                [updatedIndexPaths addObject:indexPath];
+            }];
+            
+            handler(updatedIndexPaths);
+        }
+    });
 }
 
 @end

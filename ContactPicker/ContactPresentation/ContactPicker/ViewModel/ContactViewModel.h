@@ -22,8 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray<NSString *> *_listSectionKeys;
 }
 
-@property(atomic) NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> * contactsBackup;
-@property(atomic) NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> * contactsOnView;
 @property(nonatomic) id<ContactBusProtocol> contactBus;
 
 - (id)initWithBus: (id<ContactBusProtocol>) bus;

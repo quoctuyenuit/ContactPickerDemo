@@ -12,11 +12,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactBusEntity : NSObject
-@property (nonatomic, readwrite) NSString* identifier;
-@property (nonatomic, readwrite) NSString* givenName;
-@property (nonatomic, readwrite) NSString* familyName;
+@property (nonatomic, readwrite) NSString   * identifier;
+@property (nonatomic, readwrite) NSString   * givenName;
+@property (nonatomic, readwrite) NSString   * familyName;
+@property (nonatomic, readwrite) NSData     * imageData;
 
-- (id) initWith: (NSString *) identifier givenName: (NSString*) givenName familyName: (NSString *) familyName;
+- (id) initWithIdentifier: (NSString *) identifier givenName: (NSString*) givenName familyName: (NSString *) familyName imageData:(NSData * _Nullable) imageData;
 - (id) initWithData: (ContactDAL *) contactDAL;
 @end
 

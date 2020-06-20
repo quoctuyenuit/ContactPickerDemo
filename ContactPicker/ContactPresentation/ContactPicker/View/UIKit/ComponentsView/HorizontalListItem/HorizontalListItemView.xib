@@ -44,7 +44,6 @@
                             </collectionViewFlowLayout>
                         </collectionView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Hn2-kw-5dc" secondAttribute="bottom" id="JCj-pw-87z"/>
                         <constraint firstAttribute="height" priority="750" constant="80" id="Jwf-Sf-5Sa"/>
