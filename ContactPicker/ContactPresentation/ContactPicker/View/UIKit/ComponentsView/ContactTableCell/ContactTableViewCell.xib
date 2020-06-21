@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -19,13 +20,13 @@
                         <rect key="frame" x="123" y="21.5" width="189" height="47"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIJ-6I-YDV">
-                                <rect key="frame" x="8" y="0.0" width="42" height="21"/>
+                                <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEt-mB-Bbq">
-                                <rect key="frame" x="8" y="26" width="42" height="21"/>
+                                <rect key="frame" x="0.0" y="26" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -33,10 +34,10 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="TIJ-6I-YDV" firstAttribute="leading" secondItem="0je-Ph-Wlu" secondAttribute="leading" constant="8" id="AJ1-f3-xwl"/>
+                            <constraint firstItem="TIJ-6I-YDV" firstAttribute="leading" secondItem="0je-Ph-Wlu" secondAttribute="leading" id="AJ1-f3-xwl"/>
                             <constraint firstItem="TIJ-6I-YDV" firstAttribute="top" secondItem="0je-Ph-Wlu" secondAttribute="top" id="BOy-62-3um"/>
                             <constraint firstItem="hEt-mB-Bbq" firstAttribute="top" secondItem="TIJ-6I-YDV" secondAttribute="bottom" constant="5" id="Fab-YK-eDl"/>
-                            <constraint firstItem="hEt-mB-Bbq" firstAttribute="leading" secondItem="0je-Ph-Wlu" secondAttribute="leading" constant="8" id="Fzz-as-gTc"/>
+                            <constraint firstItem="hEt-mB-Bbq" firstAttribute="leading" secondItem="0je-Ph-Wlu" secondAttribute="leading" id="Fzz-as-gTc"/>
                             <constraint firstAttribute="bottom" secondItem="hEt-mB-Bbq" secondAttribute="bottom" id="mfq-Pn-x5V"/>
                         </constraints>
                     </view>

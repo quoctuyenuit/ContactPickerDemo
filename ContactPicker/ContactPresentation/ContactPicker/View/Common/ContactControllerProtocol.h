@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "ContactViewModelProtocol.h"
 
-@protocol ContactTableProtocol <NSObject>
+@protocol ContactControllerProtocol<NSObject>
 - (void)resetAllData;
 @end
 

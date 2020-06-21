@@ -83,6 +83,10 @@
 }
 
 - (void)tableNode:(ASTableNode *)tableNode willBeginBatchFetchWithContext:(ASBatchContext *)context {
+    if (!self.contactHadLoad) {
+        [context completeBatchFetching:YES];
+        return;
+    }
     NSLog(@"ContactTableNodeController] batFetching");
     [context beginBatchFetching];
     [self loadBatchContacts:context];
@@ -125,6 +129,7 @@
             if (error) {
                 [Logging error:error.localizedDescription];
             } else {
+                NSLog(@"[TableNodeController] loadBatch response");
                 [strongSelf insertCells:updatedIndexPaths];
             }
             

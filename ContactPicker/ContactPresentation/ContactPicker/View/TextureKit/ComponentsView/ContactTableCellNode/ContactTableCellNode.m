@@ -15,13 +15,14 @@
 
 #define DEBUG_MODE              0
 
-#define SPACE_BETWEEN_ELEMENT   8
+#define SPACE_BETWEEN_ELEMENT   0
 #define TOP_PADDING             8
 #define BOTTOM_PADDING          8
-#define LEFT_PADDING            8
+#define LEFT_PADDING            16
 #define RIGHT_PADDING           8
-#define InsetForAvatar          UIEdgeInsetsMake(TOP_PADDING, 0, BOTTOM_PADDING, 0)
+#define InsetForAvatar          UIEdgeInsetsMake(TOP_PADDING, LEFT_PADDING, BOTTOM_PADDING, 0)
 #define InsetForCheckBox        UIEdgeInsetsMake(0, LEFT_PADDING, 0, 0)
+#define InsetForText            UIEdgeInsetsMake(0, LEFT_PADDING, 0, 0)
 #define CHECK_BOX_HEIGHT        25
 
 
@@ -66,7 +67,7 @@
 //    CheckBox layout
     ASLayoutSpec * checkBoxLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForCheckBox
                                                                            child:
-                                     [ASCenterLayoutSpec centerLayoutSpecWithCenteringOptions:ASCenterLayoutSpecCenteringXY
+                                     [ASCenterLayoutSpec centerLayoutSpecWithCenteringOptions:ASCenterLayoutSpecCenteringY
                                                                                 sizingOptions:ASCenterLayoutSpecSizingOptionDefault
                                                                                         child:_checkBox]];
     
@@ -77,7 +78,7 @@
     }]];
     
 //    Text layout
-    ASLayoutSpec * textLayout = [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionVertical
+    ASLayoutSpec * textLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForText child:[ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionVertical
                                                                         spacing:5
                                                                  justifyContent:ASStackLayoutJustifyContentCenter
                                                                      alignItems:ASStackLayoutAlignItemsStart
@@ -87,7 +88,7 @@
     }],
                                                                            [_contactDescriptionLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
         style.flexShrink = 1.0;
-    }]] : @[_contactNameLabel]];
+    }]] : @[_contactNameLabel]]];
     
     return [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionHorizontal
                                                    spacing:SPACE_BETWEEN_ELEMENT

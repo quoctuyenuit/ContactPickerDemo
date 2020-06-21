@@ -73,13 +73,17 @@
             [strongSelf->_contactAdapter loadContactsWithBatchSize:strongSelf->_busBatchSize
                                                         completion:^(NSArray<ContactDAL *> * listContactRequestedInfor, NSError * error, BOOL isDone) {
                 if (error) {
-                    handler(error, YES, 0);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        handler(error, YES, 0);
+                    });
                     [Logging exeption:error.localizedDescription];
                 } else {
                     [strongSelf->_listContacts addObjectsFromArray:listContactRequestedInfor];
                     strongSelf->_contactLoadDone = isDone;
                     dispatch_once(&strongSelf->_dispatchOnceToken, ^{
-                        handler(nil, isDone, listContactRequestedInfor.count);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            handler(nil, isDone, listContactRequestedInfor.count);
+                        });
                     });
                 }
             }];

@@ -9,11 +9,15 @@
 #import "ContactTableBaseController.h"
 #import "Logging.h"
 
+#define LOADING_MESSAGE         @"Đang tải..."
+
 @interface ContactTableBaseController()
 - (void) setupEvents;
 @end
 
-@implementation ContactTableBaseController
+@implementation ContactTableBaseController {
+    UIAlertController               * _loadingController;
+}
 
 @synthesize tableView;
 
@@ -34,22 +38,23 @@
 #pragma mark - Life circle methods
 - (void)loadView {
     [super loadView];
+    self.contactHadLoad                                    = NO;
     self.tableView.showsHorizontalScrollIndicator          = NO;
     self.tableView.showsVerticalScrollIndicator            = NO;
     self.tableView.separatorStyle                          = UITableViewScrollPositionNone;
     self.tableView.backgroundColor                         = UIColor.whiteColor;
-    self.tableView.rowHeight                               = 60;
+    self.tableView.rowHeight                               = 66;
+    _loadingController                                     = [self createLoadingView:LOADING_MESSAGE];
     [self setupEvents];
     [self loadContact];
+    
 }
 
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        @synchronized (self.viewModel.contactsOnView) {
-            NSLog(@"Insert cells");
-            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-        }
-    });
+    @synchronized (self) {
+        NSLog(@"Insert cells");
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 - (void)loadMoreContacts {
@@ -69,17 +74,11 @@
         }
     }];
     
-    [self.viewModel.searchObservable binding:^(NSString * searchText) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf.viewModel searchContactWithKeyName:searchText];
-        }
-    }];
-    
     [self.viewModel.dataSourceNeedReloadObservable binding:^(NSNumber * flag) {
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
             if (strongSelf) {
+                NSLog(@"dataSourceNeedReloadObservable");
                 [strongSelf reloadContacts];
             }
         });
@@ -94,21 +93,36 @@
 }
 
 - (void)loadContact {
+    [UIApplication.sharedApplication.windows[0].rootViewController presentViewController:_loadingController animated:YES completion:nil];
+    NSLog(@"[TableBase] begin load contacts");
     __weak typeof(self) weakSelf = self;
     [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                if (error) {
-                    [Logging error:error.localizedDescription];
-                } else {
-                    [strongSelf.tableView reloadData];
-                }
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
+            if (error) {
+                [Logging error:error.localizedDescription];
+            } else {
+                NSLog(@"[TableBase] loadContacts");
+                [strongSelf.tableView reloadData];
+                strongSelf.contactHadLoad = YES;
             }
-        });
+        }
     }];
 }
 
+- (UIAlertController *)createLoadingView:(NSString *) msg {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil
+                                                                    message:msg
+                                                             preferredStyle:UIAlertControllerStyleAlert];
+    alert.view.tintColor = UIColor.blackColor;
+    UIActivityIndicatorView * loadingIndicator  = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(10, 5, 50, 50)];
+    loadingIndicator.hidesWhenStopped           = YES;
+    loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleMedium;
+    [loadingIndicator startAnimating];
+    [alert.view addSubview:loadingIndicator];
+    return alert;
+}
 #pragma mark - Subclass methods
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {

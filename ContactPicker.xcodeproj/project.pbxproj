@@ -30,6 +30,8 @@
 		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
 		B051791B2490861800B0A973 /* ContactCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B05179192490861800B0A973 /* ContactCollectionCell.xib */; };
+		B06A4E02249F0A0300616510 /* ContactBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E01249F0A0300616510 /* ContactBaseController.m */; };
+		B06A4E06249F1FE600616510 /* TabbarOnTopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */; };
 		B06FBB5C248BDE20003BDC3C /* ResponseInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */; };
 		B06FBB5F248BE3AC003BDC3C /* MainViewControllerUIkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5E248BE3AC003BDC3C /* MainViewControllerUIkit.m */; };
 		B07A8D782498AD2300A3B27F /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C25505249798DE00ECA551 /* Utilities.m */; };
@@ -123,6 +125,10 @@
 		B05179172490861800B0A973 /* ContactCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCell.h; sourceTree = "<group>"; };
 		B05179182490861800B0A973 /* ContactCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionCell.m; sourceTree = "<group>"; };
 		B05179192490861800B0A973 /* ContactCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactCollectionCell.xib; sourceTree = "<group>"; };
+		B06A4E00249F0A0300616510 /* ContactBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBaseController.h; sourceTree = "<group>"; };
+		B06A4E01249F0A0300616510 /* ContactBaseController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBaseController.m; sourceTree = "<group>"; };
+		B06A4E04249F1FE600616510 /* TabbarOnTopViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopViewController.h; sourceTree = "<group>"; };
+		B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TabbarOnTopViewController.m; sourceTree = "<group>"; };
 		B06FBB5A248BDE20003BDC3C /* ResponseInformationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseInformationViewController.h; sourceTree = "<group>"; };
 		B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResponseInformationViewController.m; sourceTree = "<group>"; };
 		B06FBB5D248BE3AC003BDC3C /* MainViewControllerUIkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewControllerUIkit.h; sourceTree = "<group>"; };
@@ -165,7 +171,7 @@
 		B0F12CE72499FE6C00D038EC /* HorizontalListNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalListNode.m; sourceTree = "<group>"; };
 		B0F6FD94249E27D7004BA361 /* ContactTableBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableBaseController.h; sourceTree = "<group>"; };
 		B0F6FD95249E27D7004BA361 /* ContactTableBaseController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableBaseController.m; sourceTree = "<group>"; };
-		B0F6FD97249E285F004BA361 /* ContactTableProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableProtocol.h; sourceTree = "<group>"; };
+		B0F6FD97249E285F004BA361 /* ContactControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactControllerProtocol.h; sourceTree = "<group>"; };
 		B0FC11E62499D6410056F586 /* SearchNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchNode.h; sourceTree = "<group>"; };
 		B0FC11E72499D6410056F586 /* SearchNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchNode.m; sourceTree = "<group>"; };
 		B0FC11EA2499DAC10056F586 /* ContactCollectionCellNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCellNode.h; sourceTree = "<group>"; };
@@ -404,6 +410,15 @@
 			path = ContactCollectionCell;
 			sourceTree = "<group>";
 		};
+		B06A4E03249F1FB100616510 /* ViewControllerComponents */ = {
+			isa = PBXGroup;
+			children = (
+				B06A4E04249F1FE600616510 /* TabbarOnTopViewController.h */,
+				B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */,
+			);
+			path = ViewControllerComponents;
+			sourceTree = "<group>";
+		};
 		B07A8D792498B87B00A3B27F /* CheckBoxNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,12 +431,15 @@
 		B07A8D7D2498C0AF00A3B27F /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B0020CFE2490D18700899757 /* ResponseInformationView */,
 				B06FBB60248C0288003BDC3C /* KeyboardAppearanceDelegate.h */,
 				B07A8D7E2498C0C100A3B27F /* ContactTableCellProtocol.h */,
 				B0F12CE52499F39700D038EC /* ContactCollectionCellProtocol.h */,
 				B0F6FD94249E27D7004BA361 /* ContactTableBaseController.h */,
 				B0F6FD95249E27D7004BA361 /* ContactTableBaseController.m */,
-				B0F6FD97249E285F004BA361 /* ContactTableProtocol.h */,
+				B0F6FD97249E285F004BA361 /* ContactControllerProtocol.h */,
+				B06A4E00249F0A0300616510 /* ContactBaseController.h */,
+				B06A4E01249F0A0300616510 /* ContactBaseController.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -451,6 +469,7 @@
 		B0979AE424889876008D05F4 /* ContactPresentation */ = {
 			isa = PBXGroup;
 			children = (
+				B06A4E03249F1FB100616510 /* ViewControllerComponents */,
 				B0DAEBCE249091490002A4D0 /* ContactPicker */,
 			);
 			path = ContactPresentation;
@@ -521,13 +540,6 @@
 			path = ContactTableView;
 			sourceTree = "<group>";
 		};
-		B0C254F824978F2D00ECA551 /* ResponseInformationView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ResponseInformationView;
-			sourceTree = "<group>";
-		};
 		B0C254F924978F4700ECA551 /* ContactTableCellNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -559,7 +571,6 @@
 		B0DCBF0724978C5700DE1439 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				B0020CFE2490D18700899757 /* ResponseInformationView */,
 				B0020CFD2490D17500899757 /* ContactTableView */,
 				B0979AEA24889B94008D05F4 /* ComponentsView */,
 				B06FBB5D248BE3AC003BDC3C /* MainViewControllerUIkit.h */,
@@ -571,7 +582,6 @@
 		B0DCBF0824978CCD00DE1439 /* TextureKit */ = {
 			isa = PBXGroup;
 			children = (
-				B0C254F824978F2D00ECA551 /* ResponseInformationView */,
 				B0C254F724978F2300ECA551 /* ContactTableView */,
 				B0C254F624978F1400ECA551 /* ComponentsView */,
 			);
@@ -874,7 +884,9 @@
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
 				B0020CFA2490C7DF00899757 /* HorizontalListItemView.m in Sources */,
 				B00763452486167000239F3D /* ContactViewModel.m in Sources */,
+				B06A4E02249F0A0300616510 /* ContactBaseController.m in Sources */,
 				193E333E2484F31C00C5735D /* main.m in Sources */,
+				B06A4E06249F1FE600616510 /* TabbarOnTopViewController.m in Sources */,
 				193E33302484F31A00C5735D /* SceneDelegate.m in Sources */,
 				B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */,
 				B0E8CAE7248B3C220096ACBA /* ContactViewController.m in Sources */,

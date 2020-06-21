@@ -100,12 +100,17 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     NSLog(@"[ContactTableViewController] scrollViewDidScroll");
+    
+    if (!self.contactHadLoad)
+        return;
+    
     CGFloat currentOffSetY = scrollView.contentOffset.y;
     CGFloat contentHeight  = scrollView.contentSize.height;
     CGFloat screenHeight   = [UIScreen mainScreen].bounds.size.height;
     
     CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
     if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
+        NSLog(@"[ContactTableViewController] load from scroll");
         [self loadMoreContacts];
     }
 }

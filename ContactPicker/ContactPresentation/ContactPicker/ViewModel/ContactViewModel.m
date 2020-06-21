@@ -167,26 +167,33 @@
     if (_loadBatchInProcessing) {
         NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Load batch in processing"};
         NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
-        handler(error, nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler(error, nil);
+        });
         return;
     } else {
+        @synchronized (self) {
         NSLog(@"[ViewModel] loadBatch");
         _loadBatchInProcessing = YES;
-        @synchronized (self) {
+        
             __weak typeof(self) weakSelf = self;
             dispatch_async(_backgroundQueue, ^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (strongSelf) {
                     [strongSelf->_contactBus loadContactByBatch:CONTACT_BATCH_SIZE completion:^(NSArray<ContactBusEntity *> * listContacts, NSError *error) {
                         if (error) {
-                            handler(error, nil);
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                handler(error, nil);
+                            });
                             strongSelf->_loadBatchInProcessing = NO;
                         } else {
                             NSArray<ContactViewEntity *> * contactsAdded = [listContacts map:^ContactViewEntity * _Nonnull(ContactBusEntity * _Nonnull obj) {
                                 return [[ContactViewEntity alloc] initWithBusEntity:obj];
                             }];
                             [strongSelf addContacts:contactsAdded completion:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
-                                handler(nil, updatedIndexPaths);
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    handler(nil, updatedIndexPaths);
+                                });
                                 strongSelf->_loadBatchInProcessing = NO;
                             }];
                         }
@@ -194,7 +201,9 @@
                 } else {
                     NSDictionary * userInfo = @{NSLocalizedDescriptionKey: STRONG_SELF_DEALLOCATED_MSG};
                     NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
-                    handler(error, nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        handler(error, nil);
+                    });
                     strongSelf->_loadBatchInProcessing = NO;
                 }
             });

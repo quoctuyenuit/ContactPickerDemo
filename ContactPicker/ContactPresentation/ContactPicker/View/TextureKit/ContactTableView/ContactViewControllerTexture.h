@@ -11,12 +11,13 @@
 #import "ContactViewModelProtocol.h"
 #import "KeyboardAppearanceDelegate.h"
 #import "ContactCollectionCellProtocol.h"
+#import "ContactBaseController.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactViewControllerTexture : ASViewController <UISearchBarDelegate, UITextFieldDelegate, KeyboardAppearanceDelegate, ASCollectionDelegate, ASCollectionDataSource, ContactCollectionCellDelegate>
-- (instancetype) initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
+@interface ContactViewControllerTexture : ContactBaseController <ASCollectionDelegate, ASCollectionDataSource>
+- (instancetype) init;
 @end
 
 NS_ASSUME_NONNULL_END

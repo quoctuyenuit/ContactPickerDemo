@@ -11,13 +11,12 @@
 #import "KeyboardAppearanceDelegate.h"
 #import "ContactCollectionCell.h"
 #import "HorizontalListItemView.h"
+#import "ContactBaseController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate, KeyboardAppearanceDelegate, UICollectionViewDelegate, UICollectionViewDataSource, ContactCollectionCellDelegate>
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-
-+ (ContactViewController *) instantiateWith: (id<ContactViewModelProtocol>) viewModel;
+@interface ContactViewController : ContactBaseController <UICollectionViewDelegate, UICollectionViewDataSource>
+- (instancetype)init;
 @end
 
 NS_ASSUME_NONNULL_END
