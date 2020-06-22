@@ -88,4 +88,10 @@ struct ASDisplayGradientPoints {
 //+ (GrandCentralDispatch *) serial:(dispatch_queue_priority_t) priority;
 //@end
 
+@interface UIView(Addition)
+- (void)dropShadow: (BOOL) scale;
+
+- (void)dropShadow;
+@end
+
 NS_ASSUME_NONNULL_END

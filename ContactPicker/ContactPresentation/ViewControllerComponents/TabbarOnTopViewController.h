@@ -11,11 +11,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TabbarOnTopViewController : UIViewController
-@property(nonatomic, readwrite) NSMutableArray<UIViewController *>          * viewControllers;
-@property(nonatomic, readwrite) UIViewController                            * selectedViewController;
+@property(nonatomic, readwrite) NSArray<UIViewController *>                 * viewControllers;
+@property(nonatomic, readwrite) int                                           indexSelectedViewController;
 @property(nullable, nonatomic,weak) id<UITabBarControllerDelegate>            delegate;
 
 - (instancetype)initWithBarHeight:(CGFloat) height barColor:(UIColor *) color;
+- (void)showViewControllerAtIndex:(NSUInteger) index;
 @end
 
 NS_ASSUME_NONNULL_END

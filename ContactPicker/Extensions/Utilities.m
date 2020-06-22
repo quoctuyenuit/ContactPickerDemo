@@ -290,3 +290,22 @@
 //    
 //}
 //@end
+
+#pragma mark - UIView Extension
+@implementation UIView(Addition)
+- (void)dropShadow:(BOOL)scale {
+    self.layer.masksToBounds    = false;
+    self.layer.shadowColor      = UIColor.blackColor.CGColor;
+    self.layer.shadowOpacity    = 0.5;
+    self.layer.shadowOffset     = CGSizeMake(-1, 1);
+    self.layer.shadowRadius     = 1;
+
+    self.layer.shadowPath           =  [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    self.layer.shouldRasterize      = true;
+    self.layer.rasterizationScale   = scale ? UIScreen.mainScreen.scale : 1;
+}
+
+- (void)dropShadow {
+    [self dropShadow:YES];
+}
+@end

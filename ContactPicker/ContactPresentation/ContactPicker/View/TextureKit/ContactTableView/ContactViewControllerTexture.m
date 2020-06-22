@@ -74,6 +74,12 @@
 #pragma mark - Life circle
 - (void)loadView {
     [super loadView];
+//    [self layoutSubviews];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
 }
 
 #pragma mark - Layout methods
@@ -101,7 +107,8 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             ASDisplayNode * contentNode = strongSelf->_contentNode;
-            ASLayoutSpec * searchBarLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:UIEdgeInsetsMake(UIApplication.sharedApplication.windows[0].safeAreaInsets.top, 0, 0, 0)
+//            NSLog(@"%f", strongSelf.view.safeAreaInsets.top);
+            ASLayoutSpec * searchBarLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:UIEdgeInsetsMake(strongSelf.view.safeAreaInsets.top, 0, 0, 0)
                                                                                     child:strongSelf->_searchNode];
             
             ASDisplayNode * contentNodeLayout = [contentNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
@@ -131,6 +138,8 @@
         NSAssert(NO, @"StrongSelf referrence had dealocated");
         return nil;
     };
+    
+    [self.node setNeedsLayout];
 }
 
 #pragma mark - ASCollectionDatasource methods

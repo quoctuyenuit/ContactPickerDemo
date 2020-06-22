@@ -330,38 +330,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5197AAB4-9C42-4771-BA77-97D333556246"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/ViewModel/ContactViewModel.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "248"
-            endingLineNumber = "248"
-            landmarkName = "-searchContactWithKeyName:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3363D4A7-3239-4E9E-9B79-76E30F0CB25C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/ViewModel/ContactViewModel.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
-            landmarkName = "-searchContactWithKeyName:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "09DD0C45-B928-4569-98B0-5F82E1D9DE7A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -426,49 +394,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "44B16580-7DD2-4C62-BAD8-4ECEBBA8C4DD"
+            uuid = "D269A58C-D21E-4C32-AB90-4A70BA07E8D2"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/Texture/Source/Private/ASDisplayNode+UIViewBridge.mm"
+            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/UIKit/MainViewControllerUIkit.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
-            landmarkName = "-bounds"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "-loadContactViewController"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "44B16580-7DD2-4C62-BAD8-4ECEBBA8C4DD - e79bea87c46c5b09"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ASDisplayNode(UIViewBridge) bounds]"
-                  moduleName = "AsyncDisplayKit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lap13528/Downloads/projects/ContactPickerDemo/Pods/Texture/Source/Private/ASDisplayNode+UIViewBridge.mm"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "260"
-                  endingLineNumber = "260"
-                  offsetFromSymbolStart = "34">
-               </Location>
-               <Location
-                  uuid = "44B16580-7DD2-4C62-BAD8-4ECEBBA8C4DD - e79bea87c46c5b09"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ASDisplayNode(UIViewBridge) bounds]"
-                  moduleName = "AsyncDisplayKit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lap13528/Downloads/projects/ContactPickerDemo/Pods/Texture/Source/Private/ASDisplayNode+UIViewBridge.mm"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "260"
-                  endingLineNumber = "260"
-                  offsetFromSymbolStart = "201">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

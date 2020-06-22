@@ -91,7 +91,7 @@
     }]];
     
     ASLayoutSpec * imageLayout = [ASOverlayLayoutSpec overlayLayoutSpecWithChild: [self->_image styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.preferredSize = weakSelf.bounds.size;
+        style.preferredSize = weakSelf.calculatedSize;
     }] overlay:textLayout];
     
     return [ASOverlayLayoutSpec overlayLayoutSpecWithChild:[self->_mainBoundNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {

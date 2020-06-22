@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8nr-cf-scf">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Contact View Controller-->
+        <!--Contact With Search View Controller-->
         <scene sceneID="4q8-Ef-0xo">
             <objects>
-                <viewController storyboardIdentifier="contactTableViewController" id="JrC-kI-vAU" customClass="ContactViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="contactTableViewController" id="JrC-kI-vAU" customClass="ContactWithSearchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a2b-ip-Bed">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Tìm kiếm" translatesAutoresizingMaskIntoConstraints="NO" id="Rhx-yM-UuP">
-                                <rect key="frame" x="0.0" y="44" width="414" height="56"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="56"/>
                                 <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
@@ -42,20 +41,20 @@
             <objects>
                 <viewController storyboardIdentifier="responseInformationViewController" id="KlJ-vZ-cF7" customClass="ResponseInformationViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SUl-q1-Rck">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ypi-fZ-t5p">
-                                <rect key="frame" x="28.5" y="365.5" width="357" height="165"/>
+                                <rect key="frame" x="109" y="232.5" width="382.5" height="135"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ứng dụng chưa được cấp quyền :(((" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HxU-I0-jBb">
-                                        <rect key="frame" x="0.0" y="105" width="357" height="60"/>
+                                        <rect key="frame" x="0.0" y="105" width="382.5" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fail_ico" translatesAutoresizingMaskIntoConstraints="NO" id="sWv-eY-ZBi">
-                                        <rect key="frame" x="128.5" y="0.0" width="100" height="100"/>
+                                        <rect key="frame" x="141" y="0.0" width="100" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="EQy-nc-zB5"/>
                                             <constraint firstAttribute="height" constant="100" id="eFw-fY-fIx"/>
@@ -73,7 +72,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="urU-zk-Obo">
-                                <rect key="frame" x="171" y="760" width="72" height="30"/>
+                                <rect key="frame" x="264" y="498" width="72" height="30"/>
                                 <state key="normal" title="Mở cài đặt"/>
                                 <connections>
                                     <action selector="openSettingAction:" destination="KlJ-vZ-cF7" eventType="touchUpInside" id="dHU-Si-5mh"/>
@@ -106,7 +105,7 @@
             <objects>
                 <viewController storyboardIdentifier="mainViewController" id="8nr-cf-scf" customClass="MainViewControllerUIkit" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="h5h-Rv-Bmm">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.96863394979999995" green="0.96861582989999995" blue="0.96862810850000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <viewLayoutGuide key="safeArea" id="wdd-jh-Zhg"/>
@@ -121,14 +120,14 @@
             <objects>
                 <viewController storyboardIdentifier="SelectedItemsView" id="8DZ-MM-031" customClass="VerticalListItemsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J2V-tM-pcR">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lvW-7g-NSo">
-                                <rect key="frame" x="0.0" y="742" width="414" height="120"/>
+                                <rect key="frame" x="0.0" y="480" width="600" height="120"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lJh-0I-Yb6">
-                                        <rect key="frame" x="8" y="8" width="332" height="104"/>
+                                        <rect key="frame" x="8" y="8" width="518" height="104"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nKR-fC-8IF">
                                             <size key="itemSize" width="128" height="128"/>
@@ -138,7 +137,7 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1un-RM-1Jc">
-                                        <rect key="frame" x="348" y="35.5" width="50" height="49.5"/>
+                                        <rect key="frame" x="534" y="35.5" width="50" height="49.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="1un-RM-1Jc" secondAttribute="height" multiplier="1:1" id="RTB-cH-Kiy"/>
                                             <constraint firstAttribute="width" constant="50" id="uH0-h2-Ch7"/>

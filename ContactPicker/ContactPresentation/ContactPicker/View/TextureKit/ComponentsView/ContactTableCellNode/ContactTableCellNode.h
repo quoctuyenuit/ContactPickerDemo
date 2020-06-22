@@ -13,8 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableCellNode : ASCellNode<ContactTableCellProtocol>
-- (instancetype) initWithContact:(ContactViewEntity *) contact;
+@interface ContactTableCellNode : ASCellNode <ContactTableCellProtocol>
+- (instancetype)initWithContact:(ContactViewEntity *) contact;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -246,7 +246,6 @@
         if (strongSelf) {
             [strongSelf refreshContactOnView];
             strongSelf.dataSourceNeedReloadObservable.value = [NSNumber numberWithUnsignedInteger:0];
-            
             [strongSelf->_contactBus searchContactByName:key block:^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 NSLog(@"[SearchBusRespone]");

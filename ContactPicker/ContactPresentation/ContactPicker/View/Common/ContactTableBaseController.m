@@ -79,7 +79,7 @@
             __strong typeof(weakSelf) strongSelf = weakSelf;
             if (strongSelf) {
                 NSLog(@"dataSourceNeedReloadObservable");
-                [strongSelf reloadContacts];
+                [strongSelf.tableView reloadData];
             }
         });
     }];

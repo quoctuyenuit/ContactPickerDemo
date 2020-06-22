@@ -150,6 +150,7 @@
     [_tableView reloadData];
     NSIndexPath * firstIndex = [_viewModel firstContactOnView];
     if (firstIndex) {
+        NSLog(@"[reloadContacts] number rows in section: %d", [_tableView numberOfRowsInSection:firstIndex.section]);
         [_tableView scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
 }

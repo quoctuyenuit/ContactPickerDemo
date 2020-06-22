@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactTableNodeController : ContactTableBaseController
-- (instancetype) initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
+- (instancetype)initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
 @end
 
 NS_ASSUME_NONNULL_END
