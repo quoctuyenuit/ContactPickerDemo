@@ -12,12 +12,13 @@
 #import "TabbarOnTopItemView.h"
 #import "TabbarOnTopItemDelegate.h"
 
-#define DEFAULT_BARITEM_WIDTH       100
+#define DEFAULT_BARITEM_WIDTH       150
 #define DEBUG_MODE                  0
 #define NORMAL_COLOR                UIColor.grayColor
 
-@interface TabbarOnTopViewController () <TabbarOnTopItemDelegate>
+@interface TabbarOnTopViewController () <TabbarOnTopItemDelegate, UIScrollViewDelegate>
 - (void)setupViews;
+- (void)showItemBar:(NSUInteger) index;
 @end
 
 @implementation TabbarOnTopViewController {
@@ -25,9 +26,11 @@
     UIColor                 * _barColor;
     UIView                  * _barBoundView;
     UIScrollView            * _barScroll;
+    UIScrollView            * _contentScroll;
     UIView                  * _contentView;
     UIColor                 * _highlightColor;
     UIColor                 * _normalColor;
+    
     
     NSMutableArray<TabbarOnTopItemView *> * _items;
 }
@@ -42,17 +45,10 @@
         _contentView        = [[UIView alloc] init];
         _items              = [[NSMutableArray alloc] init];
         _viewControllers    = viewController;
+        _contentScroll      = [[UIScrollView alloc] init];
+        _contentScroll.delegate = self;
         
-//        [_contentView dropShadow];
-        
-        UISwipeGestureRecognizer * leftSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(leftSlideAction:)];
-        leftSwipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
-        
-        UISwipeGestureRecognizer * rightSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(leftSlideAction:)];
-        rightSwipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
-        
-        [self.view addGestureRecognizer:leftSwipeGesture];
-        [self.view addGestureRecognizer:rightSwipeGesture];
+        [_contentScroll setPagingEnabled:YES];
     }
     return self;
 }
@@ -75,50 +71,69 @@
     [UIView animateWithDuration:0.3 animations:^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            for (TabbarOnTopItemView * barItem in strongSelf->_items) {
-                barItem.isHighLight = NO;
-            }
+            [strongSelf showItemBar:index];
             
-            for (UIViewController * vc in strongSelf.viewControllers) {
-                vc.view.alpha = 0;
-            }
-            
-            
-            [strongSelf->_items objectAtIndex:index].isHighLight = YES;
-            [strongSelf.viewControllers objectAtIndex:index].view.alpha = 1;
+            CGFloat width   = self.view.bounds.size.width;
+            CGFloat offsetX = index * width;
+            [strongSelf->_contentScroll scrollRectToVisible:CGRectMake(offsetX, 0, width, self.view.bounds.size.height) animated:YES];
         }
     }];
-    
-    
 }
 
 #pragma mark - Helper methods
+- (void)showItemBar:(NSUInteger)index {
+    for (TabbarOnTopItemView * barItem in _items) {
+        barItem.isHighLight = NO;
+    }
+    [_items objectAtIndex:index].isHighLight = YES;
+    
+    if (_viewControllers.count > 3) {
+        CGFloat width   = DEFAULT_BARITEM_WIDTH;
+        CGFloat offsetX = index * width;
+        [_barScroll scrollRectToVisible:CGRectMake(offsetX, 0, width, _barHeight) animated:YES];
+    }
+}
+
 - (void)setupViews {
     [self.view addSubview:_barBoundView];
-    [self.view addSubview:_contentView];
+    [self.view addSubview:_contentScroll];
+    [_contentScroll addSubview:_contentView];
     
     _barBoundView.translatesAutoresizingMaskIntoConstraints     = NO;
     _contentView.translatesAutoresizingMaskIntoConstraints      = NO;
+    _contentScroll.translatesAutoresizingMaskIntoConstraints    = NO;
     
     [_barBoundView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor].active    = YES;
     [_barBoundView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active                      = YES;
     [_barBoundView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active                    = YES;
     [_barBoundView.heightAnchor constraintEqualToConstant:_barHeight].active                            = YES;
     
-    [_contentView.topAnchor constraintEqualToAnchor:_barBoundView.bottomAnchor].active   = YES;
-    [_contentView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active        = YES;
-    [_contentView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active      = YES;
-    [_contentView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active    = YES;
+    [_contentScroll.topAnchor constraintEqualToAnchor:_barBoundView.bottomAnchor].active   = YES;
+    [_contentScroll.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active        = YES;
+    [_contentScroll.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active      = YES;
+    [_contentScroll.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active    = YES;
+    
+    [_contentView.topAnchor constraintEqualToAnchor:_contentScroll.topAnchor].active          = YES;
+    [_contentView.leftAnchor constraintEqualToAnchor:_contentScroll.leftAnchor].active        = YES;
+    [_contentView.rightAnchor constraintEqualToAnchor:_contentScroll.rightAnchor].active      = YES;
+    [_contentView.bottomAnchor constraintEqualToAnchor:_contentScroll.bottomAnchor].active    = YES;
+    [_contentView.heightAnchor constraintEqualToAnchor:_contentScroll.heightAnchor].active    = YES;
     
     UIView * tabItemView = _barBoundView;
     CGFloat tabItemWidth = self.view.bounds.size.width/self.viewControllers.count;
     
     if (self.viewControllers.count > 3) {
-        tabItemView = [[UIView alloc] init]; // Scroll content view
-        tabItemWidth = DEFAULT_BARITEM_WIDTH;
+        tabItemView     = [[UIView alloc] init]; // Scroll content view
+        _barScroll      = [[UIScrollView alloc] init];
+        tabItemWidth    = DEFAULT_BARITEM_WIDTH;
+        
+        _barScroll.showsVerticalScrollIndicator     = NO;
+        _barScroll.showsHorizontalScrollIndicator   = NO;
 
+        [_barScroll setPagingEnabled:YES];
         [_barBoundView addSubview:_barScroll];
         [_barScroll addSubview:tabItemView];
+        
         _barScroll.translatesAutoresizingMaskIntoConstraints    = NO;
         tabItemView.translatesAutoresizingMaskIntoConstraints   = NO;
         
@@ -135,28 +150,27 @@
     }
 
     NSLayoutXAxisAnchor * leftAnchor = tabItemView.leftAnchor;
+    NSLayoutXAxisAnchor * leftContentAnchor = _contentView.leftAnchor;
     int vcIndex = 0;
 
     for (UIViewController * vc in self.viewControllers) {
-        [_contentView addSubview:vc.view];
-        [self addChildViewController:vc];
-        vc.view.alpha = 0;
-
-        vc.view.translatesAutoresizingMaskIntoConstraints = NO;
-
-        [vc.view.topAnchor constraintEqualToAnchor:_contentView.topAnchor].active   = YES;
-        [vc.view.leftAnchor constraintEqualToAnchor:_contentView.leftAnchor].active        = YES;
-        [vc.view.rightAnchor constraintEqualToAnchor:_contentView.rightAnchor].active      = YES;
-        [vc.view.bottomAnchor constraintEqualToAnchor:_contentView.bottomAnchor].active    = YES;
-
-        
-        TabbarOnTopItemView * tabItem = [[TabbarOnTopItemView alloc] initWithTitle:vc.tabBarItem.title image:vc.tabBarItem.image];
-        tabItem.delegate = self;
-        tabItem.itemColor = _highlightColor;
+        TabbarOnTopItemView * tabItem = [[TabbarOnTopItemView alloc] initWithTitle:vc.tabBarItem.title
+                                                                             image:vc.tabBarItem.image];
+        tabItem.delegate    = self;
+        tabItem.itemColor   = _highlightColor;
         [_items addObject:tabItem];
         
         [tabItemView addSubview:tabItem];
+        [_contentView addSubview:vc.view];
+        [self addChildViewController:vc];
+        
+        vc.view.translatesAutoresizingMaskIntoConstraints = NO;
         tabItem.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        [vc.view.topAnchor constraintEqualToAnchor:_contentView.topAnchor].active           = YES;
+        [vc.view.leftAnchor constraintEqualToAnchor:leftContentAnchor].active               = YES;
+        [vc.view.bottomAnchor constraintEqualToAnchor:_contentView.bottomAnchor].active     = YES;
+        [vc.view.widthAnchor constraintEqualToConstant:self.view.bounds.size.width].active  = YES;
 
         [tabItem.topAnchor constraintEqualToAnchor:tabItemView.topAnchor].active        = YES;
         [tabItem.leftAnchor constraintEqualToAnchor:leftAnchor].active                  = YES;
@@ -165,16 +179,19 @@
 
         if (vcIndex == self.viewControllers.count - 1) {
             [tabItem.rightAnchor constraintEqualToAnchor:tabItemView.rightAnchor].active = YES;
+            [vc.view.rightAnchor constraintEqualToAnchor:_contentView.rightAnchor].active      = YES;
         }
 
         vcIndex++;
-        leftAnchor = tabItem.rightAnchor;
+        leftAnchor          = tabItem.rightAnchor;
+        leftContentAnchor   = vc.view.rightAnchor;
     }
     self.viewControllers[self.indexSelectedViewController].view.alpha = 1;
     _items[self.indexSelectedViewController].isHighLight              = YES;
     
 #if DEBUG_MODE
     _barBoundView.backgroundColor           = UIColor.redColor;
+    _contentScroll.backgroundColor          = UIColor.yellowColor;
     _contentView.backgroundColor            = UIColor.greenColor;
 #endif
 }
@@ -193,20 +210,12 @@
     [self showViewControllerAtIndex:index];
 }
 
-- (void)leftSlideAction:(UISwipeGestureRecognizer *) gesture {
-     if (gesture.direction == UISwipeGestureRecognizerDirectionLeft) {
-         _indexSelectedViewController++;
-         if (_indexSelectedViewController >= _viewControllers.count)
-             _indexSelectedViewController = 0;
-     } else {
-         _indexSelectedViewController--;
-         if (_indexSelectedViewController < 0)
-             _indexSelectedViewController = _viewControllers.count - 1;
-     }
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat viewWidth = self.view.bounds.size.width;
+    CGFloat page = (scrollView.contentOffset.x + (0.5f * viewWidth)) / viewWidth;
     
-    [self showViewControllerAtIndex:_indexSelectedViewController];
-    
-    
+    _indexSelectedViewController = (int)page;
+    [self showItemBar:_indexSelectedViewController];
 }
 
 @end
