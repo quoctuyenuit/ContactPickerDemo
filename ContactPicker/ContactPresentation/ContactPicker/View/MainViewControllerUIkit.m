@@ -80,8 +80,8 @@
     textureContactVc.tabBarItem                     = [[UITabBarItem alloc] initWithTitle:@"Texture" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
     
 //    UITabBarController *tabBarController         = [[UITabBarController alloc] init];
-    TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor]];
-    tabBarController.viewControllers             = @[uikitContactVc, textureContactVc];
+    TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:@[uikitContactVc, textureContactVc]];
+//    tabBarController.viewControllers             = ;
 //    tabBarController.selectedViewController      = uikitContactVc;
     tabBarController.indexSelectedViewController = 0;
     tabBarController.delegate                    = self;

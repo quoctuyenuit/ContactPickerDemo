@@ -32,7 +32,7 @@
     NSMutableArray<TabbarOnTopItemView *> * _items;
 }
 
-- (instancetype)initWithBarHeight:(CGFloat)height barColor:(UIColor *)color {
+- (instancetype)initWithBarHeight:(CGFloat)height barColor:(UIColor *)color viewControllers:(NSArray<UIViewController *> *) viewController {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         _barHeight          = height;
@@ -41,8 +41,18 @@
         _barBoundView       = [[UIView alloc] init];
         _contentView        = [[UIView alloc] init];
         _items              = [[NSMutableArray alloc] init];
+        _viewControllers    = viewController;
         
-        [_contentView dropShadow];
+//        [_contentView dropShadow];
+        
+        UISwipeGestureRecognizer * leftSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(leftSlideAction:)];
+        leftSwipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
+        
+        UISwipeGestureRecognizer * rightSwipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(leftSlideAction:)];
+        rightSwipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
+        
+        [self.view addGestureRecognizer:leftSwipeGesture];
+        [self.view addGestureRecognizer:rightSwipeGesture];
     }
     return self;
 }
@@ -53,7 +63,7 @@
 }
 
 #pragma mark - Public methods
-- (void)setIndexSelectedViewController:(int)indexSelectedViewController {
+- (void)setIndexSelectedViewController:(NSUInteger)indexSelectedViewController {
     if (indexSelectedViewController >= self.viewControllers.count)
         _indexSelectedViewController = 0;
     else
@@ -174,7 +184,29 @@
     
     NSUInteger index = [_items indexOfObject:item];
     
+    if (index == _indexSelectedViewController) {
+        return;
+    } else {
+        _indexSelectedViewController = index;
+    }
+    
     [self showViewControllerAtIndex:index];
+}
+
+- (void)leftSlideAction:(UISwipeGestureRecognizer *) gesture {
+     if (gesture.direction == UISwipeGestureRecognizerDirectionLeft) {
+         _indexSelectedViewController++;
+         if (_indexSelectedViewController >= _viewControllers.count)
+             _indexSelectedViewController = 0;
+     } else {
+         _indexSelectedViewController--;
+         if (_indexSelectedViewController < 0)
+             _indexSelectedViewController = _viewControllers.count - 1;
+     }
+    
+    [self showViewControllerAtIndex:_indexSelectedViewController];
+    
+    
 }
 
 @end
