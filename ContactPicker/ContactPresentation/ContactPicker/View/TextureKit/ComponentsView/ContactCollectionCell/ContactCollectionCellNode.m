@@ -27,9 +27,8 @@
         _clearBtnNode           = [[ASButtonNode alloc] init];
         _currentContact         = contact;
         
-        UIImage * btnImage = [[UIImage imageNamed:@"close_ico"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage * btnImage = [UIImage imageNamed:@"close_ico"];
         [_clearBtnNode setBackgroundImage:btnImage forState:UIControlStateNormal];
-        _clearBtnNode.tintColor = [UIColor.grayColor colorWithAlphaComponent:0.85];
         
         [_clearBtnNode addTarget:self action:@selector(clearAction:) forControlEvents:ASControlNodeEventTouchUpInside];
         

@@ -46,6 +46,10 @@
         _items              = [[NSMutableArray alloc] init];
         _viewControllers    = viewController;
         _contentScroll      = [[UIScrollView alloc] init];
+        
+        _contentScroll.showsVerticalScrollIndicator     = NO;
+        _contentScroll.showsHorizontalScrollIndicator   = NO;
+        
         _contentScroll.delegate = self;
         
         [_contentScroll setPagingEnabled:YES];
