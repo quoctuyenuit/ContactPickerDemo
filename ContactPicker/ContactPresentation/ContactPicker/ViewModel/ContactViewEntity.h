@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readwrite) NSArray * _Nullable backgroundColor;
 @property(nonatomic, readwrite) BOOL isChecked;
 @property(nonatomic, readwrite) void (^ _Nullable waitImageToExcuteQueue)(UIImage *_Nonnull, NSString *_Nonnull );
+@property(nonatomic, readwrite) DataBinding<NSNumber *> *isCheckObservable;
 
 - (id _Nonnull ) initWithIdentifier: (NSString *_Nonnull) identifier
                           givenName: (NSString *_Nullable) givenName

@@ -94,4 +94,9 @@ struct ASDisplayGradientPoints {
 - (void)dropShadow;
 @end
 
+#pragma mark - CAGradient Extension
+@interface CAGradientLayer(Addition)
++ gradientWithSize:(CGRect) frame colors:(NSArray * _Nullable) colors;
+@end
+
 NS_ASSUME_NONNULL_END

@@ -1,6 +1,0 @@
-framework module RenderCore {
-  umbrella header "RenderCore.h"
-
-  export *
-  module * { export * }
-}

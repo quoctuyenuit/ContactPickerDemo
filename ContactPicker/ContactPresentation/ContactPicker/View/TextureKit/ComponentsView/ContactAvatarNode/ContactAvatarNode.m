@@ -25,6 +25,8 @@
         self->_label                = [[ASTextNode alloc] init];
         self->_image.contentMode    = UIViewContentModeScaleAspectFill;
         
+        _label.attributedText       = [NSAttributedString attributedStringWithString:@"Test" fontSize:FONT_SIZE color: UIColor.whiteColor firstWordColor:nil];
+        
         self->_gradient             = [CAGradientLayer layer];
         
         [self->_image setImageModificationBlock:^UIImage * _Nullable(UIImage * _Nonnull image) {
@@ -65,7 +67,7 @@
 }
 
 - (void)showLabel {
-    self->_image.alpha = 1;
+    self->_image.alpha = 0;
     self->_label.alpha = 1;
 }
 
@@ -87,7 +89,7 @@
     __weak typeof(self) weakSelf = self;
     
     ASCenterLayoutSpec * textLayout = [ASCenterLayoutSpec centerLayoutSpecWithCenteringOptions:ASCenterLayoutSpecCenteringXY sizingOptions:ASCenterLayoutSpecSizingOptionDefault child:[self->_label styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.flexGrow = 1;
+        style.flexGrow = 10;
     }]];
     
     ASLayoutSpec * imageLayout = [ASOverlayLayoutSpec overlayLayoutSpecWithChild: [self->_image styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {

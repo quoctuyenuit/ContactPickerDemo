@@ -11,6 +11,8 @@
 #import "ContactViewEntity.h"
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *>                   * searchObservable;
 @property DataBinding<NSNumber *>                   * contactBookObservable;
@@ -27,7 +29,7 @@
 
 - (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, NSUInteger numberOfContacts)) completion;
 
-- (void) loadBatchOfContacts: (void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths)) handler;
+- (void) loadBatchOfContacts: (void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths, NSArray<ContactViewEntity *> * entities)) handler;
 
 - (int) numberOfContactInSection: (NSInteger) section;
 
@@ -51,5 +53,7 @@
 
 - (NSIndexPath * _Nullable)firstContactOnView;
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif /* ContactViewModelProtocol_h */

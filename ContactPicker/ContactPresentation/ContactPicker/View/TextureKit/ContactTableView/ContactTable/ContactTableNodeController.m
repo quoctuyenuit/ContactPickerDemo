@@ -123,7 +123,7 @@
 - (void)loadBatchContacts: (ASBatchContext * _Nullable) context {
     NSLog(@"[ContactTableNodeController] load batch");
     __weak typeof(self) weakSelf = self;
-    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
+    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             if (error) {

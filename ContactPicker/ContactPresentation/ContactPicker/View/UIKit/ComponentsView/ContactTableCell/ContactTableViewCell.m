@@ -7,10 +7,10 @@
 //
 
 #import "ContactTableViewCell.h"
-#import "ContactAvatarImageView.h"
+//#import "ContactAvatarImageView.h"
 
 @interface ContactTableViewCell() {
-    ContactViewEntity * currentContact;
+
 }
 @end
 
@@ -27,30 +27,11 @@
     // Configure the view for the selected state
 }
 
-- (void)configForModel:(ContactViewEntity *)entity {
-    self->currentContact = entity;
-    
+- (void)configForModel:(ContactViewEntity *)entity {    
     self.contactNameLabel.text = entity.fullName;
     self.contactDescriptionLabel.text = entity.contactDescription;
     self.checkBox.isChecked = entity.isChecked;
-    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
-    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
-    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
-    
-    self.avatar.imageView.image = nil;
-    if (entity.avatar) {
-        [self.avatar configImage:entity.avatar forLabel:@"" withColor:nil];
-    } else {
-        [self.avatar configImage:nil forLabel:keyName withColor:entity.backgroundColor];
-        __weak ContactTableViewCell* weakSelf = self;
-        entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (identifier == entity.identifier) {
-                    [weakSelf.avatar configImage:image forLabel:@"" withColor:nil];
-                }
-            });
-        };
-    }
+    [self.avatar configWithContact:entity];
 }
 
 - (void)setSelect {

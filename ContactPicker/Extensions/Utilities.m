@@ -198,10 +198,15 @@
                                              color:(nullable UIColor *)color firstWordColor:(nullable UIColor *)firstWordColor
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
+    NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle alloc] init];
+    textStyle.alignment = NSTextAlignmentCenter;
     
     if (string) {
         NSDictionary *attributes = @{NSForegroundColorAttributeName: color ? : [UIColor blackColor],
-                                     NSFontAttributeName: [UIFont systemFontOfSize:size]};
+                                     NSFontAttributeName: [UIFont systemFontOfSize:size],
+                                     NSParagraphStyleAttributeName: textStyle
+        };
+        
         attributedString = [[NSMutableAttributedString alloc] initWithString:string];
         [attributedString addAttributes:attributes range:NSMakeRange(0, string.length)];
         
@@ -308,4 +313,17 @@
 - (void)dropShadow {
     [self dropShadow:YES];
 }
+@end
+
+@implementation CAGradientLayer(Addition)
+
++ (id)gradientWithSize:(CGRect)frame colors:(NSArray *)colors {
+    CAGradientLayer *_gradientBackground                 = [CAGradientLayer layer];
+    _gradientBackground.frame           = frame;
+    _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
+    _gradientBackground.colors          = colors;
+    
+    return _gradientBackground;
+}
+
 @end

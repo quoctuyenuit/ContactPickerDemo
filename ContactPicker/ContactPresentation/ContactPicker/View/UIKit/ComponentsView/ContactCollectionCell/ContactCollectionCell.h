@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ContactAvatarImageView.h"
+#import "ContactAvatarView.h"
 #import "ContactViewEntity.h"
 #import "ContactCollectionCellProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactCollectionCell : UICollectionViewCell<ContactCollectionCellProtocol>
-@property (weak, nonatomic) IBOutlet ContactAvatarImageView *avatar;
+@property (weak, nonatomic) IBOutlet ContactAvatarView *avatar;
 
 @end
 

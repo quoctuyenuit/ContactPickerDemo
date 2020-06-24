@@ -18,8 +18,17 @@
 
 #import "ContactViewControllerTexture.h"
 #import "ContactTableNodeController.h"
+#import "ContactTableComponentController.h"
 
 #import "TabbarOnTopViewController.h"
+
+#define DEBUG_COMPONENTKIT  1
+
+
+
+#if DEBUG_COMPONENTKIT
+#import "WildeGuessCollectionViewController.h"
+#endif
 
 
 
@@ -79,19 +88,36 @@
     ContactViewControllerTexture * textureContactVc = [[ContactViewControllerTexture alloc] init];
     textureContactVc.tabBarItem                     = [[UITabBarItem alloc] initWithTitle:@"Texture" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
     
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    [flowLayout setMinimumInteritemSpacing:0];
+    [flowLayout setMinimumLineSpacing:0];
+
+    ContactTableComponentController * componentVc   = [[ContactTableComponentController alloc] initWithCollectionViewLayout:flowLayout];
+    componentVc.tabBarItem                          = [[UITabBarItem alloc] initWithTitle:@"ComponentKit" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
+
 //    UITabBarController *tabBarController         = [[UITabBarController alloc] init];
-    TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:@[uikitContactVc, textureContactVc]];
+    TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:@[uikitContactVc, textureContactVc, componentVc]];
 //    tabBarController.viewControllers             = ;
 //    tabBarController.selectedViewController      = uikitContactVc;
     tabBarController.indexSelectedViewController = 0;
     tabBarController.delegate                    = self;
     [[UITabBar appearance] setTintColor:[UIColor appColor]];
-    
+
     
     
     
 
     self.view.backgroundColor = UIColor.whiteColor;
+    
+#if DEBUG_COMPONENTKIT
+    WildeGuessCollectionViewController *viewController = [[WildeGuessCollectionViewController alloc] initWithCollectionViewLayout:flowLayout];
+    
+    
+    return componentVc;
+    
+#endif
+    
     return tabBarController;
 }
 

@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "ContactViewEntity.h"
 #import "CheckBoxButtonView.h"
-#import "ContactAvatarImageView.h"
+#import "ContactAvatarView.h"
 #import "CheckBoxButtonDelegate.h"
 #import "ContactTableCellProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactTableViewCell : UITableViewCell<ContactTableCellProtocol>
-@property (strong, nonatomic) IBOutlet ContactAvatarImageView *avatar;
+@property (strong, nonatomic) IBOutlet ContactAvatarView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *contactNameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *contactDescriptionLabel;
 @property (strong, nonatomic) IBOutlet CheckBoxButtonView *checkBox;

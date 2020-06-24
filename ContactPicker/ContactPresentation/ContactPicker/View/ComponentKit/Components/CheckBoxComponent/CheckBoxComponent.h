@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) BOOL                   isChecked;
 @property (weak, nonatomic) id<CheckBoxButtonDelegate>  delegate;
 
-+ (instancetype)newWithState:(BOOL) state;
++ (instancetype)newWithSize:(CGSize) size state:(BOOL) isChecked;
 @end
 
 NS_ASSUME_NONNULL_END

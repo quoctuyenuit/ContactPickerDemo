@@ -25,13 +25,14 @@
                   avatar:(UIImage * _Nullable)image
                isChecked:(BOOL)isChecked {
     
-    self.identifier = identifier;
-    self.givenName = givenName;
-    self.familyName = familyName;
+    self.identifier         = identifier;
+    self.givenName          = givenName;
+    self.familyName         = familyName;
     self.contactDescription = description;
-    self.avatar = image;
-    self.isChecked = isChecked;
-    self.backgroundColor = [[GradientColors instantiate] colorForKey:self.identifier];
+    self.avatar             = image;
+    self.isChecked          = isChecked;
+    self.backgroundColor    = [[GradientColors instantiate] colorForKey:self.identifier];
+    self.isCheckObservable  = [[DataBinding alloc] initWithValue:@NO];
     return self;
 }
 
@@ -44,17 +45,22 @@
     return [self parseName:self.givenName familyName:self.familyName];
 }
 
+- (void)setIsChecked:(BOOL)isChecked {
+    _isChecked = isChecked;
+    self.isCheckObservable.value = [NSNumber numberWithBool:isChecked];
+}
+
 - (void)updateContactWithBus:(ContactBusEntity *)entity {
-    self.givenName = entity.givenName;
+    self.givenName  = entity.givenName;
     self.familyName = entity.familyName;
 }
 
 - (void)updateContact:(ContactViewEntity *)entity {
-    self.givenName = entity.givenName;
-    self.familyName = entity.familyName;
-    self.isChecked = entity.isChecked;
-    self.avatar = entity.avatar;
-    self.backgroundColor = entity.backgroundColor;
+    self.givenName          = entity.givenName;
+    self.familyName         = entity.familyName;
+    self.isChecked          = entity.isChecked;
+    self.avatar             = entity.avatar;
+    self.backgroundColor    = entity.backgroundColor;
     self.contactDescription = entity.contactDescription;
 }
 

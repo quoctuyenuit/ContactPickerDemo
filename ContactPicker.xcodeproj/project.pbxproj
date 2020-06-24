@@ -23,22 +23,33 @@
 		B0020CFC2490C7EE00899757 /* HorizontalListItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0020CFB2490C7EE00899757 /* HorizontalListItemView.xib */; };
 		B0076342248610C100239F3D /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableViewController.m */; };
 		B00763452486167000239F3D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
-		B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */; };
-		B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */; };
 		B018E65D249884ED00ED55D6 /* ContactAvatarNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B018E65C249884ED00ED55D6 /* ContactAvatarNode.m */; };
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
 		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B02AAD3B249FBE8300A0B647 /* UIButtonExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B02AAD3A249FBE8300A0B647 /* UIButtonExtension.m */; };
 		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
 		B051791B2490861800B0A973 /* ContactCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B05179192490861800B0A973 /* ContactCollectionCell.xib */; };
-		B060EA9524A0C37600F367FC /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B060EA9224A0C37500F367FC /* ComponentKit.framework */; };
-		B060EA9624A0C37600F367FC /* ComponentKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B060EA9224A0C37500F367FC /* ComponentKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B060EA9724A0C37600F367FC /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B060EA9324A0C37500F367FC /* RenderCore.framework */; };
-		B060EA9824A0C37600F367FC /* RenderCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B060EA9324A0C37500F367FC /* RenderCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B060EA9924A0C37600F367FC /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B060EA9424A0C37500F367FC /* CKSwift.framework */; };
-		B060EA9A24A0C37600F367FC /* CKSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B060EA9424A0C37500F367FC /* CKSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B057EA3F24A3077E00C86F0E /* MonochromeQuoteComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3024A3077E00C86F0E /* MonochromeQuoteComponent.mm */; };
+		B057EA4024A3077E00C86F0E /* SombreQuoteComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3424A3077E00C86F0E /* SombreQuoteComponent.mm */; };
+		B057EA4124A3077E00C86F0E /* QuoteComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3524A3077E00C86F0E /* QuoteComponent.mm */; };
+		B057EA4224A3077E00C86F0E /* FrostedQuoteComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3624A3077E00C86F0E /* FrostedQuoteComponent.mm */; };
+		B057EA4324A3077E00C86F0E /* WarmQuoteComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3724A3077E00C86F0E /* WarmQuoteComponent.mm */; };
+		B057EA4424A3077E00C86F0E /* InteractiveQuoteComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3A24A3077E00C86F0E /* InteractiveQuoteComponent.mm */; };
+		B057EA4524A3077E00C86F0E /* QuoteWithBackgroundComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3D24A3077E00C86F0E /* QuoteWithBackgroundComponent.mm */; };
+		B057EA4624A3077E00C86F0E /* SuccessIndicatorComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA3E24A3077E00C86F0E /* SuccessIndicatorComponent.mm */; };
+		B057EA5224A3078A00C86F0E /* WildeGuessCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA4924A3078800C86F0E /* WildeGuessCollectionViewController.mm */; };
+		B057EA5324A3078A00C86F0E /* QuoteModelController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA4B24A3078900C86F0E /* QuoteModelController.mm */; };
+		B057EA5424A3078A00C86F0E /* QuoteContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = B057EA4D24A3078900C86F0E /* QuoteContext.mm */; };
+		B057EA5524A3078A00C86F0E /* QuotesPage.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EA4E24A3078900C86F0E /* QuotesPage.m */; };
+		B057EA5624A3078A00C86F0E /* Quote.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EA5124A3078A00C86F0E /* Quote.m */; };
+		B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAB024A3082700C86F0E /* CKSwift.framework */; };
+		B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EA9824A3082700C86F0E /* ComponentKit.framework */; };
+		B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAAE24A3082700C86F0E /* RenderCore.framework */; };
+		B057EAB824A3555200C86F0E /* ContactWithSearchComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EAB724A3555200C86F0E /* ContactWithSearchComponent.m */; };
 		B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */; };
 		B060EAA124A0D51A00F367FC /* ContactTableComponentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EAA024A0D51A00F367FC /* ContactTableComponentController.mm */; };
+		B06247E424A1C15100FCCC61 /* ContactAvatarComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B06247E324A1C15100FCCC61 /* ContactAvatarComponent.mm */; };
+		B06247E724A1C48A00FCCC61 /* ContactAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = B06247E624A1C48A00FCCC61 /* ContactAvatarView.m */; };
 		B06A4E02249F0A0300616510 /* ContactBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E01249F0A0300616510 /* ContactBaseController.m */; };
 		B06A4E06249F1FE600616510 /* TabbarOnTopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */; };
 		B06FBB5C248BDE20003BDC3C /* ResponseInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */; };
@@ -86,23 +97,105 @@
 			remoteGlobalIDString = 193E33272484F31A00C5735D;
 			remoteInfo = ContactPicker;
 		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		B0FB8BFD24A0B60100E35B42 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				B060EA9624A0C37600F367FC /* ComponentKit.framework in Embed Frameworks */,
-				B060EA9A24A0C37600F367FC /* CKSwift.framework in Embed Frameworks */,
-				B060EA9824A0C37600F367FC /* RenderCore.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
+		B057EA9724A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0B47AB51CBD924100BB33CE;
+			remoteInfo = ComponentKit;
 		};
-/* End PBXCopyFilesBuildPhase section */
+		B057EA9924A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A273801A1AFD144100E6F222;
+			remoteInfo = ComponentKitTestHelpers;
+		};
+		B057EA9B24A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1AB4FED23350E45001F41DB;
+			remoteInfo = ComponentKitPerfTests;
+		};
+		B057EA9D24A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B342DC401AC23E8200ACAC53;
+			remoteInfo = ComponentKitTests;
+		};
+		B057EA9F24A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B342DC8B1AC23EC300ACAC53;
+			remoteInfo = ComponentKitApplicationTests;
+		};
+		B057EAA124A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B342DCAA1AC23F2A00ACAC53;
+			remoteInfo = ComponentTextKitApplicationTests;
+		};
+		B057EAA324A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B3EECEC21AC2366600BFC5DA;
+			remoteInfo = ComponentKitApplicationsTestsHost;
+		};
+		B057EAA524A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 03B8B56A1D2A346F00EDFF59;
+			remoteInfo = ComponentKitAppleTV;
+		};
+		B057EAA724A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 03A98A721D2B2BFD00C5BAC2;
+			remoteInfo = ComponentKitTestHelpersAppleTV;
+		};
+		B057EAA924A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 03F1AC061D2B2A9B00867584;
+			remoteInfo = ComponentKitTestsAppleTV;
+		};
+		B057EAAB24A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D431880023E2056C0024AA12;
+			remoteInfo = RenderCoreAppleTV;
+		};
+		B057EAAD24A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D431881723E2057E0024AA12;
+			remoteInfo = RenderCore;
+		};
+		B057EAAF24A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D4BC578023E37A1B0075D688;
+			remoteInfo = CKSwift;
+		};
+		B057EAB124A3082700C86F0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D4BC578823E37A1B0075D688;
+			remoteInfo = CKSwiftTests;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0ACF6912A689C8027B705D5C /* Pods_ContactPickerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactPickerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,9 +232,6 @@
 		B0076341248610C100239F3D /* ContactTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
 		B00763432486167000239F3D /* ContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModel.h; sourceTree = "<group>"; };
 		B00763442486167000239F3D /* ContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModel.m; sourceTree = "<group>"; };
-		B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarImageView.h; sourceTree = "<group>"; };
-		B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarImageView.m; sourceTree = "<group>"; };
-		B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactAvatarImageView.xib; sourceTree = "<group>"; };
 		B018E65B249884ED00ED55D6 /* ContactAvatarNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarNode.h; sourceTree = "<group>"; };
 		B018E65C249884ED00ED55D6 /* ContactAvatarNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarNode.m; sourceTree = "<group>"; };
 		B02A510B2487EB5500B9CC1B /* ContactBusEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusEntity.h; sourceTree = "<group>"; };
@@ -154,13 +244,44 @@
 		B05179172490861800B0A973 /* ContactCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCell.h; sourceTree = "<group>"; };
 		B05179182490861800B0A973 /* ContactCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionCell.m; sourceTree = "<group>"; };
 		B05179192490861800B0A973 /* ContactCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactCollectionCell.xib; sourceTree = "<group>"; };
-		B060EA9224A0C37500F367FC /* ComponentKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ComponentKit.framework; path = Frameworks/ComponentKit.framework; sourceTree = SOURCE_ROOT; };
-		B060EA9324A0C37500F367FC /* RenderCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RenderCore.framework; path = Frameworks/RenderCore.framework; sourceTree = SOURCE_ROOT; };
-		B060EA9424A0C37500F367FC /* CKSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CKSwift.framework; path = Frameworks/CKSwift.framework; sourceTree = SOURCE_ROOT; };
+		B057EA2F24A3077E00C86F0E /* QuoteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteComponent.h; sourceTree = "<group>"; };
+		B057EA3024A3077E00C86F0E /* MonochromeQuoteComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MonochromeQuoteComponent.mm; sourceTree = "<group>"; };
+		B057EA3124A3077E00C86F0E /* FrostedQuoteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrostedQuoteComponent.h; sourceTree = "<group>"; };
+		B057EA3224A3077E00C86F0E /* QuoteWithBackgroundComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteWithBackgroundComponent.h; sourceTree = "<group>"; };
+		B057EA3324A3077E00C86F0E /* MonochromeQuoteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonochromeQuoteComponent.h; sourceTree = "<group>"; };
+		B057EA3424A3077E00C86F0E /* SombreQuoteComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SombreQuoteComponent.mm; sourceTree = "<group>"; };
+		B057EA3524A3077E00C86F0E /* QuoteComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QuoteComponent.mm; sourceTree = "<group>"; };
+		B057EA3624A3077E00C86F0E /* FrostedQuoteComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FrostedQuoteComponent.mm; sourceTree = "<group>"; };
+		B057EA3724A3077E00C86F0E /* WarmQuoteComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WarmQuoteComponent.mm; sourceTree = "<group>"; };
+		B057EA3824A3077E00C86F0E /* WarmQuoteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarmQuoteComponent.h; sourceTree = "<group>"; };
+		B057EA3924A3077E00C86F0E /* SombreQuoteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SombreQuoteComponent.h; sourceTree = "<group>"; };
+		B057EA3A24A3077E00C86F0E /* InteractiveQuoteComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InteractiveQuoteComponent.mm; sourceTree = "<group>"; };
+		B057EA3B24A3077E00C86F0E /* SuccessIndicatorComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessIndicatorComponent.h; sourceTree = "<group>"; };
+		B057EA3C24A3077E00C86F0E /* InteractiveQuoteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractiveQuoteComponent.h; sourceTree = "<group>"; };
+		B057EA3D24A3077E00C86F0E /* QuoteWithBackgroundComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QuoteWithBackgroundComponent.mm; sourceTree = "<group>"; };
+		B057EA3E24A3077E00C86F0E /* SuccessIndicatorComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SuccessIndicatorComponent.mm; sourceTree = "<group>"; };
+		B057EA4724A3078800C86F0E /* Quote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quote.h; sourceTree = "<group>"; };
+		B057EA4824A3078800C86F0E /* QuoteModelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteModelController.h; sourceTree = "<group>"; };
+		B057EA4924A3078800C86F0E /* WildeGuessCollectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WildeGuessCollectionViewController.mm; sourceTree = "<group>"; };
+		B057EA4A24A3078800C86F0E /* QuoteContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteContext.h; sourceTree = "<group>"; };
+		B057EA4B24A3078900C86F0E /* QuoteModelController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QuoteModelController.mm; sourceTree = "<group>"; };
+		B057EA4C24A3078900C86F0E /* QuoteDisplayStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteDisplayStyle.h; sourceTree = "<group>"; };
+		B057EA4D24A3078900C86F0E /* QuoteContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QuoteContext.mm; sourceTree = "<group>"; };
+		B057EA4E24A3078900C86F0E /* QuotesPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuotesPage.m; sourceTree = "<group>"; };
+		B057EA4F24A3078A00C86F0E /* WildeGuessCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WildeGuessCollectionViewController.h; sourceTree = "<group>"; };
+		B057EA5024A3078A00C86F0E /* QuotesPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuotesPage.h; sourceTree = "<group>"; };
+		B057EA5124A3078A00C86F0E /* Quote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quote.m; sourceTree = "<group>"; };
+		B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ComponentKit.xcodeproj; path = Frameworks/componentkit/ComponentKit.xcodeproj; sourceTree = SOURCE_ROOT; };
+		B057EAB624A3555200C86F0E /* ContactWithSearchComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactWithSearchComponent.h; sourceTree = "<group>"; };
+		B057EAB724A3555200C86F0E /* ContactWithSearchComponent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchComponent.m; sourceTree = "<group>"; };
 		B060EA9B24A0C65E00F367FC /* ContactTableCellComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableCellComponent.h; sourceTree = "<group>"; };
 		B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactTableCellComponent.mm; sourceTree = "<group>"; };
 		B060EA9F24A0D51A00F367FC /* ContactTableComponentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableComponentController.h; sourceTree = "<group>"; };
 		B060EAA024A0D51A00F367FC /* ContactTableComponentController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactTableComponentController.mm; sourceTree = "<group>"; };
+		B06247E224A1C15100FCCC61 /* ContactAvatarComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarComponent.h; sourceTree = "<group>"; };
+		B06247E324A1C15100FCCC61 /* ContactAvatarComponent.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactAvatarComponent.mm; sourceTree = "<group>"; };
+		B06247E524A1C48A00FCCC61 /* ContactAvatarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarView.h; sourceTree = "<group>"; };
+		B06247E624A1C48A00FCCC61 /* ContactAvatarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarView.m; sourceTree = "<group>"; };
 		B06A4E00249F0A0300616510 /* ContactBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBaseController.h; sourceTree = "<group>"; };
 		B06A4E01249F0A0300616510 /* ContactBaseController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBaseController.m; sourceTree = "<group>"; };
 		B06A4E04249F1FE600616510 /* TabbarOnTopViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopViewController.h; sourceTree = "<group>"; };
@@ -226,10 +347,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B060EA9924A0C37600F367FC /* CKSwift.framework in Frameworks */,
+				B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */,
+				B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */,
+				B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */,
 				AB47BF2738D1D527DAC5AEC4 /* Pods_ContactPicker.framework in Frameworks */,
-				B060EA9724A0C37600F367FC /* RenderCore.framework in Frameworks */,
-				B060EA9524A0C37600F367FC /* ComponentKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,9 +541,8 @@
 		B0517913249085B400B0A973 /* ContactAvatar */ = {
 			isa = PBXGroup;
 			children = (
-				B00C06E5248A6B7300B5DEEE /* ContactAvatarImageView.h */,
-				B00C06E6248A6B7300B5DEEE /* ContactAvatarImageView.m */,
-				B00C06E8248A6B8000B5DEEE /* ContactAvatarImageView.xib */,
+				B06247E524A1C48A00FCCC61 /* ContactAvatarView.h */,
+				B06247E624A1C48A00FCCC61 /* ContactAvatarView.m */,
 			);
 			path = ContactAvatar;
 			sourceTree = "<group>";
@@ -444,6 +564,69 @@
 				B05179192490861800B0A973 /* ContactCollectionCell.xib */,
 			);
 			path = ContactCollectionCell;
+			sourceTree = "<group>";
+		};
+		B057E9F624A3068B00C86F0E /* TestComponent */ = {
+			isa = PBXGroup;
+			children = (
+				B057EA4724A3078800C86F0E /* Quote.h */,
+				B057EA5124A3078A00C86F0E /* Quote.m */,
+				B057EA4A24A3078800C86F0E /* QuoteContext.h */,
+				B057EA4D24A3078900C86F0E /* QuoteContext.mm */,
+				B057EA4C24A3078900C86F0E /* QuoteDisplayStyle.h */,
+				B057EA4824A3078800C86F0E /* QuoteModelController.h */,
+				B057EA4B24A3078900C86F0E /* QuoteModelController.mm */,
+				B057EA5024A3078A00C86F0E /* QuotesPage.h */,
+				B057EA4E24A3078900C86F0E /* QuotesPage.m */,
+				B057EA4F24A3078A00C86F0E /* WildeGuessCollectionViewController.h */,
+				B057EA4924A3078800C86F0E /* WildeGuessCollectionViewController.mm */,
+				B057EA2E24A3077E00C86F0E /* Components */,
+			);
+			path = TestComponent;
+			sourceTree = "<group>";
+		};
+		B057EA2E24A3077E00C86F0E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B057EA2F24A3077E00C86F0E /* QuoteComponent.h */,
+				B057EA3024A3077E00C86F0E /* MonochromeQuoteComponent.mm */,
+				B057EA3124A3077E00C86F0E /* FrostedQuoteComponent.h */,
+				B057EA3224A3077E00C86F0E /* QuoteWithBackgroundComponent.h */,
+				B057EA3324A3077E00C86F0E /* MonochromeQuoteComponent.h */,
+				B057EA3424A3077E00C86F0E /* SombreQuoteComponent.mm */,
+				B057EA3524A3077E00C86F0E /* QuoteComponent.mm */,
+				B057EA3624A3077E00C86F0E /* FrostedQuoteComponent.mm */,
+				B057EA3724A3077E00C86F0E /* WarmQuoteComponent.mm */,
+				B057EA3824A3077E00C86F0E /* WarmQuoteComponent.h */,
+				B057EA3924A3077E00C86F0E /* SombreQuoteComponent.h */,
+				B057EA3A24A3077E00C86F0E /* InteractiveQuoteComponent.mm */,
+				B057EA3B24A3077E00C86F0E /* SuccessIndicatorComponent.h */,
+				B057EA3C24A3077E00C86F0E /* InteractiveQuoteComponent.h */,
+				B057EA3D24A3077E00C86F0E /* QuoteWithBackgroundComponent.mm */,
+				B057EA3E24A3077E00C86F0E /* SuccessIndicatorComponent.mm */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B057EA8524A3082700C86F0E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B057EA9824A3082700C86F0E /* ComponentKit.framework */,
+				B057EA9A24A3082700C86F0E /* libComponentKitTestHelpers.a */,
+				B057EA9C24A3082700C86F0E /* ComponentKitPerfTests.xctest */,
+				B057EA9E24A3082700C86F0E /* ComponentKitTests.xctest */,
+				B057EAA024A3082700C86F0E /* ComponentKitApplicationTests.xctest */,
+				B057EAA224A3082700C86F0E /* ComponentTextKitApplicationTests.xctest */,
+				B057EAA424A3082700C86F0E /* ComponentKitApplicationsTestsHost.app */,
+				B057EAA624A3082700C86F0E /* ComponentKit.framework */,
+				B057EAA824A3082700C86F0E /* libComponentKitTestHelpers.a */,
+				B057EAAA24A3082700C86F0E /* ComponentKitTestsAppleTV.xctest */,
+				B057EAAC24A3082700C86F0E /* RenderCore.framework */,
+				B057EAAE24A3082700C86F0E /* RenderCore.framework */,
+				B057EAB024A3082700C86F0E /* CKSwift.framework */,
+				B057EAB224A3082700C86F0E /* CKSwiftTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		B060EA9E24A0D4FD00F367FC /* ContactTable */ = {
@@ -505,6 +688,8 @@
 			isa = PBXGroup;
 			children = (
 				B060EA9E24A0D4FD00F367FC /* ContactTable */,
+				B057EAB624A3555200C86F0E /* ContactWithSearchComponent.h */,
+				B057EAB724A3555200C86F0E /* ContactWithSearchComponent.m */,
 			);
 			path = ContactTableView;
 			sourceTree = "<group>";
@@ -533,6 +718,8 @@
 		B08322EF24A0AA600039D424 /* ContactAvatarComponent */ = {
 			isa = PBXGroup;
 			children = (
+				B06247E224A1C15100FCCC61 /* ContactAvatarComponent.h */,
+				B06247E324A1C15100FCCC61 /* ContactAvatarComponent.mm */,
 			);
 			path = ContactAvatarComponent;
 			sourceTree = "<group>";
@@ -698,6 +885,7 @@
 		B0DCBF0924978CE400DE1439 /* ComponentKit */ = {
 			isa = PBXGroup;
 			children = (
+				B057E9F624A3068B00C86F0E /* TestComponent */,
 				B083229424A09F490039D424 /* ContactTableView */,
 				B083229524A09F560039D424 /* Components */,
 			);
@@ -707,9 +895,7 @@
 		B0FB8C0024A0B6FE00E35B42 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B060EA9424A0C37500F367FC /* CKSwift.framework */,
-				B060EA9224A0C37500F367FC /* ComponentKit.framework */,
-				B060EA9324A0C37500F367FC /* RenderCore.framework */,
+				B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */,
 				0C453605A6182B184255EEEF /* Pods_ContactPicker.framework */,
 				1E4FD72C5D339BC818BFFF6F /* Pods_ContactPicker_ContactPickerUITests.framework */,
 				0ACF6912A689C8027B705D5C /* Pods_ContactPickerTests.framework */,
@@ -761,7 +947,6 @@
 				193E33252484F31A00C5735D /* Frameworks */,
 				193E33262484F31A00C5735D /* Resources */,
 				1B9EF3DC5BE182613BAE2257 /* [CP] Embed Pods Frameworks */,
-				B0FB8BFD24A0B60100E35B42 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -844,6 +1029,12 @@
 			mainGroup = 193E331F2484F31A00C5735D;
 			productRefGroup = 193E33292484F31A00C5735D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B057EA8524A3082700C86F0E /* Products */;
+					ProjectRef = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				193E33272484F31A00C5735D /* ContactPicker */,
@@ -853,12 +1044,112 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		B057EA9824A3082700C86F0E /* ComponentKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ComponentKit.framework;
+			remoteRef = B057EA9724A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EA9A24A3082700C86F0E /* libComponentKitTestHelpers.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libComponentKitTestHelpers.a;
+			remoteRef = B057EA9924A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EA9C24A3082700C86F0E /* ComponentKitPerfTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ComponentKitPerfTests.xctest;
+			remoteRef = B057EA9B24A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EA9E24A3082700C86F0E /* ComponentKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ComponentKitTests.xctest;
+			remoteRef = B057EA9D24A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAA024A3082700C86F0E /* ComponentKitApplicationTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ComponentKitApplicationTests.xctest;
+			remoteRef = B057EA9F24A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAA224A3082700C86F0E /* ComponentTextKitApplicationTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ComponentTextKitApplicationTests.xctest;
+			remoteRef = B057EAA124A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAA424A3082700C86F0E /* ComponentKitApplicationsTestsHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = ComponentKitApplicationsTestsHost.app;
+			remoteRef = B057EAA324A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAA624A3082700C86F0E /* ComponentKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ComponentKit.framework;
+			remoteRef = B057EAA524A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAA824A3082700C86F0E /* libComponentKitTestHelpers.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libComponentKitTestHelpers.a;
+			remoteRef = B057EAA724A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAAA24A3082700C86F0E /* ComponentKitTestsAppleTV.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ComponentKitTestsAppleTV.xctest;
+			remoteRef = B057EAA924A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAAC24A3082700C86F0E /* RenderCore.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RenderCore.framework;
+			remoteRef = B057EAAB24A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAAE24A3082700C86F0E /* RenderCore.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RenderCore.framework;
+			remoteRef = B057EAAD24A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAB024A3082700C86F0E /* CKSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CKSwift.framework;
+			remoteRef = B057EAAF24A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B057EAB224A3082700C86F0E /* CKSwiftTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CKSwiftTests.xctest;
+			remoteRef = B057EAB124A3082700C86F0E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		193E33262484F31A00C5735D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B00C06E9248A6B8000B5DEEE /* ContactAvatarImageView.xib in Resources */,
 				B0979AF82488DFD4008D05F4 /* ContactTableViewCell.xib in Resources */,
 				B051791B2490861800B0A973 /* ContactCollectionCell.xib in Resources */,
 				B0020CFC2490C7EE00899757 /* HorizontalListItemView.xib in Resources */,
@@ -993,29 +1284,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B057EAB824A3555200C86F0E /* ContactWithSearchComponent.m in Sources */,
 				B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */,
+				B057EA5524A3078A00C86F0E /* QuotesPage.m in Sources */,
 				B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */,
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
+				B057EA3F24A3077E00C86F0E /* MonochromeQuoteComponent.mm in Sources */,
 				B0C25506249798DE00ECA551 /* Utilities.m in Sources */,
+				B057EA5624A3078A00C86F0E /* Quote.m in Sources */,
 				B0F6FD96249E27D7004BA361 /* ContactTableBaseController.m in Sources */,
 				193E336824851C8400C5735D /* ContactViewEntity.m in Sources */,
+				B06247E724A1C48A00FCCC61 /* ContactAvatarView.m in Sources */,
 				B0C254FD2497910000ECA551 /* ContactTableNodeController.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableViewController.m in Sources */,
 				B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */,
 				B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */,
 				B060EAA124A0D51A00F367FC /* ContactTableComponentController.mm in Sources */,
+				B057EA5424A3078A00C86F0E /* QuoteContext.mm in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */,
 				B07A8D7C2498B8B400A3B27F /* CheckBoxNode.m in Sources */,
 				B0FC11E82499D6410056F586 /* SearchNode.m in Sources */,
 				193E332D2484F31A00C5735D /* AppDelegate.m in Sources */,
+				B057EA5324A3078A00C86F0E /* QuoteModelController.mm in Sources */,
+				B057EA4124A3077E00C86F0E /* QuoteComponent.mm in Sources */,
+				B057EA4624A3077E00C86F0E /* SuccessIndicatorComponent.mm in Sources */,
 				B0020CFA2490C7DF00899757 /* HorizontalListItemView.m in Sources */,
 				B00763452486167000239F3D /* ContactViewModel.m in Sources */,
 				B06A4E02249F0A0300616510 /* ContactBaseController.m in Sources */,
+				B057EA4524A3077E00C86F0E /* QuoteWithBackgroundComponent.mm in Sources */,
 				193E333E2484F31C00C5735D /* main.m in Sources */,
+				B057EA5224A3078A00C86F0E /* WildeGuessCollectionViewController.mm in Sources */,
+				B057EA4424A3077E00C86F0E /* InteractiveQuoteComponent.mm in Sources */,
 				B06A4E06249F1FE600616510 /* TabbarOnTopViewController.m in Sources */,
 				193E33302484F31A00C5735D /* SceneDelegate.m in Sources */,
-				B00C06E7248A6B7300B5DEEE /* ContactAvatarImageView.m in Sources */,
+				B057EA4324A3077E00C86F0E /* WarmQuoteComponent.mm in Sources */,
+				B057EA4024A3077E00C86F0E /* SombreQuoteComponent.mm in Sources */,
+				B06247E424A1C15100FCCC61 /* ContactAvatarComponent.mm in Sources */,
 				B0E8CAE7248B3C220096ACBA /* ContactWithSearchViewController.m in Sources */,
 				B07A8D842498CED700A3B27F /* ContactViewControllerTexture.m in Sources */,
 				B06FBB5C248BDE20003BDC3C /* ResponseInformationViewController.m in Sources */,
@@ -1025,6 +1330,7 @@
 				B018E65D249884ED00ED55D6 /* ContactAvatarNode.m in Sources */,
 				B0F12CE82499FE6C00D038EC /* HorizontalListNode.m in Sources */,
 				B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */,
+				B057EA4224A3077E00C86F0E /* FrostedQuoteComponent.mm in Sources */,
 				B0FC11EC2499DAC10056F586 /* ContactCollectionCellNode.m in Sources */,
 				B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */,
 				B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */,

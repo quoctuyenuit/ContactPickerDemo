@@ -15,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KtX-UY-4z4" customClass="ContactAvatarImageView">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KtX-UY-4z4" customClass="ContactAvatarView">
                         <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>

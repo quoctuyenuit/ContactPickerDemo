@@ -163,19 +163,18 @@
     });
 }
 
-- (void)loadBatchOfContacts:(void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths))handler {
+- (void)loadBatchOfContacts:(void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths, NSArray<ContactViewEntity *> * entities))handler {
     if (_loadBatchInProcessing) {
         NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Load batch in processing"};
         NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
         dispatch_async(dispatch_get_main_queue(), ^{
-            handler(error, nil);
+            handler(error, nil, nil);
         });
         return;
     } else {
         @synchronized (self) {
         NSLog(@"[ViewModel] loadBatch");
         _loadBatchInProcessing = YES;
-        
             __weak typeof(self) weakSelf = self;
             dispatch_async(_backgroundQueue, ^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -183,18 +182,21 @@
                     [strongSelf->_contactBus loadContactByBatch:CONTACT_BATCH_SIZE completion:^(NSArray<ContactBusEntity *> * listContacts, NSError *error) {
                         if (error) {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                handler(error, nil);
+                                handler(error, nil, nil);
+                                strongSelf->_loadBatchInProcessing = NO;
                             });
-                            strongSelf->_loadBatchInProcessing = NO;
+                            
                         } else {
+                            
+                            NSLog(@"[ViewModel] load done %ld contacts", listContacts.count);
                             NSArray<ContactViewEntity *> * contactsAdded = [listContacts map:^ContactViewEntity * _Nonnull(ContactBusEntity * _Nonnull obj) {
                                 return [[ContactViewEntity alloc] initWithBusEntity:obj];
                             }];
                             [strongSelf addContacts:contactsAdded completion:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                    handler(nil, updatedIndexPaths);
+                                    handler(nil, updatedIndexPaths, contactsAdded);
+                                    strongSelf->_loadBatchInProcessing = NO;
                                 });
-                                strongSelf->_loadBatchInProcessing = NO;
                             }];
                         }
                     }];
@@ -202,9 +204,9 @@
                     NSDictionary * userInfo = @{NSLocalizedDescriptionKey: STRONG_SELF_DEALLOCATED_MSG};
                     NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        handler(error, nil);
+                        handler(error, nil, nil);
+                        strongSelf->_loadBatchInProcessing = NO;
                     });
-                    strongSelf->_loadBatchInProcessing = NO;
                 }
             });
         }
@@ -249,7 +251,7 @@
             [strongSelf->_contactBus searchContactByName:key block:^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 NSLog(@"[SearchBusRespone]");
-                [strongSelf loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
+                [strongSelf loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
                     __strong typeof(weakSelf) strongSelf = weakSelf;
                     if (strongSelf && !error) {
                         NSLog(@"[LoadBatchResponse]");

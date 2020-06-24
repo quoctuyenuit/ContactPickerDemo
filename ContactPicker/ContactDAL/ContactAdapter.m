@@ -28,7 +28,7 @@
 - (void)contactDidChangedEvent: (NSNotification *) notification;
 
 #if DUMMY_DATA_ENABLE
-- (void)createDummyDataByBatch: (int) number batchSize: (int) size delegate: (void (^)(NSArray<ContactDAL *> *)) handler;
+- (void)createDummyDataByBatch: (int) number batchSize: (int) size block: (void (^)(NSArray<ContactDAL *> *)) handler;
 #endif
 
 @end
@@ -123,6 +123,9 @@
                 handler([listContacts copy], nil, YES);
             });
 #else
+            
+            [listContacts addObjectsFromArray: [self createDummyDataWithSize: batchSize - listContacts.count]];
+            
             dispatch_async(callBackQueue, ^{
                 handler([listContacts copy], nil, NO);
             });
@@ -132,7 +135,7 @@
 #if DUMMY_DATA_ENABLE
 
             // Add dummy data
-            [self createDummyDataByBatch:NUMBER_OF_DUMMY batchSize:batchSize delegate:^(NSArray<ContactDAL *> * listDummyData) {
+            [self createDummyDataByBatch:NUMBER_OF_DUMMY batchSize:batchSize block:^(NSArray<ContactDAL *> * listDummyData) {
                 dispatch_async(callBackQueue, ^{
                     handler([listDummyData copy], nil, NO);
                 });
@@ -320,13 +323,13 @@
 #pragma mark - Create Dummy Data methods
 
 #if DUMMY_DATA_ENABLE
-- (void)createDummyDataByBatch:(int)number batchSize:(int) size delegate:(void (^)(NSArray<ContactDAL *> *))handler {
+- (void)createDummyDataByBatch:(int)number batchSize:(int) size block:(void (^)(NSArray<ContactDAL *> *))block {
     int i = 0;
     while (i < number) {
         int batchSize = i + size > number ? number - i : size;
         i += batchSize;
         NSArray * batch = [self createDummyDataWithSize:batchSize];
-        handler(batch);
+        block(batch);
     }
 }
 

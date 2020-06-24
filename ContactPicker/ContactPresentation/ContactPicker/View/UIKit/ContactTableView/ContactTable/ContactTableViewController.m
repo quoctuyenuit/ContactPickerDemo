@@ -98,9 +98,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSLog(@"[ContactTableViewController] scrollViewDidScroll");
-    
+{   
     if (!self.contactHadLoad)
         return;
     
@@ -127,7 +125,7 @@
 - (void)loadMoreContacts {
     NSLog(@"[ContactTableViewController] load batch");
     __weak typeof(self) weakSelf = self;
-    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
+    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
         NSLog(@"[ContactTableViewController] load batch respose");
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
@@ -150,7 +148,7 @@
     [_tableView reloadData];
     NSIndexPath * firstIndex = [_viewModel firstContactOnView];
     if (firstIndex) {
-        NSLog(@"[reloadContacts] number rows in section: %d", [_tableView numberOfRowsInSection:firstIndex.section]);
+        NSLog(@"[reloadContacts] number rows in section: %ld", [_tableView numberOfRowsInSection:firstIndex.section]);
         [_tableView scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
 }

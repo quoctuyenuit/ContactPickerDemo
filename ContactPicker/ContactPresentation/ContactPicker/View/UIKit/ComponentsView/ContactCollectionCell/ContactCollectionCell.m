@@ -28,27 +28,7 @@
 
 - (void)configWithEntity:(ContactViewEntity *)entity {
     self->_currentContact = entity;
-    
-    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
-    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
-    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
-    
-    if (entity.avatar) {
-        [self.avatar configImage:entity.avatar forLabel:@"" withColor:nil];
-    } else {
-        [self.avatar configImage:nil forLabel:keyName withColor:entity.backgroundColor];
-        __weak ContactCollectionCell* weakSelf = self;
-        entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (strongSelf) {
-                    if ([identifier isEqualToString: strongSelf->_currentContact.identifier]) {
-                        [strongSelf.avatar configImage:image forLabel:@"" withColor:nil];
-                    }
-                }
-            });
-        };
-    }
+    [_avatar configWithContact:entity];
 }
 
 @end

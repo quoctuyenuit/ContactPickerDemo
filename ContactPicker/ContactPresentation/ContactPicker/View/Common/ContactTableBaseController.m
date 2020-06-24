@@ -47,7 +47,6 @@
     _loadingController                                     = [self createLoadingView:LOADING_MESSAGE];
     [self setupEvents];
     [self loadContact];
-    
 }
 
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths {
@@ -96,7 +95,7 @@
     [UIApplication.sharedApplication.windows[0].rootViewController presentViewController:_loadingController animated:YES completion:nil];
     NSLog(@"[TableBase] begin load contacts");
     __weak typeof(self) weakSelf = self;
-    [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths) {
+    [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];

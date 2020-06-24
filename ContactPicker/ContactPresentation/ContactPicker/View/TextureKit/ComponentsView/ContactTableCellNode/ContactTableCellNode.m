@@ -32,7 +32,6 @@
     ContactAvatarNode   * _avatar;
     ASTextNode          * _contactNameLabel;
     ASTextNode          * _contactDescriptionLabel;
-//    checkBox
 }
 
 - (instancetype)initWithContact:(ContactViewEntity *)contact {
@@ -44,8 +43,6 @@
         _contactNameLabel         = [[ASTextNode alloc] init];
         _contactDescriptionLabel  = [[ASTextNode alloc] init];
         _checkBox                 = [[CheckBoxNode alloc] init];
-        
-        [self configForModel:_contact];
         
         _avatar.style.preferredSize               = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
         _checkBox.style.preferredSize             = CGSizeMake(CHECK_BOX_HEIGHT, CHECK_BOX_HEIGHT);
@@ -108,6 +105,7 @@
 
 - (void)didEnterPreloadState {
     [super didEnterPreloadState];
+    [self configForModel:_contact];
 }
 
 #pragma mark - Subclassing
