@@ -74,13 +74,23 @@
                                        
                                                                                   size:{.width = CHECK_BOX_HEIGHT + LEFT_PADDING, .height = AVATAR_IMAGE_HEIGHT + 16}];
     
-    ContactTableCellComponent * c =  [super newWithView:{[UIView class]} component: [CKFlexboxComponent newWithView:{[UIView class]}
-                                                                                     size:{}
-                                                                                    style:{.direction = CKFlexboxDirectionRow, .spacing = SPACE_BETWEEN_ELEMENT}
-                                                                                 children:{
-        {checkBoxComponent},
-        {avatarComponent},
-        {textComponent}
+    ContactTableCellComponent * c =  [super newWithView:{[UIView class]} component: [CKFlexboxComponent newWithView:{}
+                                                                                                               size:{}
+                                                                                                              style:{
+        .direction = CKFlexboxDirectionColumn,
+        .alignItems = CKFlexboxAlignItemsStretch
+    }
+                                                                                                           children:{
+        
+        
+        {[CKFlexboxComponent newWithView:{[UIView class]}
+                                    size:{}
+                                   style:{.direction = CKFlexboxDirectionRow, .spacing = SPACE_BETWEEN_ELEMENT}
+                                children:{
+            {checkBoxComponent},
+            {avatarComponent},
+            {textComponent}
+        }]},
     }]];
     
     if (c) {

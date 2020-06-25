@@ -11,10 +11,12 @@
 #import "ContactViewEntity.h"
 #import "ContactTableCellComponent.h"
 #import "Logging.h"
+#import "ContactTableHeaderComponentView.h"
 
 #define DEBUG_FEATURE_MODE                  0
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
 #define LOG_MSG_HEADER                      @"ContactTableComponentKit"
+#define HEADER_REUSE_IDENTIFIER             @"HeaderReuseIdentifier"
 
 #if DEBUG_FEATURE_MODE
 #import "ContactViewModel.h"
@@ -22,7 +24,7 @@
 #import "ContactAdapter.h"
 #endif
 
-@interface ContactTableComponentController () <CKComponentProvider, UICollectionViewDelegateFlowLayout> {
+@interface ContactTableComponentController () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource > {
     id<ContactViewModelProtocol>                      _viewModel;
     CKCollectionViewDataSource                      * _dataSource;
     CKComponentFlexibleSizeRangeProvider            * _sizeRangeProvider;
@@ -71,12 +73,22 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    ContactViewEntity * contact = [_dataSource modelForItemAtIndexPath:indexPath];
-    NSLog(@"Did select %@", contact.fullName);
     [_viewModel selectectContactAtIndex:indexPath];
     [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return [_viewModel numberOfContactInSection:section] > 0 ? CGSizeMake(self.view.bounds.size.width, 28) : CGSizeZero;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    if (kind == UICollectionElementKindSectionHeader) {
+        ContactTableHeaderComponentView * headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:HEADER_REUSE_IDENTIFIER forIndexPath:indexPath];
+        headerView.title.text = [[_viewModel getAllSectionNames] objectAtIndex:indexPath.section];
+        return headerView;
+    }
+    return [[UICollectionReusableView alloc] init];
+}
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -123,6 +135,9 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
     _collectionView.delegate        = self;
     _collectionView.showsVerticalScrollIndicator    = NO;
     _collectionView.showsHorizontalScrollIndicator  = NO;
+    
+    [_collectionView registerClass:[ContactTableHeaderComponentView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HEADER_REUSE_IDENTIFIER];
+
 }
 
 - (void)setupDatasets {
@@ -133,7 +148,7 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
                                                  sizeRange:sizeRange];
     
     _dataSource = [[CKCollectionViewDataSource alloc] initWithCollectionView:_collectionView
-                                                 supplementaryViewDataSource:nil
+                                                 supplementaryViewDataSource:self
                                                                configuration:configuration];
     
     //    Insert sections

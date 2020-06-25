@@ -260,10 +260,14 @@
     if (contact.isChecked) {
         [_listSelectedContacts addObject:contact];
         self.selectedContactAddedObservable.value = [NSNumber numberWithUnsignedInteger:_listSelectedContacts.count - 1];
-    } else if ([_listSelectedContacts containsObject:contact]) {
-        NSUInteger index = [_listSelectedContacts indexOfObject:contact];
-        [_listSelectedContacts removeObjectAtIndex:index];
-        self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:index];
+    } else {
+        for (int i = 0; i < _listSelectedContacts.count; i++) {
+            if ([contact.identifier isEqualToString:_listSelectedContacts[i].identifier]) {
+                [_listSelectedContacts removeObjectAtIndex:i];
+                self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:i];
+                return;
+            }
+        }
     }
 }
 
