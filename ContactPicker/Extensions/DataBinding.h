@@ -18,6 +18,7 @@
 @property(atomic, readwrite) DataType value;
 - (id)initWithValue: (DataType) value;
 - (void)binding: (void (^)(DataType)) hdl;
+- (void)bindOne: (void (^)(DataType)) hdl;
 - (void)fire;
 - (void)bindAndFire: (void (^)(DataType)) hdl;
 

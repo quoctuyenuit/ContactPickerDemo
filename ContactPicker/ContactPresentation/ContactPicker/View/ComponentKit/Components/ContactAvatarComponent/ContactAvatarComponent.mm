@@ -8,17 +8,20 @@
 
 #import "ContactAvatarComponent.h"
 #import <ComponentKit/ComponentKit.h>
+#import <ComponentKit/CKComponentSubclass.h>
 #import "ContactAvatarView.h"
 #import "Utilities.h"
 
-@implementation ContactAvatarComponent
+@implementation ContactAvatarComponent {
+    ContactViewEntity       * _contact;
+}
 
 + (instancetype)newWithImage:(UIImage *)image label:(NSString *)label gradientBackgroundColor:(NSArray *)color size:(CGSize) size {
     CKComponentScope scope(self);
     CKComponent * overlay = image ?
     [CKComponent newWithView:{[UIImageView class], {
-        {@selector(setImage:), image},
-        {@selector(setContentMode:), UIImageResizingModeStretch},
+        {@selector(setImage:), [image makeCircularImageWithSize:CGSizeMake(size.width, size.height) backgroundColor:nil]},
+        {@selector(setContentMode:), UIViewContentModeScaleAspectFill},
         {CKComponentViewAttribute::LayerAttribute(@selector(setCornerRadius:)), @10}
     }} size:{.width = size.width, .height = size.height}] :
     [CKCenterLayoutComponent newWithCenteringOptions:CKCenterLayoutComponentCenteringY sizingOptions:CKCenterLayoutComponentSizingOptionDefault
@@ -48,6 +51,21 @@
     NSString * secondString = contact.familyName.length > 0 ? [contact.familyName substringToIndex:1] : @"";
     NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
     
-    return [self newWithImage:contact.avatar label:keyName gradientBackgroundColor:contact.backgroundColor size:size];
+    ContactAvatarComponent * c = [self newWithImage:contact.avatar label:keyName gradientBackgroundColor:contact.backgroundColor size:size];
+    if (c) {
+        c->_contact = contact;
+        __weak typeof(c) weakComponent = c;
+        
+        c->_contact.waitImageToExcuteQueue = ^(UIImage *_Nonnull image, NSString *_Nonnull identifier) {
+            __strong typeof(weakComponent) strongComponent = weakComponent;
+            if (strongComponent && [identifier isEqualToString:strongComponent->_contact.identifier]) {
+                [strongComponent updateState:^id _Nullable(NSNumber * _Nullable currentState) {
+                    return [currentState boolValue] ? @NO : @YES;
+                } mode:CKUpdateModeSynchronous];
+            }
+            
+        };
+    }
+    return c;
 }
 @end

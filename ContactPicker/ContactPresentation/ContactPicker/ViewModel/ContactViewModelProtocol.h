@@ -20,10 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property DataBinding<NSNumber *>                   * selectedContactRemoveObservable;
 @property DataBinding<NSNumber *>                   * selectedContactAddedObservable;
 
-@property DataBinding<NSNumber *>                   * dataSourceNeedReloadObservable;
+@property DataBinding<NSArray<NSIndexPath *> *>     * dataSourceNeedReloadObservable;
 @property DataBinding<NSIndexPath *>                * cellNeedRemoveSelectedObservable;
-
-@property(atomic) NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> * contactsOnView;
 
 - (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
 
@@ -37,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (ContactViewEntity *) contactAtIndex: (NSIndexPath *) indexPath;
 
-- (void) searchContactWithKeyName: (NSString *) key;
+- (void) searchContactWithKeyName: (NSString *) key block:(void(^)(void)) block;
 
 - (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
 

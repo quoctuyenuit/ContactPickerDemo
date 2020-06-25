@@ -15,6 +15,7 @@
 
 
 #define LOADING_MSG                         @"Đang tải danh bạ..."
+#define LOG_MSG_HEADER                      @"ContactTableTexture"
 
 @interface ContactTableNodeController () <ASTableDelegate, ASTableDataSource>
 @end
@@ -39,11 +40,6 @@
         _tableNode.dataSource = self;
     }
     return self;
-}
-
-- (void)loadView {
-    [super loadView];
-    _tableNode.leadingScreensForBatching                    = AUTO_TAIL_LOADING_NUM_SCREENFULS;
 }
 
 #pragma mark - ASTableDatasource methods
@@ -87,22 +83,46 @@
         [context completeBatchFetching:YES];
         return;
     }
-    NSLog(@"ContactTableNodeController] batFetching");
+    NSLog(@"[%@] begin batchFetchWithContext", LOG_MSG_HEADER);
     [context beginBatchFetching];
     [self loadBatchContacts:context];
 }
 
 #pragma mark - Parent methods
-- (UITableView *)tableView {
-    return _tableNode.view;
-}
-
 - (id<ContactViewModelProtocol>)viewModel {
     return _viewModel;
 }
 
-- (void)loadMoreContacts {
-    [self loadBatchContacts:nil];
+- (void)setupBaseViews {
+    _tableNode.leadingScreensForBatching                    = AUTO_TAIL_LOADING_NUM_SCREENFULS;
+    _tableNode.view.showsHorizontalScrollIndicator          = NO;
+    _tableNode.view.showsVerticalScrollIndicator            = NO;
+    _tableNode.view.separatorStyle                          = UITableViewScrollPositionNone;
+    _tableNode.view.backgroundColor                         = UIColor.whiteColor;
+    _tableNode.view.rowHeight                               = 66;
+}
+
+- (void)setupDatasets {
+    
+}
+
+- (void)reloadTable {
+    [_tableNode reloadData];
+    NSIndexPath * firstIndex = [_viewModel firstContactOnView];
+    if (firstIndex) {
+        NSLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableNode numberOfRowsInSection:firstIndex.section]);
+        [_tableNode scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+}
+
+- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+    NSLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    [_tableNode insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
+    NSLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    [_tableNode reloadData];
 }
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
@@ -110,33 +130,11 @@
     [cell setSelect];
 }
 
-- (void)reloadContacts {
-    [_tableNode reloadData];
-    NSIndexPath * firstIndex = [_viewModel firstContactOnView];
-    if (firstIndex) {
-        [_tableNode scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    }
-}
 
 #pragma mark - Helper methods
-
 - (void)loadBatchContacts: (ASBatchContext * _Nullable) context {
-    NSLog(@"[ContactTableNodeController] load batch");
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (error) {
-                [Logging error:error.localizedDescription];
-            } else {
-                NSLog(@"[TableNodeController] loadBatch response");
-                [strongSelf insertCells:updatedIndexPaths];
-            }
-            
-            if (context) {
-                [context completeBatchFetching:YES];
-            }
-        }
+    [self fetchBatchContactWithBlock:^{
+        [context completeBatchFetching:YES];
     }];
 }
 @end

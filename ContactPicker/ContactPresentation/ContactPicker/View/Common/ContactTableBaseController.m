@@ -10,6 +10,7 @@
 #import "Logging.h"
 
 #define LOADING_MESSAGE         @"Đang tải..."
+#define LOG_MSG_HEADER          @"ContactBaseTable"
 
 @interface ContactTableBaseController()
 - (void) setupEvents;
@@ -19,45 +20,66 @@
     UIAlertController               * _loadingController;
 }
 
-@synthesize tableView;
-
 @synthesize viewModel;
 
 @synthesize keyboardAppearanceDelegate;
 
-- (UITableView *)tableView {
-    NSAssert(NO, @"Subclass must implement this method");
-    return nil;
-}
-
+#pragma mark - Subclass must implement methods
 - (id<ContactViewModelProtocol>)viewModel {
     NSAssert(NO, @"Subclass must implement this method");
     return nil;
 }
 
+- (void)setupBaseViews {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)setupDatasets {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)reloadTable {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)contactHadRemoved:(NSIndexPath *)indexPath {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)fetchBatchContactWithBlock:(void (^_Nullable)(void))block {
+    NSLog(@"[%@] begin fetch batch", LOG_MSG_HEADER);
+    __weak typeof(self) weakSelf = self;
+    [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
+        NSLog(@"[%@] end fetch batch", LOG_MSG_HEADER);
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            if (error) {
+                [Logging error:error.localizedDescription];
+            } else {
+                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
+                if (block)
+                    block();
+            }
+        }
+    }];
+}
+
 #pragma mark - Life circle methods
 - (void)loadView {
     [super loadView];
-    self.contactHadLoad                                    = NO;
-    self.tableView.showsHorizontalScrollIndicator          = NO;
-    self.tableView.showsVerticalScrollIndicator            = NO;
-    self.tableView.separatorStyle                          = UITableViewScrollPositionNone;
-    self.tableView.backgroundColor                         = UIColor.whiteColor;
-    self.tableView.rowHeight                               = 66;
-    _loadingController                                     = [self createLoadingView:LOADING_MESSAGE];
+    self.contactHadLoad = NO;
+    [self setupBaseViews];
+    [self setupDatasets];
     [self setupEvents];
     [self loadContact];
-}
-
-- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths {
-    @synchronized (self) {
-        NSLog(@"Insert cells");
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    }
-}
-
-- (void)loadMoreContacts {
-    NSAssert(NO, @"Subclass must implement this method");
 }
 
 
@@ -68,19 +90,25 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.tableView reloadData];
+                [strongSelf reloadTable];
             });
         }
     }];
     
-    [self.viewModel.dataSourceNeedReloadObservable binding:^(NSNumber * flag) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                NSLog(@"dataSourceNeedReloadObservable");
-                [strongSelf.tableView reloadData];
-            }
-        });
+    [self.viewModel.searchObservable binding:^(NSString * searchText) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf.viewModel searchContactWithKeyName:searchText block:^{
+                [strongSelf fetchBatchContactWithBlock:nil];
+            }];
+        }
+    }];
+    
+    [self.viewModel.dataSourceNeedReloadObservable binding:^(NSArray<NSIndexPath *> * removedIndexPaths) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf removeCells:removedIndexPaths];
+        }
     }];
     
     [self.viewModel.cellNeedRemoveSelectedObservable binding:^(NSIndexPath * indexPath) {
@@ -92,8 +120,10 @@
 }
 
 - (void)loadContact {
+    _loadingController = [self createLoadingView:LOADING_MESSAGE];
     [UIApplication.sharedApplication.windows[0].rootViewController presentViewController:_loadingController animated:YES completion:nil];
-    NSLog(@"[TableBase] begin load contacts");
+    
+    NSLog(@"[%@] begin load batch", LOG_MSG_HEADER);
     __weak typeof(self) weakSelf = self;
     [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -102,8 +132,8 @@
             if (error) {
                 [Logging error:error.localizedDescription];
             } else {
-                NSLog(@"[TableBase] loadContacts");
-                [strongSelf.tableView reloadData];
+                NSLog(@"[%@] end load batch", LOG_MSG_HEADER);
+                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
                 strongSelf.contactHadLoad = YES;
             }
         }
@@ -121,15 +151,6 @@
     [loadingIndicator startAnimating];
     [alert.view addSubview:loadingIndicator];
     return alert;
-}
-#pragma mark - Subclass methods
-
-- (void)contactHadRemoved:(NSIndexPath *)indexPath {
-    NSAssert(NO, @"Subclass must implement this method");
-}
-
-- (void)reloadContacts {
-    NSAssert(NO, @"Subclass must implement this method");
 }
 
 #pragma mark - Protocol methods

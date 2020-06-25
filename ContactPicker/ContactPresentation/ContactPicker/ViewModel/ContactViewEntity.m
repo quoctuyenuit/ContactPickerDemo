@@ -25,15 +25,25 @@
                   avatar:(UIImage * _Nullable)image
                isChecked:(BOOL)isChecked {
     
-    self.identifier         = identifier;
-    self.givenName          = givenName;
-    self.familyName         = familyName;
-    self.contactDescription = description;
-    self.avatar             = image;
-    self.isChecked          = isChecked;
-    self.backgroundColor    = [[GradientColors instantiate] colorForKey:self.identifier];
-    self.isCheckObservable  = [[DataBinding alloc] initWithValue:@NO];
+    _identifier         = identifier;
+    _givenName          = givenName;
+    _familyName         = familyName;
+    _contactDescription = description;
+    _avatar             = image;
+    _isChecked          = isChecked;
+    _backgroundColor    = [[GradientColors instantiate] colorForKey:_identifier];
+    _isCheckObservable  = [[DataBinding alloc] initWithValue:@NO];
     return self;
+}
+
+- (void)setAvatar:(UIImage *)avatar {
+    _avatar = avatar;
+    if (_waitImageToExcuteQueue) {
+        _waitImageToExcuteQueue(_avatar, _identifier);
+    }
+    if (_waitImageSelectedToExcuteQueue) {
+        _waitImageSelectedToExcuteQueue(_avatar, _identifier);
+    }
 }
 
 - (id)initWithBusEntity:(ContactBusEntity *)entity {
@@ -42,26 +52,27 @@
 }
 
 - (NSString *) fullName {
-    return [self parseName:self.givenName familyName:self.familyName];
+    return [self parseName:_givenName familyName:_familyName];
 }
 
 - (void)setIsChecked:(BOOL)isChecked {
     _isChecked = isChecked;
-    self.isCheckObservable.value = [NSNumber numberWithBool:isChecked];
+    _isCheckObservable.value = [NSNumber numberWithBool:isChecked];
 }
 
 - (void)updateContactWithBus:(ContactBusEntity *)entity {
-    self.givenName  = entity.givenName;
-    self.familyName = entity.familyName;
+    _givenName  = entity.givenName;
+    _familyName = entity.familyName;
 }
 
 - (void)updateContact:(ContactViewEntity *)entity {
-    self.givenName          = entity.givenName;
-    self.familyName         = entity.familyName;
-    self.isChecked          = entity.isChecked;
-    self.avatar             = entity.avatar;
-    self.backgroundColor    = entity.backgroundColor;
-    self.contactDescription = entity.contactDescription;
+    _givenName          = entity.givenName;
+    _familyName         = entity.familyName;
+    _isChecked          = entity.isChecked;
+    _avatar             = entity.avatar;
+    _backgroundColor    = entity.backgroundColor;
+    _contactDescription = entity.contactDescription;
+    _isCheckObservable  = entity.isCheckObservable;
 }
 
 - (NSString *)parseName:(NSString *)givenName familyName:(NSString *)familyName {
@@ -72,30 +83,21 @@
     if ([key isEqualToString:@""]) {
         return true;
     }
-    return [[self.fullName lowercaseString] hasPrefix: [key lowercaseString]];
+    return [[_fullName lowercaseString] hasPrefix: [key lowercaseString]];
 }
 
 - (BOOL)isEqualWithBusEntity:(ContactBusEntity *)entity {
-    return ([self.givenName isEqualToString:entity.givenName] &&
-            [self.familyName isEqualToString:entity.familyName]);
+    return ([_givenName isEqualToString:entity.givenName] &&
+            [_familyName isEqualToString:entity.familyName]);
 }
 
 - (UIColor *) randomColor {
     return [UIColor colorWithHue:drand48() saturation:1.0 brightness:1.0 alpha:1.0];
 }
 
-- (BOOL)isEqual:(ContactViewEntity *)other
-{
-    if (other == self) {
-        return YES;
-    } else {
-        return [self.identifier isEqualToString:other.identifier];
-    }
-}
-
 - (NSUInteger)hash
 {
-    return [self.identifier hash];
+    return [_identifier hash];
 }
 
 - (NSAttributedString *)fullNameAttributedStringFontSize:(CGFloat)fontSize {
@@ -103,7 +105,7 @@
 }
 
 - (NSAttributedString *)descriptionAttributedStringFontSize:(CGFloat)fontSize {
-    return [NSAttributedString attributedStringWithString:self.contactDescription fontSize:fontSize color:[UIColor contactNameColor] firstWordColor:nil];
+    return [NSAttributedString attributedStringWithString:_contactDescription fontSize:fontSize color:[UIColor contactNameColor] firstWordColor:nil];
 }
 
 @end

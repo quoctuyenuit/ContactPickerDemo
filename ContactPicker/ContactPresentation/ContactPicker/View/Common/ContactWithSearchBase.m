@@ -6,25 +6,25 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactBaseController.h"
+#import "ContactWithSearchBase.h"
 
 #define LOADING_MESSAGE             @"Đang tải..."
 #define SEARCH_PLACE_HOLDER         @"Tìm kiếm"
 
 
-@interface ContactBaseController() <UISearchBarDelegate, UITextFieldDelegate>
+@interface ContactWithSearchBase() <UISearchBarDelegate, UITextFieldDelegate>
 - (UIAlertController *)createLoadingView:(NSString *) msg;
 - (void)setupEvents;
 @end
 
-@implementation ContactBaseController {
+@implementation ContactWithSearchBase {
     UIAlertController               * _loadingController;
 }
 
 #pragma mark - Life circle methods
 - (void)loadView {
     [super loadView];
-    _loadingController                      = [self createLoadingView: LOADING_MESSAGE];
+//    _loadingController                      = [self createLoadingView: LOADING_MESSAGE];
     self.searchBar.delegate                 = self;
     self.searchBar.searchTextField.delegate = self;
     self.searchBar.placeholder              = SEARCH_PLACE_HOLDER;
@@ -39,14 +39,6 @@
 
 - (void)setupEvents {
     __weak typeof(self) weakSelf = self;
-    
-    [self.viewModel.searchObservable binding:^(NSString * searchText) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf.viewModel searchContactWithKeyName:searchText];
-        }
-    }];
-    
     //    Listen contact had added observable
     [self.viewModel.selectedContactAddedObservable binding:^(NSNumber * index) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -121,15 +113,6 @@
     return nil;
 }
 
-- (UIView *)contentView {
-    NSAssert(NO, @"Subclass must implement this method");
-    return nil;
-}
-
-- (void)resetAllData {
-    
-}
-
 - (void)showSelectedContactsArea:(BOOL)isShow {
     NSAssert(NO, @"Subclass must implement this method");
 }
@@ -142,14 +125,8 @@
     NSAssert(NO, @"Subclass must implement this method");
 }
 
-- (void)loadContactTable {
-    NSAssert(NO, @"Subclass must implement this method");
-}
-
 - (void)loadContact {
     NSAssert(NO, @"Subclass must implement this method");
 }
-
-
 
 @end

@@ -241,6 +241,14 @@
                 return [self parseToContactDAL:obj forID:obj.identifier];
             }];
             
+            
+#if DUMMY_DATA_ENABLE
+//            In case dummy data in cache has released ==> recreate dummy data
+            if (listContactLoaded.count == 0) {
+                [results addObjectsFromArray:[self createDummyDataWithSize:identifiersNeedLoad.count]];
+            }
+#endif
+            
             [results addObjectsFromArray:listContactLoaded];
             handler(results, nil);
         } else {

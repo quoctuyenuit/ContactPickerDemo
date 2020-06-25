@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "ContactViewModelProtocol.h"
+#import "ContactTableBaseController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableComponentController : UICollectionViewController
-- (instancetype)initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
+@interface ContactTableComponentController : ContactTableBaseController
+- (instancetype)initWithViewModel:(id<ContactViewModelProtocol>) viewModel;
 @end
 
 NS_ASSUME_NONNULL_END

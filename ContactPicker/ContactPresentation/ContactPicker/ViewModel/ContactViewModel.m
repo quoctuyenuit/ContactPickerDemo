@@ -23,14 +23,13 @@
 }
 
 - (void) setupEvents;
-- (ContactViewEntity *) parseContactEntity: (ContactBusEntity *) entity;
+//- (ContactViewEntity *) parseContactEntity: (ContactBusEntity *) entity;
 - (NSString *) makeKeyFromName: (NSString *) name;
 - (void) refreshContactOnView;
+- (NSArray<NSIndexPath *> *) getAllIndexPaths;
 @end
 
 @implementation ContactViewModel
-
-@synthesize contactsOnView;
 
 @synthesize contactBus = _contactBus;
 
@@ -47,38 +46,36 @@
 @synthesize selectedContactAddedObservable;
 
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
-    _contactBus                 = bus;
+    _contactBus             = bus;
     
-    _searchingQueue             = dispatch_queue_create("[ViewModel] searching queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _searchingQueue         = dispatch_queue_create("[ViewModel] searching queue",
+                                                        dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _backgroundQueue        = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
-    _backgroundQueue            = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    _loadBatchInProcessing  = NO;
     
-    _loadBatchInProcessing      = NO;
+    //    List source initialization
+    _contactsOnView         = [[NSMutableDictionary alloc] init];
+    _listSelectedContacts   = [[NSMutableArray alloc] init];
+    _listSectionKeys        = [[NSMutableArray alloc] init];
     
-//    List source initialization
-    self.contactsOnView         = [[NSMutableDictionary alloc] init];
+    //    Data binding initialization
+    self.searchObservable                   = [[DataBinding<NSString *> alloc] initWithValue:@""];
+    self.contactBookObservable              = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.cellNeedRemoveSelectedObservable   = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
+    self.dataSourceNeedReloadObservable     = [[DataBinding alloc] initWithValue:nil];
+    self.selectedContactAddedObservable     = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.selectedContactRemoveObservable    = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     
-    _listSelectedContacts           = [[NSMutableArray alloc] init];
-   _listSectionKeys          = [[NSMutableArray alloc] init];
-    
-//    Data binding initialization
-    self.searchObservable = [[DataBinding<NSString *> alloc] initWithValue:@""];
-    self.contactBookObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.cellNeedRemoveSelectedObservable = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
-    self.dataSourceNeedReloadObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    
-    self.selectedContactAddedObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.selectedContactRemoveObservable = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
     
     for (char i = 'A'; i <= 'Z'; i++) {
         NSString * key = [NSString stringWithFormat:@"%c", i];
-        [self.contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
+        [_contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
         [self->_listSectionKeys addObject:key];
     }
     NSString * key = @"#";
-    [self.contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
+    [_contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
     [self->_listSectionKeys addObject:key];
-    
     
     [self setupEvents];
     
@@ -88,16 +85,16 @@
 - (void)setupEvents {
     __weak ContactViewModel * weakSelf = self;
     
-//    Listen Contact store changed
-   _contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
+    //    Listen Contact store changed
+    _contactBus.contactChangedObservable = ^(NSArray * contactsUpdated) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
             if (strongSelf) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                dispatch_async(strongSelf->_backgroundQueue, ^{
                     // Update avatar for current contacts
                     for (NSString * key in strongSelf->_listSectionKeys) {
-                        [[strongSelf.contactsOnView objectForKey:key] enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [[strongSelf->_contactsOnView objectForKey:key] enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                             [strongSelf.contactBus getImageFromId:obj.identifier isReload: YES completion:^(NSData *imageData, NSError *error) {
                                 if (!error) {
                                     UIImage * image = [UIImage imageWithData:imageData];
@@ -124,20 +121,17 @@
     };
 }
 
-- (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
-    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithBusEntity:entity];
-    
-    [self->_contactBus getImageFromId:entity.identifier isReload: NO completion:^(NSData * imageData, NSError * error) {
-        if (!error) {
-            UIImage * image = [UIImage imageWithData:imageData];
-            viewEntity.avatar = image;
-            if (viewEntity.waitImageToExcuteQueue) {
-                viewEntity.waitImageToExcuteQueue(image, entity.identifier);
-            }
-        }
-    }];
-    return viewEntity;
-}
+//- (ContactViewEntity *)parseContactEntity:(ContactBusEntity *)entity {
+//    ContactViewEntity *viewEntity =  [[ContactViewEntity alloc] initWithBusEntity:entity];
+//
+//    [self->_contactBus getImageFromId:entity.identifier isReload: NO completion:^(NSData * imageData, NSError * error) {
+//        if (!error) {
+//            UIImage * image = [UIImage imageWithData:imageData];
+//            viewEntity.avatar = image;
+//        }
+//    }];
+//    return viewEntity;
+//}
 
 #pragma mark Protocol methods
 - (void)requestPermission:(void (^)(BOOL, NSError *))completion {
@@ -157,7 +151,7 @@
                     completion(YES, nil, numberOfContacts);
                 }
                 
-               
+                
             }];
         }
     });
@@ -173,8 +167,8 @@
         return;
     } else {
         @synchronized (self) {
-        NSLog(@"[ViewModel] loadBatch");
-        _loadBatchInProcessing = YES;
+            NSLog(@"[ViewModel] loadBatch");
+            _loadBatchInProcessing = YES;
             __weak typeof(self) weakSelf = self;
             dispatch_async(_backgroundQueue, ^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -214,12 +208,12 @@
 }
 
 - (NSInteger)numberOfSection {
-    return [self.contactsOnView allKeys].count;
+    return [_contactsOnView allKeys].count;
 }
 
 - (int)numberOfContactInSection: (NSInteger) section {
     NSString * key = [self parseSectionToKey:(int)section];
-    return  (int)[self.contactsOnView objectForKey:key].count;
+    return  (int)[_contactsOnView objectForKey:key].count;
 }
 
 - (NSString *) parseSectionToKey: (int) section {
@@ -228,36 +222,32 @@
 
 - (ContactViewEntity *)contactAtIndex:(NSIndexPath *)indexPath {
     NSString * key = [self parseSectionToKey:(int)indexPath.section];
-    return [[self.contactsOnView objectForKey:key] objectAtIndex:indexPath.row];
+    return [[_contactsOnView objectForKey:key] objectAtIndex:indexPath.row];
 }
 
 - (ContactViewEntity *)contactWithIdentifier:(NSString *)identifier name:(NSString *)name {
     NSString * key = [self makeKeyFromName:name];
-    NSArray * listContact = [self.contactsOnView objectForKey:key];
+    NSArray * listContact = [_contactsOnView objectForKey:key];
     return [listContact firstObjectWith:^BOOL(ContactViewEntity * _Nonnull obj) {
         return [obj.identifier isEqualToString:identifier];
     }];
 }
 
-- (void)searchContactWithKeyName:(NSString *)key {
+- (void)searchContactWithKeyName:(NSString *)key block:(nonnull void (^)(void))block {
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(_searchingQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (strongSelf) {
+            NSArray * allIndexes = [strongSelf getAllIndexPaths];
             [strongSelf refreshContactOnView];
-            strongSelf.dataSourceNeedReloadObservable.value = [NSNumber numberWithUnsignedInteger:0];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                strongSelf.dataSourceNeedReloadObservable.value = allIndexes;
+            });
             [strongSelf->_contactBus searchContactByName:key block:^{
-                __strong typeof(weakSelf) strongSelf = weakSelf;
                 NSLog(@"[SearchBusRespone]");
-                [strongSelf loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
-                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                    if (strongSelf && !error) {
-                        NSLog(@"[LoadBatchResponse]");
-                        strongSelf.dataSourceNeedReloadObservable.value = [NSNumber numberWithUnsignedInteger:0];
-                    }
-                }];
+                block();
             }];
         }
     });
@@ -318,35 +308,35 @@
 
 - (BOOL)isContainContact:(ContactViewEntity *)contact {
     NSString * key = [self makeKeyFromName:contact.fullName];
-    NSArray * listContacts = [self.contactsOnView objectForKey:key];
+    NSArray * listContacts = [_contactsOnView objectForKey:key];
     return listContacts ? [listContacts containsObject:contact] : NO;
 }
 
 - (NSIndexPath *)indexOfContact:(ContactViewEntity *)contact {
     NSString * key = [self makeKeyFromName:contact.fullName];
     NSInteger section = [self->_listSectionKeys indexOfObject:key];
-    NSArray * listContacts = [self.contactsOnView objectForKey:key];
+    NSArray * listContacts = [_contactsOnView objectForKey:key];
     NSInteger row = [listContacts indexOfObject:contact];
     return [NSIndexPath indexPathForRow:row inSection:section];
 }
 
 - (ContactViewEntity * _Nullable)contactWithIdentifier:(NSString *)identifier {
     for (NSString * key in _listSectionKeys) {
-        ContactViewEntity * result = [[self.contactsOnView objectForKey:key] firstObjectWith:^BOOL(ContactViewEntity * _Nonnull obj) {
+        ContactViewEntity * result = [[_contactsOnView objectForKey:key] firstObjectWith:^BOOL(ContactViewEntity * _Nonnull obj) {
             return [obj.identifier isEqualToString:identifier];
         }];
         if (result)
             return result;
     }
-
+    
     return nil;
 }
 
 - (NSIndexPath * _Nullable)firstContactOnView {
     for(int i = 0; i < _listSectionKeys.count; i++) {
         NSString * key = _listSectionKeys[i];
-        if ([contactsOnView objectForKey:key].count > 0) {
-            NSLog(@"[firstContactOnView] %ld", [contactsOnView objectForKey:key].count);
+        if ([_contactsOnView objectForKey:key].count > 0) {
+            NSLog(@"[firstContactOnView] %ld", [_contactsOnView objectForKey:key].count);
             return [NSIndexPath indexPathForRow:0 inSection:i];
         }
     }
@@ -366,13 +356,13 @@
 
 - (void)refreshContactOnView {
     [Logging info:@"Refresh contactOnView"];
-    self.contactsOnView = [[NSMutableDictionary alloc] init];
+    _contactsOnView = [[NSMutableDictionary alloc] init];
     for (char i = 'A'; i <= 'Z'; i++) {
         NSString * key = [NSString stringWithFormat:@"%c", i];
-        [self.contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
+        [_contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
     }
     NSString * key = @"#";
-    [self.contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
+    [_contactsOnView setValue:[[NSMutableArray alloc] init] forKey:key];
 }
 
 - (void)addContacts:(NSArray<ContactViewEntity *> *) contacts completion: (void (^)(NSArray<NSIndexPath *> * updatedIndexPaths)) handler {
@@ -392,7 +382,7 @@
                 }];
                 
                 NSString * key                      = [strongSelf makeKeyFromName:newContact.fullName];
-                NSMutableArray * contactsInSection  = [strongSelf.contactsOnView objectForKey:key];
+                NSMutableArray * contactsInSection  = [strongSelf->_contactsOnView objectForKey:key];
                 
                 NSUInteger row          = contactsInSection.count;
                 NSUInteger section      = [strongSelf->_listSectionKeys indexOfObject:key];
@@ -405,6 +395,18 @@
             handler(updatedIndexPaths);
         }
     });
+}
+
+- (NSArray<NSIndexPath *> *)getAllIndexPaths {
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    for (int i = 0; i < _listSectionKeys.count; i++) {
+        NSString * key = [_listSectionKeys objectAtIndex:i];
+        NSArray * sectionData = [_contactsOnView objectForKey:key];
+        for (int j = 0; j < sectionData.count; j++) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:i]];
+        }
+    }
+    return indexPaths;
 }
 
 @end

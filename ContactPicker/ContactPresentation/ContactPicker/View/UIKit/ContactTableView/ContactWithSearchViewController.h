@@ -11,11 +11,11 @@
 #import "KeyboardAppearanceDelegate.h"
 #import "ContactCollectionCell.h"
 #import "HorizontalListItemView.h"
-#import "ContactBaseController.h"
+#import "ContactWithSearchBase.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactWithSearchViewController : ContactBaseController <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface ContactWithSearchViewController : ContactWithSearchBase <UICollectionViewDelegate, UICollectionViewDataSource>
 - (instancetype)init;
 @end
 

@@ -85,10 +85,7 @@
     
     if (c) {
         c->_contact = contact;
-        [c->_contact.isCheckObservable binding:^(NSNumber * isChecked) {
-            
-//            NSLog(@"width: %f, height: %f", c.size.width.value(), c.size.height.value());
-            
+        [c->_contact.isCheckObservable bindOne:^(NSNumber * isChecked) {
             [c updateState:^(NSNumber *oldState) {
                 return isChecked;
             } mode:CKUpdateModeSynchronous];

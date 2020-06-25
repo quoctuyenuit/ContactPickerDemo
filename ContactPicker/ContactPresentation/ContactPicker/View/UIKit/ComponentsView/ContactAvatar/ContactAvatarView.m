@@ -10,6 +10,7 @@
 
 #define DEBUG_MODE      0
 #define FONT_SIZE       20
+#import "Utilities.h"
 
 @interface ContactAvatarView ()
 - (void) initElement;
@@ -56,17 +57,13 @@
     _gradientBackground.frame           = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
     
-    self.layer.cornerRadius             = self.frame.size.width / 2;
     
+    self.layer.cornerRadius             = self.frame.size.width / 2;
     
     self.backgroundColor            = UIColor.clearColor;
     _mainBoundView.backgroundColor  = UIColor.clearColor;
     
     _label.text = @"Tets";
-}
-
-- (void)setContact:(ContactViewEntity *)contact {
-    [self configWithContact:contact];
 }
 
 #pragma mark - Life circle methods
@@ -95,6 +92,9 @@
     [_imageView.leftAnchor constraintEqualToAnchor:_mainBoundView.leftAnchor].active      = YES;
     [_imageView.rightAnchor constraintEqualToAnchor:_mainBoundView.rightAnchor].active    = YES;
     [_imageView.bottomAnchor constraintEqualToAnchor:_mainBoundView.bottomAnchor].active  = YES;
+    [_imageView.widthAnchor constraintEqualToAnchor:_mainBoundView.widthAnchor].active    = YES;
+    [_imageView.heightAnchor constraintEqualToAnchor:_mainBoundView.heightAnchor].active    = YES;
+    
     
     [_label.topAnchor constraintEqualToAnchor:_mainBoundView.topAnchor].active        = YES;
     [_label.leftAnchor constraintEqualToAnchor:_mainBoundView.leftAnchor].active      = YES;
@@ -110,32 +110,12 @@
 
 #pragma mark - Public methods
 - (void)configWithImage:(UIImage *)image withTitle:(NSString *)title withBackground:(NSArray *)backgroundColor {
-    _imageView.image            = image;
+    _imageView.image            = [image makeCircularImageWithSize:CGSizeMake(self.bounds.size.width, self.bounds.size.height) backgroundColor:nil];
     _label.text                 = title;
     _gradientBackground.colors  = backgroundColor;
     
     _imageView.alpha    = image ? 1 : 0;
     _label.alpha        = [title isEqualToString:@""] ? 0 : 1;
-}
-
-- (void)configWithContact:(ContactViewEntity *)entity {
-    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
-    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
-    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
-    
-    if (entity.avatar) {
-        [self configWithImage:entity.avatar withTitle:@"" withBackground:nil];
-    } else {
-        [self configWithImage:nil withTitle:keyName withBackground:entity.backgroundColor];
-        __weak typeof(self) weakSelf = self;
-        entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (identifier == entity.identifier) {
-                    [weakSelf configWithImage:image withTitle:@"" withBackground:nil];
-                }
-            });
-        };
-    }
 }
 
 @end

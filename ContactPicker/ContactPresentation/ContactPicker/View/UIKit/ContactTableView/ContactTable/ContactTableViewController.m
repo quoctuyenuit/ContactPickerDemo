@@ -14,6 +14,7 @@
 #import "Logging.h"
 
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
+#define LOG_MSG_HEADER              @"ContactTableUIKit"
 
 @interface ContactTableViewController() <UITableViewDelegate, UITableViewDataSource>
 @end
@@ -31,20 +32,11 @@
     if (self) {
         _viewModel              = viewModel;
         _tableView              = [[UITableView alloc] init];
-        _tableView.delegate     = self;
-        _tableView.dataSource   = self;
     }
     return self;
 }
 
 #pragma mark - Life circle methods
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self.view addSubview:_tableView];
-    UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
-    [_tableView registerNib:nib forCellReuseIdentifier:CELL_REUSE_IDENTIFIER];
-}
 - (void)viewDidLayoutSubviews
 {
   [super viewDidLayoutSubviews];
@@ -57,8 +49,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSDate * time = [[NSDate alloc] init];
-    NSLog(@"[ContactTableViewController] numberOfRowsInSection, time = %f", [time timeIntervalSince1970]);
     return [self->_viewModel numberOfContactInSection:section];
 }
 
@@ -109,47 +99,54 @@
     CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
     if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
         NSLog(@"[ContactTableViewController] load from scroll");
-        [self loadMoreContacts];
+        [self fetchBatchContactWithBlock:nil];
     }
 }
 
 #pragma mark - Subclass methods
-- (UITableView *)tableView {
-    return _tableView;
-}
-
 - (id<ContactViewModelProtocol>)viewModel {
     return _viewModel;
 }
 
-- (void)loadMoreContacts {
-    NSLog(@"[ContactTableViewController] load batch");
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
-        NSLog(@"[ContactTableViewController] load batch respose");
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (error) {
-                [Logging error:error.localizedDescription];
-            } else {
-                [strongSelf insertCells:updatedIndexPaths];
-            }
-        }
-    }];
+- (void)setupBaseViews {
+    [self.view addSubview:_tableView];
+    UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
+    [_tableView registerNib:nib forCellReuseIdentifier:CELL_REUSE_IDENTIFIER];
+    
+    _tableView.showsHorizontalScrollIndicator          = NO;
+    _tableView.showsVerticalScrollIndicator            = NO;
+    _tableView.separatorStyle                          = UITableViewScrollPositionNone;
+    _tableView.backgroundColor                         = UIColor.whiteColor;
+    _tableView.rowHeight                               = 66;
+    _tableView.delegate                                = self;
+    _tableView.dataSource                              = self;
+}
+
+- (void)setupDatasets {
+    
+}
+
+- (void)reloadTable {
+    [_tableView reloadData];
+    NSIndexPath * firstIndex = [_viewModel firstContactOnView];
+    if (firstIndex) {
+        NSLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableView numberOfRowsInSection:firstIndex.section]);
+        [_tableView scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+}
+
+- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+    NSLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
+    NSLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    [_tableView reloadData];
 }
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
     ContactTableViewCell * cell = [_tableView cellForRowAtIndexPath:indexPath];
     [cell setSelect];
-}
-
-- (void)reloadContacts {
-    NSLog(@"[ContactTableViewController] reload");
-    [_tableView reloadData];
-    NSIndexPath * firstIndex = [_viewModel firstContactOnView];
-    if (firstIndex) {
-        NSLog(@"[reloadContacts] number rows in section: %ld", [_tableView numberOfRowsInSection:firstIndex.section]);
-        [_tableView scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    }
 }
 @end

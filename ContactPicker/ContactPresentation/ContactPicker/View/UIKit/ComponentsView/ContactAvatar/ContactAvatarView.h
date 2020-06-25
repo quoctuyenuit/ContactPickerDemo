@@ -12,11 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactAvatarView : UIView
-@property(nonatomic, readwrite) ContactViewEntity   * contact;
 
 - (void)configWithImage:(UIImage * _Nullable) image withTitle:(NSString *) title withBackground:(NSArray * _Nullable) backgroundColor;
-
-- (void)configWithContact:(ContactViewEntity *) contact;
 @end
 
 NS_ASSUME_NONNULL_END

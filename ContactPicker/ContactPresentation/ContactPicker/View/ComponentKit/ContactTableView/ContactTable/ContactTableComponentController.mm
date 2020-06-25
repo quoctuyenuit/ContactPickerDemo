@@ -12,8 +12,9 @@
 #import "ContactTableCellComponent.h"
 #import "Logging.h"
 
-#define DEBUG_FEATURE_MODE  1
+#define DEBUG_FEATURE_MODE                  0
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
+#define LOG_MSG_HEADER                      @"ContactTableComponentKit"
 
 #if DEBUG_FEATURE_MODE
 #import "ContactViewModel.h"
@@ -25,70 +26,27 @@
     id<ContactViewModelProtocol>                      _viewModel;
     CKCollectionViewDataSource                      * _dataSource;
     CKComponentFlexibleSizeRangeProvider            * _sizeRangeProvider;
-    
+    UICollectionView                                * _collectionView;
 }
 
 @end
 
 @implementation ContactTableComponentController
-
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
-    if (self = [super initWithCollectionViewLayout:layout]) {
-        _viewModel          = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
+- (instancetype)initWithViewModel:(id<ContactViewModelProtocol>) viewModel {
+    if (self = [super initWithNibName:nil bundle:nil]) {
+        _viewModel          = viewModel;
         _sizeRangeProvider  = [CKComponentFlexibleSizeRangeProvider providerWithFlexibility:CKComponentSizeRangeFlexibleHeight];
     }
     return self;
 }
 
-- (instancetype)initWithViewModel:(id<ContactViewModelProtocol>)viewModel {
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    [flowLayout setMinimumInteritemSpacing:0];
-    [flowLayout setMinimumLineSpacing:0];
+- (void)loadView {
+    [super loadView];
     
-    self = [super initWithCollectionViewLayout:flowLayout];
-    
-    if (self) {
-        _viewModel                  = viewModel;
-#if DEBUG_FEATURE_MODE
-        _viewModel                  = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
-#endif
-        
-        _sizeRangeProvider          = [CKComponentFlexibleSizeRangeProvider providerWithFlexibility:CKComponentSizeRangeFlexibleHeight];
-    }
-    return self;
 }
                                        
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    
-    self.collectionView.backgroundColor = UIColor.whiteColor;
-    self.collectionView.delegate        = self;
-    self.collectionView.showsVerticalScrollIndicator    = NO;
-    self.collectionView.showsHorizontalScrollIndicator  = NO;
-    
-    const CKSizeRange sizeRange = [_sizeRangeProvider sizeRangeForBoundingSize:self.collectionView.bounds.size];
-    CKDataSourceConfiguration * configuration = [[CKDataSourceConfiguration<ContactViewEntity *, id<NSObject>> alloc]
-                                                initWithComponentProviderFunc:ContactComponentProvider
-                                                context:nil
-                                                sizeRange:sizeRange];
-    
-    _dataSource = [[CKCollectionViewDataSource alloc] initWithCollectionView:self.collectionView
-                                                 supplementaryViewDataSource:nil
-                                                               configuration:configuration];
-    
-//    Insert sections
-    CKDataSourceChangeset * initalChangeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset]
-                                                withInsertedSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 27)]] build];
-    
-    [_dataSource applyChangeset:initalChangeset mode:CKUpdateModeAsynchronous userInfo:nil];
-    
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadContacts:^(BOOL isSuccess, NSError * _Nonnull error, NSUInteger numberOfContacts) {
-        [weakSelf loadMoreContact];
-    }];
 }
 
 static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSObject> context) {
@@ -116,39 +74,9 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
     ContactViewEntity * contact = [_dataSource modelForItemAtIndexPath:indexPath];
     NSLog(@"Did select %@", contact.fullName);
     [_viewModel selectectContactAtIndex:indexPath];
+    [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
-#pragma mark - Helper methods
-- (void)loadMoreContact {
-    NSLog(@"[ContactTableViewController] load batch");
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
-        NSLog(@"[ContactTableViewController] load batch respose");
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (error) {
-                [Logging error:error.localizedDescription];
-            } else {
-                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
-            }
-        }
-    }];
-}
-
-- (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities {
-    NSInteger indexCount = indexPaths.count;
-    NSInteger entityCount = entities.count;
-    if (indexCount != entityCount)
-        return;
-    
-    NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * items = [[NSMutableDictionary alloc] init];
-    for (int i = 0; i < indexCount; i++) {
-        [items setObject:entities[i] forKey:indexPaths[i]];
-    }
-    
-    CKDataSourceChangeset *changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withInsertedItems:items] build];
-    [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
-}
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -163,8 +91,8 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
     
     CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
     if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
-        NSLog(@"[ContactTableViewController] load from scroll");
-        [self loadMoreContact];
+        NSLog(@"[%@] begin call fetching", LOG_MSG_HEADER);
+        [self fetchBatchContactWithBlock:nil];
     }
 }
 
@@ -172,4 +100,76 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
     return nil;
 }
 
+#pragma mark - Subclass methods
+- (id<ContactViewModelProtocol>)viewModel {
+    return _viewModel;
+}
+
+- (void)setupBaseViews {
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    [flowLayout setMinimumInteritemSpacing:0];
+    [flowLayout setMinimumLineSpacing:0];
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:flowLayout];
+    [self.view addSubview:_collectionView];
+    _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    [_collectionView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
+    [_collectionView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active = YES;
+    [_collectionView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active = YES;
+    [_collectionView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    
+    _collectionView.backgroundColor = UIColor.whiteColor;
+    _collectionView.delegate        = self;
+    _collectionView.showsVerticalScrollIndicator    = NO;
+    _collectionView.showsHorizontalScrollIndicator  = NO;
+}
+
+- (void)setupDatasets {
+    const CKSizeRange sizeRange = [_sizeRangeProvider sizeRangeForBoundingSize:_collectionView.bounds.size];
+    CKDataSourceConfiguration * configuration = [[CKDataSourceConfiguration<ContactViewEntity *, id<NSObject>> alloc]
+                                                 initWithComponentProviderFunc:ContactComponentProvider
+                                                 context:nil
+                                                 sizeRange:sizeRange];
+    
+    _dataSource = [[CKCollectionViewDataSource alloc] initWithCollectionView:_collectionView
+                                                 supplementaryViewDataSource:nil
+                                                               configuration:configuration];
+    
+    //    Insert sections
+    CKDataSourceChangeset * initalChangeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset]
+                                                withInsertedSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 27)]] build];
+    
+    [_dataSource applyChangeset:initalChangeset mode:CKUpdateModeAsynchronous userInfo:nil];
+}
+
+- (void)reloadTable {
+    [_collectionView reloadData];
+}
+
+- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+    NSInteger indexCount = indexPaths.count;
+    NSInteger entityCount = entities.count;
+    if (indexCount != entityCount)
+        return;
+    
+    NSLog(@"[%@] begin insert cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
+    NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * items = [[NSMutableDictionary alloc] init];
+    for (int i = 0; i < indexCount; i++) {
+        [items setObject:entities[i] forKey:indexPaths[i]];
+    }
+    
+    CKDataSourceChangeset *changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withInsertedItems:items] build];
+    [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
+}
+
+- (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
+    NSLog(@"[%@] begin remove cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
+    CKDataSourceChangeset * changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withRemovedItems:[[NSSet alloc] initWithArray:indexPaths]] build];
+    [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
+}
+
+- (void)contactHadRemoved:(NSIndexPath *)indexPath {
+    
+}
 @end

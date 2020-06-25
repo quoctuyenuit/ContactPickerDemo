@@ -17,14 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactTableBaseController : ASViewController<KeyboardAppearanceProtocol>
 @property(nonatomic, readwrite) id<ContactViewModelProtocol>      viewModel;
-@property(nonatomic, readwrite) UITableView                     * tableView;
 @property(nonatomic, readwrite) BOOL                              contactHadLoad;
 
-- (void)reloadContacts;
+- (void)setupBaseViews;
+- (void)setupDatasets;
+- (void)reloadTable;
+- (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities;
+- (void)removeCells:(NSArray<NSIndexPath *> *) indexPaths;
+- (void)fetchBatchContactWithBlock:(void(^_Nullable)(void)) block;
 - (void)contactHadRemoved:(NSIndexPath *) indexPath;
-- (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths;
-- (void)loadMoreContacts;
-- (void)loadContact;
 @end
 
 NS_ASSUME_NONNULL_END

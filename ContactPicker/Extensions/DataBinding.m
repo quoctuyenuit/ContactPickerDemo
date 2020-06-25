@@ -38,6 +38,11 @@
     [_handlers addObject:hdl];
 }
 
+- (void)bindOne:(void (^)(id))hdl {
+    [_handlers removeAllObjects];
+    [_handlers addObject:hdl];
+}
+
 - (void)fire {
     typedef void (^Handler)(id);
     for (Handler hdl in _handlers) {

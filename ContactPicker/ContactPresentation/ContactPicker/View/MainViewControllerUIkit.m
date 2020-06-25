@@ -19,10 +19,11 @@
 #import "ContactViewControllerTexture.h"
 #import "ContactTableNodeController.h"
 #import "ContactTableComponentController.h"
+#import "ContactWithSearchComponent.h"
 
 #import "TabbarOnTopViewController.h"
 
-#define DEBUG_COMPONENTKIT  1
+#define DEBUG_COMPONENTKIT  0
 
 
 
@@ -88,18 +89,12 @@
     ContactViewControllerTexture * textureContactVc = [[ContactViewControllerTexture alloc] init];
     textureContactVc.tabBarItem                     = [[UITabBarItem alloc] initWithTitle:@"Texture" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    [flowLayout setMinimumInteritemSpacing:0];
-    [flowLayout setMinimumLineSpacing:0];
+  
 
-    ContactTableComponentController * componentVc   = [[ContactTableComponentController alloc] initWithCollectionViewLayout:flowLayout];
+    ContactWithSearchComponent * componentVc   = [[ContactWithSearchComponent alloc] init];
     componentVc.tabBarItem                          = [[UITabBarItem alloc] initWithTitle:@"ComponentKit" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
 
-//    UITabBarController *tabBarController         = [[UITabBarController alloc] init];
     TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:@[uikitContactVc, textureContactVc, componentVc]];
-//    tabBarController.viewControllers             = ;
-//    tabBarController.selectedViewController      = uikitContactVc;
     tabBarController.indexSelectedViewController = 0;
     tabBarController.delegate                    = self;
     [[UITabBar appearance] setTintColor:[UIColor appColor]];
@@ -111,6 +106,10 @@
     self.view.backgroundColor = UIColor.whiteColor;
     
 #if DEBUG_COMPONENTKIT
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    [flowLayout setMinimumInteritemSpacing:0];
+    [flowLayout setMinimumLineSpacing:0];
     WildeGuessCollectionViewController *viewController = [[WildeGuessCollectionViewController alloc] initWithCollectionViewLayout:flowLayout];
     
     

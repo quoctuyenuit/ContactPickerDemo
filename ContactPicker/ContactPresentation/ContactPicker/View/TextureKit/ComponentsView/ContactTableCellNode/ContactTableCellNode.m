@@ -125,15 +125,15 @@
         [_avatar configWithImage:entity.avatar forLabel:@"" withGradientColor:nil];
     } else {
         [_avatar configWithImage:nil forLabel:keyName withGradientColor:entity.backgroundColor];
-        __weak typeof(self) weakSelf = self;
-        entity.waitImageToExcuteQueue = ^(UIImage* image, NSString * identifier) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                if ([identifier isEqualToString: strongSelf->_contact.identifier]) {
-                    [strongSelf->_avatar configWithImage:image forLabel:@"" withGradientColor:nil];
-                }
-            }
-        };
     }
+    __weak typeof(self) weakSelf = self;
+    entity.waitImageToExcuteQueue = ^(UIImage* image, NSString * identifier) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            if ([identifier isEqualToString: strongSelf->_contact.identifier]) {
+                [strongSelf->_avatar configWithImage:image forLabel:@"" withGradientColor:nil];
+            }
+        }
+    };
 }
 @end
