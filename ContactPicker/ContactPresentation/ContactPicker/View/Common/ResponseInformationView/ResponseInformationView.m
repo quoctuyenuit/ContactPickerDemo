@@ -8,7 +8,7 @@
 
 #import "ResponseInformationView.h"
 
-#define DEBUG_MODE          1
+#define DEBUG_MODE          0
 #define PERMISSION_MSG      @"Ứng dụng chưa được cấp quyền :("
 #define EMPTY_MSG           @"Danh bạ rỗng!"
 #define FAILT_MSG           @"Không thể tải danh bạ :("
@@ -49,6 +49,7 @@
         _messageLabel.numberOfLines     = 0;
         _messageLabel.textColor         = UIColor.blackColor;
         _messageLabel.font              = [UIFont systemFontOfSize:MSG_FONT_SIZE];
+        self.backgroundColor            = UIColor.whiteColor;
         
         [_openSettingBtn setTitle:BUTTON_TITLE forState:UIControlStateNormal];
         [_openSettingBtn setTitleColor:UIColor.blueColor forState:UIControlStateNormal];
@@ -144,7 +145,7 @@
 }
 
 - (void)setupSomethingWrongView {
-    _responseIconView.image = [UIImage imageNamed:@"fail_ico"];
+    _responseIconView.image = [UIImage imageNamed:FAILT_IMG_NAME];
     _messageLabel.text = STH_WRONG_MSG;
     _openSettingBtn.enabled = NO;
     _openSettingBtn.alpha = 0;
