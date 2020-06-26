@@ -18,6 +18,9 @@
 
 @implementation ContactTableBaseController {
     UIAlertController               * _loadingController;
+#if DEBUG_MEM_ENABLE
+    NSTimer                         * _autoFetchBatchTimer;
+#endif
 }
 
 @synthesize viewModel;
@@ -79,7 +82,21 @@
     [self setupBaseViews];
     [self setupDatasets];
     [self setupEvents];
+#if DEBUG_MEM_ENABLE
+//    Auto fetch contact;
+    _autoFetchBatchTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                            target:self
+                                                          selector:@selector(autoFetchBatchTimerAction:)
+                                                          userInfo:nil
+                                                           repeats:YES];
+#endif
 }
+
+#if DEBUG_MEM_ENABLE
+- (void)autoFetchBatchTimerAction:(NSTimer *) timer {
+    [self fetchBatchContactWithBlock:nil];
+}
+#endif
 
 - (void)viewDidLoad {
     [super viewDidLoad];

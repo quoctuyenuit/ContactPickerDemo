@@ -19,6 +19,17 @@
 #import "ContactWithSearchUIKit.h"
 #import "TabbarOnTopViewController.h"
 
+#define DEBUG_JUST_UIKIT        0
+
+#if !DEBUG_JUST_UIKIT
+#define DEBUG_JUST_TEXTURE      0
+
+#if !DEBUG_JUST_TEXTURE
+#define DEBUG_JUST_COMPONENTKIT 1
+#endif
+
+#endif
+
 @interface MainViewControllerUIkit () {
     UIViewController * contentViewController;
     ContactViewModel * viewModel;
@@ -31,6 +42,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = UIColor.whiteColor;
     self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
     
     __weak typeof(self) weakSelf = self;
@@ -71,15 +84,24 @@
     ContactWithSearchUIKit * uikitContactVc = [[ContactWithSearchUIKit alloc] init];
     uikitContactVc.tabBarItem              = [[UITabBarItem alloc] initWithTitle:@"UIKit" image:[UIImage systemImageNamed:@"archivebox.fill"] tag:0];
 
+#if DEBUG_JUST_UIKIT
+    return uikitContactVc;
+#endif
 
     ContactWithSearchTexture * textureContactVc = [[ContactWithSearchTexture alloc] init];
     textureContactVc.tabBarItem                     = [[UITabBarItem alloc] initWithTitle:@"Texture" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
     
-  
+#if DEBUG_JUST_TEXTURE
+    return textureContactVc;
+#endif
 
     ContactWithSearchComponentKit * componentVc   = [[ContactWithSearchComponentKit alloc] init];
     componentVc.tabBarItem                          = [[UITabBarItem alloc] initWithTitle:@"ComponentKit" image:[UIImage systemImageNamed:@"paperplane.fill"] tag:1];
 
+#if DEBUG_JUST_COMPONENTKIT
+    return componentVc;
+#endif
+    
     TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:@[uikitContactVc, textureContactVc, componentVc]];
     tabBarController.indexSelectedViewController = 0;
     self.view.backgroundColor = UIColor.whiteColor;

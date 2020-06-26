@@ -118,6 +118,14 @@
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     NSLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
     [_tableNode insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    
+#if DEBUG_MEM_ENABLE
+    NSInteger cells = 0;
+    for (NSInteger section = 0; section < [_tableNode numberOfSections]; section++) {
+        cells += [_tableNode numberOfRowsInSection:section];
+    }
+    NSLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
+#endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {

@@ -176,6 +176,15 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
     
     CKDataSourceChangeset *changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withInsertedItems:items] build];
     [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
+    
+
+#if DEBUG_MEM_ENABLE
+    NSInteger cells = 0;
+    for (NSInteger section = 0; section < [_collectionView numberOfSections]; section++) {
+        cells += [_collectionView numberOfItemsInSection:section];
+    }
+    NSLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
+#endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {

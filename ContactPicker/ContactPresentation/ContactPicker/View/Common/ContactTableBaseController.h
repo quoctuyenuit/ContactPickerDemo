@@ -13,6 +13,11 @@
 
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
 
+#define DEBUG_MEM_ENABLE                    1
+#if DEBUG_MEM_ENABLE
+#define NUMBER_OF_BATCH                     30
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
 

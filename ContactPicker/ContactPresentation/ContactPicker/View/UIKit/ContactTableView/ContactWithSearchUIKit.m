@@ -44,7 +44,7 @@
         _searchBar                          = [[UISearchBar alloc] init];
         _searchBar.searchBarStyle           = UISearchBarStyleMinimal;
         _searchBar.barTintColor             = UIColor.clearColor;
-        _searchBar.backgroundColor          = UIColor.clearColor;
+        _searchBar.backgroundColor          = UIColor.whiteColor;
     }
     return self;
 }
