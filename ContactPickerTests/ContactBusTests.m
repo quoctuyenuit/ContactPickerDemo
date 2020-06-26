@@ -45,7 +45,7 @@
 - (void) testLoadContacts {
     XCTestExpectation *loadContactExpectation = [self expectationWithDescription:@"load contacts"];
     
-    [self.contactBus loadContacts: ^(NSArray * listContacts ,NSError * error, BOOL isDone) {
+    [self.contactBus loadContacts:^(NSError *error, BOOL isDone, NSUInteger numberOfContacts) {
         if (isDone) {
             XCTAssertNil(error, @"Return error when load contacts");
             [loadContactExpectation fulfill];
@@ -72,47 +72,6 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void) testLoadContactByIdWithValidInput {
-    NSMutableArray * loadExpectations = [[NSMutableArray alloc] init];
-    
-    [self.contactBus loadContacts:^(NSArray * listContacts, NSError * error, BOOL isDone) {
-        if (isDone) {
-            XCTAssertNil(error, @"Error is not nil");
-            
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                XCTestExpectation *expectation = [self expectationWithDescription:@"load contacts"];
-                [loadExpectations addObject:expectation];
-                [expectation fulfill];
-            });
-            
-            
-            XCTAssertNotNil(listContacts, @"listContacts return nil");
-            XCTAssertNil(error, @"Error is not nil");
-            
-            ContactBusEntity * exampleContact = listContacts.firstObject;
-            XCTAssertNotNil(exampleContact, @"listContacts is empty");
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                XCTestExpectation *expectation = [self expectationWithDescription:@"load contacts"];
-                [loadExpectations addObject:expectation];
-                [expectation fulfill];
-            });
-            
-            [self.contactBus loadContactById:exampleContact.identifier isReload: YES completion:^(ContactBusEntity * contact, NSError * error) {
-                XCTAssertNotNil(contact, @"Contact from valid id is nil");
-                XCTAssertNil(error, @"Load contact from valid id have error");
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    XCTestExpectation *expectation = [self expectationWithDescription:@"load contacts"];
-                    [loadExpectations addObject:expectation];
-                    [expectation fulfill];
-                });
-                
-            }];
-        }
-    }];
-    
-    [self waitForExpectations:loadExpectations timeout:10];
-}
-
 - (void) testLoadBatchOfContactWithInvalidInput {
     XCTestExpectation * emptyExpectation = [self expectationWithDescription:@"load contact by batch with empty"];
     XCTestExpectation * wrongDataExpectation = [self expectationWithDescription:@"load contact by batch with wrong data"];
@@ -131,34 +90,4 @@
     
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
-
-- (void) testLoadBatchOfContactWithValidInput {
-    XCTestExpectation * loadContactsExpectation = [self expectationWithDescription:@"load contact expectation"];
-    XCTestExpectation * validIdentifierExpectation = [self expectationWithDescription:@"load contact by id with valid data"];
-    
-    [self.contactBus loadContacts: ^(NSArray<ContactDAL *> * listContacts, NSError * error, BOOL isDone) {
-        if (isDone) {
-            XCTAssertNotNil(listContacts, @"listContacts return nil");
-            XCTAssertNil(error, @"Error is not nil");
-            XCTAssertTrue(listContacts.count >= 3, @"list contact < 3");
-            
-            NSArray * identifiers = [[listContacts subarrayWithRange:NSMakeRange(0, 3)] map:^NSString* _Nonnull(ContactBusEntity *  _Nonnull obj) {
-                return obj.identifier;
-            }];
-            
-            XCTAssertTrue(identifiers.count == 3, @"Map in NSArray extension is wrong");
-            
-            [loadContactsExpectation fulfill];
-            [self.contactBus loadBatchOfDetailedContacts:identifiers isReload: YES completion:^(NSArray * batchOfContact, NSError * error) {
-                XCTAssertNotNil(batchOfContact, @"Contacts from list valid id is nil");
-                XCTAssertTrue(batchOfContact.count == 3, @"Load missing contacts in batch");
-                XCTAssertNil(error, @"Load contact from valid id have error");
-                [validIdentifierExpectation fulfill];
-            }];
-        }
-    }];
-    
-    [self waitForExpectationsWithTimeout:5 handler:nil];
-}
-
 @end

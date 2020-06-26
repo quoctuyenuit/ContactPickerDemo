@@ -41,7 +41,7 @@
 - (void)testLoadContacts {
     XCTestExpectation * loadExpectation = [self expectationWithDescription:@"load contact expectation"];
     
-    [self.viewModel loadContacts:^(BOOL isSuccess, NSError *error, int numberOfContacts) {
+    [self.viewModel loadContacts:^(BOOL isSuccess, NSError * _Nonnull error, NSUInteger numberOfContacts) {
         XCTAssertTrue(isSuccess, @"Load contacts is failt");
          [loadExpectation fulfill];
     }];

@@ -37,6 +37,7 @@
     CKComponentScope scope(self, contact.identifier);
     const BOOL _state = contact.isChecked;
     
+    // Text Component
     CKComponent * textComponent     = [CKCenterLayoutComponent newWithCenteringOptions:CKCenterLayoutComponentCenteringY
                                                                      sizingOptions:CKCenterLayoutComponentSizingOptionDefault
                                                                              child: [CKInsetComponent newWithInsets:InsetForText component:
@@ -55,25 +56,32 @@
         
     }]] size:{}];
     
-
+    // Avatar Component
     CKComponent * avatarComponent   = [CKInsetComponent newWithInsets:InsetForAvatar
                                                           component:[ContactAvatarComponent newWithContact: contact
                                                                                                       size: CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)]];
     
-    
+    // Checkbox Component
     NSString * imageName = _state ? CHECK_IMAGE_NAME : UNCHECK_IMAGE_NAME;
     CKComponent * checkBoxComponent = [CKCenterLayoutComponent newWithCenteringOptions:CKCenterLayoutComponentCenteringY
                                                                           sizingOptions:CKCenterLayoutComponentSizingOptionDefault
                                                                                  child: [CKInsetComponent newWithInsets:InsetForCheckBox
                                                                                                               component:
-                                                                                         
-                                                                                         [CKButtonComponent newWithAction:{} options:{
-        .backgroundImages   = {{UIControlStateNormal, [UIImage imageNamed:imageName]}},
-        .size               = {.width = CHECK_BOX_HEIGHT, .height = CHECK_BOX_HEIGHT}
-    }]]
+                                                                                         [CKImageComponent newWithImage:[UIImage imageNamed:imageName]
+                                                                                                             attributes:{}
+                                                                                                                   size:{
+        .width = CHECK_BOX_HEIGHT,
+        .height = CHECK_BOX_HEIGHT
+        
+    }]
+                                                                                         ]
                                        
-                                                                                  size:{.width = CHECK_BOX_HEIGHT + LEFT_PADDING, .height = AVATAR_IMAGE_HEIGHT + 16}];
+                                                                                  size:{
+        .width = CHECK_BOX_HEIGHT + LEFT_PADDING,
+        .height = AVATAR_IMAGE_HEIGHT + 16
+    }];
     
+    // Combine
     ContactTableCellComponent * c =  [super newWithView:{[UIView class]} component: [CKFlexboxComponent newWithView:{}
                                                                                                                size:{}
                                                                                                               style:{

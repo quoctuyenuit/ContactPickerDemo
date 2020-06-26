@@ -15,7 +15,7 @@
 #define DEBUG_EMPTY_CONTACT         0
 #define DEBUG_FAILT_LOAD            0
 #define DEBUG_PERMISSION_DENIED     0
-#define DUMMY_DATA_ENABLE           1
+#define DUMMY_DATA_ENABLE           0
 #define NUMBER_OF_DUMMY             10000
 
 
@@ -178,7 +178,10 @@
             NSArray *keysToFetch        = @[CNContactGivenNameKey,
                                             CNContactPhoneNumbersKey,
                                             CNContactFamilyNameKey,
-                                            CNContactEmailAddressesKey];
+                                            CNContactEmailAddressesKey,
+                                            CNContactImageDataAvailableKey,
+                                            CNContactImageDataKey,
+                                            CNContactThumbnailImageDataKey];
             
             CNContact* contact          = [addressBook unifiedContactWithIdentifier: identifier
                                                                         keysToFetch:keysToFetch

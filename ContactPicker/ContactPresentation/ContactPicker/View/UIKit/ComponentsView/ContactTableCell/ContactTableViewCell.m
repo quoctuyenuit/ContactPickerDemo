@@ -115,6 +115,8 @@
     _textBoundView              = [[UIView alloc] init];
     _contactNameLabel           = [[UILabel alloc] init];
     _contactDescriptionLabel    = [[UILabel alloc] init];
+    
+    [_checkBox setUserInteractionEnabled:NO];
 }
 
 - (void)configForModel:(ContactViewEntity *)entity {    
