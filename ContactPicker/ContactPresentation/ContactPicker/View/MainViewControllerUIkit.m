@@ -25,7 +25,7 @@
 #define DEBUG_JUST_TEXTURE      0
 
 #if !DEBUG_JUST_TEXTURE
-#define DEBUG_JUST_COMPONENTKIT 1
+#define DEBUG_JUST_COMPONENTKIT 0
 #endif
 
 #endif

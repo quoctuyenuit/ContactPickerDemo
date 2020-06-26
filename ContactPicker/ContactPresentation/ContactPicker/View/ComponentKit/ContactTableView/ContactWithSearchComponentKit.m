@@ -37,13 +37,15 @@
         _searchBar.searchBarStyle           = UISearchBarStyleMinimal;
         _searchBar.barTintColor             = UIColor.clearColor;
         _searchBar.backgroundColor          = UIColor.clearColor;
+        [self initElements];
+        [self showSelectedContactsArea:NO];
     }
     return self;
 }
 
 - (void)initElements {
-    _contactSelectedView                = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
-    _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
+    _contactSelectedView                = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
+    _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
     
     _contactSelectedView.layer.shadowColor      = UIColor.grayColor.CGColor;
     _contactSelectedView.layer.shadowOpacity    = 1;
@@ -52,14 +54,6 @@
     _contactSelectedKeyboardView.layer.shadowColor      = UIColor.grayColor.CGColor;
     _contactSelectedKeyboardView.layer.shadowOpacity    = 1;
     _contactSelectedKeyboardView.layer.shadowOffset     = CGSizeMake(1, 0);
-    
-    _contactSelectedView.collectionView.delegate            = self;
-    _contactSelectedView.collectionView.dataSource          = self;
-    _contactSelectedKeyboardView.collectionView.delegate    = self;
-    _contactSelectedKeyboardView.collectionView.dataSource  = self;
-    
-    [_contactSelectedView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
-    [_contactSelectedKeyboardView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
  
     _searchBar.inputAccessoryView = _contactSelectedKeyboardView;
     
@@ -68,14 +62,6 @@
     _contactSelectedView.backgroundColor            = UIColor.yellowColor;
     _contactSelectedKeyboardView.backgroundColor    = UIColor.orangeColor;
 #endif
-}
-
-#pragma mark - Life circle methods
-- (void)loadView {
-    [super loadView];
-    
-    [self initElements];
-    [self showSelectedContactsArea:NO];
 }
 
 #pragma mark - Layout views
@@ -93,7 +79,6 @@
     [_searchBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active                             = YES;
     [_searchBar.heightAnchor constraintEqualToConstant:SEARCH_BAR_HEIGHT].active                                    = YES;
     
-//    UIView * _contentView = _contentViewController.view;
     [_contentViewController.view.topAnchor constraintEqualToAnchor:_searchBar.bottomAnchor].active                 = YES;
     [_contentViewController.view.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active             = YES;
     [_contentViewController.view.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active           = YES;
@@ -117,6 +102,14 @@
     return _searchBar;
 }
 
+- (id<HorizontalListItemProtocol>)selectedContactView {
+    return _contactSelectedView;
+}
+
+- (id<HorizontalListItemProtocol>)keyboardSearchbarView {
+    return _contactSelectedKeyboardView;
+}
+
 - (void)resetAllData {
     
 }
@@ -133,19 +126,6 @@
             strongSelf->_contactSelectedKeyboardView.alpha = isShow ? 1 : 0;
         }
     }];
-}
-
-- (void)addSelectedContact:(NSIndexPath *) indexPath {
-    [_contactSelectedView.collectionView insertItemsAtIndexPaths:@[indexPath]];
-    [_contactSelectedKeyboardView.collectionView insertItemsAtIndexPaths:@[indexPath]];
-        
-    [_contactSelectedView.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
-    [_contactSelectedKeyboardView.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
-}
-
-- (void)removeSelectedContact:(NSIndexPath *) indexPath {
-    [_contactSelectedView.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-    [_contactSelectedKeyboardView.collectionView deleteItemsAtIndexPaths:@[indexPath]];
 }
 
 - (void)loadContact {
@@ -183,27 +163,4 @@
     return vc;
 }
 
-
-#pragma mark - Collection view delegate and datasource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [_viewModel numberOfSelectedContacts];
-}
-
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCollectionCell" forIndexPath:indexPath];
-    
-    ContactViewEntity * entity = [_viewModel selectedContactAtIndex:indexPath.item];
-    
-    [cell configWithEntity:entity];
-    
-    if (cell.delegate == nil) {
-        cell.delegate = self;
-    }
-    
-    return cell;
-}
 @end

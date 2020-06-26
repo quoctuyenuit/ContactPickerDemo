@@ -48,11 +48,6 @@
         _contactSelectedView.layer.shadowOpacity    = 1;
         _contactSelectedView.layer.shadowOffset     = CGSizeMake(1, 0);
         
-        _contactSelectedView.collectionNode.delegate            = self;
-        _contactSelectedView.collectionNode.dataSource          = self;
-        _contactSelectedKeyboardView.collectionNode.delegate    = self;
-        _contactSelectedKeyboardView.collectionNode.dataSource  = self;
-        
         [self showSelectedContactsArea:NO];
         [_contactSelectedKeyboardView setFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 80)];
         
@@ -142,30 +137,6 @@
     [self.node setNeedsLayout];
 }
 
-#pragma mark - ASCollectionDatasource methods
-- (NSInteger)numberOfSectionsInCollectionNode:(ASCollectionNode *)collectionNode {
-    return 1;
-}
-
-- (NSInteger)collectionNode:(ASCollectionNode *)collectionNode numberOfItemsInSection:(NSInteger)section {
-    return [_viewModel numberOfSelectedContacts];
-}
-
-- (ASCellNodeBlock)collectionNode:(ASCollectionNode *)collectionNode nodeBlockForItemAtIndexPath:(NSIndexPath *)indexPath {
-    __weak typeof(self) weakSelf = self;
-    ContactViewEntity * contact = [_viewModel selectedContactAtIndex:indexPath.item];
-    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
-        ContactCollectionCellNode *  cellNode = [[ContactCollectionCellNode alloc] initWithContact:contact];
-        cellNode.delegate = weakSelf;
-        return cellNode;
-    };
-    return ASCellNodeBlock;
-}
-
-- (ASSizeRange)collectionNode:(ASCollectionNode *)collectionNode constrainedSizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return ASSizeRangeMake(CGSizeMake(55, 55));
-}
-
 #pragma mark - Subclass methods
 - (id<ContactViewModelProtocol>)viewModel {
     return _viewModel;
@@ -175,9 +146,14 @@
     return _searchNode.bar;
 }
 
-- (void)resetAllData {
-    
+- (id<HorizontalListItemProtocol>)selectedContactView {
+    return _contactSelectedView;
 }
+
+- (id<HorizontalListItemProtocol>)keyboardSearchbarView {
+    return _contactSelectedKeyboardView;
+}
+
 
 - (void)showSelectedContactsArea:(BOOL)isShow {
     _isShowSelected = isShow;
@@ -191,19 +167,6 @@
     } completion:^(BOOL finished) {
         [weakSelf.node setNeedsLayout];
     }];
-}
-
-- (void)addSelectedContact:(NSIndexPath *) indexPath {
-    [_contactSelectedView.collectionNode insertItemsAtIndexPaths:@[indexPath]];
-    [_contactSelectedKeyboardView.collectionNode insertItemsAtIndexPaths:@[indexPath]];
-    
-    [_contactSelectedView.collectionNode scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
-    [_contactSelectedKeyboardView.collectionNode scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
-}
-
-- (void)removeSelectedContact:(NSIndexPath *) indexPath {
-    [_contactSelectedView.collectionNode deleteItemsAtIndexPaths:@[indexPath]];
-    [_contactSelectedKeyboardView.collectionNode deleteItemsAtIndexPaths:@[indexPath]];
 }
 
 - (void)loadContact {

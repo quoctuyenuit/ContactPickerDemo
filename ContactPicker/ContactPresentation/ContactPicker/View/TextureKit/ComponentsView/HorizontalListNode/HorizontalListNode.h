@@ -9,18 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "ContactViewEntity.h"
+#import "HorizontalListItemProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol HorizontalListNodeDelegate <NSObject>
-
-- (void)listDidClickButton:(NSArray<ContactViewEntity *> *) listContacts;
-
-@end
-
-@interface HorizontalListNode : ASDisplayNode
+@interface HorizontalListNode : ASDisplayNode <HorizontalListItemProtocol>
 @property(nonatomic, strong) ASCollectionNode               * collectionNode;
-@property(weak, readwrite) id<HorizontalListNodeDelegate>     delegate;
 
 - (instancetype)init;
 @end

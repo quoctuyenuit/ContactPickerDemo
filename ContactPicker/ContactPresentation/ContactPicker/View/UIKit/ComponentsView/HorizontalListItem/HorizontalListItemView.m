@@ -7,19 +7,25 @@
 //
 
 #import "HorizontalListItemView.h"
+#import "ContactCollectionCell.h"
 
 #define DEBUG_MODE                  0
 #define DEFAULT_CONTENT_HEIGHT      80
 #define DEFAULT_COLLECTION_HEIGHT   60
 #define BUTTON_WIDTH                50
+#define REUSE_IDENTIIER             @"HorizontalReuseIdentifier"
 
 
-@interface HorizontalListItemView()
+@interface HorizontalListItemView() <UICollectionViewDelegate, UICollectionViewDataSource, ContactCollectionCellDelegate>
 - (void)customInit;
 
 @end
 
-@implementation HorizontalListItemView
+@implementation HorizontalListItemView {
+    UIView            *_mainContentView;
+    UIButton          *_button;
+    UICollectionView  *_collectionView;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -44,7 +50,7 @@
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     [flowLayout setMinimumInteritemSpacing:0];
     [flowLayout setMinimumLineSpacing:10];
-    flowLayout.itemSize = CGSizeMake(55, 55);
+    flowLayout.itemSize = ITEM_SIZE;
     flowLayout.estimatedItemSize = CGSizeZero;
     
     _mainContentView    = [[UIView alloc] init];
@@ -55,6 +61,11 @@
     self.backgroundColor                = UIColor.whiteColor;
     _mainContentView.backgroundColor    = UIColor.whiteColor;
     _collectionView.backgroundColor     = UIColor.whiteColor;
+    
+    _collectionView.delegate            = self;
+    _collectionView.dataSource          = self;
+    
+    [_collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
 }
 
 - (void)layoutSubviews {
@@ -115,5 +126,42 @@
 #endif
 }
 
+- (void)insertItemAtIndex:(NSInteger)index {
+    NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    [_collectionView insertItemsAtIndexPaths:@[indexPath]];
+    [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
+}
 
+- (void)removeItemAtIndex:(NSInteger)index {
+    NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    [_collectionView deleteItemsAtIndexPaths:@[indexPath]];
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return [delegate horizontalListItem:self numberOfItemAtSection:section];
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:REUSE_IDENTIIER forIndexPath:indexPath];
+    
+    ContactViewEntity * entity = [delegate horizontalListItem:self entityForIndexPath:indexPath];
+    
+    [cell configWithEntity:entity];
+    
+    if (cell.delegate == nil) {
+        cell.delegate = self;
+    }
+    
+    return cell;
+}
+
+- (void)removeCell:(ContactViewEntity *)entity {
+    [delegate removeCellWithContact:entity];
+}
+
+@synthesize delegate;
 @end

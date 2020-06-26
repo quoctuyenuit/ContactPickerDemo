@@ -7,12 +7,13 @@
 //
 
 #import "ContactWithSearchBase.h"
+#import "HorizontalListItemProtocol.h"
 
 #define LOADING_MESSAGE             @"Đang tải..."
 #define SEARCH_PLACE_HOLDER         @"Tìm kiếm"
 
 
-@interface ContactWithSearchBase() <UISearchBarDelegate, UITextFieldDelegate>
+@interface ContactWithSearchBase() <UISearchBarDelegate, UITextFieldDelegate, HorizontalListItemDelegate>
 - (UIAlertController *)createLoadingView:(NSString *) msg;
 - (void)setupEvents;
 @end
@@ -27,6 +28,8 @@
     self.searchBar.delegate                 = self;
     self.searchBar.searchTextField.delegate = self;
     self.searchBar.placeholder              = SEARCH_PLACE_HOLDER;
+    self.selectedContactView.delegate       = self;
+    self.keyboardSearchbarView.delegate     = self;
     [self setupEvents];
     [self loadContact];
 }
@@ -45,8 +48,8 @@
             if ([index intValue] == 0) {
                 [self showSelectedContactsArea:YES];
             }
-            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:[index intValue] inSection:0];
-            [strongSelf addSelectedContact: indexPath];
+            [strongSelf.selectedContactView insertItemAtIndex: [index integerValue]];
+            [strongSelf.keyboardSearchbarView insertItemAtIndex: [index integerValue]];
         }
     }];
     
@@ -57,8 +60,8 @@
             if ([strongSelf.viewModel numberOfSelectedContacts] == 0) {
                 [self showSelectedContactsArea:NO];
             }
-            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:[index intValue] inSection:0];
-            [strongSelf removeSelectedContact: indexPath];
+            [strongSelf.selectedContactView removeItemAtIndex: [index integerValue]];
+            [strongSelf.keyboardSearchbarView removeItemAtIndex: [index integerValue]];
         }
     }];
 }
@@ -112,15 +115,17 @@
     return nil;
 }
 
+- (id<HorizontalListItemProtocol>)selectedContactView {
+    NSAssert(NO, @"Subclass must implement this method");
+    return nil;
+}
+
+- (id<HorizontalListItemProtocol>)keyboardSearchbarView {
+    NSAssert(NO, @"Subclass must implement this method");
+    return nil;
+}
+
 - (void)showSelectedContactsArea:(BOOL)isShow {
-    NSAssert(NO, @"Subclass must implement this method");
-}
-
-- (void)addSelectedContact:(NSIndexPath *) indexPath {
-    NSAssert(NO, @"Subclass must implement this method");
-}
-
-- (void)removeSelectedContact:(NSIndexPath *) indexPath {
     NSAssert(NO, @"Subclass must implement this method");
 }
 
@@ -128,4 +133,16 @@
     NSAssert(NO, @"Subclass must implement this method");
 }
 
+#pragma mark - HorizontalListItemDelegate methods
+- (ContactViewEntity *)horizontalListItem:(id<HorizontalListItemProtocol>)listItemView entityForIndexPath:(NSIndexPath *)indexPath {
+    return [self.viewModel selectedContactAtIndex:indexPath.item];
+}
+
+- (NSInteger)horizontalListItem:(id<HorizontalListItemProtocol>)listItemView numberOfItemAtSection:(NSInteger)section {
+    return [self.viewModel numberOfSelectedContacts];
+}
+
+- (void)removeCellWithContact:(ContactViewEntity *)contact {
+    [self.viewModel removeSelectedContact:contact.identifier];
+}
 @end

@@ -21,7 +21,7 @@
 #define DEBUG_MODE          0
 #define REUSE_IDENTIIER     @"ContactCollectionCell"
 
-@interface ContactWithSearchUIKit () {
+@interface ContactWithSearchUIKit (){
     UISearchBar                                     * _searchBar;
     UIViewController                                * _contentViewController;
     HorizontalListItemView                          * _contactSelectedKeyboardView;
@@ -45,13 +45,15 @@
         _searchBar.searchBarStyle           = UISearchBarStyleMinimal;
         _searchBar.barTintColor             = UIColor.clearColor;
         _searchBar.backgroundColor          = UIColor.whiteColor;
+        [self initElements];
+        [self showSelectedContactsArea:NO];
     }
     return self;
 }
 
 - (void)initElements {
-    _contactSelectedView                = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
-    _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
+    _contactSelectedView                = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
+    _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
     
     _contactSelectedView.layer.shadowColor      = UIColor.grayColor.CGColor;
     _contactSelectedView.layer.shadowOpacity    = 1;
@@ -61,14 +63,6 @@
     _contactSelectedKeyboardView.layer.shadowOpacity    = 1;
     _contactSelectedKeyboardView.layer.shadowOffset     = CGSizeMake(1, 0);
     
-    _contactSelectedView.collectionView.delegate            = self;
-    _contactSelectedView.collectionView.dataSource          = self;
-    _contactSelectedKeyboardView.collectionView.delegate    = self;
-    _contactSelectedKeyboardView.collectionView.dataSource  = self;
-    
-    [_contactSelectedView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
-    [_contactSelectedKeyboardView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
-    
     _searchBar.inputAccessoryView = _contactSelectedKeyboardView;
     
 #if DEBUG_MODE
@@ -76,14 +70,6 @@
     _contactSelectedView.backgroundColor            = UIColor.yellowColor;
     _contactSelectedKeyboardView.backgroundColor    = UIColor.orangeColor;
 #endif
-}
-
-#pragma mark - Life circle methods
-- (void)loadView {
-    [super loadView];
-    
-    [self initElements];
-    [self showSelectedContactsArea:NO];
 }
 
 #pragma mark - Layout views
@@ -148,8 +134,12 @@
     return _searchBar;
 }
 
-- (void)resetAllData {
-    
+- (id<HorizontalListItemProtocol>)selectedContactView {
+    return _contactSelectedView;
+}
+
+- (id<HorizontalListItemProtocol>)keyboardSearchbarView {
+    return _contactSelectedKeyboardView;
 }
 
 - (void)showSelectedContactsArea:(BOOL)isShow {
@@ -164,19 +154,6 @@
             strongSelf->_contactSelectedKeyboardView.alpha = isShow ? 1 : 0;
         }
     }];
-}
-
-- (void)addSelectedContact:(NSIndexPath *) indexPath {
-    [_contactSelectedView.collectionView insertItemsAtIndexPaths:@[indexPath]];
-    [_contactSelectedKeyboardView.collectionView insertItemsAtIndexPaths:@[indexPath]];
-        
-    [_contactSelectedView.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
-    [_contactSelectedKeyboardView.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
-}
-
-- (void)removeSelectedContact:(NSIndexPath *) indexPath {
-    [_contactSelectedView.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-    [_contactSelectedKeyboardView.collectionView deleteItemsAtIndexPaths:@[indexPath]];
 }
 
 - (void)loadContact {

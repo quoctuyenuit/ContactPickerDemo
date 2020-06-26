@@ -8,6 +8,7 @@
 
 #import "HorizontalListNode.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
+#import "ContactCollectionCellNode.h"
 
 #define DEBUG_MODE          0
 #define BUTTON_SIZE         CGSizeMake(50, 50)
@@ -18,8 +19,11 @@
 #define InsetForCollection  UIEdgeInsetsMake(0, LEFT_PADDING, 0, 0)
 #define InsetForButton      UIEdgeInsetsMake(0, 0, 0, RIGHT_PADDING)
 
+@interface HorizontalListNode () <ASCollectionDelegate, ASCollectionDataSource, ContactCollectionCellDelegate>
 
-@implementation HorizontalListNode {
+@end
+
+@implementation HorizontalListNode  {
     ASButtonNode            * _actionButton;
     ASDisplayNode           * _boundNode;
 }
@@ -28,16 +32,22 @@
     self = [super init];
     if (self) {
         
-        UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
-        [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        [flowLayout setMinimumInteritemSpacing:0];
+        [flowLayout setMinimumLineSpacing:10];
+        flowLayout.itemSize = ITEM_SIZE;
+        flowLayout.estimatedItemSize = CGSizeZero;
         
         
         _actionButton           = [[ASButtonNode alloc] init];
-        _collectionNode         = [[ASCollectionNode alloc] initWithCollectionViewLayout: layout];
+        _collectionNode         = [[ASCollectionNode alloc] initWithCollectionViewLayout: flowLayout];
         _boundNode              = [[ASDisplayNode alloc] init];
         self.backgroundColor    = UIColor.whiteColor;
         
-        _collectionNode.showsHorizontalScrollIndicator = NO;
+        _collectionNode.showsHorizontalScrollIndicator  = NO;
+        _collectionNode.dataSource                      = self;
+        _collectionNode.delegate                        = self;
         
         [_actionButton setBackgroundImage:[UIImage imageNamed:@"arrow_ico"] forState:UIControlStateNormal];
         
@@ -97,4 +107,44 @@
         style.flexGrow = 10;
     }]]];
 }
+
+#pragma mark - ASCollectionDataSource methods
+
+- (NSInteger)numberOfSectionsInCollectionNode:(ASCollectionNode *)collectionNode {
+    return 1;
+}
+
+- (NSInteger)collectionNode:(ASCollectionNode *)collectionNode numberOfItemsInSection:(NSInteger)section {
+    return [self.delegate horizontalListItem:self numberOfItemAtSection:section];
+}
+
+- (ASCellNodeBlock)collectionNode:(ASCollectionNode *)collectionNode nodeBlockForItemAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self) weakSelf = self;
+    ContactViewEntity * contact = [self.delegate horizontalListItem:self entityForIndexPath:indexPath];
+    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        ContactCollectionCellNode *  cellNode = [[ContactCollectionCellNode alloc] initWithContact:contact];
+        cellNode.delegate = strongSelf;
+        return cellNode;
+    };
+    return ASCellNodeBlock;
+}
+
+- (void)removeCell:(ContactViewEntity *)entity {
+    [self.delegate removeCellWithContact:entity];
+}
+
+#pragma - mark HorizontalListItemProtocol methods
+- (void)insertItemAtIndex:(NSInteger)index {
+    NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    [_collectionNode insertItemsAtIndexPaths:@[indexPath]];
+    [_collectionNode scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
+}
+
+- (void)removeItemAtIndex:(NSInteger)index {
+    NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    [_collectionNode deleteItemsAtIndexPaths:@[indexPath]];
+}
+
+@synthesize delegate;
 @end

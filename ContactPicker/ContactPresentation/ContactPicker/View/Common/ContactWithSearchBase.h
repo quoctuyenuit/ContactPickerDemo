@@ -12,6 +12,7 @@
 #import "KeyboardAppearanceDelegate.h"
 #import "ContactCollectionCellProtocol.h"
 #import "ResponseInformationView.h"
+#import "HorizontalListItemProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,12 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ContactWithSearchBase : ASViewController <KeyboardAppearanceDelegate, ContactCollectionCellDelegate>
 @property(nonatomic, readwrite) id<ContactViewModelProtocol>          viewModel;
 @property(nonatomic, readwrite) UISearchBar                         * searchBar;
+@property(nonatomic, readwrite) id<HorizontalListItemProtocol>        selectedContactView;
+@property(nonatomic, readwrite) id<HorizontalListItemProtocol>        keyboardSearchbarView;
 
 - (ResponseInformationView *)loadResponseInforView:(ResponseViewType)type;
 - (void)loadContact;
 - (CGSize)selectedItemSize;
-- (void)addSelectedContact:(NSIndexPath *) indexPath;
-- (void)removeSelectedContact:(NSIndexPath *) indexPath;
 - (void)showSelectedContactsArea:(BOOL) isShow;
 @end
 

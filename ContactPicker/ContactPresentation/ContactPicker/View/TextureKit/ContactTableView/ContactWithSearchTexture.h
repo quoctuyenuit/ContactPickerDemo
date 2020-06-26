@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactWithSearchTexture : ContactWithSearchBase <ASCollectionDelegate, ASCollectionDataSource>
+@interface ContactWithSearchTexture : ContactWithSearchBase
 - (instancetype) init;
 @end
 

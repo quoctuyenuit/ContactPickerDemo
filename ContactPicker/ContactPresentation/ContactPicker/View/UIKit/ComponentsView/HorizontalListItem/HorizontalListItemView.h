@@ -7,17 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ContactViewEntity.h"
+#import "HorizontalListItemProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
-
-@interface HorizontalListItemView : UIView {
-    UIView            *_mainContentView;
-    UIButton          *_button;
-}
-@property (strong, nonatomic) UICollectionView  *collectionView;
-
+@interface HorizontalListItemView : UIView <HorizontalListItemProtocol> 
 @end
+
+
 
 NS_ASSUME_NONNULL_END
