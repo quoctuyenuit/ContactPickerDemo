@@ -129,16 +129,11 @@
                 handler([listContacts copy], nil, YES);
             });
 #else
-            
             [listContacts addObjectsFromArray: [self createDummyDataWithSize: batchSize - listContacts.count]];
             
             dispatch_async(callBackQueue, ^{
                 handler([listContacts copy], nil, NO);
             });
-#endif
-            
-            
-#if DUMMY_DATA_ENABLE
 
             // Add dummy data
             [self createDummyDataByBatch:NUMBER_OF_DUMMY batchSize:batchSize block:^(NSArray<ContactDAL *> * listDummyData) {

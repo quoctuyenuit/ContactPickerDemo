@@ -52,12 +52,11 @@
     _label.textColor        = UIColor.whiteColor;
     _label.textAlignment    = NSTextAlignmentCenter;
     
-    _imageView.contentMode  = UIViewContentModeScaleAspectFill;
+    [_imageView setContentMode: UIViewContentModeScaleAspectFill];
+    [_imageView.layer setMasksToBounds:YES];
     
     self.backgroundColor            = UIColor.clearColor;
     _mainBoundView.backgroundColor  = UIColor.clearColor;
-    
-    _label.text = @"Tets";
 }
 
 #pragma mark - Life circle methods
@@ -68,6 +67,7 @@
     _gradientBackground.frame           = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
     self.layer.cornerRadius             = self.frame.size.width / 2;
+    _imageView.layer.cornerRadius       = self.frame.size.width / 2;
 }
 
 #pragma mark - Helper methods
@@ -108,7 +108,7 @@
 
 #pragma mark - Public methods
 - (void)configWithImage:(UIImage *)image withTitle:(NSString *)title withBackground:(NSArray *)backgroundColor {
-    _imageView.image            = [image makeCircularImageWithSize:CGSizeMake(self.bounds.size.width, self.bounds.size.height) backgroundColor:nil];
+    _imageView.image            = image;
     _label.text                 = title;
     _gradientBackground.colors  = backgroundColor;
     
