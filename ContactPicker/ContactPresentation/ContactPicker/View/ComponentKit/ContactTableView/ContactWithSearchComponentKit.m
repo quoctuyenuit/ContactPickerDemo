@@ -1,27 +1,26 @@
 //
-//  ContactViewController.m
+//  ContactWithSearchComponent.m
 //  ContactPicker
 //
-//  Created by Quốc Tuyến on 6/6/20.
+//  Created by Quốc Tuyến on 6/24/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactWithSearchUIKit.h"
-#import "ContactTableControllerUIKit.h"
-#import "ContactViewModel.h"
-#import "KeyboardAppearanceDelegate.h"
-#import "Logging.h"
-#import "ContactCollectionCell.h"
-#import "ResponseInformationViewController.h"
+#import "ContactWithSearchComponentKit.h"
+#import <ComponentKit/ComponentKit.h>
+#import <UIKit/UIKit.h>
+#import "HorizontalListItemView.h"
 
 #import "ContactViewModel.h"
 #import "ContactBus.h"
 #import "ContactAdapter.h"
+#import "ContactTableControllerComponentKit.h"
 
-#define DEBUG_MODE          0
+#import "ContactCollectionCell.h"
+
 #define REUSE_IDENTIIER     @"ContactCollectionCell"
 
-@interface ContactWithSearchUIKit () {
+@implementation ContactWithSearchComponentKit {
     UISearchBar                                     * _searchBar;
     UIViewController                                * _contentViewController;
     HorizontalListItemView                          * _contactSelectedKeyboardView;
@@ -29,13 +28,6 @@
     id<ContactViewModelProtocol>                      _viewModel;
     NSLayoutConstraint                              * _contactSelectedHeightConstraint;
 }
-
-- (void) initElements;
-- (void) layoutViews;
-@end
-
-@implementation ContactWithSearchUIKit
-
 - (instancetype)init
 {
     self = [super initWithNibName:nil bundle:nil];
@@ -68,7 +60,7 @@
     
     [_contactSelectedView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
     [_contactSelectedKeyboardView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
-    
+ 
     _searchBar.inputAccessoryView = _contactSelectedKeyboardView;
     
 #if DEBUG_MODE
@@ -96,7 +88,7 @@
     _contentViewController.view.translatesAutoresizingMaskIntoConstraints          = NO;
     _contactSelectedView.translatesAutoresizingMaskIntoConstraints  = NO;
     
-    [_searchBar.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor].active = YES;
+    [_searchBar.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
     [_searchBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active                               = YES;
     [_searchBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active                             = YES;
     [_searchBar.heightAnchor constraintEqualToConstant:SEARCH_BAR_HEIGHT].active                                    = YES;
@@ -114,29 +106,6 @@
     _contactSelectedHeightConstraint.active                                                         = YES;
     
     [self.view bringSubviewToFront:_contactSelectedView];
-}
-
-#pragma mark - Collection view delegate and datasource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [_viewModel numberOfSelectedContacts];
-}
-
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCollectionCell" forIndexPath:indexPath];
-    
-    ContactViewEntity * entity = [_viewModel selectedContactAtIndex:indexPath.item];
-    
-    [cell configWithEntity:entity];
-    
-    if (cell.delegate == nil) {
-        cell.delegate = self;
-    }
-    
-    return cell;
 }
 
 #pragma mark - Subclass methods
@@ -189,7 +158,7 @@
             } else if (numberOfContacts == 0) {
                 strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeEmptyContact];
             } else {
-                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableControllerUIKit alloc] initWithViewModel:self->_viewModel];
+                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableControllerComponentKit alloc] initWithViewModel:self->_viewModel];
                 table.keyboardAppearanceDelegate = self;
                 strongSelf->_contentViewController = table;
             }
@@ -212,5 +181,29 @@
     [responseView.rightAnchor constraintEqualToAnchor:vc.view.rightAnchor].active   = YES;
     [responseView.bottomAnchor constraintEqualToAnchor:vc.view.bottomAnchor].active = YES;
     return vc;
+}
+
+
+#pragma mark - Collection view delegate and datasource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return [_viewModel numberOfSelectedContacts];
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCollectionCell" forIndexPath:indexPath];
+    
+    ContactViewEntity * entity = [_viewModel selectedContactAtIndex:indexPath.item];
+    
+    [cell configWithEntity:entity];
+    
+    if (cell.delegate == nil) {
+        cell.delegate = self;
+    }
+    
+    return cell;
 }
 @end

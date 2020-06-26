@@ -16,11 +16,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactTableViewCell : UITableViewCell<ContactTableCellProtocol>
-@property (strong, nonatomic) IBOutlet ContactAvatarView *avatar;
-@property (strong, nonatomic) IBOutlet UILabel *contactNameLabel;
-@property (strong, nonatomic) IBOutlet UILabel *contactDescriptionLabel;
-@property (strong, nonatomic) IBOutlet CheckBoxButtonView *checkBox;
-
 @end
 
 NS_ASSUME_NONNULL_END

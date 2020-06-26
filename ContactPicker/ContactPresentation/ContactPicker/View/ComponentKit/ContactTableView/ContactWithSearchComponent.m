@@ -6,7 +6,7 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactWithSearchComponent.h"
+#import "ContactWithSearchComponentKit.h"
 #import <ComponentKit/ComponentKit.h>
 #import <UIKit/UIKit.h>
 #import "HorizontalListItemView.h"
@@ -20,9 +20,9 @@
 
 #define REUSE_IDENTIIER     @"ContactCollectionCell"
 
-@implementation ContactWithSearchComponent {
+@implementation ContactWithSearchComponentKit {
     UISearchBar                                     * _searchBar;
-    UIViewController<KeyboardAppearanceProtocol>    * _contentViewController;
+    UIViewController                                * _contentViewController;
     HorizontalListItemView                          * _contactSelectedKeyboardView;
     HorizontalListItemView                          * _contactSelectedView;
     id<ContactViewModelProtocol>                      _viewModel;
@@ -58,9 +58,8 @@
     _contactSelectedKeyboardView.collectionView.delegate    = self;
     _contactSelectedKeyboardView.collectionView.dataSource  = self;
     
-    UINib * collectionCellNib = [UINib nibWithNibName:@"ContactCollectionCell" bundle:nil];
-    [_contactSelectedView.collectionView registerNib:collectionCellNib forCellWithReuseIdentifier:REUSE_IDENTIIER];
-    [_contactSelectedKeyboardView.collectionView registerNib:collectionCellNib forCellWithReuseIdentifier:REUSE_IDENTIIER];
+    [_contactSelectedView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
+    [_contactSelectedKeyboardView.collectionView registerClass:[ContactCollectionCell class] forCellWithReuseIdentifier:REUSE_IDENTIIER];
  
     _searchBar.inputAccessoryView = _contactSelectedKeyboardView;
     
@@ -154,20 +153,34 @@
     [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            if (isSuccess) {
-                strongSelf->_contentViewController = [[ContactTableComponentController alloc] initWithViewModel:self->_viewModel];
+            if (error) {
+                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeFailLoadingContact];
+            } else if (numberOfContacts == 0) {
+                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeEmptyContact];
             } else {
-                if (numberOfContacts == 0) {
-                    strongSelf->_contentViewController = [strongSelf loadResponseInforView:ResponseViewTypeEmptyContact];
-                } else {
-                    strongSelf->_contentViewController = [strongSelf loadResponseInforView:ResponseViewTypeFailLoadingContact];
-                }
+                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableComponentController alloc] initWithViewModel:self->_viewModel];
+                table.keyboardAppearanceDelegate = self;
+                strongSelf->_contentViewController = table;
             }
-            strongSelf->_contentViewController.keyboardAppearanceDelegate = self;
+            
             [strongSelf addChildViewController:strongSelf->_contentViewController];
             [strongSelf layoutViews];
         }
     }];
+}
+
+- (UIViewController *)wrapResponseViewIntoController:(ResponseViewType) type {
+    ResponseInformationViewController *responseView = [self loadResponseInforView:type];
+    responseView.keyboardAppearanceDelegate         = self;
+    UIViewController * vc                           = [[UIViewController alloc] init];
+    [vc.view addSubview:responseView];
+    
+    responseView.translatesAutoresizingMaskIntoConstraints                          = NO;
+    [responseView.topAnchor constraintEqualToAnchor:vc.view.topAnchor].active       = YES;
+    [responseView.leftAnchor constraintEqualToAnchor:vc.view.leftAnchor].active     = YES;
+    [responseView.rightAnchor constraintEqualToAnchor:vc.view.rightAnchor].active   = YES;
+    [responseView.bottomAnchor constraintEqualToAnchor:vc.view.bottomAnchor].active = YES;
+    return vc;
 }
 
 

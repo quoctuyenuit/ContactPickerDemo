@@ -79,9 +79,12 @@
     [self setupBaseViews];
     [self setupDatasets];
     [self setupEvents];
-    [self loadContact];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self loadContact];
+}
 
 #pragma mark - Helper methods
 - (void)setupEvents {
@@ -133,8 +136,8 @@
                 [Logging error:error.localizedDescription];
             } else {
                 NSLog(@"[%@] end load batch", LOG_MSG_HEADER);
-                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
                 strongSelf.contactHadLoad = YES;
+                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
             }
         }
     }];

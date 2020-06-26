@@ -12,10 +12,11 @@
 #import "ContactDALProtocol.h"
 
 
-#define DEBUG_EMPTY_CONTACT 0
-#define DEBUG_FAILT_LOAD    0
-#define DUMMY_DATA_ENABLE   1
-#define NUMBER_OF_DUMMY     10000
+#define DEBUG_EMPTY_CONTACT         0
+#define DEBUG_FAILT_LOAD            0
+#define DEBUG_PERMISSION_DENIED     0
+#define DUMMY_DATA_ENABLE           1
+#define NUMBER_OF_DUMMY             10000
 
 
 @interface ContactAdapter() {
@@ -57,6 +58,11 @@
 
 #pragma mark - Protocols methods
 - (void)requestPermission:(void (^)(BOOL, NSError * _Nullable)) handler {
+#if DEBUG_PERMISSION_DENIED
+    handler(NO, nil);
+    return;
+#endif
+    
     if ([CNContactStore class]) {
         CNContactStore *addressBook = [[CNContactStore alloc] init];
         [addressBook requestAccessForEntityType:CNEntityTypeContacts

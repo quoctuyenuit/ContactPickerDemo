@@ -12,11 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface HorizontalListItemView : UIView
-@property (strong, nonatomic) IBOutlet UIView *mainContentView;
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UIButton *button;
-
+@interface HorizontalListItemView : UIView {
+    UIView            *_mainContentView;
+    UIButton          *_button;
+}
+@property (strong, nonatomic) UICollectionView  *collectionView;
 
 @end
 

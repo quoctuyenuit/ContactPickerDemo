@@ -7,7 +7,7 @@
 //
 
 #import <ComponentKit/ComponentKit.h>
-#import "ContactTableComponentController.h"
+#import "ContactTableControllerComponentKit.h"
 #import "ContactViewEntity.h"
 #import "ContactTableCellComponent.h"
 #import "Logging.h"
@@ -24,7 +24,7 @@
 #import "ContactAdapter.h"
 #endif
 
-@interface ContactTableComponentController () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource > {
+@interface ContactTableControllerComponentKit () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource > {
     id<ContactViewModelProtocol>                      _viewModel;
     CKCollectionViewDataSource                      * _dataSource;
     CKComponentFlexibleSizeRangeProvider            * _sizeRangeProvider;
@@ -33,7 +33,7 @@
 
 @end
 
-@implementation ContactTableComponentController
+@implementation ContactTableControllerComponentKit
 - (instancetype)initWithViewModel:(id<ContactViewModelProtocol>) viewModel {
     if (self = [super initWithNibName:nil bundle:nil]) {
         _viewModel          = viewModel;

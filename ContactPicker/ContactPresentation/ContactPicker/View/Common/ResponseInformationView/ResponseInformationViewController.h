@@ -18,20 +18,8 @@ typedef enum : NSUInteger {
     ResponseViewTypeSomethingWrong
 } ResponseViewType;
 
-@interface ResponseInformationViewController : UIViewController<KeyboardAppearanceProtocol> {
-    ResponseViewType viewType;
-}
-
-@property (weak, nonatomic) IBOutlet UIImageView *responseIconView;
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
-@property (weak, nonatomic) IBOutlet UIButton *openSettingBtn;
-
-extern NSString * const _Nonnull PermissionDeniedMsg;
-extern NSString * const _Nonnull EmptyContactMsg;
-extern NSString * const _Nonnull FailLoadingContactMsg;
-extern NSString * const _Nonnull SomethingWrongMsg;
-
-+ (ResponseInformationViewController *) instantiateWith: (ResponseViewType) viewType;
+@interface ResponseInformationViewController : UIView<KeyboardAppearanceProtocol>
+- (instancetype)initWithType:(ResponseViewType) viewType;
 
 @end
 

@@ -6,7 +6,7 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactTableViewController.h"
+#import "ContactTableControllerUIKit.h"
 #import "ContactViewModelProtocol.h"
 #import "ContactTableViewCell.h"
 #import "Utilities.h"
@@ -16,10 +16,10 @@
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
 #define LOG_MSG_HEADER              @"ContactTableUIKit"
 
-@interface ContactTableViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface ContactTableControllerUIKit() <UITableViewDelegate, UITableViewDataSource>
 @end
 
-@implementation ContactTableViewController {
+@implementation ContactTableControllerUIKit {
     UITableView                     * _tableView;
     id<ContactViewModelProtocol>      _viewModel;
 }
@@ -49,6 +49,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!self.contactHadLoad)
+        return 0;
+//    NSInteger rows = [self->_viewModel numberOfContactInSection:section];
+//    if (rows > 0)
+//        NSLog(@"[%@] numberOfRows is called", LOG_MSG_HEADER);
     return [self->_viewModel numberOfContactInSection:section];
 }
 
@@ -98,7 +103,7 @@
     
     CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
     if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
-        NSLog(@"[ContactTableViewController] load from scroll");
+        NSLog(@"[%@] begin fetching from scroll", LOG_MSG_HEADER);
         [self fetchBatchContactWithBlock:nil];
     }
 }
@@ -111,7 +116,7 @@
 - (void)setupBaseViews {
     [self.view addSubview:_tableView];
     UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
-    [_tableView registerNib:nib forCellReuseIdentifier:CELL_REUSE_IDENTIFIER];
+    [_tableView registerClass:[ContactTableViewCell class] forCellReuseIdentifier:CELL_REUSE_IDENTIFIER];
     
     _tableView.showsHorizontalScrollIndicator          = NO;
     _tableView.showsVerticalScrollIndicator            = NO;

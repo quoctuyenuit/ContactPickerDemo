@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactTableViewController : ContactTableBaseController
+@interface ContactTableControllerUIKit : ContactTableBaseController
 - (id) initWithViewModel: (id<ContactViewModelProtocol>) viewModel;
 @end
 

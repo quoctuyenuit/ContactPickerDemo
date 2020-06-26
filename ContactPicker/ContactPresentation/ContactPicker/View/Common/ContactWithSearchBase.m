@@ -24,7 +24,6 @@
 #pragma mark - Life circle methods
 - (void)loadView {
     [super loadView];
-//    _loadingController                      = [self createLoadingView: LOADING_MESSAGE];
     self.searchBar.delegate                 = self;
     self.searchBar.searchTextField.delegate = self;
     self.searchBar.placeholder              = SEARCH_PLACE_HOLDER;
@@ -79,7 +78,7 @@
 
 #pragma mark - Helper methods
 - (ResponseInformationViewController *)loadResponseInforView:(ResponseViewType)type {
-    return [ResponseInformationViewController instantiateWith:type];
+    return [[ResponseInformationViewController alloc] initWithType:type];
 }
 
 #pragma mark - KeyboardAppearanceProtocol methods

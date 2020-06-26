@@ -21,7 +21,7 @@
 - (void)setIsChecked:(BOOL)isChecked {
     self->_isChecked = isChecked;
     UIImage * backgroundImage = isChecked ? [UIImage imageNamed:@"checked_img"] : [UIImage imageNamed:@"unchecked_img"];
-    [self->_button setBackgroundImage: backgroundImage forState:UIControlStateNormal];
+    [self setBackgroundImage: backgroundImage forState:UIControlStateNormal];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder
@@ -43,18 +43,15 @@
 }
 
 - (void)customInit {
-    self->_isChecked = NO;
-    [[NSBundle mainBundle] loadNibNamed:@"CheckBoxButtonView" owner:self options:nil];
-    [self addSubview:self.contentView];
-    self.contentView.frame = self.bounds;
+    self.isChecked = NO;
+    [self addTarget:self action:@selector(checkAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-
-- (IBAction)checkAction:(id)sender {
+- (void)checkAction:(id)sender {
     self.isChecked = !self.isChecked;
     [self.delegate check: self.isChecked];
 }
 
-@synthesize isChecked = _isChecked;
+//@synthesize isChecked = _isChecked;
 
 @end

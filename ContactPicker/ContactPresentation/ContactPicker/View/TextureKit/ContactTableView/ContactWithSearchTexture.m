@@ -6,10 +6,10 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactViewControllerTexture.h"
+#import "ContactWithSearchTexture.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "KeyboardAppearanceDelegate.h"
-#import "ContactTableNodeController.h"
+#import "ContactTableControllerTexture.h"
 #import "SearchNode.h"
 #import "ContactCollectionCellNode.h"
 #import "HorizontalListNode.h"
@@ -23,10 +23,10 @@
 
 #define LOADING_MSG             @"Đang tải..."
 
-@interface ContactViewControllerTexture()
+@interface ContactWithSearchTexture()
 @end
 
-@implementation ContactViewControllerTexture {
+@implementation ContactWithSearchTexture {
     BOOL                                              _isShowSelected;
     id<ContactViewModelProtocol>                      _viewModel;
     ASViewController                                * _contentViewController;
@@ -211,25 +211,26 @@
     [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            if (isSuccess) {
-                ContactTableNodeController * table = [[ContactTableNodeController alloc] initWithViewModel:strongSelf->_viewModel];
+            if (!error && numberOfContacts > 0) {
+                ContactTableControllerTexture * table = [[ContactTableControllerTexture alloc] initWithViewModel:strongSelf->_viewModel];
                 table.keyboardAppearanceDelegate = strongSelf;
                 strongSelf->_contentViewController = table;
             } else {
                 ResponseInformationViewController * resVc = nil;
-                if (numberOfContacts == 0) {
-                    resVc = [strongSelf loadResponseInforView:ResponseViewTypeEmptyContact];
-                } else {
+                if (error) {
                     resVc = [strongSelf loadResponseInforView:ResponseViewTypeFailLoadingContact];
+                } else {
+                    resVc = [strongSelf loadResponseInforView:ResponseViewTypeEmptyContact];
                 }
                 resVc.keyboardAppearanceDelegate = strongSelf;
                 
                 ASDisplayNode * node = [[ASDisplayNode alloc] initWithViewBlock:^UIView * _Nonnull{
-                    return resVc.view;
+                    return resVc;
                 }];
                 
                 strongSelf->_contentViewController = [[ASViewController alloc] initWithNode: node];
             }
+            
             [strongSelf addChildViewController:strongSelf->_contentViewController];
             [strongSelf->_contentNode addSubnode:strongSelf->_contentViewController.node];
             [strongSelf layoutContentNode];

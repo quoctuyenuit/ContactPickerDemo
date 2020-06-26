@@ -7,30 +7,120 @@
 //
 
 #import "ContactTableViewCell.h"
-//#import "ContactAvatarImageView.h"
+
+#define DEBUG_MODE          0
+#define CHECKBOX_SIZE       25
+#define AVATAR_SIZE         55
+#define LEFT_PADDING        16
+#define RIGHT_PADDING       16
+#define SPACE_BETWEEN_ELE   16
 
 @interface ContactTableViewCell() {
-
+    ContactAvatarView       *_avatar;
+    UILabel                 *_contactNameLabel;
+    UILabel                 *_contactDescriptionLabel;
+    CheckBoxButtonView      *_checkBox;
+    UIView                  *_textBoundView;
 }
+- (void)initElements;
 @end
 
 @implementation ContactTableViewCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self initElements];
+    }
+    return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initElements];
+    }
+    return self;
+}
 
-    // Configure the view for the selected state
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self initElements];
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    [self addSubview:_checkBox];
+    [self addSubview:_avatar];
+    [self addSubview:_textBoundView];
+    [_textBoundView addSubview:_contactNameLabel];
+    [_textBoundView addSubview:_contactDescriptionLabel];
+    
+    _checkBox.translatesAutoresizingMaskIntoConstraints                 = NO;
+    _avatar.translatesAutoresizingMaskIntoConstraints                   = NO;
+    _textBoundView.translatesAutoresizingMaskIntoConstraints            = NO;
+    _contactNameLabel.translatesAutoresizingMaskIntoConstraints         = NO;
+    _contactDescriptionLabel.translatesAutoresizingMaskIntoConstraints  = NO;
+    
+    [_checkBox.widthAnchor constraintEqualToConstant:CHECKBOX_SIZE].active          = YES;
+    [_checkBox.heightAnchor constraintEqualToAnchor:_checkBox.widthAnchor].active   = YES;
+    [_checkBox.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active     = YES;
+    [_checkBox.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:LEFT_PADDING].active   = YES;
+    
+    [_avatar.leftAnchor constraintEqualToAnchor:_checkBox.rightAnchor constant:SPACE_BETWEEN_ELE].active    = YES;
+    [_avatar.heightAnchor constraintEqualToAnchor:_avatar.widthAnchor].active                               = YES;
+    [_avatar.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active                               = YES;
+    NSLayoutConstraint *avatarWidthConstraint = [_avatar.widthAnchor constraintEqualToConstant:AVATAR_SIZE];
+    NSLayoutConstraint *avatarTopConstraint = [_avatar.topAnchor constraintGreaterThanOrEqualToAnchor:self.topAnchor constant:8];
+    
+    
+    [_contactNameLabel.topAnchor constraintEqualToAnchor:_textBoundView.topAnchor].active       = YES;
+    [_contactNameLabel.leftAnchor constraintEqualToAnchor:_textBoundView.leftAnchor].active     = YES;
+    [_contactNameLabel.rightAnchor constraintEqualToAnchor:_textBoundView.rightAnchor].active   = YES;
+    
+    [_contactDescriptionLabel.topAnchor constraintEqualToAnchor:_contactNameLabel.bottomAnchor constant:-5].active  = YES;
+    [_contactDescriptionLabel.leftAnchor constraintEqualToAnchor:_textBoundView.leftAnchor].active                  = YES;
+    [_contactDescriptionLabel.rightAnchor constraintEqualToAnchor:_textBoundView.rightAnchor].active                = YES;
+    [_contactDescriptionLabel.bottomAnchor constraintEqualToAnchor:_textBoundView.bottomAnchor].active              = YES;
+    
+    [_textBoundView.leftAnchor constraintEqualToAnchor:_avatar.rightAnchor constant:SPACE_BETWEEN_ELE].active  = YES;
+    [_textBoundView.rightAnchor constraintEqualToAnchor:self.rightAnchor constant:-RIGHT_PADDING].active                    = YES;
+    [_textBoundView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active                            = YES;
+    
+    avatarTopConstraint.priority    = UILayoutPriorityRequired;
+    avatarWidthConstraint.priority  = UILayoutPriorityDefaultHigh;
+    
+    avatarTopConstraint.active      = YES;
+    avatarWidthConstraint.active    = YES;
+    
+#if DEBUG_MODE
+    self.backgroundColor                        = UIColor.blueColor;
+    _checkBox.backgroundColor                   = UIColor.blackColor;
+    _avatar.backgroundColor                     = UIColor.redColor;
+    _textBoundView.backgroundColor              = UIColor.greenColor;
+    _contactNameLabel.backgroundColor           = UIColor.grayColor;
+    _contactDescriptionLabel.backgroundColor    = UIColor.brownColor;
+#endif
+}
+
+- (void)initElements {
+    _checkBox                   = [[CheckBoxButtonView alloc] initWithFrame:CGRectZero];
+    _avatar                     = [[ContactAvatarView alloc] initWithFrame:CGRectZero];
+    _textBoundView              = [[UIView alloc] init];
+    _contactNameLabel           = [[UILabel alloc] init];
+    _contactDescriptionLabel    = [[UILabel alloc] init];
 }
 
 - (void)configForModel:(ContactViewEntity *)entity {    
-    self.contactNameLabel.text = entity.fullName;
-    self.contactDescriptionLabel.text = entity.contactDescription;
-    self.checkBox.isChecked = entity.isChecked;
+    _contactNameLabel.text = entity.fullName;
+    _contactDescriptionLabel.text = entity.contactDescription;
+    _checkBox.isChecked = entity.isChecked;
     
     NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
     NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
@@ -54,7 +144,7 @@
 }
 
 - (void)setSelect {
-    self.checkBox.isChecked = !self.checkBox.isChecked;
+    _checkBox.isChecked = !_checkBox.isChecked;
 }
 
 - (NSString *)reuseIdentifier {

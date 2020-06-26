@@ -11,15 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CheckBoxButtonView : UIView {
-    BOOL _isChecked;
+@interface CheckBoxButtonView : UIButton {
+    BOOL        _isChecked;
 }
-@property (weak, nonatomic) IBOutlet UIButton *button;
-@property (strong, nonatomic) IBOutlet UIView *contentView;
+
 @property (nonatomic, readwrite) BOOL isChecked;
-
 @property (weak, nonatomic) id<CheckBoxButtonDelegate> delegate;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -15,6 +15,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+//@protocol TestProtocol <NSObject>
+//
+//- (void)pringHelloWorld;
+//
+//@end
+//
+//@interface TestProtocol(Extension)
+//
+//@end
+
 @interface ContactTableBaseController : ASViewController<KeyboardAppearanceProtocol>
 @property(nonatomic, readwrite) id<ContactViewModelProtocol>      viewModel;
 @property(nonatomic, readwrite) BOOL                              contactHadLoad;

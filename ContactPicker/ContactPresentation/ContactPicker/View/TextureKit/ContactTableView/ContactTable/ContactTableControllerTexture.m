@@ -6,7 +6,7 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactTableNodeController.h"
+#import "ContactTableControllerTexture.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "ContactViewModelProtocol.h"
 #import "ContactViewEntity.h"
@@ -17,10 +17,10 @@
 #define LOADING_MSG                         @"Đang tải danh bạ..."
 #define LOG_MSG_HEADER                      @"ContactTableTexture"
 
-@interface ContactTableNodeController () <ASTableDelegate, ASTableDataSource>
+@interface ContactTableControllerTexture () <ASTableDelegate, ASTableDataSource>
 @end
 
-@implementation ContactTableNodeController {
+@implementation ContactTableControllerTexture {
     ASTableNode                 * _tableNode;
     id<ContactViewModelProtocol>  _viewModel;
 }

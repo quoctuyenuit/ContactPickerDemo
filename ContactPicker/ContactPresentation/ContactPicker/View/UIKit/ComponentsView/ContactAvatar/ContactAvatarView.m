@@ -46,19 +46,13 @@
     _mainBoundView      = [[UIView alloc] init];
     _imageView          = [[UIImageView alloc] init];
     _label              = [[UILabel alloc] init];
+    _gradientBackground = [CAGradientLayer layer];
     
     _label.font             = [UIFont systemFontOfSize:FONT_SIZE];
     _label.textColor        = UIColor.whiteColor;
     _label.textAlignment    = NSTextAlignmentCenter;
     
     _imageView.contentMode  = UIViewContentModeScaleAspectFill;
-    
-    _gradientBackground                 = [CAGradientLayer layer];
-    _gradientBackground.frame           = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
-    
-    
-    self.layer.cornerRadius             = self.frame.size.width / 2;
     
     self.backgroundColor            = UIColor.clearColor;
     _mainBoundView.backgroundColor  = UIColor.clearColor;
@@ -70,6 +64,10 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self layoutViews];
+    
+    _gradientBackground.frame           = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
+    self.layer.cornerRadius             = self.frame.size.width / 2;
 }
 
 #pragma mark - Helper methods

@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactWithSearchComponent : ContactWithSearchBase <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface ContactWithSearchComponentKit : ContactWithSearchBase <UICollectionViewDelegate, UICollectionViewDataSource>
 - (instancetype)init;
 @end
 

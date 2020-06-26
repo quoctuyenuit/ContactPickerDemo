@@ -13,8 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactCollectionCell : UICollectionViewCell<ContactCollectionCellProtocol>
-@property (weak, nonatomic) IBOutlet ContactAvatarView *avatar;
+@interface ContactCollectionCell : UICollectionViewCell<ContactCollectionCellProtocol> {
+    ContactAvatarView   *_avatar;
+    UIButton            *_button;
+}
 
 @end
 

@@ -9,20 +9,64 @@
 #import "ContactCollectionCell.h"
 #import "ContactViewEntity.h"
 
+#define CLOSE_BTN_WIDTH     20
+
 @interface ContactCollectionCell() {
     ContactViewEntity * _currentContact;
 }
+- (void)initElements;
 @end
 
 @implementation ContactCollectionCell
 
 @synthesize delegate;
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initElements];
+    }
+    return self;
 }
-- (IBAction)closeAction:(id)sender {
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self initElements];
+    }
+    return self;
+}
+
+- (void)initElements {
+    _avatar = [[ContactAvatarView alloc] initWithFrame:self.frame];
+    _button = [[UIButton alloc] init];
+    
+    [_button setBackgroundImage:[UIImage imageNamed:@"close_ico"] forState:UIControlStateNormal];
+    [_button addTarget:self action:@selector(closeAction:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self addSubview:_avatar];
+    [self addSubview:_button];
+    
+    _avatar.translatesAutoresizingMaskIntoConstraints = NO;
+    _button.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [_avatar.topAnchor constraintEqualToAnchor:self.topAnchor].active       = YES;
+    [_avatar.leftAnchor constraintEqualToAnchor:self.leftAnchor].active     = YES;
+    [_avatar.rightAnchor constraintEqualToAnchor:self.rightAnchor].active   = YES;
+    [_avatar.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
+    
+    [_button.topAnchor constraintEqualToAnchor:self.topAnchor].active       = YES;
+    [_button.rightAnchor constraintEqualToAnchor:self.rightAnchor].active   = YES;
+    [_button.widthAnchor constraintEqualToConstant:CLOSE_BTN_WIDTH].active  = YES;
+    [_button.heightAnchor constraintEqualToAnchor:_button.widthAnchor].active   = YES;
+}
+
+- (void)closeAction:(id)sender {
     [self.delegate removeCell:self->_currentContact];
 }
 
