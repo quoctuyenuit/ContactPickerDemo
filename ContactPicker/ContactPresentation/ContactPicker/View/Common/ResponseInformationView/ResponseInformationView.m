@@ -6,7 +6,7 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ResponseInformationViewController.h"
+#import "ResponseInformationView.h"
 
 #define DEBUG_MODE          1
 #define PERMISSION_MSG      @"Ứng dụng chưa được cấp quyền :("
@@ -22,7 +22,7 @@
 #define MSG_FONT_SIZE       20
 #define BOTTOM_PADDING      72
 
-@interface ResponseInformationViewController ()
+@interface ResponseInformationView ()
 - (void) setupPermissionDeniedView;
 - (void) setupEmptyContactView;
 - (void) setupFailLoadingContactView;
@@ -30,7 +30,7 @@
 - (void) setupView;
 @end
 
-@implementation ResponseInformationViewController {
+@implementation ResponseInformationView {
     UIImageView     *_responseIconView;
     UILabel         *_messageLabel;
     UIButton        *_openSettingBtn;

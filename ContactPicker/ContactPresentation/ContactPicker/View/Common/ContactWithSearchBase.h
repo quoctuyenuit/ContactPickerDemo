@@ -11,7 +11,7 @@
 #import "ContactViewModelProtocol.h"
 #import "KeyboardAppearanceDelegate.h"
 #import "ContactCollectionCellProtocol.h"
-#import "ResponseInformationViewController.h"
+#import "ResponseInformationView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readwrite) id<ContactViewModelProtocol>          viewModel;
 @property(nonatomic, readwrite) UISearchBar                         * searchBar;
 
-- (ResponseInformationViewController *)loadResponseInforView:(ResponseViewType)type;
+- (ResponseInformationView *)loadResponseInforView:(ResponseViewType)type;
 - (void)loadContact;
 - (CGSize)selectedItemSize;
 - (void)addSelectedContact:(NSIndexPath *) indexPath;

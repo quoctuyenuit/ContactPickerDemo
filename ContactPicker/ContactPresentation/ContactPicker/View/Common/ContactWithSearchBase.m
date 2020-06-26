@@ -77,8 +77,8 @@
 }
 
 #pragma mark - Helper methods
-- (ResponseInformationViewController *)loadResponseInforView:(ResponseViewType)type {
-    return [[ResponseInformationViewController alloc] initWithType:type];
+- (ResponseInformationView *)loadResponseInforView:(ResponseViewType)type {
+    return [[ResponseInformationView alloc] initWithType:type];
 }
 
 #pragma mark - KeyboardAppearanceProtocol methods

@@ -170,7 +170,7 @@
 }
 
 - (UIViewController *)wrapResponseViewIntoController:(ResponseViewType) type {
-    ResponseInformationViewController *responseView = [self loadResponseInforView:type];
+    ResponseInformationView *responseView = [self loadResponseInforView:type];
     responseView.keyboardAppearanceDelegate         = self;
     UIViewController * vc                           = [[UIViewController alloc] init];
     [vc.view addSubview:responseView];

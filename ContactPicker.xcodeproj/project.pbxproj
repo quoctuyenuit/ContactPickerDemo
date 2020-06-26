@@ -37,7 +37,7 @@
 		B06247E724A1C48A00FCCC61 /* ContactAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = B06247E624A1C48A00FCCC61 /* ContactAvatarView.m */; };
 		B06A4E02249F0A0300616510 /* ContactWithSearchBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E01249F0A0300616510 /* ContactWithSearchBase.m */; };
 		B06A4E06249F1FE600616510 /* TabbarOnTopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */; };
-		B06FBB5C248BDE20003BDC3C /* ResponseInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */; };
+		B06FBB5C248BDE20003BDC3C /* ResponseInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5B248BDE20003BDC3C /* ResponseInformationView.m */; };
 		B06FBB5F248BE3AC003BDC3C /* MainViewControllerUIkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5E248BE3AC003BDC3C /* MainViewControllerUIkit.m */; };
 		B07A8D782498AD2300A3B27F /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C25505249798DE00ECA551 /* Utilities.m */; };
 		B07A8D7C2498B8B400A3B27F /* CheckBoxNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D7B2498B8B400A3B27F /* CheckBoxNode.m */; };
@@ -241,8 +241,8 @@
 		B06A4E01249F0A0300616510 /* ContactWithSearchBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchBase.m; sourceTree = "<group>"; };
 		B06A4E04249F1FE600616510 /* TabbarOnTopViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopViewController.h; sourceTree = "<group>"; };
 		B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TabbarOnTopViewController.m; sourceTree = "<group>"; };
-		B06FBB5A248BDE20003BDC3C /* ResponseInformationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseInformationViewController.h; sourceTree = "<group>"; };
-		B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResponseInformationViewController.m; sourceTree = "<group>"; };
+		B06FBB5A248BDE20003BDC3C /* ResponseInformationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseInformationView.h; sourceTree = "<group>"; };
+		B06FBB5B248BDE20003BDC3C /* ResponseInformationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResponseInformationView.m; sourceTree = "<group>"; };
 		B06FBB5D248BE3AC003BDC3C /* MainViewControllerUIkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewControllerUIkit.h; sourceTree = "<group>"; };
 		B06FBB5E248BE3AC003BDC3C /* MainViewControllerUIkit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewControllerUIkit.m; sourceTree = "<group>"; };
 		B06FBB60248C0288003BDC3C /* KeyboardAppearanceDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardAppearanceDelegate.h; sourceTree = "<group>"; };
@@ -431,8 +431,8 @@
 		B0020CFE2490D18700899757 /* ResponseInformationView */ = {
 			isa = PBXGroup;
 			children = (
-				B06FBB5A248BDE20003BDC3C /* ResponseInformationViewController.h */,
-				B06FBB5B248BDE20003BDC3C /* ResponseInformationViewController.m */,
+				B06FBB5A248BDE20003BDC3C /* ResponseInformationView.h */,
+				B06FBB5B248BDE20003BDC3C /* ResponseInformationView.m */,
 			);
 			path = ResponseInformationView;
 			sourceTree = "<group>";
@@ -1232,7 +1232,7 @@
 				B06247E424A1C15100FCCC61 /* ContactAvatarComponent.mm in Sources */,
 				B0E8CAE7248B3C220096ACBA /* ContactWithSearchUIKit.m in Sources */,
 				B07A8D842498CED700A3B27F /* ContactWithSearchTexture.m in Sources */,
-				B06FBB5C248BDE20003BDC3C /* ResponseInformationViewController.m in Sources */,
+				B06FBB5C248BDE20003BDC3C /* ResponseInformationView.m in Sources */,
 				B06FBB5F248BE3AC003BDC3C /* MainViewControllerUIkit.m in Sources */,
 				B08322ED24A0AA4C0039D424 /* CheckBoxComponent.mm in Sources */,
 				B0A0A3F6248DDEAA00AB53BB /* Logging.m in Sources */,

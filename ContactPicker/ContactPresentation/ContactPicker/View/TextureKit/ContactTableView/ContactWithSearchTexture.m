@@ -13,7 +13,7 @@
 #import "SearchNode.h"
 #import "ContactCollectionCellNode.h"
 #import "HorizontalListNode.h"
-#import "ResponseInformationViewController.h"
+#import "ResponseInformationView.h"
 
 #import "ContactViewModel.h"
 #import "ContactBus.h"
@@ -216,7 +216,7 @@
                 table.keyboardAppearanceDelegate = strongSelf;
                 strongSelf->_contentViewController = table;
             } else {
-                ResponseInformationViewController * resVc = nil;
+                ResponseInformationView * resVc = nil;
                 if (error) {
                     resVc = [strongSelf loadResponseInforView:ResponseViewTypeFailLoadingContact];
                 } else {

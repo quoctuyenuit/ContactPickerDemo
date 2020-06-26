@@ -12,7 +12,7 @@
 #import "KeyboardAppearanceDelegate.h"
 #import "Logging.h"
 #import "ContactCollectionCell.h"
-#import "ResponseInformationViewController.h"
+#import "ResponseInformationView.h"
 
 #import "ContactViewModel.h"
 #import "ContactBus.h"
@@ -201,7 +201,7 @@
 }
 
 - (UIViewController *)wrapResponseViewIntoController:(ResponseViewType) type {
-    ResponseInformationViewController *responseView = [self loadResponseInforView:type];
+    ResponseInformationView *responseView = [self loadResponseInforView:type];
     responseView.keyboardAppearanceDelegate         = self;
     UIViewController * vc                           = [[UIViewController alloc] init];
     [vc.view addSubview:responseView];

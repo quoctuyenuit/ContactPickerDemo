@@ -7,7 +7,7 @@
 //
 
 #import "MainViewControllerUIkit.h"
-#import "ResponseInformationViewController.h"
+#import "ResponseInformationView.h"
 #import "ContactViewModelProtocol.h"
 #import "ContactViewModel.h"
 #import "ContactBus.h"
@@ -60,7 +60,7 @@
 
 
 - (UIViewController *)loadResponseInforView:(ResponseViewType)type {
-    UIView * v =[[ResponseInformationViewController alloc] initWithType:type];
+    UIView * v =[[ResponseInformationView alloc] initWithType:type];
     UIViewController * vc = [[UIViewController alloc] init];
     [vc.view addSubview:v];
     v.frame = vc.view.frame;
