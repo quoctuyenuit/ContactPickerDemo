@@ -42,21 +42,9 @@
     return self;
 }
 
-- (void)loadView {
-    [super loadView];
-    
-}
-                                       
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
-static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSObject> context) {
+#pragma mark - CKComponentProvider methods
++ (CKComponent *)componentForModel:(ContactViewEntity *)contact context:(id<NSObject>)context {
     return [ContactTableCellComponent newWithContact:contact];
-}
-
-- (void)contactSelectedAction:(ContactViewEntity *) contact {
-    
 }
 
 #pragma mark - UICollectionViewDelegateFlowlayout
@@ -108,10 +96,6 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
     }
 }
 
-+ (CKComponent *)componentForModel:(id<NSObject>)model context:(id<NSObject>)context {
-    return nil;
-}
-
 #pragma mark - Subclass methods
 - (id<ContactViewModelProtocol>)viewModel {
     return _viewModel;
@@ -143,7 +127,7 @@ static CKComponent * ContactComponentProvider(ContactViewEntity * contact,id<NSO
 - (void)setupDatasets {
     const CKSizeRange sizeRange = [_sizeRangeProvider sizeRangeForBoundingSize:_collectionView.bounds.size];
     CKDataSourceConfiguration * configuration = [[CKDataSourceConfiguration<ContactViewEntity *, id<NSObject>> alloc]
-                                                 initWithComponentProviderFunc:ContactComponentProvider
+                                                 initWithComponentProvider:[self class]
                                                  context:nil
                                                  sizeRange:sizeRange];
     

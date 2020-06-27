@@ -27,6 +27,8 @@
     UICollectionView  *_collectionView;
 }
 
+@synthesize delegate;
+
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
@@ -126,6 +128,7 @@
 #endif
 }
 
+#pragma mark - HorizontalListItemProtocol methods
 - (void)insertItemAtIndex:(NSInteger)index {
     NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
     [_collectionView insertItemsAtIndexPaths:@[indexPath]];
@@ -137,6 +140,7 @@
     [_collectionView deleteItemsAtIndexPaths:@[indexPath]];
 }
 
+#pragma mark - UICollectionViewDelegate & UICollectionViewDataSource methods
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
@@ -159,9 +163,9 @@
     return cell;
 }
 
+#pragma mark - ContactCollectionDelegate methods
 - (void)removeCell:(ContactViewEntity *)entity {
     [delegate removeCellWithContact:entity];
 }
 
-@synthesize delegate;
 @end
