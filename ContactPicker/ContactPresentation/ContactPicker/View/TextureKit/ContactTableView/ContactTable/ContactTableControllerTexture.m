@@ -141,7 +141,7 @@
 
 #pragma mark - Helper methods
 - (void)loadBatchContacts: (ASBatchContext * _Nullable) context {
-    [self fetchBatchContactWithBlock:^{
+    [self fetchBatchContactWithBlock:^(NSError * error) {
         [context completeBatchFetching:YES];
     }];
 }

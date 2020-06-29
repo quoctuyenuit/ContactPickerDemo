@@ -137,7 +137,7 @@
 
             if (strongSelf->_loadingState || strongSelf->_numberContactHadLoaded >= strongSelf->_listContactsBuffer.count) {
                 [Logging info:@"[LoadContact] _listContacts have 0 elements"];
-                NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"contact didnt have loaded yet"};
+                NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Contact loading is finished"};
                 NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
                 handler(nil, error);
                 return;

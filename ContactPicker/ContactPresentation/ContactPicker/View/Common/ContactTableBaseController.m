@@ -57,7 +57,7 @@
     NSAssert(NO, @"Subclass must implement this method");
 }
 
-- (void)fetchBatchContactWithBlock:(void (^_Nullable)(void))block {
+- (void)fetchBatchContactWithBlock:(void (^_Nullable)(NSError * error))block {
     NSLog(@"[%@] begin fetch batch", LOG_MSG_HEADER);
     __weak typeof(self) weakSelf = self;
     [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
@@ -68,9 +68,9 @@
                 [Logging error:error.localizedDescription];
             } else {
                 [strongSelf insertCells:updatedIndexPaths forEntities:entities];
-                if (block)
-                    block();
             }
+            if (block)
+                block(error);
         }
     }];
 }
@@ -94,7 +94,14 @@
 
 #if DEBUG_MEM_ENABLE
 - (void)autoFetchBatchTimerAction:(NSTimer *) timer {
-    [self fetchBatchContactWithBlock:nil];
+    __weak typeof(self) weakSelf = self;
+    [self fetchBatchContactWithBlock:^(NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf && error) {
+            [strongSelf->_autoFetchBatchTimer invalidate];
+            strongSelf-> _autoFetchBatchTimer = nil;
+        }
+    }];
 }
 #endif
 

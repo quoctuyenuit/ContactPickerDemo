@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,9 +27,9 @@
 		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
 		B02AAD3B249FBE8300A0B647 /* UIButtonExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B02AAD3A249FBE8300A0B647 /* UIButtonExtension.m */; };
 		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
-		B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAB024A3082700C86F0E /* CKSwift.framework */; };
-		B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EA9824A3082700C86F0E /* ComponentKit.framework */; };
-		B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAAE24A3082700C86F0E /* RenderCore.framework */; };
+		B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAB024A3082700C86F0E /* CKSwift.framework */; platformFilter = ios; };
+		B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EA9824A3082700C86F0E /* ComponentKit.framework */; platformFilter = ios; };
+		B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAAE24A3082700C86F0E /* RenderCore.framework */; platformFilter = ios; };
 		B057EAB824A3555200C86F0E /* ContactWithSearchComponentKit.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */; };
 		B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */; };
 		B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EAA024A0D51A00F367FC /* ContactTableControllerComponentKit.mm */; };
@@ -217,6 +217,7 @@
 		B00763442486167000239F3D /* ContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModel.m; sourceTree = "<group>"; };
 		B018E65B249884ED00ED55D6 /* ContactAvatarNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarNode.h; sourceTree = "<group>"; };
 		B018E65C249884ED00ED55D6 /* ContactAvatarNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarNode.m; sourceTree = "<group>"; };
+		B01A7EBE24A9899200652FE5 /* ContactPicker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ContactPicker.entitlements; sourceTree = "<group>"; };
 		B02A510B2487EB5500B9CC1B /* ContactBusEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusEntity.h; sourceTree = "<group>"; };
 		B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusEntity.m; sourceTree = "<group>"; };
 		B02A510E2487EF2000B9CC1B /* ContactBus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBus.h; sourceTree = "<group>"; };
@@ -353,6 +354,7 @@
 		193E332A2484F31A00C5735D /* ContactPicker */ = {
 			isa = PBXGroup;
 			children = (
+				B01A7EBE24A9899200652FE5 /* ContactPicker.entitlements */,
 				B0979AE024888DEB008D05F4 /* Extensions */,
 				B0979AE424889876008D05F4 /* ContactPresentation */,
 				B02A510A2487EAA700B9CC1B /* ContactBUS */,
@@ -1429,6 +1431,7 @@
 			baseConfigurationReference = 4D3BC35D66AFDB4BD9C4EA55 /* Pods-ContactPicker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ContactPicker/ContactPicker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1443,6 +1446,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tuyennq.ContactPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1452,6 +1456,7 @@
 			baseConfigurationReference = 821BF97CA69360C6D6118DDA /* Pods-ContactPicker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ContactPicker/ContactPicker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1466,6 +1471,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tuyennq.ContactPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

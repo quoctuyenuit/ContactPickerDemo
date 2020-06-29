@@ -49,7 +49,7 @@
         _checkBox.userInteractionEnabled          = NO;
         
         self.automaticallyManagesSubnodes = YES;
-        
+        [self configForModel:_contact];
 #if DEBUG_MODE
         _avatar.backgroundColor                   = UIColor.greenColor;
         _contactNameLabel.backgroundColor         = UIColor.grayColor;
@@ -105,7 +105,6 @@
 
 - (void)didEnterPreloadState {
     [super didEnterPreloadState];
-    [self configForModel:_contact];
 }
 
 #pragma mark - Subclassing
