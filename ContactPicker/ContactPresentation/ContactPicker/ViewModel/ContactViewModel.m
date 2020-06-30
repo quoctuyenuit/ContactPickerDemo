@@ -23,8 +23,8 @@
 
 @interface ContactViewModel() {
     BOOL                _loadBatchInProcessing;
-    dispatch_queue_t    _backgroundQueue;
-    dispatch_queue_t    _searchingQueue;
+    dispatch_queue_t    _backgroundConcurrentQueue;
+    dispatch_queue_t    _backgroundSerialQueue;
 }
 
 - (void) setupEvents;
@@ -53,9 +53,9 @@
 - (id)initWithBus:(id<ContactBusProtocol>)bus {
     _contactBus             = bus;
     
-    _searchingQueue         = dispatch_queue_create("[ViewModel] searching queue",
+    _backgroundSerialQueue         = dispatch_queue_create("[ViewModel] searching queue",
                                                         dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
-    _backgroundQueue        = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    _backgroundConcurrentQueue        = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
     _loadBatchInProcessing  = NO;
     
@@ -96,7 +96,7 @@
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
             if (strongSelf) {
-                dispatch_async(strongSelf->_backgroundQueue, ^{
+                dispatch_async(strongSelf->_backgroundConcurrentQueue, ^{
                     // Update avatar for current contacts
                     for (NSString * key in strongSelf->_listSectionKeys) {
                         [[strongSelf->_contactsOnView objectForKey:key] enumerateObjectsUsingBlock:^(ContactViewEntity * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -145,7 +145,7 @@
 
 - (void)loadContacts:(void (^)(BOOL isSuccess, NSError * error, NSUInteger numberOfContacts))completion {
     __weak typeof(self) weakSelf = self;
-    dispatch_async(_backgroundQueue, ^{
+    dispatch_async(_backgroundConcurrentQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             
@@ -175,7 +175,7 @@
             DebugLog(@"[ViewModel] loadBatch");
             _loadBatchInProcessing = YES;
             __weak typeof(self) weakSelf = self;
-            dispatch_async(_backgroundQueue, ^{
+            dispatch_async(_backgroundSerialQueue, ^{
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (strongSelf) {
                     [strongSelf->_contactBus loadContactByBatch:CONTACT_BATCH_SIZE completion:^(NSArray<ContactBusEntity *> * listContacts, NSError *error) {
@@ -248,7 +248,7 @@
 - (void)searchContactWithKeyName:(NSString *)key block:(nonnull void (^)(void))block {
     __weak typeof(self) weakSelf = self;
     
-    dispatch_async(_searchingQueue, ^{
+    dispatch_async(_backgroundSerialQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (strongSelf) {
@@ -384,7 +384,7 @@
 - (void)addContacts:(NSArray<ContactViewEntity *> *) contacts completion: (void (^)(NSArray<NSIndexPath *> * updatedIndexPaths)) handler {
     __weak typeof(self) weakSelf = self;
     
-    dispatch_async(_backgroundQueue, ^{
+    dispatch_async(_backgroundSerialQueue, ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             

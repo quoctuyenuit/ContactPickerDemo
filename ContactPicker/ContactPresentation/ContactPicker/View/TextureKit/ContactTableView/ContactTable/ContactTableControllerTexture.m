@@ -52,10 +52,9 @@
 
 - (ASCellNodeBlock)tableNode:(ASTableNode *)tableNode nodeBlockForRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak ContactViewEntity * contact = [_viewModel contactAtIndex:indexPath];
-    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
+    return ^ASCellNode * {
         return [[ContactTableCellNode alloc] initWithContact:contact];
     };
-    return ASCellNodeBlock;
 }
 
 - (void)tableNode:(ASTableNode *)tableNode didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
