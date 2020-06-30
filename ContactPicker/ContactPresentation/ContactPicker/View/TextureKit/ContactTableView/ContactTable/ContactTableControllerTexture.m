@@ -43,27 +43,19 @@
 
 #pragma mark - ASTableDatasource methods
 - (NSInteger)numberOfSectionsInTableNode:(ASTableNode *)tableNode {
-    return [self->_viewModel numberOfSection];
+    return [_viewModel numberOfSection];
 }
 
 - (NSInteger)tableNode:(ASTableNode *)tableNode numberOfRowsInSection:(NSInteger)section {
-    return [self->_viewModel numberOfContactInSection:section];
+    return [_viewModel numberOfContactInSection:section];
 }
 
-//- (ASCellNodeBlock)tableNode:(ASTableNode *)tableNode nodeBlockForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    ContactViewEntity * contact = [self->_viewModel contactAtIndex:indexPath];
-//    __weak typeof(contact) weakContact = contact;
-//    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
-//        return [[ContactTableCellNode alloc] initWithContact:weakContact];
-//    };
-//    return ASCellNodeBlock;
-//}
-
-
-
-- (ASCellNode *)tableNode:(ASTableNode *)tableNode nodeForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ContactViewEntity * contact = [self->_viewModel contactAtIndex:indexPath];
-    return [[ContactTableCellNode alloc] initWithContact:contact];
+- (ASCellNodeBlock)tableNode:(ASTableNode *)tableNode nodeBlockForRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak ContactViewEntity * contact = [_viewModel contactAtIndex:indexPath];
+    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
+        return [[ContactTableCellNode alloc] initWithContact:contact];
+    };
+    return ASCellNodeBlock;
 }
 
 - (void)tableNode:(ASTableNode *)tableNode didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -72,17 +64,17 @@
     ContactTableCellNode * cell = (ContactTableCellNode *)[tableNode nodeForRowAtIndexPath:indexPath];
     [cell setSelect];
     
-    [self->_viewModel selectectContactAtIndex:indexPath];
+    [_viewModel selectectContactAtIndex:indexPath];
     
     [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [self->_viewModel getAllSectionNames];
+    return [_viewModel getAllSectionNames];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [self->_viewModel numberOfContactInSection:section] > 0 ? [self->_viewModel titleForHeaderInSection:section] : nil;
+    return [_viewModel numberOfContactInSection:section] > 0 ? [_viewModel titleForHeaderInSection:section] : nil;
 }
 
 - (void)tableNode:(ASTableNode *)tableNode willBeginBatchFetchWithContext:(ASBatchContext *)context {

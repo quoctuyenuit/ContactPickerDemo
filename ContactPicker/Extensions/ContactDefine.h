@@ -27,7 +27,7 @@
 #define DEBUG_FAILT_LOAD                0
 #define DEBUG_PERMISSION_DENIED         0
 #define DUMMY_DATA_ENABLE               1
-#define NUMBER_OF_DUMMY                 10000
+#define NUMBER_OF_DUMMY                 1000
 
 //Memory debug define
 #define DEBUG_MEM_ENABLE                1
@@ -38,11 +38,11 @@
 
 #if !DEBUG_JUST_UIKIT
 //Just show Texture View
-#define DEBUG_JUST_TEXTURE              0
+#define DEBUG_JUST_TEXTURE              1
 
 #if !DEBUG_JUST_TEXTURE
 //Just show ComponentKit view
-#define DEBUG_JUST_COMPONENTKIT         1
+#define DEBUG_JUST_COMPONENTKIT         0
 #endif
 
 #endif
