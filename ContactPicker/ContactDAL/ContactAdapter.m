@@ -18,6 +18,10 @@
 #define DUMMY_DATA_ENABLE           0
 #define NUMBER_OF_DUMMY             1000
 
+#define CHECK_RETAINCYCLE               0
+#if CHECK_RETAINCYCLE
+#import <FBRetainCycleDetector/FBRetainCycleDetector.h>
+#endif
 
 @interface ContactAdapter() {
     NSCache                     * _imageCache;
@@ -153,6 +157,13 @@
             handler(nil, error, YES);
         }
     });
+    
+#if CHECK_RETAINCYCLE
+    FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
+    [detector addCandidate:self];
+    NSSet *retainCycles = [detector findRetainCycles];
+    NSLog(@"[Check leaks] %@", retainCycles);
+#endif
 }
 
 
@@ -262,6 +273,13 @@
         }
         
     });
+    
+#if CHECK_RETAINCYCLE
+    FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
+    [detector addCandidate:self];
+    NSSet *retainCycles = [detector findRetainCycles];
+    NSLog(@"[Check leaks] %@", retainCycles);
+#endif
 }
 
 - (void)getImageById:(NSString *)identifier isReload: (BOOL) isReload completion:(void (^)(NSData *, NSError * error))handler {

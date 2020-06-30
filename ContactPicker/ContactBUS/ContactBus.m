@@ -16,6 +16,11 @@
 
 #define DEFAULT_BATCH_SIZE      100
 
+#define CHECK_RETAINCYCLE               0
+#if CHECK_RETAINCYCLE
+#import <FBRetainCycleDetector/FBRetainCycleDetector.h>
+#endif
+
 @interface ContactBus()
 - (void)setupEvents;
 - (NSArray *)getIdentifiersFrom:(int) indexStart count:(int) count;
@@ -127,6 +132,13 @@
             }];
         }
     });
+    
+    #if CHECK_RETAINCYCLE
+        FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
+        [detector addCandidate:self];
+        NSSet *retainCycles = [detector findRetainCycles];
+        NSLog(@"[Check leaks] %@", retainCycles);
+    #endif
 }
 
 - (void)loadContactByBatch:(int)numberOfContact completion:(void (^)(NSArray<ContactBusEntity *> *, NSError *))handler {
@@ -159,6 +171,12 @@
             }];
         }
     });
+    #if CHECK_RETAINCYCLE
+        FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
+        [detector addCandidate:self];
+        NSSet *retainCycles = [detector findRetainCycles];
+        NSLog(@"[Check leaks] %@", retainCycles);
+    #endif
 }
 
 - (void)getImageFromId:(NSString *)identifier isReload:(BOOL) isReload completion:(void (^)(NSData * imageData, NSError * error))handler {

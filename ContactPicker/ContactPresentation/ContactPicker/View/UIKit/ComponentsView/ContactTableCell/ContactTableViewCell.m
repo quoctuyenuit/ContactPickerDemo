@@ -7,8 +7,10 @@
 //
 
 #import "ContactTableViewCell.h"
+#import <FBRetainCycleDetector/FBRetainCycleDetector.h>
 
 #define DEBUG_MODE          0
+#define CHECK_MEM_LEAKS     0
 #define CHECKBOX_SIZE       25
 #define AVATAR_SIZE         55
 #define LEFT_PADDING        16
@@ -21,6 +23,9 @@
     UILabel                 *_contactDescriptionLabel;
     CheckBoxButtonView      *_checkBox;
     UIView                  *_textBoundView;
+    
+    
+    void (^_block)(void);
 }
 - (void)initElements;
 @end
@@ -135,14 +140,29 @@
     }
     
     __weak typeof(self) weakSelf = self;
+    __weak typeof(entity) weakEntity = entity;
     entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf && identifier == entity.identifier) {
+            if (strongSelf && identifier == weakEntity.identifier) {
                 [strongSelf->_avatar configWithImage:image withTitle:@"" withBackground:nil];
             }
         });
     };
+    
+#if CHECK_MEM_LEAKS
+    
+    self->_block = ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            NSLog(@"%@", self);
+        }
+    };
+    FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
+    [detector addCandidate:self];
+    NSSet *retainCycles = [detector findRetainCycles];
+    NSLog(@"[Check leaks] %@", retainCycles);
+#endif
 }
 
 - (void)setSelect {

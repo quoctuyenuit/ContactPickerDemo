@@ -51,12 +51,20 @@
     return [self->_viewModel numberOfContactInSection:section];
 }
 
-- (ASCellNodeBlock)tableNode:(ASTableNode *)tableNode nodeBlockForRowAtIndexPath:(NSIndexPath *)indexPath {
+//- (ASCellNodeBlock)tableNode:(ASTableNode *)tableNode nodeBlockForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    ContactViewEntity * contact = [self->_viewModel contactAtIndex:indexPath];
+//    __weak typeof(contact) weakContact = contact;
+//    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
+//        return [[ContactTableCellNode alloc] initWithContact:weakContact];
+//    };
+//    return ASCellNodeBlock;
+//}
+
+
+
+- (ASCellNode *)tableNode:(ASTableNode *)tableNode nodeForRowAtIndexPath:(NSIndexPath *)indexPath {
     ContactViewEntity * contact = [self->_viewModel contactAtIndex:indexPath];
-    ASCellNode *(^ASCellNodeBlock)(void) = ^ASCellNode * {
-        return [[ContactTableCellNode alloc] initWithContact:contact];
-    };
-    return ASCellNodeBlock;
+    return [[ContactTableCellNode alloc] initWithContact:contact];
 }
 
 - (void)tableNode:(ASTableNode *)tableNode didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

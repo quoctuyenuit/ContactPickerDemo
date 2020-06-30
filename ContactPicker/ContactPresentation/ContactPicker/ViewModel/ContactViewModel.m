@@ -13,6 +13,11 @@
 #import <UIKit/UIKit.h>
 #import "Logging.h"
 
+#define CHECK_RETAINCYCLE               0
+#if CHECK_RETAINCYCLE
+#import <FBRetainCycleDetector/FBRetainCycleDetector.h>
+#endif
+
 #define CONTACT_BATCH_SIZE              200
 #define STRONG_SELF_DEALLOCATED_MSG     @"strongSelf had deallocated"
 
@@ -205,6 +210,13 @@
             });
         }
     }
+    
+#if CHECK_RETAINCYCLE
+    FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
+    [detector addCandidate:self];
+    NSSet *retainCycles = [detector findRetainCycles];
+    NSLog(@"[Check leaks] %@", retainCycles);
+#endif
 }
 
 - (NSInteger)numberOfSection {

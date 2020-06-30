@@ -46,7 +46,7 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             if ([index intValue] == 0) {
-                [self showSelectedContactsArea:YES];
+                [strongSelf showSelectedContactsArea:YES];
             }
             [strongSelf.selectedContactView insertItemAtIndex: [index integerValue]];
             [strongSelf.keyboardSearchbarView insertItemAtIndex: [index integerValue]];
@@ -58,7 +58,7 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             if ([strongSelf.viewModel numberOfSelectedContacts] == 0) {
-                [self showSelectedContactsArea:NO];
+                [strongSelf showSelectedContactsArea:NO];
             }
             [strongSelf.selectedContactView removeItemAtIndex: [index integerValue]];
             [strongSelf.keyboardSearchbarView removeItemAtIndex: [index integerValue]];

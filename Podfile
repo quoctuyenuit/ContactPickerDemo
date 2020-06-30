@@ -6,6 +6,7 @@ target 'ContactPicker' do
   use_frameworks!
   
   pod "Texture"
+  pod 'FBRetainCycleDetector'
 
   # Pods for ContactPicker
   target 'ContactPickerTests' do

@@ -115,7 +115,6 @@
 
 - (void)setupBaseViews {
     [self.view addSubview:_tableView];
-    UINib *nib = [UINib nibWithNibName:@"ContactTableViewCell" bundle:nil];
     [_tableView registerClass:[ContactTableViewCell class] forCellReuseIdentifier:CELL_REUSE_IDENTIFIER];
     
     _tableView.showsHorizontalScrollIndicator          = NO;

@@ -1,4 +1,5 @@
 PODS:
+  - FBRetainCycleDetector (0.1.4)
   - PINCache (3.0.1-beta.6):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.6)
     - PINCache/Core (= 3.0.1-beta.6)
@@ -36,21 +37,24 @@ PODS:
     - Texture/Core
 
 DEPENDENCIES:
+  - FBRetainCycleDetector
   - Texture
 
 SPEC REPOS:
   trunk:
+    - FBRetainCycleDetector
     - PINCache
     - PINOperation
     - PINRemoteImage
     - Texture
 
 SPEC CHECKSUMS:
+  FBRetainCycleDetector: 46f8179bbb1c587deee3ea838a1a3ee02acf5015
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
   Texture: 8ecf6984065a1e54f06bf97b349ecca28582acd7
 
-PODFILE CHECKSUM: 2fa80141e6e0e678836b764877f22f735b49e40d
+PODFILE CHECKSUM: aec105ab0e2cd74ea1d9b7077179a72e0ec29c6f
 
 COCOAPODS: 1.9.3

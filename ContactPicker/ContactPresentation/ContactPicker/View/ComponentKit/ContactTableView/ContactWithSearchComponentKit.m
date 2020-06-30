@@ -45,7 +45,7 @@
 
 - (void)initElements {
     _contactSelectedView                = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
-    _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
+    _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, 0, 80)];
     
     _contactSelectedView.layer.shadowColor      = UIColor.grayColor.CGColor;
     _contactSelectedView.layer.shadowOpacity    = 1;
