@@ -102,9 +102,6 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             ASDisplayNode * contentNode = strongSelf->_contentNode;
-//            NSLog(@"%f", strongSelf.view.safeAreaInsets.top);
-            ASLayoutSpec * searchBarLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:UIEdgeInsetsMake(strongSelf.view.safeAreaInsets.top, 0, 0, 0)
-                                                                                    child:strongSelf->_searchNode];
             
             ASDisplayNode * contentNodeLayout = [contentNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
                 style.flexGrow = 10;
@@ -126,8 +123,8 @@
                                                         alignItems:ASStackLayoutAlignItemsCenter
                                                           children:
                     strongSelf->_isShowSelected ?
-                    @[searchBarLayout, contentNodeLayout, selectedLayout ] :
-                    @[searchBarLayout, contentNodeLayout]
+                    @[strongSelf->_searchNode, contentNodeLayout, selectedLayout ] :
+                    @[strongSelf->_searchNode, contentNodeLayout]
                     ];
         }
         NSAssert(NO, @"StrongSelf referrence had dealocated");

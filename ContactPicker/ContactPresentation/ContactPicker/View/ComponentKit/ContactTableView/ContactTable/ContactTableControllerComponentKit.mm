@@ -10,8 +10,8 @@
 #import "ContactTableControllerComponentKit.h"
 #import "ContactViewEntity.h"
 #import "ContactTableCellComponent.h"
-#import "Logging.h"
 #import "ContactTableHeaderComponentView.h"
+#import "ContactDefine.h"
 
 #define DEBUG_FEATURE_MODE                  0
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
@@ -91,7 +91,7 @@
     
     CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
     if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
-        NSLog(@"[%@] begin call fetching", LOG_MSG_HEADER);
+        DebugLog(@"[%@] begin call fetching", LOG_MSG_HEADER);
         [self fetchBatchContactWithBlock:nil];
     }
 }
@@ -152,7 +152,7 @@
     if (indexCount != entityCount)
         return;
     
-    NSLog(@"[%@] begin insert cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
+    DebugLog(@"[%@] begin insert cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
     NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * items = [[NSMutableDictionary alloc] init];
     for (int i = 0; i < indexCount; i++) {
         [items setObject:entities[i] forKey:indexPaths[i]];
@@ -167,12 +167,12 @@
     for (NSInteger section = 0; section < [_collectionView numberOfSections]; section++) {
         cells += [_collectionView numberOfItemsInSection:section];
     }
-    NSLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
+    DebugLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
 #endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
-    NSLog(@"[%@] begin remove cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
+    DebugLog(@"[%@] begin remove cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
     CKDataSourceChangeset * changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withRemovedItems:[[NSSet alloc] initWithArray:indexPaths]] build];
     [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
 }

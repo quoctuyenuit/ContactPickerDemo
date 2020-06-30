@@ -11,7 +11,7 @@
 #import "ContactTableViewCell.h"
 #import "Utilities.h"
 #import "ContactViewEntity.h"
-#import "Logging.h"
+#import "ContactDefine.h"
 
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
 #define LOG_MSG_HEADER              @"ContactTableUIKit"
@@ -53,7 +53,7 @@
         return 0;
 //    NSInteger rows = [self->_viewModel numberOfContactInSection:section];
 //    if (rows > 0)
-//        NSLog(@"[%@] numberOfRows is called", LOG_MSG_HEADER);
+//        DebugLog(@"[%@] numberOfRows is called", LOG_MSG_HEADER);
     return [self->_viewModel numberOfContactInSection:section];
 }
 
@@ -103,7 +103,7 @@
     
     CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
     if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
-        NSLog(@"[%@] begin fetching from scroll", LOG_MSG_HEADER);
+        DebugLog(@"[%@] begin fetching from scroll", LOG_MSG_HEADER);
         [self fetchBatchContactWithBlock:nil];
     }
 }
@@ -134,25 +134,25 @@
     [_tableView reloadData];
     NSIndexPath * firstIndex = [_viewModel firstContactOnView];
     if (firstIndex) {
-        NSLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableView numberOfRowsInSection:firstIndex.section]);
+        DebugLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableView numberOfRowsInSection:firstIndex.section]);
         [_tableView scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
 }
 
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
-    NSLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
     [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 #if DEBUG_MEM_ENABLE
     NSInteger cells = 0;
     for (NSInteger section = 0; section < [_tableView numberOfSections]; section++) {
         cells += [_tableView numberOfRowsInSection:section];
     }
-    NSLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
+    DebugLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
 #endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
-    NSLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    DebugLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
     [_tableView reloadData];
 }
 

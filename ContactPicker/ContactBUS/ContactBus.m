@@ -11,12 +11,12 @@
 #import "Utilities.h"
 #import "ContactBusEntity.h"
 #import <UIKit/UIKit.h>
-#import "Logging.h"
 #import "Utilities.h"
+#import "ContactDefine.h"
 
 #define DEFAULT_BATCH_SIZE      100
 
-#define CHECK_RETAINCYCLE               0
+#define CHECK_RETAINCYCLE       0
 #if CHECK_RETAINCYCLE
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
 #endif
@@ -81,7 +81,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         handler(error, YES, 0);
                     });
-                    [Logging exeption:error.localizedDescription];
+                    DebugLog(@"%@", error.localizedDescription);
                 } else {
                     [strongSelf->_listContacts addObjectsFromArray:listContactRequestedInfor];
                     strongSelf->_contactLoadDone = isDone;
@@ -137,7 +137,7 @@
         FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
         [detector addCandidate:self];
         NSSet *retainCycles = [detector findRetainCycles];
-        NSLog(@"[Check leaks] %@", retainCycles);
+        DebugLog(@"[Check leaks] %@", retainCycles);
     #endif
 }
 
@@ -148,9 +148,9 @@
         if (strongSelf) {
 
             if (strongSelf->_loadingState || strongSelf->_numberContactHadLoaded >= strongSelf->_listContactsBuffer.count) {
-                [Logging info:@"[LoadContact] _listContacts have 0 elements"];
+                DebugLog(@"[LoadContact] _listContacts have 0 elements");
                 NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Contact loading is finished"};
-                NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:NO_CONTENT_ERROR_CODE userInfo:userInfo];
                 handler(nil, error);
                 return;
             }
@@ -175,7 +175,7 @@
         FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
         [detector addCandidate:self];
         NSSet *retainCycles = [detector findRetainCycles];
-        NSLog(@"[Check leaks] %@", retainCycles);
+        DebugLog(@"[Check leaks] %@", retainCycles);
     #endif
 }
 
@@ -231,7 +231,7 @@
             [strongSelf loadBatchOfDetailedContacts:identifiers isReload:YES completion:^(NSArray<ContactBusEntity *> * updatedContacts, NSError * error) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (error || !strongSelf) {
-                    [Logging error:@"Cannot load contacts after contact changed events"];
+                    DebugLog(@"Cannot load contacts after contact changed events");
                 } else {
                     strongSelf.contactChangedObservable(updatedContacts);
                 }

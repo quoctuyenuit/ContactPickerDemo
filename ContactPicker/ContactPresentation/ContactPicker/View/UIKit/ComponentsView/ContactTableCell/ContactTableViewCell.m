@@ -7,6 +7,7 @@
 //
 
 #import "ContactTableViewCell.h"
+#import "ContactDefine.h"
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
 
 #define DEBUG_MODE          0
@@ -155,21 +156,17 @@
     self->_block = ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            NSLog(@"%@", self);
+            DebugLog(@"%@", self);
         }
     };
     FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
     [detector addCandidate:self];
     NSSet *retainCycles = [detector findRetainCycles];
-    NSLog(@"[Check leaks] %@", retainCycles);
+    DebugLog(@"[Check leaks] %@", retainCycles);
 #endif
 }
 
 - (void)setSelect {
     _checkBox.isChecked = !_checkBox.isChecked;
-}
-
-- (NSString *)reuseIdentifier {
-    return @"ContactViewCell";
 }
 @end

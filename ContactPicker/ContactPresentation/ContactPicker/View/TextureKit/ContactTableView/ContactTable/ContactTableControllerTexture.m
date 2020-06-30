@@ -11,8 +11,7 @@
 #import "ContactViewModelProtocol.h"
 #import "ContactViewEntity.h"
 #import "ContactTableCellNode.h"
-#import "Logging.h"
-
+#import "ContactDefine.h"
 
 #define LOADING_MSG                         @"Đang tải danh bạ..."
 #define LOG_MSG_HEADER                      @"ContactTableTexture"
@@ -91,7 +90,7 @@
         [context completeBatchFetching:YES];
         return;
     }
-    NSLog(@"[%@] begin batchFetchWithContext", LOG_MSG_HEADER);
+    DebugLog(@"[%@] begin batchFetchWithContext", LOG_MSG_HEADER);
     [context beginBatchFetching];
     [self loadBatchContacts:context];
 }
@@ -118,13 +117,13 @@
     [_tableNode reloadData];
     NSIndexPath * firstIndex = [_viewModel firstContactOnView];
     if (firstIndex) {
-        NSLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableNode numberOfRowsInSection:firstIndex.section]);
+        DebugLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableNode numberOfRowsInSection:firstIndex.section]);
         [_tableNode scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
 }
 
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
-    NSLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
     [_tableNode insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     
 #if DEBUG_MEM_ENABLE
@@ -132,12 +131,12 @@
     for (NSInteger section = 0; section < [_tableNode numberOfSections]; section++) {
         cells += [_tableNode numberOfRowsInSection:section];
     }
-    NSLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
+    DebugLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
 #endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
-    NSLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    DebugLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
     [_tableNode reloadData];
 }
 

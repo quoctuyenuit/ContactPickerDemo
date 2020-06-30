@@ -7,8 +7,7 @@
 //
 
 #import "ContactTableBaseController.h"
-#import "Logging.h"
-
+#import "ContactDefine.h"
 #define LOADING_MESSAGE         @"Đang tải..."
 #define LOG_MSG_HEADER          @"ContactBaseTable"
 
@@ -58,14 +57,14 @@
 }
 
 - (void)fetchBatchContactWithBlock:(void (^_Nullable)(NSError * error))block {
-    NSLog(@"[%@] begin fetch batch", LOG_MSG_HEADER);
+    DebugLog(@"[%@] begin fetch batch", LOG_MSG_HEADER);
     __weak typeof(self) weakSelf = self;
     [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
-        NSLog(@"[%@] end fetch batch", LOG_MSG_HEADER);
+        DebugLog(@"[%@] end fetch batch", LOG_MSG_HEADER);
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             if (error) {
-                [Logging error:error.localizedDescription];
+                DebugLog(@"%@", error.localizedDescription);
             } else {
                 [strongSelf insertCells:updatedIndexPaths forEntities:entities];
             }
@@ -97,7 +96,7 @@
     __weak typeof(self) weakSelf = self;
     [self fetchBatchContactWithBlock:^(NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf && error) {
+        if (strongSelf && error.code == NO_CONTENT_ERROR_CODE) {
             [strongSelf->_autoFetchBatchTimer invalidate];
             strongSelf-> _autoFetchBatchTimer = nil;
         }
@@ -150,16 +149,16 @@
     _loadingController = [self createLoadingView:LOADING_MESSAGE];
     [UIApplication.sharedApplication.windows[0].rootViewController presentViewController:_loadingController animated:YES completion:nil];
     
-    NSLog(@"[%@] begin load batch", LOG_MSG_HEADER);
+    DebugLog(@"[%@] begin load batch", LOG_MSG_HEADER);
     __weak typeof(self) weakSelf = self;
     [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
             if (error) {
-                [Logging error:error.localizedDescription];
+                DebugLog(@"%@", error.localizedDescription);
             } else {
-                NSLog(@"[%@] end load batch", LOG_MSG_HEADER);
+                DebugLog(@"[%@] end load batch", LOG_MSG_HEADER);
                 strongSelf.contactHadLoad = YES;
                 [strongSelf insertCells:updatedIndexPaths forEntities:entities];
             }

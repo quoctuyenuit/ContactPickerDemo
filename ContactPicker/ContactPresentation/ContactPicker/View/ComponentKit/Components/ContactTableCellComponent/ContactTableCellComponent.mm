@@ -37,6 +37,7 @@
     CKComponentScope scope(self, contact.identifier);
     const BOOL _state = contact.isChecked;
     
+//    NSLog(@"init component");
     // Text Component
     CKComponent * textComponent     = [CKCenterLayoutComponent newWithCenteringOptions:CKCenterLayoutComponentCenteringY
                                                                      sizingOptions:CKCenterLayoutComponentSizingOptionDefault

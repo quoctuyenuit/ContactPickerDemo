@@ -7,7 +7,7 @@
 //
 
 #import "SceneDelegate.h"
-#import "MainViewControllerUIkit.h"
+#import "ContactMainViewController.h"
 
 @interface SceneDelegate ()
 
@@ -20,7 +20,7 @@
     UIWindowScene * windowScene = (UIWindowScene *) scene;
     _window                     = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     
-    UIViewController * mainViewController   = [[MainViewControllerUIkit alloc] init];
+    UIViewController * mainViewController   = [[ContactMainViewController alloc] init];
     _window.rootViewController              = mainViewController;
     
     [_window makeKeyAndVisible];

@@ -9,14 +9,8 @@
 #import "ContactAdapter.h"
 #import <Contacts/Contacts.h>
 #import "Utilities.h"
+#import "ContactDefine.h"
 #import "ContactDALProtocol.h"
-
-
-#define DEBUG_EMPTY_CONTACT         0
-#define DEBUG_FAILT_LOAD            0
-#define DEBUG_PERMISSION_DENIED     0
-#define DUMMY_DATA_ENABLE           0
-#define NUMBER_OF_DUMMY             1000
 
 #define CHECK_RETAINCYCLE               0
 #if CHECK_RETAINCYCLE
@@ -75,7 +69,7 @@
         }];
     } else {
         NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
-        NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+        NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:UNSUPPORTED_ERROR_CODE userInfo:userInfo];
         handler(NO, error);
     }
 }
@@ -91,7 +85,7 @@
         
 #if DEBUG_FAILT_LOAD
         NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
-        NSError * error         = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+        NSError * error         = [NSError errorWithDomain:NSCocoaErrorDomain code:UNSUPPORTED_ERROR_CODE userInfo:userInfo];
         handler(nil, error, YES);
         return;
 #endif
@@ -153,7 +147,7 @@
             
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
-            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:UNSUPPORTED_ERROR_CODE userInfo:userInfo];
             handler(nil, error, YES);
         }
     });
@@ -162,7 +156,7 @@
     FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
     [detector addCandidate:self];
     NSSet *retainCycles = [detector findRetainCycles];
-    NSLog(@"[Check leaks] %@", retainCycles);
+    DebugLog(@"[Check leaks] %@", retainCycles);
 #endif
 }
 
@@ -195,7 +189,7 @@
             
             if (!contact) {
                 NSDictionary * userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"Dont have contact with identifier: %@", identifier]};
-                NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:NOT_FOUND_ERROR_CODE userInfo:userInfo];
                 handler(nil, error);
             } else {
                 handler([self parseToContactDAL:contact forID: identifier], nil);
@@ -203,7 +197,7 @@
             
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
-            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:UNSUPPORTED_ERROR_CODE userInfo:userInfo];
             handler(nil, error);
         }
     });
@@ -268,7 +262,7 @@
             handler(results, nil);
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
-            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:UNSUPPORTED_ERROR_CODE userInfo:userInfo];
             handler(nil, error);
         }
         
@@ -278,7 +272,7 @@
     FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
     [detector addCandidate:self];
     NSSet *retainCycles = [detector findRetainCycles];
-    NSLog(@"[Check leaks] %@", retainCycles);
+    DebugLog(@"[Check leaks] %@", retainCycles);
 #endif
 }
 
@@ -306,7 +300,7 @@
                                                                      error:nil];
             if (!contact) {
                 NSDictionary * userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"Dont have contact with identifier: %@", identifier]};
-                NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:NOT_FOUND_ERROR_CODE userInfo:userInfo];
                 handler(nil, error);
             } else {
                 if (contact.imageDataAvailable) {
@@ -317,7 +311,7 @@
             
         } else {
             NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"CNContactStore not supported"};
-            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+            NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:UNSUPPORTED_ERROR_CODE userInfo:userInfo];
             handler(nil, error);
         }
     });

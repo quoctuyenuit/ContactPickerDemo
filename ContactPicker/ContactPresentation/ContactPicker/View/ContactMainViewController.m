@@ -6,29 +6,19 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "MainViewControllerUIkit.h"
+#import "ContactMainViewController.h"
 #import "ResponseInformationView.h"
 #import "ContactViewModelProtocol.h"
 #import "ContactViewModel.h"
 #import "ContactBus.h"
 #import "ContactAdapter.h"
-#import "Logging.h"
+#import "ContactDefine.h"
 
 #import "ContactWithSearchTexture.h"
 #import "ContactWithSearchComponentKit.h"
 #import "ContactWithSearchUIKit.h"
 #import "TabbarOnTopViewController.h"
 
-#define DEBUG_JUST_UIKIT        0
-
-#if !DEBUG_JUST_UIKIT
-#define DEBUG_JUST_TEXTURE      0
-
-#if !DEBUG_JUST_TEXTURE
-#define DEBUG_JUST_COMPONENTKIT 0
-#endif
-
-#endif
 
 #define UIKIT_TITLE         @"UIkit"
 #define TEXTURE_TITLE       @"Texture"
@@ -38,15 +28,16 @@
 #define TEXTURE_ICO_NAME        @"paperplane.fill"
 #define COMPONENTKIT_ICO_NAME   @"paperplane.fill"
 
-@interface MainViewControllerUIkit () {
-    UIViewController * contentViewController;
+@interface ContactMainViewController () {
+    UIViewController * _contentViewController;
     ContactViewModel * viewModel;
 }
+- (void) setupViews;
 - (UIViewController *) loadContactViewController;
 - (UIViewController *) loadResponseInforView: (ResponseViewType) type;
 @end
 
-@implementation MainViewControllerUIkit
+@implementation ContactMainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -59,24 +50,32 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong typeof(weakSelf) strongSelf = weakSelf;
             if (strongSelf) {
-                UIViewController * resVc = nil;
                 if (granted) {
-                    resVc = [strongSelf loadContactViewController];
+                    strongSelf->_contentViewController = [strongSelf loadContactViewController];
                 } else {
-                    if (error.code == 1) {
-                        resVc = [strongSelf loadResponseInforView:ResponseViewTypeSomethingWrong];
-                        [Logging error:error.localizedDescription];
+                    if (error.code == UNSUPPORTED_ERROR_CODE) {
+                        strongSelf->_contentViewController = [strongSelf loadResponseInforView:ResponseViewTypeSomethingWrong];
+                        DebugLog(@"%@", error.localizedDescription);
                     } else {
-                        resVc = [strongSelf loadResponseInforView: ResponseViewTypePermissionDenied];
+                        strongSelf->_contentViewController = [strongSelf loadResponseInforView: ResponseViewTypePermissionDenied];
                     }
                 }
-                [strongSelf addChildViewController:resVc];
-                [strongSelf.view addSubview:resVc.view];
-                resVc.view.frame = strongSelf.view.bounds;
+                [strongSelf setupViews];
             }
         });
         
     }];
+}
+
+- (void)setupViews {
+    [self addChildViewController:_contentViewController];
+    [self.view addSubview:_contentViewController.view];
+    
+    _contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [_contentViewController.view.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor].active = YES;
+    [_contentViewController.view.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active        = YES;
+    [_contentViewController.view.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active      = YES;
+    [_contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active    = YES;
 }
 
 

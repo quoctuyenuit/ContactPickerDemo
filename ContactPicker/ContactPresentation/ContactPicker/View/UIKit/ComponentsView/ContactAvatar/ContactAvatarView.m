@@ -55,8 +55,8 @@
     [_imageView setContentMode: UIViewContentModeScaleAspectFill];
     [_imageView.layer setMasksToBounds:YES];
     
-    self.backgroundColor            = UIColor.clearColor;
     _mainBoundView.backgroundColor  = UIColor.clearColor;
+    self.backgroundColor            = UIColor.clearColor;
 }
 
 #pragma mark - Life circle methods
@@ -66,8 +66,8 @@
     
     _gradientBackground.frame           = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
-    self.layer.cornerRadius             = self.frame.size.width / 2;
     _imageView.layer.cornerRadius       = self.frame.size.width / 2;
+    self.layer.cornerRadius             = self.frame.size.width / 2;
 }
 
 #pragma mark - Helper methods
@@ -91,7 +91,7 @@
     [_imageView.rightAnchor constraintEqualToAnchor:_mainBoundView.rightAnchor].active    = YES;
     [_imageView.bottomAnchor constraintEqualToAnchor:_mainBoundView.bottomAnchor].active  = YES;
     [_imageView.widthAnchor constraintEqualToAnchor:_mainBoundView.widthAnchor].active    = YES;
-    [_imageView.heightAnchor constraintEqualToAnchor:_mainBoundView.heightAnchor].active    = YES;
+    [_imageView.heightAnchor constraintEqualToAnchor:_mainBoundView.heightAnchor].active  = YES;
     
     
     [_label.topAnchor constraintEqualToAnchor:_mainBoundView.topAnchor].active        = YES;

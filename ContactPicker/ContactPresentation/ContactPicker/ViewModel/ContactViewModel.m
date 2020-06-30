@@ -11,7 +11,7 @@
 #import <Contacts/Contacts.h>
 #import "Utilities.h"
 #import <UIKit/UIKit.h>
-#import "Logging.h"
+#import "ContactDefine.h"
 
 #define CHECK_RETAINCYCLE               0
 #if CHECK_RETAINCYCLE
@@ -165,14 +165,14 @@
 - (void)loadBatchOfContacts:(void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths, NSArray<ContactViewEntity *> * entities))handler {
     if (_loadBatchInProcessing) {
         NSDictionary * userInfo = @{NSLocalizedDescriptionKey: @"Load batch in processing"};
-        NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+        NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:TOO_MANY_REQUESTS_ERROR_CODE userInfo:userInfo];
         dispatch_async(dispatch_get_main_queue(), ^{
             handler(error, nil, nil);
         });
         return;
     } else {
         @synchronized (self) {
-            NSLog(@"[ViewModel] loadBatch");
+            DebugLog(@"[ViewModel] loadBatch");
             _loadBatchInProcessing = YES;
             __weak typeof(self) weakSelf = self;
             dispatch_async(_backgroundQueue, ^{
@@ -187,7 +187,7 @@
                             
                         } else {
                             
-                            NSLog(@"[ViewModel] load done %ld contacts", listContacts.count);
+                            DebugLog(@"[ViewModel] load done %ld contacts", listContacts.count);
                             NSArray<ContactViewEntity *> * contactsAdded = [listContacts map:^ContactViewEntity * _Nonnull(ContactBusEntity * _Nonnull obj) {
                                 return [[ContactViewEntity alloc] initWithBusEntity:obj];
                             }];
@@ -201,7 +201,7 @@
                     }];
                 } else {
                     NSDictionary * userInfo = @{NSLocalizedDescriptionKey: STRONG_SELF_DEALLOCATED_MSG};
-                    NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:userInfo];
+                    NSError *error          = [NSError errorWithDomain:NSCocoaErrorDomain code:RETAIN_CYCLE_GONE_ERROR_CODE userInfo:userInfo];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         handler(error, nil, nil);
                         strongSelf->_loadBatchInProcessing = NO;
@@ -215,7 +215,7 @@
     FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
     [detector addCandidate:self];
     NSSet *retainCycles = [detector findRetainCycles];
-    NSLog(@"[Check leaks] %@", retainCycles);
+    DebugLog(@"[Check leaks] %@", retainCycles);
 #endif
 }
 
@@ -258,7 +258,7 @@
                 strongSelf.dataSourceNeedReloadObservable.value = allIndexes;
             });
             [strongSelf->_contactBus searchContactByName:key block:^{
-                NSLog(@"[SearchBusRespone]");
+                DebugLog(@"[SearchBusRespone]");
                 block();
             }];
         }
@@ -352,7 +352,7 @@
     for(int i = 0; i < _listSectionKeys.count; i++) {
         NSString * key = _listSectionKeys[i];
         if ([_contactsOnView objectForKey:key].count > 0) {
-            NSLog(@"[firstContactOnView] %ld", [_contactsOnView objectForKey:key].count);
+            DebugLog(@"[firstContactOnView] %ld", [_contactsOnView objectForKey:key].count);
             return [NSIndexPath indexPathForRow:0 inSection:i];
         }
     }
@@ -371,7 +371,7 @@
 #pragma mark - Helper methods
 
 - (void)refreshContactOnView {
-    [Logging info:@"Refresh contactOnView"];
+    DebugLog(@"Refresh contactOnView");
     _contactsOnView = [[NSMutableDictionary alloc] init];
     for (char i = 'A'; i <= 'Z'; i++) {
         NSString * key = [NSString stringWithFormat:@"%c", i];

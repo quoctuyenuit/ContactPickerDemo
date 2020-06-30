@@ -10,7 +10,6 @@
 #import "ContactTableControllerUIKit.h"
 #import "ContactViewModel.h"
 #import "KeyboardAppearanceDelegate.h"
-#import "Logging.h"
 #import "ContactCollectionCell.h"
 #import "ResponseInformationView.h"
 

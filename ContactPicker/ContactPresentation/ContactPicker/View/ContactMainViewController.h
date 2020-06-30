@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MainViewControllerUIkit : UIViewController
+@interface ContactMainViewController : UIViewController
 
 @end
 
