@@ -87,11 +87,10 @@
 }
 
 - (void)_setupEvents {
-    __weak typeof(self) weakSelf = self;
-    
+    weak_self
     [_contactBus.contactDidChangedObservable binding:^(NSArray<id<ContactBusEntityProtocol>> * updatedContacts) {
         dispatch_async(weakSelf.backgroundSerialQueue, ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strong_self
             if (strongSelf) {
                 
                 for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
@@ -108,10 +107,9 @@
 }
 
 - (void)_addContacts:(NSArray<ContactViewEntity *> *) contacts block: (void (^)(NSArray<NSIndexPath *> * updatedIndexPaths)) block {
-    __weak typeof(self) weakSelf = self;
-    
+    weak_self
     dispatch_async(_backgroundSerialQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             
             NSMutableArray<NSIndexPath *> * updatedIndexPaths = [[NSMutableArray alloc] init];
@@ -263,9 +261,9 @@
         return;
     }
     
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_sync(_loadResponseQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf.loadContactRequest addObject:block];
             
@@ -277,10 +275,10 @@
     });
     
     dispatch_async(_backgroundSerialQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf->_contactBus loadContactsWithBlock:^(NSArray<id<ContactBusEntityProtocol>> *contacts, NSError *error) {
-                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strong_self
                 if (strongSelf && !error) {
                     NSArray<ContactViewEntity *> *contactEntity = [contacts map:^ContactViewEntity * _Nonnull(id<ContactBusEntityProtocol> _Nonnull obj) {
                         return [[ContactViewEntity alloc] initWithBusEntity:obj];
@@ -288,7 +286,7 @@
                     
                     [strongSelf _addContacts:contactEntity block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
                         dispatch_async(weakSelf.loadResponseQueue, ^{
-                            __strong typeof(weakSelf) strongSelf = weakSelf;
+                            strong_self
                             if (strongSelf) {
                                 for (ViewModelResponseListBlock block in strongSelf.loadContactRequest) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -308,7 +306,7 @@
                     }
                     
                     dispatch_async(weakSelf.loadResponseQueue, ^{
-                        __strong typeof(weakSelf) strongSelf = weakSelf;
+                        strong_self
                         if (strongSelf) {
                             for (ViewModelResponseListBlock block in strongSelf.loadContactRequest) {
                                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -326,9 +324,9 @@
 }
 
 - (void)searchContactWithKeyName:(NSString *)key block:(ViewModelResponseListBlock) block {
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_async(_backgroundSerialQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             NSArray * allIndexes = [strongSelf _getAllIndexPaths];
             dispatch_sync(dispatch_get_main_queue(), ^{

@@ -135,12 +135,12 @@
     _contactDescriptionLabel.attributedText = entity.phone;
     _checkBox.isChecked = entity.isChecked;
 
-    WEAK_SELF
+    weak_self
     __weak typeof(entity) weakEntity = entity;
 
     [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(AvatarObj * _Nonnull imgObj, NSString *key) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            STRONG_SELF
+            strong_self
             if (strongSelf && [weakEntity.identifier isEqualToString:key]) {
                 NSString * label = imgObj.isGenerated ? imgObj.label : @"";
                 [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];

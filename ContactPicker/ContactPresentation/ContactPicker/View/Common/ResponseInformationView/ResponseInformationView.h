@@ -20,7 +20,7 @@ typedef enum : NSUInteger {
 
 @interface ResponseInformationView : UIView<KeyboardAppearanceProtocol>
 - (instancetype)initWithType:(ResponseViewType) viewType;
-
+- (UIViewController *)wrapToViewController;
 @end
 
 NS_ASSUME_NONNULL_END

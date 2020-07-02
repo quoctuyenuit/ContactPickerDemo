@@ -9,16 +9,8 @@
 #ifndef ContactDefine_h
 #define ContactDefine_h
 
-//Error code define
-#define NO_CONTENT_ERROR_CODE           204
-#define TOO_MANY_REQUESTS_ERROR_CODE    429
-#define RETAIN_CYCLE_GONE_ERROR_CODE    410
-#define UNSUPPORTED_ERROR_CODE          415
-#define NOT_FOUND_ERROR_CODE            404
-#define EMPTY_ERROR_CODE                400
-
-#define WEAK_SELF __weak typeof(self) weakSelf = self;
-#define STRONG_SELF __strong typeof(weakSelf) strongSelf = weakSelf;
+#define weak_self __weak typeof(self) weakSelf = self;
+#define strong_self __strong typeof(weakSelf) strongSelf = weakSelf;
 
 #pragma mark - Debug define
 #define DEBUG_APP_MODE                  1
@@ -28,7 +20,7 @@
 
 //Dummy data define
 #define DEBUG_EMPTY_CONTACT             0
-#define DEBUG_FAILT_LOAD                0
+#define DEBUG_FAILT_LOAD                1
 #define DEBUG_PERMISSION_DENIED         0
 #define DUMMY_DATA_ENABLE               1
 #define NUMBER_OF_DUMMY                 1000

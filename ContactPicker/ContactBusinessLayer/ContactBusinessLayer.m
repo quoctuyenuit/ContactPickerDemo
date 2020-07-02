@@ -86,9 +86,9 @@
         return;
     }
     
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_sync(_loadResponseQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf.loadContactRequest addObject:block];
             
@@ -101,7 +101,7 @@
     });
     dispatch_async(weakSelf.backgroundQueue, ^{
         [weakSelf.contactAdapter loadContactsWithBlock:^(NSArray<id<ContactDALProtocol>> *contacts, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strong_self
             if (strongSelf) {
                 if (!error) {
                     NSArray<id<ContactBusEntityProtocol>> *businessContacts = [contacts map:^ContactBusEntity * _Nonnull(id<ContactDALProtocol>  _Nonnull contactDAL) {
@@ -112,7 +112,7 @@
                 }
                 
                 dispatch_async(strongSelf.loadResponseQueue, ^{
-                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                    strong_self
                     if (strongSelf) {
                         for (BusinessResponseListBlock block in strongSelf.loadContactRequest) {
                             //add excute queue
@@ -142,9 +142,9 @@
     }
     
     _searchReady = NO;
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_sync(_searchQueue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             strongSelf->_searchReady = YES;
             if ([name isEqualToString:@""]) {

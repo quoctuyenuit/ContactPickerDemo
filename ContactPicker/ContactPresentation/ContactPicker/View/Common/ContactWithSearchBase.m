@@ -8,6 +8,7 @@
 
 #import "ContactWithSearchBase.h"
 #import "HorizontalListItemProtocol.h"
+#import "ContactDefine.h"
 
 #define LOADING_MESSAGE             @"Đang tải..."
 #define SEARCH_PLACE_HOLDER         @"Tìm kiếm"
@@ -39,10 +40,10 @@
 }
 
 - (void)setupEvents {
-    __weak typeof(self) weakSelf = self;
+    weak_self
     //    Listen contact had added observable
     [self.viewModel.selectedContactAddedObservable binding:^(NSNumber * index) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             if ([index intValue] == 0) {
                 [strongSelf showSelectedContactsArea:YES];
@@ -54,7 +55,7 @@
     
     //    Listen contact had removed observable
     [self.viewModel.selectedContactRemoveObservable binding:^(NSNumber * index) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             if ([strongSelf.viewModel numberOfSelectedContacts] == 0) {
                 [strongSelf showSelectedContactsArea:NO];

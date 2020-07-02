@@ -13,19 +13,20 @@
 #define RETAIN_CYCLE_GONE_ERROR_CODE    410
 #define UNSUPPORTED_ERROR_CODE          415
 #define NOT_FOUND_ERROR_CODE            404
+#define FAILT_ERROR_CODE                505
 #define DEFAULT_ERROR_CODE              1
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
     ErrorTypeEmpty,
+    ErrorTypeFailt,
     ErrorTypeTooManyRequest,
     ErrorTypeRetainCycleGone,
     ErrorTypeNotFound
 } ErrorType;
 
 @interface NSError(Addition)
-@property(nonatomic, readonly) ErrorType errorType;
 - (instancetype)initWithDomain:(NSString *) domain type:(ErrorType) type localizeString:(NSString *) msg;
 @end
 

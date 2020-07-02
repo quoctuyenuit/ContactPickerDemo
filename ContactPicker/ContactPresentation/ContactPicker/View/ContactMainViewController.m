@@ -13,12 +13,14 @@
 #import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 #import "ContactDefine.h"
+#import "NSErrorExtension.h"
 
 #import "ContactWithSearchTexture.h"
 #import "ContactWithSearchComponentKit.h"
 #import "ContactWithSearchUIKit.h"
 #import "TabbarOnTopViewController.h"
 
+#define DEBUG_MODE          0
 
 #define UIKIT_TITLE         @"UIkit"
 #define TEXTURE_TITLE       @"Texture"
@@ -45,20 +47,15 @@
     self.view.backgroundColor = UIColor.whiteColor;
     self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
     
-    __weak typeof(self) weakSelf = self;
+    weak_self
     [self->viewModel requestPermission:^(BOOL granted, NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strong_self
             if (strongSelf) {
                 if (granted) {
                     strongSelf->_contentViewController = [strongSelf loadContactViewController];
                 } else {
-                    if (error.code == UNSUPPORTED_ERROR_CODE) {
-                        strongSelf->_contentViewController = [strongSelf loadResponseInforView:ResponseViewTypeSomethingWrong];
-                        DebugLog(@"%@", error.localizedDescription);
-                    } else {
-                        strongSelf->_contentViewController = [strongSelf loadResponseInforView: ResponseViewTypePermissionDenied];
-                    }
+                    strongSelf->_contentViewController = [strongSelf loadResponseInforView: ResponseViewTypePermissionDenied];
                 }
                 [strongSelf setupViews];
             }
@@ -72,19 +69,20 @@
     [self.view addSubview:_contentViewController.view];
     
     _contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    [_contentViewController.view.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor].active = YES;
-    [_contentViewController.view.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active        = YES;
-    [_contentViewController.view.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active      = YES;
-    [_contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active    = YES;
+    [_contentViewController.view.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor].active          = YES;
+    [_contentViewController.view.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor].active    = YES;
+    [_contentViewController.view.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active                            = YES;
+    [_contentViewController.view.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active                          = YES;
+    
+#if DEBUG_MODE
+    _contentViewController.view.backgroundColor     = UIColor.greenColor;
+#endif
 }
 
 
 - (UIViewController *)loadResponseInforView:(ResponseViewType)type {
-    UIView * v =[[ResponseInformationView alloc] initWithType:type];
-    UIViewController * vc = [[UIViewController alloc] init];
-    [vc.view addSubview:v];
-    v.frame = vc.view.frame;
-    return vc;
+    UIViewController * v =[[[ResponseInformationView alloc] initWithType:type] wrapToViewController];
+    return v;
 }
 
 - (UIViewController *)loadContactViewController {

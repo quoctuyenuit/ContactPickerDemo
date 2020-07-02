@@ -8,6 +8,7 @@
 
 #import "ContactTableBaseController.h"
 #import "ContactDefine.h"
+#import "NSErrorExtension.h"
 #define LOADING_MESSAGE         @"Đang tải..."
 #define LOG_MSG_HEADER          @"ContactBaseTable"
 
@@ -37,6 +38,10 @@
 }
 
 - (void)setupDatasets {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
+- (void)showErrorView:(ResponseViewType)type {
     NSAssert(NO, @"Subclass must implement this method");
 }
 
@@ -72,9 +77,9 @@
 
 #pragma mark - Helper methods
 - (void)setupEvents {
-    __weak typeof(self) weakSelf = self;
+    weak_self
     [self.viewModel.contactBookObservable binding:^(NSNumber * number) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf reloadTable];
@@ -83,7 +88,7 @@
     }];
     
     [self.viewModel.searchObservable binding:^(NSString * searchText) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf.viewModel searchContactWithKeyName:searchText block:^(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -95,14 +100,14 @@
     }];
     
     [self.viewModel.dataSourceNeedReloadObservable binding:^(NSArray<NSIndexPath *> * removedIndexPaths) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf removeCells:removedIndexPaths];
         }
     }];
     
     [self.viewModel.cellNeedRemoveSelectedObservable binding:^(NSIndexPath * indexPath) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf contactHadRemoved:indexPath];
         }
@@ -114,16 +119,28 @@
     [UIApplication.sharedApplication.windows[0].rootViewController presentViewController:_loadingController animated:YES completion:nil];
     
     DebugLog(@"[%@] begin load contact", LOG_MSG_HEADER);
-    __weak typeof(self) weakSelf = self;
-    [self.viewModel loadContactsWithBlock:^(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+    weak_self
+    [self.viewModel loadContactsWithBlock:^(NSArray<ContactViewEntity *> * _Nullable contacts,
+                                            NSArray<NSIndexPath *> * _Nullable indexPaths,
+                                            NSError * _Nullable error) {
+        strong_self
         if (strongSelf) {
             [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
             if (!error) {
                 weakSelf.contactHadLoad = YES;
                 [weakSelf insertCells:indexPaths forEntities:contacts];
             } else {
-                DebugLog(@"%@", error.localizedDescription);
+                switch (error.code) {
+                    case NO_CONTENT_ERROR_CODE:
+                        [weakSelf showErrorView:ResponseViewTypeEmptyContact];
+                        break;
+                    case FAILT_ERROR_CODE:
+                        [weakSelf showErrorView:ResponseViewTypeFailLoadingContact];
+                        break;
+                    default:
+                        [weakSelf showErrorView:ResponseViewTypeSomethingWrong];
+                        break;
+                }
             }
         }
     }];

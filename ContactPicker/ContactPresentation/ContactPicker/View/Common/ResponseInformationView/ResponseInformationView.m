@@ -159,6 +159,17 @@
     [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
+- (UIViewController *)wrapToViewController {
+    UIViewController * vc = [[UIViewController alloc] init];
+    [vc.view addSubview:self];
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topAnchor constraintEqualToAnchor:vc.view.topAnchor].active          = YES;
+    [self.leftAnchor constraintEqualToAnchor:vc.view.leftAnchor].active        = YES;
+    [self.rightAnchor constraintEqualToAnchor:vc.view.rightAnchor].active      = YES;
+    [self.bottomAnchor constraintEqualToAnchor:vc.view.bottomAnchor].active    = YES;
+    return vc;
+}
+
 @synthesize keyboardAppearanceDelegate;
 
 @end

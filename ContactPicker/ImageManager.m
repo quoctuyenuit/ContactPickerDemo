@@ -89,11 +89,11 @@
         return;
     }
     
-    WEAK_SELF
+    weak_self
     __weak typeof(key) weakKey = key;
     __weak typeof(label) weakLabel = label;
     dispatch_async(_backgroundQueue, ^{
-        STRONG_SELF
+        strong_self
         if (strongSelf) {
             AvatarObj * imgObj = [strongSelf.imageCache objectForKey:weakKey];
             if (imgObj) {
@@ -106,7 +106,7 @@
             block(imgObj, weakKey);
             
             [strongSelf.contactAdapter getImageById:weakKey block:^(UIImage *image, NSError *error) {
-                STRONG_SELF
+                strong_self
                 if (strongSelf) {
                     if (image) {
                         AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO];

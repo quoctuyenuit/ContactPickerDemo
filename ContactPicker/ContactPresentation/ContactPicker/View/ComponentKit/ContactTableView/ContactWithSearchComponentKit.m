@@ -119,9 +119,9 @@
     _contactSelectedHeightConstraint.constant = isShow ? 80 + self.view.safeAreaInsets.bottom : 0;
     [_contactSelectedView layoutIfNeeded];
     
-    __weak typeof(self) weakSelf = self;
+    weak_self
     [UIView animateWithDuration:0.2 animations:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             strongSelf->_contactSelectedView.alpha = isShow ? 1 : 0;
             strongSelf->_contactSelectedKeyboardView.alpha = isShow ? 1 : 0;

@@ -81,10 +81,10 @@
 #pragma mark - Layout methods
 
 - (void)layoutContentNode {
-    __weak typeof(self) weakSelf = self;
+    weak_self
     
     _contentNode.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             return [ASInsetLayoutSpec insetLayoutSpecWithInsets:UIEdgeInsetsMake(0, 0, 0, 0) child:[strongSelf->_contentViewController.node styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
                 style.flexGrow = 10;
@@ -97,10 +97,9 @@
 }
 
 - (void)layoutSubviews {
-    __weak typeof(self) weakSelf = self;
-    
+    weak_self
     self.node.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             ASDisplayNode * contentNode = strongSelf->_contentNode;
             
@@ -111,7 +110,7 @@
             
             ASDisplayNode * selectedLayout = [strongSelf->_contactSelectedView styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
                 
-                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strong_self
                 if (strongSelf) {
                     style.flexShrink = 1;
                     style.preferredSize = CGSizeMake(strongSelf.node.calculatedSize.width, 80 + self.view.safeAreaInsets.bottom);
@@ -155,9 +154,9 @@
 
 - (void)showSelectedContactsArea:(BOOL)isShow {
     _isShowSelected = isShow;
-    __weak typeof(self) weakSelf = self;
+    weak_self
     [UIView animateWithDuration:0.3 animations:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             strongSelf->_contactSelectedView.alpha = isShow ? 1 : 0;
             strongSelf->_contactSelectedKeyboardView.alpha = isShow ? 1 : 0;

@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "TabbarOnTopItemView.h"
 #import "TabbarOnTopItemDelegate.h"
+#import "ContactDefine.h"
 
 #define DEFAULT_BARITEM_WIDTH       150
 #define DEBUG_MODE                  0
@@ -70,9 +71,9 @@
 }
 
 - (void)showViewControllerAtIndex:(NSUInteger)index {
-    __weak typeof(self) weakSelf = self;
+    weak_self
     [UIView animateWithDuration:0.3 animations:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf showItemBar:index];
             

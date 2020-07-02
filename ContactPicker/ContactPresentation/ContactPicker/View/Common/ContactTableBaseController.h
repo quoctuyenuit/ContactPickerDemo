@@ -10,6 +10,7 @@
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "KeyboardAppearanceDelegate.h"
 #import "ContactViewModelProtocol.h"
+#import "ResponseInformationView.h"
 
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
 
@@ -22,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setupBaseViews;
 - (void)setupDatasets;
+- (void)showErrorView:(ResponseViewType) type;
 - (void)reloadTable;
 - (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities;
 - (void)removeCells:(NSArray<NSIndexPath *> *) indexPaths;

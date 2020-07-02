@@ -89,14 +89,14 @@
 #endif
     
 #if DEBUG_FAILT_LOAD
-    NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeRetainCycleGone localizeString:@"Load failt"];
+    NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeFailt localizeString:@"Load failt"];
     block(nil, error);
     return;
 #endif
     
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_async(_response_queue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             [strongSelf.loadContactRequest addObject:block];
             
@@ -108,7 +108,7 @@
     });
     
     dispatch_async(_background_queue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             NSMutableArray *listContacts        = [[NSMutableArray alloc] init];
             CNContactStore *addressBook         = [[CNContactStore alloc] init];
@@ -134,7 +134,7 @@
             }
             
             dispatch_sync(strongSelf->_response_queue, ^{
-                __strong typeof(weakSelf) strongSelf = weakSelf;
+                strong_self
                 if (strongSelf) {
                     for (AdapterResponseListBlock block in strongSelf.loadContactRequest) {
                         block(listContacts, error);
@@ -144,7 +144,7 @@
                 }
             });
         } else {
-            NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeRetainCycleGone localizeString:@"Load failt"];
+            NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeFailt localizeString:@"Load failt"];
             block(nil, error);
         }
     });
@@ -154,9 +154,9 @@
     if (!block) {
         return;
     }
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_async(_background_queue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             CNContactStore *addressBook = [[CNContactStore alloc] init];
             
@@ -187,9 +187,9 @@
         return;
     }
     
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_async(_background_queue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             CNContactStore *addressBook     = [[CNContactStore alloc] init];
             NSArray *keysToFetch            = strongSelf.fetchRequest;
@@ -214,9 +214,9 @@
     if (!block) {
         return;
     }
-    __weak typeof(self) weakSelf = self;
+    weak_self
     dispatch_async(_background_queue, ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strong_self
         if (strongSelf) {
             CNContactStore *addressBook = [[CNContactStore alloc] init];
             

@@ -9,10 +9,7 @@
 #import "NSErrorExtension.h"
 
 @implementation NSError(Addition)
-@dynamic errorType;
-
 - (instancetype)initWithDomain:(NSString *)domain type:(ErrorType)type localizeString:(NSString *)msg {
-    
     NSInteger code;
     switch (type) {
         case ErrorTypeEmpty:
@@ -27,13 +24,16 @@
         case ErrorTypeNotFound:
             code = NOT_FOUND_ERROR_CODE;
             break;
+        case ErrorTypeFailt:
+            code = FAILT_ERROR_CODE;
+            break;
         default:
             code = DEFAULT_ERROR_CODE;
             break;
     }
-    NSDictionary * userInfo = @{NSLocalizedDescriptionKey: [NSString stringWithFormat: msg]};
+    NSDictionary * userInfo = @{NSLocalizedDescriptionKey: msg};
     
-    self = [[super init] initWithDomain:domain code:code userInfo:userInfo];
+    self = [[self init] initWithDomain:domain code:code userInfo:userInfo];
     return self;
 }
 

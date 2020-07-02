@@ -19,7 +19,7 @@
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
 #define LOG_MSG_HEADER              @"ContactTableUIKit"
 
-@interface ContactTableControllerUIKit() <UITableViewDelegate, UITableViewDataSource>
+@interface ContactTableControllerUIKit() <UITableViewDelegate, UITableViewDataSource, KeyboardAppearanceDelegate>
 @end
 
 @implementation ContactTableControllerUIKit {
@@ -115,6 +115,18 @@
     
 }
 
+- (void)showErrorView:(ResponseViewType)type {
+    ResponseInformationView * resView = [[ResponseInformationView alloc] initWithType:type];
+    resView.keyboardAppearanceDelegate = self;
+    [_tableView removeFromSuperview];
+    [self.view addSubview:resView];
+    resView.translatesAutoresizingMaskIntoConstraints = NO;
+    [resView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active          =  YES;
+    [resView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active        =  YES;
+    [resView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active      =  YES;
+    [resView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active    =  YES;
+}
+
 - (void)reloadTable {
     [_tableView reloadData];
     NSIndexPath * firstIndex = [_viewModel firstContactOnView];
@@ -147,6 +159,8 @@
     ContactTableViewCell * cell = [_tableView cellForRowAtIndexPath:indexPath];
     [cell setSelect];
 }
+- (void)hideKeyboard {
+    [keyboardAppearanceDelegate hideKeyboard];
+}
 @end
-
 #endif
