@@ -15,6 +15,7 @@
 
 typedef void(^AdapterResponseListBlock)(NSArray<id<ContactDALProtocol>> * contacts, NSError * error);
 typedef void(^AdapterResponseContactBlock)(id<ContactDALProtocol> contact, NSError * error);
+typedef void(^AdapterResponseListImageBlock)(NSDictionary<NSString *, NSData *> * images, NSError * error);
 
 @protocol ContactAdapterProtocol <NSObject>
 
@@ -35,9 +36,11 @@ typedef void(^AdapterResponseContactBlock)(id<ContactDALProtocol> contact, NSErr
 - (void) loadContactsByBatch: (NSArray<NSString *> *) identifiers
                       block: (AdapterResponseListBlock) block;
 
+- (void) loadContactImagesWithBlock:(AdapterResponseListImageBlock) block;
+
 //Get image by id, if image already in cache take it otherwise load it from CNContactStore
 - (void) getImageById: (NSString *) identifier
-                block: (void (^)(UIImage * image, NSError * error)) block;
+                block: (void (^)(NSData * image, NSError * error)) block;
 @end
 
 #endif /* ContactAdapterProtocol_h */

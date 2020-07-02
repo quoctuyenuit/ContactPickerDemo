@@ -129,10 +129,6 @@
     NSAssert(NO, @"Subclass must implement this method");
 }
 
-- (void)loadContact {
-    NSAssert(NO, @"Subclass must implement this method");
-}
-
 #pragma mark - HorizontalListItemDelegate methods
 - (ContactViewEntity *)horizontalListItem:(id<HorizontalListItemProtocol>)listItemView entityForIndexPath:(NSIndexPath *)indexPath {
     return [self.viewModel selectedContactAtIndex:indexPath.item];

@@ -45,10 +45,19 @@
 }
 
 - (id) init {
-    _background_queue   = dispatch_queue_create("[Adapter] background queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
-    _response_queue     = dispatch_queue_create("[Adapter] response queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _loadContactQueue   = dispatch_queue_create("[Adapter] background queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _responseLoadContactQueue     = dispatch_queue_create("[Adapter] response queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _loadImageQueue     = dispatch_queue_create("[Adapter] background queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _responseLoadImageQueue     = dispatch_queue_create("[Adapter] response queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    
     _loadInProcessing   = NO;
     _loadContactRequest = [[NSMutableArray alloc] init];
+    _loadImageInProcessing   = NO;
+    _loadContactImageRequest = [[NSMutableArray alloc] init];
+    
+    
+    
+    
     contactChangedObservable   = [[DataBinding alloc] initWithValue: nil];
     
     [NSNotificationCenter.defaultCenter addObserver:self
@@ -95,7 +104,7 @@
 #endif
     
     weak_self
-    dispatch_async(_response_queue, ^{
+    dispatch_async(_responseLoadContactQueue, ^{
         strong_self
         if (strongSelf) {
             [strongSelf.loadContactRequest addObject:block];
@@ -107,7 +116,7 @@
         }
     });
     
-    dispatch_async(_background_queue, ^{
+    dispatch_async(_loadContactQueue, ^{
         strong_self
         if (strongSelf) {
             NSMutableArray *listContacts        = [[NSMutableArray alloc] init];
@@ -133,7 +142,7 @@
                 error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeEmpty localizeString:@"Empty contacts"];
             }
             
-            dispatch_sync(strongSelf->_response_queue, ^{
+            dispatch_sync(strongSelf->_responseLoadContactQueue, ^{
                 strong_self
                 if (strongSelf) {
                     for (AdapterResponseListBlock block in strongSelf.loadContactRequest) {
@@ -155,7 +164,7 @@
         return;
     }
     weak_self
-    dispatch_async(_background_queue, ^{
+    dispatch_async(_loadContactQueue, ^{
         strong_self
         if (strongSelf) {
             CNContactStore *addressBook = [[CNContactStore alloc] init];
@@ -188,7 +197,7 @@
     }
     
     weak_self
-    dispatch_async(_background_queue, ^{
+    dispatch_async(_loadContactQueue, ^{
         strong_self
         if (strongSelf) {
             CNContactStore *addressBook     = [[CNContactStore alloc] init];
@@ -210,12 +219,71 @@
     });
 }
 
-- (void)getImageById:(NSString *)identifier block:(void (^)(UIImage *image, NSError * error))block {
+- (void)loadContactImagesWithBlock:(AdapterResponseListImageBlock)block {
     if (!block) {
         return;
     }
     weak_self
-    dispatch_async(_background_queue, ^{
+    dispatch_sync(_responseLoadImageQueue, ^{
+        strong_self
+        if (strongSelf) {
+            [strongSelf.loadContactImageRequest addObject:block];
+            
+            if (strongSelf.loadImageInProcessing) {
+                return;
+            }
+            strongSelf->_loadImageInProcessing = YES;
+        }
+    });
+    
+    dispatch_async(_loadImageQueue, ^{
+        strong_self
+        if (strongSelf) {
+            NSMutableDictionary *result   = [[NSMutableDictionary alloc] init];
+            CNContactStore *addressBook         = [[CNContactStore alloc] init];
+            
+            NSArray *keysToFetch                = @[CNContactIdentifierKey,
+                                                    CNContactImageDataAvailableKey,
+                                                    CNContactThumbnailImageDataKey];
+            
+            CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:keysToFetch];
+            [addressBook enumerateContactsWithFetchRequest:fetchRequest
+                                                     error:nil
+                                                usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
+                if (contact.imageDataAvailable) {
+                    [result setObject:contact.thumbnailImageData forKey:contact.identifier];
+                }
+            }];
+            
+            NSError * error = nil;
+            if (result.count == 0) {
+                error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeEmpty localizeString:@"Empty contact images"];
+            }
+            
+            dispatch_sync(strongSelf->_responseLoadImageQueue, ^{
+                strong_self
+                if (strongSelf) {
+                    for (AdapterResponseListImageBlock block in strongSelf.loadContactImageRequest) {
+                        block(result, error);
+                    }
+                    [strongSelf.loadContactImageRequest removeAllObjects];
+                    strongSelf->_loadImageInProcessing = NO; //Load done
+                }
+            });
+        } else {
+            NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeFailt localizeString:@"Load failt"];
+            block(nil, error);
+        }
+    });
+}
+
+- (void)getImageById:(NSString *)identifier block:(void (^)(NSData *imageData, NSError * error))block {
+    
+    if (!block) {
+        return;
+    }
+    weak_self
+    dispatch_async(_loadContactQueue, ^{
         strong_self
         if (strongSelf) {
             CNContactStore *addressBook = [[CNContactStore alloc] init];
@@ -230,10 +298,7 @@
                 NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeNotFound localizeString:[NSString stringWithFormat: @"Dont have contact with identifier: %@", identifier]];
                 block(nil, error);
             } else if (contact.imageDataAvailable) {
-//                Resize image to smaller
-                UIImage * image = [UIImage imageWithImage: [UIImage imageWithData:contact.thumbnailImageData]
-                                         scaledToFillSize:CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)];
-                block(image, nil);
+                block(contact.thumbnailImageData, nil);
             }
         }
     });

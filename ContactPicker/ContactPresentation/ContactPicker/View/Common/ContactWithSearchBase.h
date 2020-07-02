@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readwrite) id<HorizontalListItemProtocol>        keyboardSearchbarView;
 
 - (ResponseInformationView *)loadResponseInforView:(ResponseViewType)type;
-- (void)loadContact;
 - (CGSize)selectedItemSize;
 - (void)showSelectedContactsArea:(BOOL) isShow;
 @end

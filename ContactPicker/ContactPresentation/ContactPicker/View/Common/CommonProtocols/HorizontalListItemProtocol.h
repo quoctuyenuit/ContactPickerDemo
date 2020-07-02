@@ -19,8 +19,6 @@
 
 - (NSInteger) horizontalListItem:(id<HorizontalListItemProtocol>) listItemView numberOfItemAtSection:(NSInteger) section;
 - (ContactViewEntity *) horizontalListItem:(id<HorizontalListItemProtocol>) listItemView entityForIndexPath:(NSIndexPath *) indexPath;
-- (UIImage *) horizontalListItem: (id<HorizontalListItemProtocol>) listItemView imageForIdentifier:(NSString *) identifier;
-
 - (void) removeCellWithContact:(ContactViewEntity *) contact;
 
 @end

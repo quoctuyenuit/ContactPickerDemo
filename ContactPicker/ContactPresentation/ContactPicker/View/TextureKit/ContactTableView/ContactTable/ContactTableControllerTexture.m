@@ -16,15 +16,18 @@
 #import "ContactTableCellNode.h"
 #import "ContactDefine.h"
 
+#define DEBUG_MODE                          1
+
 #define LOADING_MSG                         @"Đang tải danh bạ..."
 #define LOG_MSG_HEADER                      @"ContactTableTexture"
 
-@interface ContactTableControllerTexture () <ASTableDelegate, ASTableDataSource>
+@interface ContactTableControllerTexture () <ASTableDelegate, ASTableDataSource, KeyboardAppearanceDelegate>
 @end
 
 @implementation ContactTableControllerTexture {
-    ASTableNode                 * _tableNode;
-    id<ContactViewModelProtocol>  _viewModel;
+//    ASTableNode                 * _tableNode;
+    ASDisplayNode                   *_contentNode;
+    id<ContactViewModelProtocol>    _viewModel;
 }
 
 
@@ -33,13 +36,25 @@
 #pragma mark - Lifecycle
 
 - (instancetype) initWithViewModel: (id<ContactViewModelProtocol>) viewModel {
-    _tableNode                  = [[ASTableNode alloc] init];
-    self = [super initWithNode:self->_tableNode];
-    
+    self = [super initWithNode:[[ASDisplayNode alloc] init]];
     if (self) {
         _viewModel            = viewModel;
+        _tableNode              = [[ASTableNode alloc] init];
         _tableNode.delegate   = self;
         _tableNode.dataSource = self;
+        
+#if DEBUG_MODE
+        self.node.backgroundColor       = UIColor.greenColor;
+#endif
+        self.node.automaticallyManagesSubnodes = YES;
+        weak_self
+        self.node.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
+            return [ASWrapperLayoutSpec wrapperWithLayoutElement:[weakSelf.tableNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+                style.flexGrow = 10;
+                style.flexShrink = 1;
+                style.preferredSize = weakSelf.node.calculatedSize;
+            }]];
+        };
     }
     return self;
 }
@@ -79,16 +94,6 @@
     return [_viewModel numberOfContactInSection:section] > 0 ? [_viewModel titleForHeaderInSection:section] : nil;
 }
 
-- (void)tableNode:(ASTableNode *)tableNode willBeginBatchFetchWithContext:(ASBatchContext *)context {
-    if (!self.contactHadLoad) {
-        [context completeBatchFetching:YES];
-        return;
-    }
-    DebugLog(@"[%@] begin batchFetchWithContext", LOG_MSG_HEADER);
-    [context beginBatchFetching];
-    [self loadBatchContacts:context];
-}
-
 #pragma mark - Parent methods
 - (id<ContactViewModelProtocol>)viewModel {
     return _viewModel;
@@ -100,11 +105,30 @@
     _tableNode.view.showsVerticalScrollIndicator            = NO;
     _tableNode.view.separatorStyle                          = UITableViewScrollPositionNone;
     _tableNode.view.backgroundColor                         = UIColor.whiteColor;
-    _tableNode.view.rowHeight                               = 66;
+    _tableNode.view.rowHeight                               = TABLE_CELL_HEIGHT;
 }
 
 - (void)setupDatasets {
     
+}
+
+- (void)showErrorView:(ResponseViewType)type {
+    [_tableNode removeFromSupernode];
+    
+    ResponseInformationView * resView = [[ResponseInformationView alloc] initWithType:type];
+    resView.keyboardAppearanceDelegate = self;
+
+    _contentNode = [[ASDisplayNode alloc] initWithViewBlock:^UIView * _Nonnull{
+        return resView;
+    }];
+    weak_self
+    self.node.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
+        return [ASWrapperLayoutSpec wrapperWithLayoutElement:[weakSelf.contentNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+            style.flexGrow = 10;
+            style.flexShrink = 1;
+            style.preferredSize = weakSelf.node.calculatedSize;
+        }]];
+    };
 }
 
 - (void)reloadTable {
@@ -119,14 +143,6 @@
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
     [_tableNode insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    
-#if DEBUG_MEM_ENABLE
-    NSInteger cells = 0;
-    for (NSInteger section = 0; section < [_tableNode numberOfSections]; section++) {
-        cells += [_tableNode numberOfRowsInSection:section];
-    }
-    DebugLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
-#endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
@@ -139,12 +155,9 @@
     [cell setSelect];
 }
 
-
-#pragma mark - Helper methods
-- (void)loadBatchContacts: (ASBatchContext * _Nullable) context {
-//    [self fetchBatchContactWithBlock:^(NSError * error) {
-//        [context completeBatchFetching:YES];
-//    }];
+#pragma mark - KeyboardAppearanceDelegate methods
+- (void)hideKeyboard {
+    [self.keyboardAppearanceDelegate hideKeyboard];
 }
 @end
 

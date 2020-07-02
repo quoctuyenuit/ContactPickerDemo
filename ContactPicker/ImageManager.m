@@ -11,7 +11,8 @@
 #import "ContactAdapter.h"
 #import "ContactDefine.h"
 
-#define CACHE_SIZE              5
+#define DEBUG_MODE          0
+#define CACHE_SIZE          10
 
 @interface ImageManager ()
 - (UIImage *) _createGradientImageWithSize:(CGSize) size colors:(NSArray *) colors;
@@ -79,9 +80,33 @@
 }
 
 #pragma mark - Public methods
+- (void)refreshCache:(NSDictionary<NSString *,UIImage *> *)images {
+    weak_self
+    dispatch_async(weakSelf.backgroundQueue, ^{
+#if DEBUG_MODE
+        [NSThread sleepForTimeInterval:2];
+#endif
+        strong_self
+        if (strongSelf) {
+            for (NSString * key in images.allKeys) {
+                UIImage * image = [images objectForKey:key];
+
+                DataBinding * imageObservable = [strongSelf.imageCache objectForKey:key];
+                AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO identififer:key];
+                if (imageObservable) {
+                    imageObservable.value = imgObj;
+                } else {
+                    imageObservable = [[DataBinding alloc] initWithValue:imgObj];
+                    [strongSelf.imageCache setObject:imageObservable forKey:key];
+                }
+            }
+        }
+    });
+}
+
 - (void)imageForKey:(NSString *)key
-              label:(NSString *) label
-              block:(void (^)(AvatarObj * _Nonnull imgObj, NSString * key))block {
+              label:(NSString *)label
+              block:(void (^)(DataBinding<AvatarObj *> * _Nonnull imageObservable))block {
     if (!block) {
         return;
     }
@@ -95,27 +120,40 @@
     dispatch_async(_backgroundQueue, ^{
         strong_self
         if (strongSelf) {
-            AvatarObj * imgObj = [strongSelf.imageCache objectForKey:weakKey];
-            if (imgObj) {
-                block(imgObj, weakKey);
+            DataBinding<AvatarObj *> *imageObservable = [strongSelf.imageCache objectForKey:weakKey];
+            if (imageObservable) {
+                block(imageObservable);
                 return;
             }
             UIImage * image = [strongSelf _randomImage];
-            imgObj = [[AvatarObj alloc] initWithImage:image label:weakLabel isGenerated:YES];
-            [strongSelf.imageCache setObject:imgObj forKey:weakKey];
-            block(imgObj, weakKey);
+            AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:weakLabel isGenerated:YES identififer:weakKey];
+            imageObservable = [[DataBinding alloc] initWithValue:imgObj];
             
-            [strongSelf.contactAdapter getImageById:weakKey block:^(UIImage *image, NSError *error) {
-                strong_self
-                if (strongSelf) {
-                    if (image) {
-                        AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO];
-                        [strongSelf.imageCache setObject:imgObj forKey:weakKey];
-                        block(imgObj, weakKey);
-                    }
+            [strongSelf.imageCache setObject:imageObservable forKey:weakKey];
+            block(imageObservable);
+            
+            [strongSelf.contactAdapter getImageById:weakKey block:^(NSData *imageData, NSError *error) {
+#if DEBUG_MODE
+                [NSThread sleepForTimeInterval:3];
+#endif
+                if (!error) {
+                    UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData] scaledToFillSize: CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)];
+                    AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO identififer:key];
+                    DataBinding<AvatarObj *> *imageObservable = [strongSelf.imageCache objectForKey:weakKey];
+                    imageObservable.value = imgObj;
                 }
             }];
         }
     });
+}
+
+- (UIImage *)imageForKey:(NSString *)key label:(NSString * _Nullable) label {
+    DataBinding<AvatarObj *> *imageObservable = [_imageCache objectForKey:key];
+    if (!imageObservable) {
+        UIImage * image = [self _randomImage];
+        AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:label isGenerated:YES identififer:key];
+        imageObservable = [[DataBinding alloc] initWithValue:imgObj];
+    }
+    return imageObservable.value.image;
 }
 @end

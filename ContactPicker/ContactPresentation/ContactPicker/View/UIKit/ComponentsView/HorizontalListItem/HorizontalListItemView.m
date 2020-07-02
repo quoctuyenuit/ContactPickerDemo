@@ -6,9 +6,6 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
-#import "ContactDefine.h"
-#if BUILD_UIKIT
-
 #import "HorizontalListItemView.h"
 #import "ContactCollectionCell.h"
 #import "ImageManager.h"
@@ -173,4 +170,3 @@
 }
 
 @end
-#endif

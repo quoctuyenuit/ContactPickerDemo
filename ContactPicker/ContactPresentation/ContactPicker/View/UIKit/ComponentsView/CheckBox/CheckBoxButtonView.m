@@ -5,8 +5,7 @@
 //  Created by Quốc Tuyến on 6/3/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-#import "ContactDefine.h"
-#if BUILD_UIKIT
+
 #import "CheckBoxButtonView.h"
 
 @interface CheckBoxButtonView()
@@ -53,7 +52,4 @@
     [self.delegate check: self.isChecked];
 }
 
-//@synthesize isChecked = _isChecked;
-
 @end
-#endif

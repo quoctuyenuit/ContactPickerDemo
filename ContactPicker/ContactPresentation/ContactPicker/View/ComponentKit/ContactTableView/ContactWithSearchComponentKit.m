@@ -23,7 +23,7 @@
 
 @implementation ContactWithSearchComponentKit {
     UISearchBar                                     * _searchBar;
-    UIViewController                                * _contentViewController;
+    UIViewController<KeyboardAppearanceProtocol>    * _contentViewController;
     HorizontalListItemView                          * _contactSelectedKeyboardView;
     HorizontalListItemView                          * _contactSelectedView;
     id<ContactViewModelProtocol>                      _viewModel;
@@ -45,6 +45,9 @@
 }
 
 - (void)initElements {
+    _contentViewController  = [[ContactTableControllerComponentKit alloc] initWithViewModel:_viewModel];
+    _contentViewController.keyboardAppearanceDelegate = self;
+    
     _contactSelectedView                = [[HorizontalListItemView alloc] initWithFrame:CGRectZero];
     _contactSelectedKeyboardView        = [[HorizontalListItemView alloc] initWithFrame:CGRectMake(0, 0, 0, 80)];
     
@@ -57,6 +60,9 @@
     _contactSelectedKeyboardView.layer.shadowOffset     = CGSizeMake(1, 0);
  
     _searchBar.inputAccessoryView = _contactSelectedKeyboardView;
+    
+    [self addChildViewController:_contentViewController];
+    [self layoutViews];
     
 #if DEBUG_MODE
     _searchBar.backgroundColor                      = UIColor.redColor;
@@ -127,41 +133,6 @@
             strongSelf->_contactSelectedKeyboardView.alpha = isShow ? 1 : 0;
         }
     }];
-}
-
-- (void)loadContact {
-//    __weak typeof(self) weakSelf = self;
-//    [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
-//        __strong typeof(weakSelf) strongSelf = weakSelf;
-//        if (strongSelf) {
-//            if (error) {
-//                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeFailLoadingContact];
-//            } else if (numberOfContacts == 0) {
-//                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeEmptyContact];
-//            } else {
-//                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableControllerComponentKit alloc] initWithViewModel:self->_viewModel];
-//                table.keyboardAppearanceDelegate = self;
-//                strongSelf->_contentViewController = table;
-//            }
-//            
-//            [strongSelf addChildViewController:strongSelf->_contentViewController];
-//            [strongSelf layoutViews];
-//        }
-//    }];
-}
-
-- (UIViewController *)wrapResponseViewIntoController:(ResponseViewType) type {
-    ResponseInformationView *responseView = [self loadResponseInforView:type];
-    responseView.keyboardAppearanceDelegate         = self;
-    UIViewController * vc                           = [[UIViewController alloc] init];
-    [vc.view addSubview:responseView];
-    
-    responseView.translatesAutoresizingMaskIntoConstraints                          = NO;
-    [responseView.topAnchor constraintEqualToAnchor:vc.view.topAnchor].active       = YES;
-    [responseView.leftAnchor constraintEqualToAnchor:vc.view.leftAnchor].active     = YES;
-    [responseView.rightAnchor constraintEqualToAnchor:vc.view.rightAnchor].active   = YES;
-    [responseView.bottomAnchor constraintEqualToAnchor:vc.view.bottomAnchor].active = YES;
-    return vc;
 }
 
 @end

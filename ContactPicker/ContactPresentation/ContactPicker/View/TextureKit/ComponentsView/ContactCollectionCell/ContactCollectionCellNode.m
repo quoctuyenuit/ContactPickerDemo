@@ -9,6 +9,7 @@
 #if BUILD_TEXTURE
 #import "ContactCollectionCellNode.h"
 #import "ContactAvatarNode.h"
+#import "ImageManager.h"
 
 #define DEBUG_MODE          0
 #define CLEAR_BTN_SIZE      CGSizeMake(20,20)
@@ -35,7 +36,7 @@
         
         self.automaticallyManagesSubnodes = YES;
         
-        [self binding:contact];
+//        [self binding:contact];
 #if DEBUG_MODE
         _avatarNode.backgroundColor         = UIColor.greenColor;
         _clearBtnNode.backgroundColor       = UIColor.redColor;
@@ -60,25 +61,27 @@
     }] overlay:buttonLayout];
 }
 
-- (void)binding:(nonnull ContactViewEntity *)entity {
-    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
-    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
-    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
-    
-    if (entity.avatar) {
-        [_avatarNode configWithImage:entity.avatar forLabel:@"" withGradientColor:nil];
-    } else {
-        [_avatarNode configWithImage:nil forLabel:keyName withGradientColor:entity.backgroundColor];
-    }
-    __weak typeof(self) weakSelf = self;
-    entity.waitImageSelectedToExcuteQueue = ^(UIImage * image, NSString * identifier) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if ([identifier isEqualToString:strongSelf->_currentContact.identifier]) {
-                [strongSelf->_avatarNode configWithImage:image forLabel:@"" withGradientColor:nil];
+- (void)didEnterDisplayState {
+    [super didEnterDisplayState];
+    weak_self
+    [[ImageManager instance] imageForKey:_currentContact.identifier label:_currentContact.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
+            strong_self
+            if (strongSelf && [strongSelf->_currentContact.identifier isEqualToString:imgObj.identifier]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    strong_self
+                    if (strongSelf) {
+                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                        [strongSelf->_avatarNode configWithImage:imgObj.image withTitle:label];
+                    }
+                });
             }
-        }
-    };
+        }];
+    }];
+}
+
+- (void)binding:(nonnull ContactViewEntity *)entity {
+   
 }
 
 - (void)clearAction:(id) sender {

@@ -15,7 +15,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ImageManager : NSObject
-@property(atomic, readonly) NSCache<NSString *, AvatarObj *>    *imageCache;
+@property(atomic, readonly) NSCache<NSString *, DataBinding *>  *imageCache;
 @property(nonatomic, readonly) NSMutableArray                   *colorsTable;
 @property(nonatomic, readonly) NSMutableArray                   *generatedImages;
 @property(nonatomic, readonly) id<ContactAdapterProtocol>       contactAdapter;
@@ -23,7 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 + (instancetype) instance;
-- (void) imageForKey:(NSString *) key label:(NSString * _Nullable) label block:(void(^)(AvatarObj * imgObj, NSString * key)) block;
+- (void) refreshCache:(NSDictionary<NSString *, UIImage *> *) images;
+- (void) imageForKey:(NSString *) key label:(NSString * _Nullable) label block:(void(^)(DataBinding<AvatarObj *> * imageObservable)) block;
+- (UIImage *) imageForKey:(NSString *) key label:(NSString * _Nullable) label;
 @end
 
 NS_ASSUME_NONNULL_END

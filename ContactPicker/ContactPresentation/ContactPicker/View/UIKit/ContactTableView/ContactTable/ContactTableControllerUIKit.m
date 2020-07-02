@@ -106,7 +106,7 @@
     _tableView.showsVerticalScrollIndicator            = NO;
     _tableView.separatorStyle                          = UITableViewScrollPositionNone;
     _tableView.backgroundColor                         = UIColor.whiteColor;
-    _tableView.rowHeight                               = 66;
+    _tableView.rowHeight                               = TABLE_CELL_HEIGHT;
     _tableView.delegate                                = self;
     _tableView.dataSource                              = self;
 }
@@ -141,13 +141,6 @@
     [_tableView beginUpdates];
     [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [_tableView endUpdates];
-#if DEBUG_MEM_ENABLE
-    NSInteger cells = 0;
-    for (NSInteger section = 0; section < [_tableView numberOfSections]; section++) {
-        cells += [_tableView numberOfRowsInSection:section];
-    }
-    DebugLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
-#endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {

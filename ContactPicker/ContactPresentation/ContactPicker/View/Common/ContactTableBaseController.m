@@ -18,9 +18,6 @@
 
 @implementation ContactTableBaseController {
     UIAlertController               * _loadingController;
-#if DEBUG_MEM_ENABLE
-    NSTimer                         * _autoFetchBatchTimer;
-#endif
 }
 
 @synthesize viewModel;

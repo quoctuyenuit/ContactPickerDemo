@@ -15,6 +15,7 @@
 #import "ContactCollectionCellNode.h"
 #import "HorizontalListNode.h"
 #import "ResponseInformationView.h"
+#import "KeyboardAppearanceDelegate.h"
 
 #import "ContactViewModel.h"
 #import "ContactBusinessLayer.h"
@@ -30,9 +31,8 @@
 @implementation ContactWithSearchTexture {
     BOOL                                              _isShowSelected;
     id<ContactViewModelProtocol>                      _viewModel;
-    ASViewController                                * _contentViewController;
     SearchNode                                      * _searchNode;
-    ASDisplayNode                                   * _contentNode;
+    ASViewController<KeyboardAppearanceProtocol>    * _contentNode;
     HorizontalListNode                              * _contactSelectedView;
     HorizontalListNode                              * _contactSelectedKeyboardView;
 }
@@ -41,7 +41,10 @@
     if (self) {
         _viewModel                                  = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
         _searchNode                                 = [[SearchNode alloc] initWithHeight:SEARCH_BAR_HEIGHT];
-        _contentNode                                = [[ASDisplayNode alloc] init];
+        _contentNode                                = [[ContactTableControllerTexture alloc] initWithViewModel:_viewModel];
+        _contentNode.keyboardAppearanceDelegate     = self;
+        [self addChildViewController:_contentNode];
+        
         _contactSelectedView                        = [[HorizontalListNode alloc] init];
         _contactSelectedKeyboardView                = [[HorizontalListNode alloc] init];
         _isShowSelected                             = NO;
@@ -59,7 +62,7 @@
         
 #if DEBUG_MODE
         _searchNode.backgroundColor             = UIColor.redColor;
-        _contentNode.backgroundColor            = UIColor.greenColor;
+        _contentNode.node.backgroundColor            = UIColor.greenColor;
         _contactSelectedView.backgroundColor    = UIColor.yellowColor;
 #endif
         
@@ -79,33 +82,17 @@
 }
 
 #pragma mark - Layout methods
-
-- (void)layoutContentNode {
-    weak_self
-    
-    _contentNode.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
-        strong_self
-        if (strongSelf) {
-            return [ASInsetLayoutSpec insetLayoutSpecWithInsets:UIEdgeInsetsMake(0, 0, 0, 0) child:[strongSelf->_contentViewController.node styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-                style.flexGrow = 10;
-            }]];
-        }
-        return nil;
-    };
-    
-    [_contentNode layoutIfNeeded];
-}
-
 - (void)layoutSubviews {
     weak_self
     self.node.layoutSpecBlock = ^ASLayoutSpec * _Nonnull(__kindof ASDisplayNode * _Nonnull node, ASSizeRange constrainedSize) {
         strong_self
         if (strongSelf) {
-            ASDisplayNode * contentNode = strongSelf->_contentNode;
+            ASDisplayNode * contentNode = strongSelf->_contentNode.node;
             
             ASDisplayNode * contentNodeLayout = [contentNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
                 style.flexGrow = 10;
                 style.flexShrink = 10;
+                style.preferredSize = weakSelf.node.calculatedSize;
             }];
             
             ASDisplayNode * selectedLayout = [strongSelf->_contactSelectedView styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
@@ -163,39 +150,6 @@
         }
     } completion:^(BOOL finished) {
         [weakSelf.node setNeedsLayout];
-    }];
-}
-
-- (void)loadContact {
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (!error && numberOfContacts > 0) {
-                ContactTableControllerTexture * table = [[ContactTableControllerTexture alloc] initWithViewModel:strongSelf->_viewModel];
-                table.keyboardAppearanceDelegate = strongSelf;
-                strongSelf->_contentViewController = table;
-            } else {
-                ResponseInformationView * resVc = nil;
-                if (error) {
-                    resVc = [strongSelf loadResponseInforView:ResponseViewTypeFailLoadingContact];
-                } else {
-                    resVc = [strongSelf loadResponseInforView:ResponseViewTypeEmptyContact];
-                }
-                resVc.keyboardAppearanceDelegate = strongSelf;
-                
-                ASDisplayNode * node = [[ASDisplayNode alloc] initWithViewBlock:^UIView * _Nonnull{
-                    return resVc;
-                }];
-                
-                strongSelf->_contentViewController = [[ASViewController alloc] initWithNode: node];
-            }
-            
-            [strongSelf addChildViewController:strongSelf->_contentViewController];
-            [strongSelf->_contentNode addSubnode:strongSelf->_contentViewController.node];
-            [strongSelf layoutContentNode];
-            [strongSelf->_contentNode setNeedsLayout];
-        }
     }];
 }
 

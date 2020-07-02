@@ -22,15 +22,13 @@
     self = [super init];
     if (self) {
         self->_mainBoundNode        = [[ASImageNode alloc] init];
-        self->_image                = [[ASImageNode alloc] init];
+        self->_imageNode            = [[ASImageNode alloc] init];
         self->_label                = [[ASTextNode alloc] init];
-        self->_image.contentMode    = UIViewContentModeScaleAspectFill;
+        self->_imageNode.contentMode    = UIViewContentModeScaleAspectFill;
         
-        _label.attributedText       = [NSAttributedString attributedStringWithString:@"Test" fontSize:FONT_SIZE color: UIColor.whiteColor firstWordColor:nil];
+//        _label.attributedText       = [NSAttributedString attributedStringWithString:@"Test" fontSize:FONT_SIZE color: UIColor.whiteColor firstWordColor:nil];
         
-        self->_gradient             = [CAGradientLayer layer];
-        
-        [self->_image setImageModificationBlock:^UIImage * _Nullable(UIImage * _Nonnull image) {
+        [self->_imageNode setImageModificationBlock:^UIImage * _Nullable(UIImage * _Nonnull image) {
             CGSize profileImageSize = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
             return [image makeCircularImageWithSize:profileImageSize backgroundColor:nil];
         }];
@@ -49,41 +47,16 @@
     [super awakeFromNib];
     
 }
-- (void)didLoad {
-    [super didLoad];
-    self->_gradient.frame = CGRectMake(0, 0, self.calculatedSize.width, self.calculatedSize.height);
-    self->_gradient.cornerRadius = self->_gradient.bounds.size.width / 2;
-    
-    [self->_mainBoundNode.layer insertSublayer:self->_gradient atIndex:0];
-}
+
 - (void)layoutDidFinish {
     [super layoutDidFinish];
     self.layer.cornerRadius = self.bounds.size.width / 2;
-    self->_image.cornerRadius = self->_image.bounds.size.width / 2;
+    self->_imageNode.cornerRadius = self->_imageNode.bounds.size.width / 2;
 }
 
-- (void)showImage {
-    self->_image.alpha = 1;
-    self->_label.alpha = 0;
-}
-
-- (void)showLabel {
-    self->_image.alpha = 0;
-    self->_label.alpha = 1;
-}
-
-- (void)configWithImage:(UIImage *)image forLabel:(NSString *)label withGradientColor:(NSArray *)color {
-//    image = [UIImage imageNamed:@"default_avatar"];
-    
-    self->_image.image = image;
-    self->_label.attributedText = [NSAttributedString attributedStringWithString:label fontSize:FONT_SIZE color: UIColor.whiteColor firstWordColor:nil];
-    if (image) {
-        [self showImage];
-    } else {
-        [self showLabel];
-    }
-    
-    self->_gradient.colors = color;
+- (void)configWithImage:(UIImage *)image withTitle:(NSString *)label {
+    _imageNode.image = image;
+    _label.attributedText = [NSAttributedString attributedStringWithString:label fontSize:FONT_SIZE color: UIColor.whiteColor firstWordColor:nil];
 }
 
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize {
@@ -93,7 +66,7 @@
         style.flexGrow = 10;
     }]];
     
-    ASLayoutSpec * imageLayout = [ASOverlayLayoutSpec overlayLayoutSpecWithChild: [self->_image styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+    ASLayoutSpec * imageLayout = [ASOverlayLayoutSpec overlayLayoutSpecWithChild: [self->_imageNode styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
         style.preferredSize = weakSelf.calculatedSize;
     }] overlay:textLayout];
     

@@ -13,6 +13,7 @@
 #define AVATAR_IMAGE_HEIGHT             50
 #define CONTACT_FONT_SIZE               17
 #define CONTACT_DESCRIPTION_FONT_SIZE   16
+#define TABLE_CELL_HEIGHT               66
 
 NS_ASSUME_NONNULL_BEGIN
 

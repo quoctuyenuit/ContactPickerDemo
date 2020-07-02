@@ -20,18 +20,15 @@
 
 //Dummy data define
 #define DEBUG_EMPTY_CONTACT             0
-#define DEBUG_FAILT_LOAD                1
+#define DEBUG_FAILT_LOAD                0
 #define DEBUG_PERMISSION_DENIED         0
 #define DUMMY_DATA_ENABLE               1
 #define NUMBER_OF_DUMMY                 1000
 
-//Memory debug define
-#define DEBUG_MEM_ENABLE                1
-
 
 #define BUILD_UIKIT                     1
-#define BUILD_TEXTURE                   0
-#define BUILD_COMPONENTKIT              0
+#define BUILD_TEXTURE                   1
+#define BUILD_COMPONENTKIT              1
 
 
 #elif DEBUG_APP_MODE == 0

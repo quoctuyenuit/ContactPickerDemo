@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "ContactDefine.h"
 #import "NSErrorExtension.h"
+#import "ImageManager.h"
 
 
 #define VIEWMODEL_ERROR_DOMAIN          @"ViewModel Error"
@@ -32,6 +33,7 @@
 - (void) _refreshContactOnView;
 - (NSArray<NSIndexPath *> *) _getAllIndexPaths;
 - (NSString *) _makeKeyFromName: (NSString *) name;
+- (void) _refreshImageCache;
 @end
 
 @implementation ContactViewModel
@@ -52,13 +54,11 @@
     _contactBus                 = bus;
     _backgroundSerialQueue      = dispatch_queue_create("[ViewModel] searching queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     _backgroundConcurrentQueue  = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    _loadResponseQueue           = dispatch_queue_create("ContactBus search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     
     //    List source initialization
     _contactsOnView         = [[NSMutableDictionary alloc] init];
     _listSelectedContacts   = [[NSMutableArray alloc] init];
     _listSectionKeys        = [[NSMutableArray alloc] init];
-    _loadContactRequest     = [[NSMutableArray alloc] init];
     
     //    Data binding initialization
     self.searchObservable                   = [[DataBinding<NSString *> alloc] initWithValue:@""];
@@ -92,7 +92,7 @@
         dispatch_async(weakSelf.backgroundSerialQueue, ^{
             strong_self
             if (strongSelf) {
-                
+                [strongSelf _refreshImageCache];
                 for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
                     ContactViewEntity * oldContact = [strongSelf contactOfIdentifier:newContact.identifier];
                     if (oldContact && ![oldContact isEqualWithBusEntity:newContact]) {
@@ -167,6 +167,15 @@
     NSString * firstLetter = [[name substringToIndex:1] uppercaseString];
     int letterNumber = [firstLetter characterAtIndex:0];
     return (letterNumber >= 65 && letterNumber <= 90) ? firstLetter : @"#";
+}
+
+- (void)_refreshImageCache {
+    [_contactBus loadContactImagesWithBlock:^(NSDictionary<NSString *,UIImage *> *images, NSError *error) {
+        if (!error)
+            [[ImageManager instance] refreshCache:images];
+        else
+            DebugLog(@"[%@] %@", LOG_MSG_HEADER, error.localizedDescription);
+    }];
 }
 
 - (ContactViewEntity *)contactOfIdentifier:(NSString *)identifier name:(NSString *)name {
@@ -262,18 +271,6 @@
     }
     
     weak_self
-    dispatch_sync(_loadResponseQueue, ^{
-        strong_self
-        if (strongSelf) {
-            [strongSelf.loadContactRequest addObject:block];
-            
-            if (strongSelf.loadInProcessing) {
-                return;
-            }
-            strongSelf->_loadInProcessing = YES;
-        }
-    });
-    
     dispatch_async(_backgroundSerialQueue, ^{
         strong_self
         if (strongSelf) {
@@ -285,17 +282,8 @@
                     }];
                     
                     [strongSelf _addContacts:contactEntity block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
-                        dispatch_async(weakSelf.loadResponseQueue, ^{
-                            strong_self
-                            if (strongSelf) {
-                                for (ViewModelResponseListBlock block in strongSelf.loadContactRequest) {
-                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                        block(contactEntity, updatedIndexPaths, nil);
-                                    });
-                                }
-                                [strongSelf.loadContactRequest removeAllObjects];
-                                strongSelf->_loadInProcessing = NO;
-                            }
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            block(contactEntity, updatedIndexPaths, nil);
                         });
                     }];
                     
@@ -304,18 +292,8 @@
                         DebugLog(@"[%@] %@", LOG_MSG_HEADER, error.localizedDescription);
                         error = [[NSError alloc] initWithDomain:VIEWMODEL_ERROR_DOMAIN type:ErrorTypeRetainCycleGone localizeString:@"StrongSelf is released"];
                     }
-                    
-                    dispatch_async(weakSelf.loadResponseQueue, ^{
-                        strong_self
-                        if (strongSelf) {
-                            for (ViewModelResponseListBlock block in strongSelf.loadContactRequest) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    block(nil, nil, error);
-                                });
-                            }
-                            [strongSelf.loadContactRequest removeAllObjects];
-                            strongSelf->_loadInProcessing = NO;
-                        }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        block(nil, nil, error);
                     });
                 }
             }];

@@ -26,11 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, readonly) dispatch_queue_t     backgroundConcurrentQueue;
 @property(nonatomic, readonly) dispatch_queue_t     backgroundSerialQueue;
-@property(nonatomic, readonly) dispatch_queue_t     loadResponseQueue;
-
-@property(atomic, readonly) BOOL                    loadInProcessing;
-
-@property(atomic, readonly) NSMutableArray<ViewModelResponseListBlock>   *loadContactRequest;
 
 - (id)initWithBus: (id<BusinessLayerProtocol>) bus;
 

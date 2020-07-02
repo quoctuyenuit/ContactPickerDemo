@@ -5,11 +5,11 @@
 //  Created by Quốc Tuyến on 6/10/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-#import "ContactDefine.h"
-#if BUILD_UIKIT
+
 #import "ContactCollectionCell.h"
 #import "ContactViewEntity.h"
 #import "ImageManager.h"
+#import "ContactDefine.h"
 
 #define CLOSE_BTN_WIDTH     20
 
@@ -75,17 +75,20 @@
 - (void)binding:(ContactViewEntity *)entity{
     self->_currentContact = entity;
     weak_self
-    __weak typeof(entity) weakEntity = entity;
-    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(AvatarObj * _Nonnull imgObj, NSString *key) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
             strong_self
-            if (strongSelf && [weakEntity.identifier isEqualToString:key]) {
-                NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+            if (strongSelf && [strongSelf->_currentContact.identifier isEqualToString:imgObj.identifier]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    strong_self
+                    if (strongSelf) {
+                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                        [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+                    }
+                });
             }
-        });
+        }];
     }];
 }
 
 @end
-#endif

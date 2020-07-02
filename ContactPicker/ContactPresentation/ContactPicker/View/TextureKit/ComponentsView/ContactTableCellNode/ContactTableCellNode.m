@@ -13,6 +13,7 @@
 #import "Utilities.h"
 #import "ContactAvatarNode.h"
 #import "CheckBoxNode.h"
+#import "ImageManager.h"
 
 #define DEBUG_MODE              0
 
@@ -80,13 +81,12 @@
                                                                         spacing:5
                                                                  justifyContent:ASStackLayoutJustifyContentCenter
                                                                      alignItems:ASStackLayoutAlignItemsStart
-                                                                       children: ![_contact.contactDescription isEqualToString:@""] ? @[
-                                                                           [_contactNameLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.flexShrink = 1.0;
-    }],
-                                                                           [_contactDescriptionLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.flexShrink = 1.0;
-    }]] : @[_contactNameLabel]]];
+                                                                       children: @[[_contactNameLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+                                                                           style.flexShrink = 1.0;
+                                                                       }],
+                                                                                                                                              [_contactDescriptionLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+                                                                           style.flexShrink = 1.0;
+                                                                       }]]]];
     
     return [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionHorizontal
                                                    spacing:SPACE_BETWEEN_ELEMENT
@@ -114,27 +114,24 @@
 }
 
 - (void)configForModel:(ContactViewEntity *)entity {
-    _contactNameLabel.attributedText          = [entity fullNameAttributedStringFontSize:CONTACT_FONT_SIZE];
-    _contactDescriptionLabel.attributedText   = [entity descriptionAttributedStringFontSize:CONTACT_FONT_SIZE];
+    _contactNameLabel.attributedText          = entity.fullName;
+    _contactDescriptionLabel.attributedText   = entity.phone;
     _checkBox.isChecked = entity.isChecked;
-    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
-    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
-    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
-    
-    if (entity.avatar) {
-        [_avatar configWithImage:entity.avatar forLabel:@"" withGradientColor:nil];
-    } else {
-        [_avatar configWithImage:nil forLabel:keyName withGradientColor:entity.backgroundColor];
-    }
-    __weak typeof(self) weakSelf = self;
-    entity.waitImageToExcuteQueue = ^(UIImage* image, NSString * identifier) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if ([identifier isEqualToString: strongSelf->_contact.identifier]) {
-                [strongSelf->_avatar configWithImage:image forLabel:@"" withGradientColor:nil];
+    weak_self
+    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
+            strong_self
+            if (strongSelf && [strongSelf->_contact.identifier isEqualToString:imgObj.identifier]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    strong_self
+                    if (strongSelf) {
+                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                        [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+                    }
+                });
             }
-        }
-    };
+        }];
+    }];
 }
 @end
 #endif

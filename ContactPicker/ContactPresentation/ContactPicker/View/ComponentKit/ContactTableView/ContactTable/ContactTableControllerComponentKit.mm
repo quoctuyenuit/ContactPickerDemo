@@ -13,19 +13,14 @@
 #import "ContactTableCellComponent.h"
 #import "ContactTableHeaderComponentView.h"
 #import "ContactDefine.h"
+#import "KeyboardAppearanceDelegate.h"
 
-#define DEBUG_FEATURE_MODE                  0
+#define DEBUG_MODE                          0
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
 #define LOG_MSG_HEADER                      @"ContactTableComponentKit"
 #define HEADER_REUSE_IDENTIFIER             @"HeaderReuseIdentifier"
 
-#if DEBUG_FEATURE_MODE
-#import "ContactViewModel.h"
-#import "ContactBus.h"
-#import "ContactAdapter.h"
-#endif
-
-@interface ContactTableControllerComponentKit () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource > {
+@interface ContactTableControllerComponentKit () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource , KeyboardAppearanceDelegate> {
     id<ContactViewModelProtocol>                      _viewModel;
     CKCollectionViewDataSource                      * _dataSource;
     CKComponentFlexibleSizeRangeProvider            * _sizeRangeProvider;
@@ -79,24 +74,6 @@
     return [[UICollectionReusableView alloc] init];
 }
 
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.contentSize.height == 0) {
-        return;
-    }
-    
-    CGFloat currentOffSetY = scrollView.contentOffset.y;
-    CGFloat contentHeight  = scrollView.contentSize.height;
-    CGFloat screenHeight   = [UIScreen mainScreen].bounds.size.height;
-    
-    CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
-    if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
-        DebugLog(@"[%@] begin call fetching", LOG_MSG_HEADER);
-        [self fetchBatchContactWithBlock:nil];
-    }
-}
-
 #pragma mark - Subclass methods
 - (id<ContactViewModelProtocol>)viewModel {
     return _viewModel;
@@ -111,9 +88,9 @@
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:flowLayout];
     [self.view addSubview:_collectionView];
     _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    [_collectionView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
-    [_collectionView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active = YES;
-    [_collectionView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active = YES;
+    [_collectionView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active      = YES;
+    [_collectionView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active  = YES;
+    [_collectionView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active    = YES;
     [_collectionView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
     
     _collectionView.backgroundColor = UIColor.whiteColor;
@@ -122,6 +99,10 @@
     _collectionView.showsHorizontalScrollIndicator  = NO;
     
     [_collectionView registerClass:[ContactTableHeaderComponentView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HEADER_REUSE_IDENTIFIER];
+    
+#if DEBUG_MODE
+    _collectionView.backgroundColor = UIColor.greenColor;
+#endif
 
 }
 
@@ -143,6 +124,18 @@
     [_dataSource applyChangeset:initalChangeset mode:CKUpdateModeAsynchronous userInfo:nil];
 }
 
+- (void)showErrorView:(ResponseViewType)type {
+    ResponseInformationView * resView = [[ResponseInformationView alloc] initWithType:type];
+    resView.keyboardAppearanceDelegate = self;
+    [_collectionView removeFromSuperview];
+    [self.view addSubview:resView];
+    resView.translatesAutoresizingMaskIntoConstraints = NO;
+    [resView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active          =  YES;
+    [resView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active        =  YES;
+    [resView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active      =  YES;
+    [resView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active    =  YES;
+}
+
 - (void)reloadTable {
     [_collectionView reloadData];
 }
@@ -161,15 +154,6 @@
     
     CKDataSourceChangeset *changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withInsertedItems:items] build];
     [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
-    
-
-#if DEBUG_MEM_ENABLE
-    NSInteger cells = 0;
-    for (NSInteger section = 0; section < [_collectionView numberOfSections]; section++) {
-        cells += [_collectionView numberOfItemsInSection:section];
-    }
-    DebugLog(@"[%@] current cells: %ld", LOG_MSG_HEADER, cells);
-#endif
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
@@ -180,6 +164,10 @@
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
     
+}
+
+- (void) hideKeyboard {
+    [self.keyboardAppearanceDelegate hideKeyboard];
 }
 @end
 #endif

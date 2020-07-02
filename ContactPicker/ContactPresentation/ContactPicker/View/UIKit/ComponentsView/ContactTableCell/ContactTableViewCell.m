@@ -5,8 +5,7 @@
 //  Created by Quốc Tuyến on 6/4/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-#import "ContactDefine.h"
-#if BUILD_UIKIT
+
 #import "ContactTableViewCell.h"
 #import "ContactDefine.h"
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
@@ -26,6 +25,7 @@
     UILabel                 *_contactDescriptionLabel;
     CheckBoxButtonView      *_checkBox;
     UIView                  *_textBoundView;
+    ContactViewEntity       *_currentContact;
     
     
     void (^_block)(void);
@@ -130,27 +130,34 @@
     [self setupViews];
 }
 
-- (void)configForModel:(ContactViewEntity *)entity {    
-    _contactNameLabel.attributedText = entity.fullName;
+- (void)configForModel:(ContactViewEntity *)entity {
+    _currentContact                         = entity;
+    _contactNameLabel.attributedText        = entity.fullName;
     _contactDescriptionLabel.attributedText = entity.phone;
-    _checkBox.isChecked = entity.isChecked;
+    _checkBox.isChecked                     = entity.isChecked;
 
     weak_self
-    __weak typeof(entity) weakEntity = entity;
-
-    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(AvatarObj * _Nonnull imgObj, NSString *key) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
             strong_self
-            if (strongSelf && [weakEntity.identifier isEqualToString:key]) {
-                NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+            if (strongSelf && [strongSelf->_currentContact.identifier isEqualToString:imgObj.identifier]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    strong_self
+                    if (strongSelf) {
+                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                        [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+                    }
+                });
             }
-        });
+        }];
     }];
+}
+
+- (void)configCheckBox:(BOOL)isChecked {
+    _checkBox.isChecked = isChecked;
 }
 
 - (void)setSelect {
     _checkBox.isChecked = !_checkBox.isChecked;
 }
 @end
-#endif

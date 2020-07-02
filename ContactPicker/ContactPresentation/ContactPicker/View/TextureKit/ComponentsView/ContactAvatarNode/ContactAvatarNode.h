@@ -15,15 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactAvatarNode : ASDisplayNode {
     ASDisplayNode   * _mainBoundNode;
-    ASImageNode     * _image;
+    ASImageNode     * _imageNode;
     ASTextNode      * _label;
-    CAGradientLayer * _gradient;
 }
 
 - (instancetype) init;
 - (void) showImage;
 - (void) showLabel;
-- (void) configWithImage: (UIImage * _Nullable) image forLabel: (NSString *) label withGradientColor: (NSArray * _Nullable) color;
+- (void) configWithImage: (UIImage * _Nullable) image withTitle: (NSString *) label;
 @end
 
 NS_ASSUME_NONNULL_END

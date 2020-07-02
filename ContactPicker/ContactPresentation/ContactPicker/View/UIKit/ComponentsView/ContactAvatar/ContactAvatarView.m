@@ -5,8 +5,7 @@
 //  Created by Quốc Tuyến on 6/23/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-#import "ContactDefine.h"
-#if BUILD_UIKIT
+
 #import "ContactAvatarView.h"
 
 #define DEBUG_MODE      0
@@ -110,4 +109,3 @@
 }
 
 @end
-#endif
