@@ -6,8 +6,12 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
+#import "ContactDefine.h"
+#if BUILD_UIKIT
+
 #import "HorizontalListItemView.h"
 #import "ContactCollectionCell.h"
+#import "ImageManager.h"
 
 #define DEBUG_MODE                  0
 #define DEFAULT_CONTENT_HEIGHT      80
@@ -154,7 +158,7 @@
     
     ContactViewEntity * entity = [delegate horizontalListItem:self entityForIndexPath:indexPath];
     
-    [cell configWithEntity:entity];
+    [cell binding:entity];
     
     if (cell.delegate == nil) {
         cell.delegate = self;
@@ -169,3 +173,4 @@
 }
 
 @end
+#endif

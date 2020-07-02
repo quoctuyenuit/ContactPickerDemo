@@ -7,20 +7,20 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 #import "ContactBusEntity.h"
 #import "Utilities.h"
 
 @interface ContactBusTests : XCTestCase
-@property (nonatomic) ContactBus * contactBus;
+@property (nonatomic) ContactBusinessLayer * contactBus;
 @end
 
 @implementation ContactBusTests
 
 - (void)setUp {
     ContactAdapter * adapter = [[ContactAdapter alloc] init];
-    self.contactBus = [[ContactBus alloc] initWithAdapter:adapter];
+    self.contactBus = [[ContactBusinessLayer alloc] initWithAdapter:adapter];
 }
 
 - (void)tearDown {

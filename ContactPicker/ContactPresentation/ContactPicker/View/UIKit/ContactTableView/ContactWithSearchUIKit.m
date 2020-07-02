@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/6/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_UIKIT
 #import "ContactWithSearchUIKit.h"
 #import "ContactTableControllerUIKit.h"
 #import "ContactViewModel.h"
@@ -14,7 +15,7 @@
 #import "ResponseInformationView.h"
 
 #import "ContactViewModel.h"
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 
 #define DEBUG_MODE          0
@@ -22,7 +23,7 @@
 
 @interface ContactWithSearchUIKit (){
     UISearchBar                                     * _searchBar;
-    UIViewController                                * _contentViewController;
+    UIViewController<KeyboardAppearanceProtocol>    * _contentViewController;
     HorizontalListItemView                          * _contactSelectedKeyboardView;
     HorizontalListItemView                          * _contactSelectedView;
     id<ContactViewModelProtocol>                      _viewModel;
@@ -39,7 +40,7 @@
 {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        _viewModel                          = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
+        _viewModel                          = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
         _searchBar                          = [[UISearchBar alloc] init];
         _searchBar.searchBarStyle           = UISearchBarStyleMinimal;
         _searchBar.barTintColor             = UIColor.clearColor;
@@ -62,6 +63,9 @@
     _contactSelectedKeyboardView.layer.shadowOpacity    = 1;
     _contactSelectedKeyboardView.layer.shadowOffset     = CGSizeMake(1, 0);
     
+    _contentViewController = [[ContactTableControllerUIKit alloc] initWithViewModel:self->_viewModel];
+    _contentViewController.keyboardAppearanceDelegate = self;
+    
     _searchBar.inputAccessoryView = _contactSelectedKeyboardView;
     
 #if DEBUG_MODE
@@ -71,11 +75,18 @@
 #endif
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self layoutViews];
+}
+
 #pragma mark - Layout views
 - (void)layoutViews {
+    [self addChildViewController:_contentViewController];
     [self.view addSubview:_searchBar];
     [self.view addSubview:_contentViewController.view];
     [self.view addSubview:_contactSelectedView];
+    [self.view addSubview:_contentViewController.view];
     
     _searchBar.translatesAutoresizingMaskIntoConstraints            = NO;
     _contentViewController.view.translatesAutoresizingMaskIntoConstraints          = NO;
@@ -99,29 +110,6 @@
     _contactSelectedHeightConstraint.active                                                         = YES;
     
     [self.view bringSubviewToFront:_contactSelectedView];
-}
-
-#pragma mark - Collection view delegate and datasource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [_viewModel numberOfSelectedContacts];
-}
-
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    ContactCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ContactCollectionCell" forIndexPath:indexPath];
-    
-    ContactViewEntity * entity = [_viewModel selectedContactAtIndex:indexPath.item];
-    
-    [cell configWithEntity:entity];
-    
-    if (cell.delegate == nil) {
-        cell.delegate = self;
-    }
-    
-    return cell;
 }
 
 #pragma mark - Subclass methods
@@ -154,39 +142,5 @@
         }
     }];
 }
-
-- (void)loadContact {
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (error) {
-                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeFailLoadingContact];
-            } else if (numberOfContacts == 0) {
-                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeEmptyContact];
-            } else {
-                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableControllerUIKit alloc] initWithViewModel:self->_viewModel];
-                table.keyboardAppearanceDelegate = self;
-                strongSelf->_contentViewController = table;
-            }
-            
-            [strongSelf addChildViewController:strongSelf->_contentViewController];
-            [strongSelf layoutViews];
-        }
-    }];
-}
-
-- (UIViewController *)wrapResponseViewIntoController:(ResponseViewType) type {
-    ResponseInformationView *responseView = [self loadResponseInforView:type];
-    responseView.keyboardAppearanceDelegate         = self;
-    UIViewController * vc                           = [[UIViewController alloc] init];
-    [vc.view addSubview:responseView];
-    
-    responseView.translatesAutoresizingMaskIntoConstraints                          = NO;
-    [responseView.topAnchor constraintEqualToAnchor:vc.view.topAnchor].active       = YES;
-    [responseView.leftAnchor constraintEqualToAnchor:vc.view.leftAnchor].active     = YES;
-    [responseView.rightAnchor constraintEqualToAnchor:vc.view.rightAnchor].active   = YES;
-    [responseView.bottomAnchor constraintEqualToAnchor:vc.view.bottomAnchor].active = YES;
-    return vc;
-}
 @end
+#endif

@@ -15,9 +15,13 @@
 #define RETAIN_CYCLE_GONE_ERROR_CODE    410
 #define UNSUPPORTED_ERROR_CODE          415
 #define NOT_FOUND_ERROR_CODE            404
+#define EMPTY_ERROR_CODE                400
+
+#define WEAK_SELF __weak typeof(self) weakSelf = self;
+#define STRONG_SELF __strong typeof(weakSelf) strongSelf = weakSelf;
 
 #pragma mark - Debug define
-#define DEBUG_APP_MODE                  0
+#define DEBUG_APP_MODE                  1
 
 #if DEBUG_APP_MODE == 1
 #define DebugLog(...) NSLog(__VA_ARGS__)
@@ -27,25 +31,16 @@
 #define DEBUG_FAILT_LOAD                0
 #define DEBUG_PERMISSION_DENIED         0
 #define DUMMY_DATA_ENABLE               1
-#define NUMBER_OF_DUMMY                 10000
+#define NUMBER_OF_DUMMY                 1000
 
 //Memory debug define
-#define DEBUG_MEM_ENABLE                0
+#define DEBUG_MEM_ENABLE                1
 
-//Component debug define
-//Just show UIKit View
-#define DEBUG_JUST_UIKIT                0
 
-#if !DEBUG_JUST_UIKIT
-//Just show Texture View
-#define DEBUG_JUST_TEXTURE              0
+#define BUILD_UIKIT                     1
+#define BUILD_TEXTURE                   0
+#define BUILD_COMPONENTKIT              0
 
-#if !DEBUG_JUST_TEXTURE
-//Just show ComponentKit view
-#define DEBUG_JUST_COMPONENTKIT         0
-#endif
-
-#endif
 
 #elif DEBUG_APP_MODE == 0
 #define DebugLog(...)

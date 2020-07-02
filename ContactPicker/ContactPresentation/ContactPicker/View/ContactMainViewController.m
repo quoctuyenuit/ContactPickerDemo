@@ -10,7 +10,7 @@
 #import "ResponseInformationView.h"
 #import "ContactViewModelProtocol.h"
 #import "ContactViewModel.h"
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 #import "ContactDefine.h"
 
@@ -43,7 +43,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = UIColor.whiteColor;
-    self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
+    self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
     
     __weak typeof(self) weakSelf = self;
     [self->viewModel requestPermission:^(BOOL granted, NSError * error) {
@@ -88,28 +88,27 @@
 }
 
 - (UIViewController *)loadContactViewController {
+    NSMutableArray * viewControllers = [[NSMutableArray alloc] init];
+    
+#if BUILD_UIKIT
     ContactWithSearchUIKit * uikitContactVc = [[ContactWithSearchUIKit alloc] init];
     uikitContactVc.tabBarItem              = [[UITabBarItem alloc] initWithTitle:UIKIT_TITLE image:[UIImage systemImageNamed:UIKIT_ICO_NAME] tag:0];
-
-#if DEBUG_JUST_UIKIT
-    return uikitContactVc;
+    [viewControllers addObject:uikitContactVc];
 #endif
-
+    
+#if BUILD_TEXTURE
     ContactWithSearchTexture * textureContactVc = [[ContactWithSearchTexture alloc] init];
     textureContactVc.tabBarItem                     = [[UITabBarItem alloc] initWithTitle:TEXTURE_TITLE image:[UIImage systemImageNamed:TEXTURE_ICO_NAME] tag:1];
-    
-#if DEBUG_JUST_TEXTURE
-    return textureContactVc;
+    [viewControllers addObject:textureContactVc];
 #endif
-
+    
+#if BUILD_COMPONENTKIT
     ContactWithSearchComponentKit * componentVc   = [[ContactWithSearchComponentKit alloc] init];
     componentVc.tabBarItem                          = [[UITabBarItem alloc] initWithTitle:COMPONENTKIT_TITLE image:[UIImage systemImageNamed:COMPONENTKIT_ICO_NAME] tag:1];
-
-#if DEBUG_JUST_COMPONENTKIT
-    return componentVc;
+    [viewControllers addObject:componentVc];
 #endif
     
-    TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:@[uikitContactVc, textureContactVc, componentVc]];
+    TabbarOnTopViewController *tabBarController = [[TabbarOnTopViewController alloc] initWithBarHeight:60 barColor:[UIColor appColor] viewControllers:viewControllers];
     tabBarController.indexSelectedViewController = 0;
     self.view.backgroundColor = UIColor.whiteColor;
     

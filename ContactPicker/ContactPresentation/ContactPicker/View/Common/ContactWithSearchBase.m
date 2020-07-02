@@ -31,7 +31,6 @@
     self.selectedContactView.delegate       = self;
     self.keyboardSearchbarView.delegate     = self;
     [self setupEvents];
-    [self loadContact];
 }
 
 #pragma mark - Helper methods

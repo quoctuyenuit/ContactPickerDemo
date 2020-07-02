@@ -6,12 +6,15 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
+#import "ContactDefine.h"
+
+#if BUILD_UIKIT
 #import "ContactTableControllerUIKit.h"
 #import "ContactViewModelProtocol.h"
 #import "ContactTableViewCell.h"
 #import "Utilities.h"
 #import "ContactViewEntity.h"
-#import "ContactDefine.h"
+
 
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
 #define LOG_MSG_HEADER              @"ContactTableUIKit"
@@ -51,9 +54,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (!self.contactHadLoad)
         return 0;
-//    NSInteger rows = [self->_viewModel numberOfContactInSection:section];
-//    if (rows > 0)
-//        DebugLog(@"[%@] numberOfRows is called", LOG_MSG_HEADER);
     return [self->_viewModel numberOfContactInSection:section];
 }
 
@@ -65,7 +65,7 @@
     if (cell == nil) {
         cell = [[ContactTableViewCell alloc] initWithFrame:CGRectZero];
     }
-    
+
     ContactViewEntity *entity = [self->_viewModel contactAtIndex: indexPath];
     [cell configForModel:entity];
     
@@ -92,21 +92,6 @@
     [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{   
-    if (!self.contactHadLoad)
-        return;
-    
-    CGFloat currentOffSetY = scrollView.contentOffset.y;
-    CGFloat contentHeight  = scrollView.contentSize.height;
-    CGFloat screenHeight   = [UIScreen mainScreen].bounds.size.height;
-    
-    CGFloat screenfullsBeforeBottom = (contentHeight - currentOffSetY) / screenHeight;
-    if (screenfullsBeforeBottom < AUTO_TAIL_LOADING_NUM_SCREENFULS) {
-        DebugLog(@"[%@] begin fetching from scroll", LOG_MSG_HEADER);
-        [self fetchBatchContactWithBlock:nil];
-    }
-}
 
 #pragma mark - Subclass methods
 - (id<ContactViewModelProtocol>)viewModel {
@@ -141,7 +126,9 @@
 
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+    [_tableView beginUpdates];
     [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [_tableView endUpdates];
 #if DEBUG_MEM_ENABLE
     NSInteger cells = 0;
     for (NSInteger section = 0; section < [_tableView numberOfSections]; section++) {
@@ -161,3 +148,5 @@
     [cell setSelect];
 }
 @end
+
+#endif

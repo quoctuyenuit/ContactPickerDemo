@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)reloadTable;
 - (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities;
 - (void)removeCells:(NSArray<NSIndexPath *> *) indexPaths;
-- (void)fetchBatchContactWithBlock:(void(^_Nullable)(NSError * error)) block;
 - (void)contactHadRemoved:(NSIndexPath *) indexPath;
 @end
 

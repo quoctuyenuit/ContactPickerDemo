@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ContactAdapter.h"
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactDAL.h"
 #import <Contacts/Contacts.h>
 #import "Utilities.h"

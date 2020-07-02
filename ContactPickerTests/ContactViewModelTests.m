@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ContactViewmodel.h"
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 #import "ContactBusEntity.h"
 
@@ -20,7 +20,7 @@
 
 - (void)setUp {
     ContactAdapter * adapter = [[ContactAdapter alloc] init];
-    ContactBus * contactBus = [[ContactBus alloc] initWithAdapter:adapter];
+    ContactBusinessLayer * contactBus = [[ContactBusinessLayer alloc] initWithAdapter:adapter];
     self.viewModel = [[ContactViewModel alloc] initWithBus:contactBus];
 }
 

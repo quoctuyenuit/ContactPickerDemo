@@ -6,6 +6,9 @@
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
+#import "ContactDefine.h"
+#if BUILD_TEXTURE
+
 #import "ContactTableControllerTexture.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "ContactViewModelProtocol.h"
@@ -139,8 +142,11 @@
 
 #pragma mark - Helper methods
 - (void)loadBatchContacts: (ASBatchContext * _Nullable) context {
-    [self fetchBatchContactWithBlock:^(NSError * error) {
-        [context completeBatchFetching:YES];
-    }];
+//    [self fetchBatchContactWithBlock:^(NSError * error) {
+//        [context completeBatchFetching:YES];
+//    }];
 }
 @end
+
+
+#endif

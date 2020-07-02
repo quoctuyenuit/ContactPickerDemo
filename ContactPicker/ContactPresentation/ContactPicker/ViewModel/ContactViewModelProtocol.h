@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error);
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *>                   * searchObservable;
@@ -23,31 +24,32 @@ NS_ASSUME_NONNULL_BEGIN
 @property DataBinding<NSArray<NSIndexPath *> *>     * dataSourceNeedReloadObservable;
 @property DataBinding<NSIndexPath *>                * cellNeedRemoveSelectedObservable;
 
-- (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
-
-- (void) loadContacts: (void (^)(BOOL isSuccess, NSError * error, NSUInteger numberOfContacts)) completion;
-
-- (void) loadBatchOfContacts: (void (^)(NSError * error, NSArray<NSIndexPath *> * updatedIndexPaths, NSArray<ContactViewEntity *> * entities)) handler;
+#pragma mark - ContactTableDataSource methods
+- (NSInteger) numberOfSection;
 
 - (int) numberOfContactInSection: (NSInteger) section;
 
-- (NSInteger) numberOfSection;
-
 - (ContactViewEntity *) contactAtIndex: (NSIndexPath *) indexPath;
-
-- (void) searchContactWithKeyName: (NSString *) key block:(void(^)(void)) block;
-
-- (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
-
-- (void) removeSelectedContact: (NSString *) identifier;
 
 - (NSString *) titleForHeaderInSection: (NSInteger) section;
 
 - (NSArray *) getAllSectionNames;
 
+#pragma mark - Selected Contact CollectionDataSource methods
 - (NSInteger)numberOfSelectedContacts;
 
 - (ContactViewEntity *) selectedContactAtIndex: (NSInteger) index;
+
+#pragma mark - Feature methods
+- (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
+
+- (void) loadContactsWithBlock: (ViewModelResponseListBlock) block;
+
+- (void) searchContactWithKeyName: (NSString *) key block:(ViewModelResponseListBlock) block;
+
+- (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
+
+- (void) removeSelectedContact: (NSString *) identifier;
 
 - (NSIndexPath * _Nullable)firstContactOnView;
 @end

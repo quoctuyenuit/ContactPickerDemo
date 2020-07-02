@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/15/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_TEXTURE
 #import "ContactTableCellNode.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import <AsyncDisplayKit/ASDisplayNode+Beta.h>
@@ -136,3 +137,4 @@
     };
 }
 @end
+#endif

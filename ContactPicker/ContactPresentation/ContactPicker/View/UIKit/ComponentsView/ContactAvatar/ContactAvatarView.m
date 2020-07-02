@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/23/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_UIKIT
 #import "ContactAvatarView.h"
 
 #define DEBUG_MODE      0
@@ -46,7 +47,6 @@
     _mainBoundView      = [[UIView alloc] init];
     _imageView          = [[UIImageView alloc] init];
     _label              = [[UILabel alloc] init];
-    _gradientBackground = [CAGradientLayer layer];
     
     _label.font             = [UIFont systemFontOfSize:FONT_SIZE];
     _label.textColor        = UIColor.whiteColor;
@@ -57,15 +57,13 @@
     
     _mainBoundView.backgroundColor  = UIColor.clearColor;
     self.backgroundColor            = UIColor.clearColor;
+    
+    [self layoutViews];
 }
 
 #pragma mark - Life circle methods
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self layoutViews];
-    
-    _gradientBackground.frame           = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    _gradientBackground.cornerRadius    = _gradientBackground.frame.size.width / 2;
     _imageView.layer.cornerRadius       = self.frame.size.width / 2;
     self.layer.cornerRadius             = self.frame.size.width / 2;
 }
@@ -75,7 +73,6 @@
     [self addSubview:_mainBoundView];
     [_mainBoundView addSubview:_imageView];
     [_mainBoundView addSubview:_label];
-    [_mainBoundView.layer insertSublayer:_gradientBackground atIndex:0];
     
     _mainBoundView.translatesAutoresizingMaskIntoConstraints    = NO;
     _imageView.translatesAutoresizingMaskIntoConstraints        = NO;
@@ -107,13 +104,10 @@
 }
 
 #pragma mark - Public methods
-- (void)configWithImage:(UIImage *)image withTitle:(NSString *)title withBackground:(NSArray *)backgroundColor {
+- (void)configWithImage:(UIImage *)image withTitle:(NSString *)title {
     _imageView.image            = image;
     _label.text                 = title;
-    _gradientBackground.colors  = backgroundColor;
-    
-    _imageView.alpha    = image ? 1 : 0;
-    _label.alpha        = [title isEqualToString:@""] ? 0 : 1;
 }
 
 @end
+#endif

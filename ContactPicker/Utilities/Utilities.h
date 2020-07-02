@@ -10,14 +10,16 @@
 #import <UIKit/UIKit.h>
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 
-#define AVATAR_IMAGE_HEIGHT     50
-#define CONTACT_FONT_SIZE       17
+#define AVATAR_IMAGE_HEIGHT             50
+#define CONTACT_FONT_SIZE               17
+#define CONTACT_DESCRIPTION_FONT_SIZE   16
 
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - UIImage Exrtension
 @interface UIImage(Addition)
 - (UIImage *)makeCircularImageWithSize:(CGSize)size backgroundColor:(UIColor * _Nullable)backgroundColor;
++ (UIImage *)imageWithImage:(UIImage *)image scaledToFillSize:(CGSize)size;
 @end
 
 #pragma mark - UIColor Exrtension

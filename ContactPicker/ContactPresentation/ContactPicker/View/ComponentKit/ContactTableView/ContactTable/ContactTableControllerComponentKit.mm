@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/22/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_COMPONENTKIT
 #import <ComponentKit/ComponentKit.h>
 #import "ContactTableControllerComponentKit.h"
 #import "ContactViewEntity.h"
@@ -181,3 +182,4 @@
     
 }
 @end
+#endif

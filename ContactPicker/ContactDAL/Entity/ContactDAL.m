@@ -11,29 +11,20 @@
 
 @implementation ContactDAL
 
-- (NSString *)fullName {
-    return [NSString stringWithFormat:@"%@ %@", self.givenName, self.familyName];
-}
-
 - (id)initWithIdentifier:(NSString *)contactID
                     name:(NSString *)givenName
               familyName:(NSString *)familyName
-                  phones:(NSArray<NSString *> *)phone
-                  emails:(NSArray<NSString *> *)email
-               imageData:(NSData *)imageData
+                  phones:(NSArray<NSString *> *)phones
+                  emails:(NSArray<NSString *> *)emails
 {
-    self.identifier          = contactID;
-    self.givenName        = givenName;
-    self.familyName  = familyName;
-    self.contactPhones      = phone;
-    self.contactEmails      = email;
-    self.imageData          = imageData;
+    self.identifier     = contactID;
+    self.givenName      = givenName;
+    self.familyName     = familyName;
+    self.contactPhones  = [[NSMutableArray alloc] initWithArray:phones];
+    self.contactEmails  = [[NSMutableArray alloc] initWithArray:emails];
     return self;
 }
 
-- (id)initWithID:(NSString *)contactID name:(NSString *)name familyName: (NSString *) familyName {
-    return [self initWithIdentifier:contactID name:name familyName:familyName phones:nil emails:nil imageData: nil];
-}
 @synthesize contactEmails;
 
 @synthesize familyName;
@@ -43,7 +34,5 @@
 @synthesize givenName;
 
 @synthesize contactPhones;
-
-@synthesize imageData;
 
 @end

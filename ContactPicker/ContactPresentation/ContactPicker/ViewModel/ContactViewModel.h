@@ -9,27 +9,34 @@
 #import <Foundation/Foundation.h>
 #import "DataBinding.h"
 #import "ContactViewEntity.h"
-#import "ContactBusProtocol.h"
+#import "BusinessLayerProtocol.h"
 #import "ContactViewModelProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface ContactViewModel : NSObject<ContactViewModelProtocol> {
-    id<ContactBusProtocol>                                                  _contactBus;
-    NSMutableArray<ContactViewEntity *>                                     *_listSelectedContacts;
-    NSMutableArray<NSString *>                                              *_listSectionKeys;
-    NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *>  *_contactsOnView;
-}
+@interface ContactViewModel : NSObject<ContactViewModelProtocol>
 
-@property(nonatomic) id<ContactBusProtocol> contactBus;
+@property(nonatomic, readonly) id<BusinessLayerProtocol>            contactBus;
+@property(nonatomic, readonly) NSMutableArray<NSString *>           *listSectionKeys;
+@property(nonatomic, readonly) NSMutableArray<ContactViewEntity *>  *listSelectedContacts;
 
-- (id)initWithBus: (id<ContactBusProtocol>) bus;
+@property(atomic, readonly) NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> *contactsOnView;
 
-- (ContactViewEntity *) contactWithIdentifier: (NSString *) identifier name: (NSString *) name;
+@property(nonatomic, readonly) dispatch_queue_t     backgroundConcurrentQueue;
+@property(nonatomic, readonly) dispatch_queue_t     backgroundSerialQueue;
+@property(nonatomic, readonly) dispatch_queue_t     loadResponseQueue;
 
-- (ContactViewEntity * _Nullable) contactWithIdentifier: (NSString *) identifier;
+@property(atomic, readonly) BOOL                    loadInProcessing;
+
+@property(atomic, readonly) NSMutableArray<ViewModelResponseListBlock>   *loadContactRequest;
+
+- (id)initWithBus: (id<BusinessLayerProtocol>) bus;
+
+- (ContactViewEntity *) contactOfIdentifier: (NSString *) identifier name: (NSString *) name;
+
+- (ContactViewEntity * _Nullable) contactOfIdentifier: (NSString *) identifier;
 
 - (BOOL) isContainContact: (ContactViewEntity *) contact;
 

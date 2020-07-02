@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/16/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_TEXTURE
 #import "ContactWithSearchTexture.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "KeyboardAppearanceDelegate.h"
@@ -16,7 +17,7 @@
 #import "ResponseInformationView.h"
 
 #import "ContactViewModel.h"
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 
 #define DEBUG_MODE              0
@@ -38,7 +39,7 @@
 - (instancetype)init {
     self = [super initWithNode:[[ASDisplayNode alloc] init]];
     if (self) {
-        _viewModel                                  = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
+        _viewModel                                  = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
         _searchNode                                 = [[SearchNode alloc] initWithHeight:SEARCH_BAR_HEIGHT];
         _contentNode                                = [[ASDisplayNode alloc] init];
         _contactSelectedView                        = [[HorizontalListNode alloc] init];
@@ -200,3 +201,4 @@
 }
 
 @end
+#endif

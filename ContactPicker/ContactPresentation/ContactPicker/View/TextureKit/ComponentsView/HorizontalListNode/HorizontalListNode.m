@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/17/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_TEXTURE
 #import "HorizontalListNode.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "ContactCollectionCellNode.h"
@@ -148,3 +149,4 @@
 
 @synthesize delegate;
 @end
+#endif

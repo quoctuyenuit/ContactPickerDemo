@@ -24,12 +24,13 @@
 		B00763452486167000239F3D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
 		B018E65D249884ED00ED55D6 /* ContactAvatarNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B018E65C249884ED00ED55D6 /* ContactAvatarNode.m */; };
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
-		B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
+		B02A51102487EF2000B9CC1B /* ContactBusinessLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */; };
 		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
 		B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAB024A3082700C86F0E /* CKSwift.framework */; platformFilter = ios; };
 		B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EA9824A3082700C86F0E /* ComponentKit.framework */; platformFilter = ios; };
 		B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAAE24A3082700C86F0E /* RenderCore.framework */; platformFilter = ios; };
 		B057EAB824A3555200C86F0E /* ContactWithSearchComponentKit.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */; };
+		B05CA07824AD7ABF00F68AE4 /* AvatarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */; };
 		B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */; };
 		B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EAA024A0D51A00F367FC /* ContactTableControllerComponentKit.mm */; };
 		B06247E424A1C15100FCCC61 /* ContactAvatarComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B06247E324A1C15100FCCC61 /* ContactAvatarComponent.mm */; };
@@ -38,6 +39,8 @@
 		B06A4E06249F1FE600616510 /* TabbarOnTopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06A4E05249F1FE600616510 /* TabbarOnTopViewController.m */; };
 		B06FBB5C248BDE20003BDC3C /* ResponseInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5B248BDE20003BDC3C /* ResponseInformationView.m */; };
 		B06FBB5F248BE3AC003BDC3C /* ContactMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B06FBB5E248BE3AC003BDC3C /* ContactMainViewController.m */; };
+		B072C90924AC278E0087BEED /* ImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B072C90824AC278E0087BEED /* ImageManager.m */; };
+		B072C90C24AC3E4E0087BEED /* NSErrorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = B072C90B24AC3E4E0087BEED /* NSErrorExtension.m */; };
 		B07A8D782498AD2300A3B27F /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C25505249798DE00ECA551 /* Utilities.m */; };
 		B07A8D7C2498B8B400A3B27F /* CheckBoxNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D7B2498B8B400A3B27F /* CheckBoxNode.m */; };
 		B07A8D842498CED700A3B27F /* ContactWithSearchTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D832498CED700A3B27F /* ContactWithSearchTexture.m */; };
@@ -49,7 +52,7 @@
 		B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43B24878BEA00E557E1 /* ContactDAL.m */; };
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
 		B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
-		B0C1C24A2490F3D800634829 /* ContactBus.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBus.m */; };
+		B0C1C24A2490F3D800634829 /* ContactBusinessLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */; };
 		B0C254FD2497910000ECA551 /* ContactTableControllerTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FC2497910000ECA551 /* ContactTableControllerTexture.m */; };
 		B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FF2497912300ECA551 /* ContactTableCellNode.m */; };
 		B0C25506249798DE00ECA551 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C25505249798DE00ECA551 /* Utilities.m */; };
@@ -218,14 +221,16 @@
 		B01A7EBE24A9899200652FE5 /* ContactPicker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ContactPicker.entitlements; sourceTree = "<group>"; };
 		B02A510B2487EB5500B9CC1B /* ContactBusEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusEntity.h; sourceTree = "<group>"; };
 		B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusEntity.m; sourceTree = "<group>"; };
-		B02A510E2487EF2000B9CC1B /* ContactBus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBus.h; sourceTree = "<group>"; };
-		B02A510F2487EF2000B9CC1B /* ContactBus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBus.m; sourceTree = "<group>"; };
-		B02A51112487EFB800B9CC1B /* ContactBusProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusProtocol.h; sourceTree = "<group>"; };
+		B02A510E2487EF2000B9CC1B /* ContactBusinessLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusinessLayer.h; sourceTree = "<group>"; };
+		B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusinessLayer.m; sourceTree = "<group>"; };
+		B02A51112487EFB800B9CC1B /* BusinessLayerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BusinessLayerProtocol.h; sourceTree = "<group>"; };
 		B05179172490861800B0A973 /* ContactCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCell.h; sourceTree = "<group>"; };
 		B05179182490861800B0A973 /* ContactCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionCell.m; sourceTree = "<group>"; };
 		B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ComponentKit.xcodeproj; path = Frameworks/componentkit/ComponentKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		B057EAB624A3555200C86F0E /* ContactWithSearchComponentKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactWithSearchComponentKit.h; sourceTree = "<group>"; };
 		B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchComponentKit.m; sourceTree = "<group>"; };
+		B05CA07624AD7ABF00F68AE4 /* AvatarObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AvatarObj.h; sourceTree = "<group>"; };
+		B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AvatarObj.m; sourceTree = "<group>"; };
 		B060EA9B24A0C65E00F367FC /* ContactTableCellComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableCellComponent.h; sourceTree = "<group>"; };
 		B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactTableCellComponent.mm; sourceTree = "<group>"; };
 		B060EA9F24A0D51A00F367FC /* ContactTableControllerComponentKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableControllerComponentKit.h; sourceTree = "<group>"; };
@@ -243,6 +248,11 @@
 		B06FBB5D248BE3AC003BDC3C /* ContactMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactMainViewController.h; sourceTree = "<group>"; };
 		B06FBB5E248BE3AC003BDC3C /* ContactMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactMainViewController.m; sourceTree = "<group>"; };
 		B06FBB60248C0288003BDC3C /* KeyboardAppearanceDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardAppearanceDelegate.h; sourceTree = "<group>"; };
+		B072C90724AC278E0087BEED /* ImageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImageManager.h; path = ContactPicker/ImageManager.h; sourceTree = SOURCE_ROOT; };
+		B072C90824AC278E0087BEED /* ImageManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ImageManager.m; path = ContactPicker/ImageManager.m; sourceTree = SOURCE_ROOT; };
+		B072C90A24AC3E4E0087BEED /* NSErrorExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSErrorExtension.h; sourceTree = "<group>"; };
+		B072C90B24AC3E4E0087BEED /* NSErrorExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSErrorExtension.m; sourceTree = "<group>"; };
+		B072C90D24AC4F9A0087BEED /* ContactBusEntityProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusEntityProtocol.h; sourceTree = "<group>"; };
 		B07A8D7A2498B8B400A3B27F /* CheckBoxNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxNode.h; sourceTree = "<group>"; };
 		B07A8D7B2498B8B400A3B27F /* CheckBoxNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckBoxNode.m; sourceTree = "<group>"; };
 		B07A8D7E2498C0C100A3B27F /* ContactTableCellProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableCellProtocol.h; sourceTree = "<group>"; };
@@ -350,9 +360,9 @@
 			isa = PBXGroup;
 			children = (
 				B01A7EBE24A9899200652FE5 /* ContactPicker.entitlements */,
-				B0979AE024888DEB008D05F4 /* Extensions */,
+				B0979AE024888DEB008D05F4 /* Utilities */,
 				B0979AE424889876008D05F4 /* ContactPresentation */,
-				B02A510A2487EAA700B9CC1B /* ContactBUS */,
+				B02A510A2487EAA700B9CC1B /* ContactBusinessLayer */,
 				B0ABD43824878A2200E557E1 /* ContactDAL */,
 				193E332B2484F31A00C5735D /* AppDelegate.h */,
 				193E332C2484F31A00C5735D /* AppDelegate.m */,
@@ -398,8 +408,7 @@
 		193E33612485144C00C5735D /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				193E336624851C7B00C5735D /* ContactViewEntity.h */,
-				193E336724851C8400C5735D /* ContactViewEntity.m */,
+				B072C90E24AC7B5B0087BEED /* Entity */,
 				B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */,
 				B00763432486167000239F3D /* ContactViewModel.h */,
 				B00763442486167000239F3D /* ContactViewModel.m */,
@@ -444,15 +453,15 @@
 			path = ContactAvatarNode;
 			sourceTree = "<group>";
 		};
-		B02A510A2487EAA700B9CC1B /* ContactBUS */ = {
+		B02A510A2487EAA700B9CC1B /* ContactBusinessLayer */ = {
 			isa = PBXGroup;
 			children = (
 				B0979AF124889E32008D05F4 /* Entity */,
-				B02A51112487EFB800B9CC1B /* ContactBusProtocol.h */,
-				B02A510E2487EF2000B9CC1B /* ContactBus.h */,
-				B02A510F2487EF2000B9CC1B /* ContactBus.m */,
+				B02A51112487EFB800B9CC1B /* BusinessLayerProtocol.h */,
+				B02A510E2487EF2000B9CC1B /* ContactBusinessLayer.h */,
+				B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */,
 			);
-			path = ContactBUS;
+			path = ContactBusinessLayer;
 			sourceTree = "<group>";
 		};
 		B02EE7E12489DA38006AA3D8 /* View */ = {
@@ -556,6 +565,15 @@
 			path = ViewControllerComponents;
 			sourceTree = "<group>";
 		};
+		B072C90E24AC7B5B0087BEED /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				193E336624851C7B00C5735D /* ContactViewEntity.h */,
+				193E336724851C8400C5735D /* ContactViewEntity.m */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		B07A8D792498B87B00A3B27F /* CheckBoxNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -655,7 +673,7 @@
 			path = ContactTableCellComponent;
 			sourceTree = "<group>";
 		};
-		B0979AE024888DEB008D05F4 /* Extensions */ = {
+		B0979AE024888DEB008D05F4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				193E336924851CC800C5735D /* DataBinding.h */,
@@ -663,8 +681,14 @@
 				B0C25504249798DE00ECA551 /* Utilities.h */,
 				B0C25505249798DE00ECA551 /* Utilities.m */,
 				B0F7EC9824AAF08200B49A36 /* ContactDefine.h */,
+				B072C90724AC278E0087BEED /* ImageManager.h */,
+				B072C90824AC278E0087BEED /* ImageManager.m */,
+				B072C90A24AC3E4E0087BEED /* NSErrorExtension.h */,
+				B072C90B24AC3E4E0087BEED /* NSErrorExtension.m */,
+				B05CA07624AD7ABF00F68AE4 /* AvatarObj.h */,
+				B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */,
 			);
-			path = Extensions;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		B0979AE424889876008D05F4 /* ContactPresentation */ = {
@@ -691,6 +715,7 @@
 		B0979AF124889E32008D05F4 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				B072C90D24AC4F9A0087BEED /* ContactBusEntityProtocol.h */,
 				B02A510B2487EB5500B9CC1B /* ContactBusEntity.h */,
 				B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */,
 			);
@@ -1196,6 +1221,7 @@
 				B0076342248610C100239F3D /* ContactTableControllerUIKit.m in Sources */,
 				B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */,
 				B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */,
+				B072C90924AC278E0087BEED /* ImageManager.m in Sources */,
 				B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */,
@@ -1210,6 +1236,7 @@
 				193E33302484F31A00C5735D /* SceneDelegate.m in Sources */,
 				B07AA26524A4A4A800D6F602 /* ContactTableHeaderComponentView.m in Sources */,
 				B06247E424A1C15100FCCC61 /* ContactAvatarComponent.mm in Sources */,
+				B072C90C24AC3E4E0087BEED /* NSErrorExtension.m in Sources */,
 				B0E8CAE7248B3C220096ACBA /* ContactWithSearchUIKit.m in Sources */,
 				B07A8D842498CED700A3B27F /* ContactWithSearchTexture.m in Sources */,
 				B06FBB5C248BDE20003BDC3C /* ResponseInformationView.m in Sources */,
@@ -1219,7 +1246,8 @@
 				B0F12CE82499FE6C00D038EC /* HorizontalListNode.m in Sources */,
 				B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */,
 				B0FC11EC2499DAC10056F586 /* ContactCollectionCellNode.m in Sources */,
-				B02A51102487EF2000B9CC1B /* ContactBus.m in Sources */,
+				B02A51102487EF2000B9CC1B /* ContactBusinessLayer.m in Sources */,
+				B05CA07824AD7ABF00F68AE4 /* AvatarObj.m in Sources */,
 				B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */,
 				B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */,
 			);
@@ -1230,7 +1258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */,
-				B0C1C24A2490F3D800634829 /* ContactBus.m in Sources */,
+				B0C1C24A2490F3D800634829 /* ContactBusinessLayer.m in Sources */,
 				B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */,
 				B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */,
 				B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */,

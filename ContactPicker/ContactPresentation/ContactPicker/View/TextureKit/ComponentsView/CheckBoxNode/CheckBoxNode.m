@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/16/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_TEXTURE
 #import "CheckBoxNode.h"
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 
@@ -37,3 +38,4 @@
     [self.delegate check:self->_isChecked];
 }
 @end
+#endif

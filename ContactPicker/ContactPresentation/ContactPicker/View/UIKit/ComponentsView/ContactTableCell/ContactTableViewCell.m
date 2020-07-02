@@ -5,10 +5,12 @@
 //  Created by Quốc Tuyến on 6/4/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_UIKIT
 #import "ContactTableViewCell.h"
 #import "ContactDefine.h"
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
+#import "ImageManager.h"
 
 #define DEBUG_MODE          0
 #define CHECK_MEM_LEAKS     0
@@ -61,7 +63,9 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
+}
+
+- (void)setupViews {
     [self addSubview:_checkBox];
     [self addSubview:_avatar];
     [self addSubview:_textBoundView];
@@ -90,7 +94,7 @@
     [_contactNameLabel.leftAnchor constraintEqualToAnchor:_textBoundView.leftAnchor].active     = YES;
     [_contactNameLabel.rightAnchor constraintEqualToAnchor:_textBoundView.rightAnchor].active   = YES;
     
-    [_contactDescriptionLabel.topAnchor constraintEqualToAnchor:_contactNameLabel.bottomAnchor constant:-5].active  = YES;
+    [_contactDescriptionLabel.topAnchor constraintEqualToAnchor:_contactNameLabel.bottomAnchor constant:5].active  = YES;
     [_contactDescriptionLabel.leftAnchor constraintEqualToAnchor:_textBoundView.leftAnchor].active                  = YES;
     [_contactDescriptionLabel.rightAnchor constraintEqualToAnchor:_textBoundView.rightAnchor].active                = YES;
     [_contactDescriptionLabel.bottomAnchor constraintEqualToAnchor:_textBoundView.bottomAnchor].active              = YES;
@@ -123,50 +127,30 @@
     _contactDescriptionLabel    = [[UILabel alloc] init];
     
     [_checkBox setUserInteractionEnabled:NO];
+    [self setupViews];
 }
 
 - (void)configForModel:(ContactViewEntity *)entity {    
-    _contactNameLabel.text = entity.fullName;
-    _contactDescriptionLabel.text = entity.contactDescription;
+    _contactNameLabel.attributedText = entity.fullName;
+    _contactDescriptionLabel.attributedText = entity.phone;
     _checkBox.isChecked = entity.isChecked;
-    
-    NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
-    NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
-    NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
-    
-    if (entity.avatar) {
-        [_avatar configWithImage:entity.avatar withTitle:@"" withBackground:nil];
-    } else {
-        [_avatar configWithImage:nil withTitle:keyName withBackground:entity.backgroundColor];
-    }
-    
-    __weak typeof(self) weakSelf = self;
+
+    WEAK_SELF
     __weak typeof(entity) weakEntity = entity;
-    entity.waitImageToExcuteQueue = ^(UIImage* image, NSString* identifier){
+
+    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(AvatarObj * _Nonnull imgObj, NSString *key) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf && identifier == weakEntity.identifier) {
-                [strongSelf->_avatar configWithImage:image withTitle:@"" withBackground:nil];
+            STRONG_SELF
+            if (strongSelf && [weakEntity.identifier isEqualToString:key]) {
+                NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
             }
         });
-    };
-    
-#if CHECK_MEM_LEAKS
-    
-    self->_block = ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            DebugLog(@"%@", self);
-        }
-    };
-    FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] init];
-    [detector addCandidate:self];
-    NSSet *retainCycles = [detector findRetainCycles];
-    DebugLog(@"[Check leaks] %@", retainCycles);
-#endif
+    }];
 }
 
 - (void)setSelect {
     _checkBox.isChecked = !_checkBox.isChecked;
 }
 @end
+#endif

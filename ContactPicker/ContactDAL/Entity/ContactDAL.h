@@ -20,14 +20,8 @@
 - (id)initWithIdentifier: (NSString *) contactID
                     name: (NSString *) givenName
               familyName: (NSString *) familyName
-                  phones: (NSArray<NSString *> *) phone
-                  emails: (NSArray<NSString *> *) email
-               imageData: (NSData *) imageData;
-
-- (id) initWithID: (NSString *) contactID
-             name: (NSString *) name
-       familyName: (NSString *) familyName;
-
+                  phones: (NSArray<NSString *> *) phones
+                  emails: (NSArray<NSString *> *) emails;
 @end
 
 #endif /* ContactDAL_h */

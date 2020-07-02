@@ -47,9 +47,25 @@
             filePath = "ContactPicker/ContactPresentation/ContactPicker/View/TextureKit/ContactTableView/ContactTable/ContactTableControllerTexture.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "-tableNode:nodeBlockForRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4D489270-8F2C-41F2-8AD9-B217296BF0F4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ContactPicker/ContactBusinessLayer/ContactBusinessLayer.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
+            landmarkName = "-searchContactByName:block:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

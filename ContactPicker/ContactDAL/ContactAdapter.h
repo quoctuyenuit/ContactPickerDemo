@@ -8,9 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "ContactAdapterProtocol.h"
+#import "ImageManager.h"
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ContactAdapter : NSObject<ContactAdapterProtocol>
+@property(atomic, readonly) dispatch_queue_t    background_queue;
+@property(atomic, readonly) dispatch_queue_t    response_queue;
+@property(atomic, readonly) BOOL                loadInProcessing;
+@property(nonatomic, readonly) NSArray          *fetchRequest;
+@property(atomic, readonly) NSMutableArray<AdapterResponseListBlock>   *loadContactRequest;
+
 - (id)init;
 @end
 

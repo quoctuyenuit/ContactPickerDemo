@@ -56,24 +56,6 @@
     NSAssert(NO, @"Subclass must implement this method");
 }
 
-- (void)fetchBatchContactWithBlock:(void (^_Nullable)(NSError * error))block {
-    DebugLog(@"[%@] begin fetch batch", LOG_MSG_HEADER);
-    __weak typeof(self) weakSelf = self;
-    [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
-        DebugLog(@"[%@] end fetch batch", LOG_MSG_HEADER);
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (error) {
-                DebugLog(@"%@", error.localizedDescription);
-            } else {
-                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
-            }
-            if (block)
-                block(error);
-        }
-    }];
-}
-
 #pragma mark - Life circle methods
 - (void)loadView {
     [super loadView];
@@ -81,28 +63,7 @@
     [self setupBaseViews];
     [self setupDatasets];
     [self setupEvents];
-#if DEBUG_MEM_ENABLE
-//    Auto fetch contact;
-    _autoFetchBatchTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
-                                                            target:self
-                                                          selector:@selector(autoFetchBatchTimerAction:)
-                                                          userInfo:nil
-                                                           repeats:YES];
-#endif
 }
-
-#if DEBUG_MEM_ENABLE
-- (void)autoFetchBatchTimerAction:(NSTimer *) timer {
-    __weak typeof(self) weakSelf = self;
-    [self fetchBatchContactWithBlock:^(NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf && error.code == NO_CONTENT_ERROR_CODE) {
-            [strongSelf->_autoFetchBatchTimer invalidate];
-            strongSelf-> _autoFetchBatchTimer = nil;
-        }
-    }];
-}
-#endif
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -124,8 +85,11 @@
     [self.viewModel.searchObservable binding:^(NSString * searchText) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            [strongSelf.viewModel searchContactWithKeyName:searchText block:^{
-                [strongSelf fetchBatchContactWithBlock:nil];
+            [strongSelf.viewModel searchContactWithKeyName:searchText block:^(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error) {
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf && !error) {
+                    [strongSelf insertCells:indexPaths forEntities:contacts];
+                }
             }];
         }
     }];
@@ -149,18 +113,17 @@
     _loadingController = [self createLoadingView:LOADING_MESSAGE];
     [UIApplication.sharedApplication.windows[0].rootViewController presentViewController:_loadingController animated:YES completion:nil];
     
-    DebugLog(@"[%@] begin load batch", LOG_MSG_HEADER);
+    DebugLog(@"[%@] begin load contact", LOG_MSG_HEADER);
     __weak typeof(self) weakSelf = self;
-    [self.viewModel loadBatchOfContacts:^(NSError *error, NSArray<NSIndexPath *> *updatedIndexPaths, NSArray<ContactViewEntity *> * entities) {
+    [self.viewModel loadContactsWithBlock:^(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
-            if (error) {
-                DebugLog(@"%@", error.localizedDescription);
+            if (!error) {
+                weakSelf.contactHadLoad = YES;
+                [weakSelf insertCells:indexPaths forEntities:contacts];
             } else {
-                DebugLog(@"[%@] end load batch", LOG_MSG_HEADER);
-                strongSelf.contactHadLoad = YES;
-                [strongSelf insertCells:updatedIndexPaths forEntities:entities];
+                DebugLog(@"%@", error.localizedDescription);
             }
         }
     }];

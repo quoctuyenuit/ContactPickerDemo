@@ -15,7 +15,6 @@
 @property (nonatomic, readwrite) NSString                   * familyName;
 @property (nonatomic, readwrite) NSArray<NSString *>        * contactPhones;
 @property (nonatomic, readwrite) NSArray<NSString *>        * contactEmails;
-@property (nonatomic, readwrite) NSData                     * imageData;
 
 @end
 

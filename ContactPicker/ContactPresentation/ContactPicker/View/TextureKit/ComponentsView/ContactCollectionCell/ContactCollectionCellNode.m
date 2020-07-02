@@ -5,7 +5,8 @@
 //  Created by Quốc Tuyến on 6/17/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_TEXTURE
 #import "ContactCollectionCellNode.h"
 #import "ContactAvatarNode.h"
 
@@ -34,7 +35,7 @@
         
         self.automaticallyManagesSubnodes = YES;
         
-        [self configWithEntity:contact];
+        [self binding:contact];
 #if DEBUG_MODE
         _avatarNode.backgroundColor         = UIColor.greenColor;
         _clearBtnNode.backgroundColor       = UIColor.redColor;
@@ -59,7 +60,7 @@
     }] overlay:buttonLayout];
 }
 
-- (void)configWithEntity:(nonnull ContactViewEntity *)entity {
+- (void)binding:(nonnull ContactViewEntity *)entity {
     NSString * firstString = entity.givenName.length > 0 ? [entity.givenName substringToIndex:1] : @"";
     NSString * secondString = entity.familyName.length > 0 ? [entity.familyName substringToIndex:1] : @"";
     NSString * keyName = [NSString stringWithFormat:@"%@%@", firstString, secondString];
@@ -84,3 +85,4 @@
     [self.delegate removeCell:_currentContact];
 }
 @end
+#endif

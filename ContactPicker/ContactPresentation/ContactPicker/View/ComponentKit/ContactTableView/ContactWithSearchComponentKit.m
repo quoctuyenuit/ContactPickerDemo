@@ -5,14 +5,15 @@
 //  Created by Quốc Tuyến on 6/24/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
-
+#import "ContactDefine.h"
+#if BUILD_COMPONENTKIT
 #import "ContactWithSearchComponentKit.h"
 #import <ComponentKit/ComponentKit.h>
 #import <UIKit/UIKit.h>
 #import "HorizontalListItemView.h"
 
 #import "ContactViewModel.h"
-#import "ContactBus.h"
+#import "ContactBusinessLayer.h"
 #import "ContactAdapter.h"
 #import "ContactTableControllerComponentKit.h"
 
@@ -32,7 +33,7 @@
 {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        _viewModel                          = [[ContactViewModel alloc] initWithBus: [[ContactBus alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
+        _viewModel                          = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
         _searchBar                          = [[UISearchBar alloc] init];
         _searchBar.searchBarStyle           = UISearchBarStyleMinimal;
         _searchBar.barTintColor             = UIColor.clearColor;
@@ -129,24 +130,24 @@
 }
 
 - (void)loadContact {
-    __weak typeof(self) weakSelf = self;
-    [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (error) {
-                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeFailLoadingContact];
-            } else if (numberOfContacts == 0) {
-                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeEmptyContact];
-            } else {
-                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableControllerComponentKit alloc] initWithViewModel:self->_viewModel];
-                table.keyboardAppearanceDelegate = self;
-                strongSelf->_contentViewController = table;
-            }
-            
-            [strongSelf addChildViewController:strongSelf->_contentViewController];
-            [strongSelf layoutViews];
-        }
-    }];
+//    __weak typeof(self) weakSelf = self;
+//    [_viewModel loadContacts:^(BOOL isSuccess, NSError *error, NSUInteger numberOfContacts) {
+//        __strong typeof(weakSelf) strongSelf = weakSelf;
+//        if (strongSelf) {
+//            if (error) {
+//                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeFailLoadingContact];
+//            } else if (numberOfContacts == 0) {
+//                strongSelf->_contentViewController = [strongSelf wrapResponseViewIntoController:ResponseViewTypeEmptyContact];
+//            } else {
+//                UIViewController<KeyboardAppearanceProtocol> *table = [[ContactTableControllerComponentKit alloc] initWithViewModel:self->_viewModel];
+//                table.keyboardAppearanceDelegate = self;
+//                strongSelf->_contentViewController = table;
+//            }
+//            
+//            [strongSelf addChildViewController:strongSelf->_contentViewController];
+//            [strongSelf layoutViews];
+//        }
+//    }];
 }
 
 - (UIViewController *)wrapResponseViewIntoController:(ResponseViewType) type {
@@ -164,3 +165,4 @@
 }
 
 @end
+#endif
