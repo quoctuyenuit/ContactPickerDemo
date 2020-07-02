@@ -27,7 +27,7 @@
 
 
 #define BUILD_UIKIT                     1
-#define BUILD_TEXTURE                   1
+#define BUILD_TEXTURE                   0
 #define BUILD_COMPONENTKIT              1
 
 

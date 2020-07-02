@@ -31,6 +31,7 @@
 		B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAAE24A3082700C86F0E /* RenderCore.framework */; platformFilter = ios; };
 		B057EAB824A3555200C86F0E /* ContactWithSearchComponentKit.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */; };
 		B05CA07824AD7ABF00F68AE4 /* AvatarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */; };
+		B05CA08D24AE08C100F68AE4 /* TableIndexView.m in Sources */ = {isa = PBXBuildFile; fileRef = B05CA08C24AE08C100F68AE4 /* TableIndexView.m */; };
 		B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */; };
 		B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = B060EAA024A0D51A00F367FC /* ContactTableControllerComponentKit.mm */; };
 		B06247E724A1C48A00FCCC61 /* ContactAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = B06247E624A1C48A00FCCC61 /* ContactAvatarView.m */; };
@@ -229,6 +230,8 @@
 		B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchComponentKit.m; sourceTree = "<group>"; };
 		B05CA07624AD7ABF00F68AE4 /* AvatarObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AvatarObj.h; sourceTree = "<group>"; };
 		B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AvatarObj.m; sourceTree = "<group>"; };
+		B05CA08B24AE08C100F68AE4 /* TableIndexView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableIndexView.h; sourceTree = "<group>"; };
+		B05CA08C24AE08C100F68AE4 /* TableIndexView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableIndexView.m; sourceTree = "<group>"; };
 		B060EA9B24A0C65E00F367FC /* ContactTableCellComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableCellComponent.h; sourceTree = "<group>"; };
 		B060EA9C24A0C65E00F367FC /* ContactTableCellComponent.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactTableCellComponent.mm; sourceTree = "<group>"; };
 		B060EA9F24A0D51A00F367FC /* ContactTableControllerComponentKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableControllerComponentKit.h; sourceTree = "<group>"; };
@@ -538,6 +541,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B05CA08A24AE08B200F68AE4 /* TableIndexView */ = {
+			isa = PBXGroup;
+			children = (
+				B05CA08B24AE08C100F68AE4 /* TableIndexView.h */,
+				B05CA08C24AE08C100F68AE4 /* TableIndexView.m */,
+			);
+			path = TableIndexView;
+			sourceTree = "<group>";
+		};
 		B060EA9E24A0D4FD00F367FC /* ContactTable */ = {
 			isa = PBXGroup;
 			children = (
@@ -632,6 +644,7 @@
 		B083229524A09F560039D424 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				B05CA08A24AE08B200F68AE4 /* TableIndexView */,
 				B07AA25424A4A48200D6F602 /* HeaderSectionView */,
 				B08322F124A0AA7D0039D424 /* ContactTableCellComponent */,
 			);
@@ -1197,6 +1210,7 @@
 				B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */,
 				B072C90924AC278E0087BEED /* ImageManager.m in Sources */,
 				B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */,
+				B05CA08D24AE08C100F68AE4 /* TableIndexView.m in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
 				B060EA9D24A0C65E00F367FC /* ContactTableCellComponent.mm in Sources */,
 				B07A8D7C2498B8B400A3B27F /* CheckBoxNode.m in Sources */,

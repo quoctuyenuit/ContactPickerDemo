@@ -211,16 +211,25 @@
 
 @implementation NSAttributedString (Additions)
 
-+ (NSAttributedString *)attributedStringWithString:(NSString *)string fontSize:(CGFloat)size
-                                             color:(nullable UIColor *)color firstWordColor:(nullable UIColor *)firstWordColor
++ (NSAttributedString *)attributedStringWithString:(NSString *)string
+                                          fontSize:(CGFloat)size
+                                             color:(nullable UIColor *)color
+                                    firstWordColor:(nullable UIColor *)firstWordColor
 {
+    return [NSAttributedString attributedStringWithString:string font:[UIFont systemFontOfSize:size] color:color firstWordColor:firstWordColor];
+}
+
++ (NSAttributedString *)attributedStringWithString:(NSString *)string
+                                              font:(UIFont *)font
+                                             color:(UIColor *)color
+                                    firstWordColor:(UIColor *)firstWordColor {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
     NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle alloc] init];
     textStyle.alignment = NSTextAlignmentLeft;
     
     if (string) {
         NSDictionary *attributes = @{NSForegroundColorAttributeName: color ? : [UIColor blackColor],
-                                     NSFontAttributeName: [UIFont systemFontOfSize:size],
+                                     NSFontAttributeName: font,
                                      NSParagraphStyleAttributeName: textStyle
         };
         

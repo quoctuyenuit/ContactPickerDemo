@@ -14,17 +14,19 @@
 #import "ContactTableHeaderComponentView.h"
 #import "ContactDefine.h"
 #import "KeyboardAppearanceDelegate.h"
+#import "TableIndexView.h"
 
 #define DEBUG_MODE                          0
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
 #define LOG_MSG_HEADER                      @"ContactTableComponentKit"
 #define HEADER_REUSE_IDENTIFIER             @"HeaderReuseIdentifier"
 
-@interface ContactTableControllerComponentKit () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource , KeyboardAppearanceDelegate> {
+@interface ContactTableControllerComponentKit () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource ,KeyboardAppearanceDelegate, TableViewIndexDelegate> {
     id<ContactViewModelProtocol>                      _viewModel;
     CKCollectionViewDataSource                      * _dataSource;
     CKComponentFlexibleSizeRangeProvider            * _sizeRangeProvider;
     UICollectionView                                * _collectionView;
+    TableIndexView                                  * _tableIndexView;
 }
 
 @end
@@ -86,12 +88,26 @@
     [flowLayout setMinimumLineSpacing:0];
     
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:flowLayout];
+    _tableIndexView = [[TableIndexView alloc] initWithTitlesIndex:[_viewModel getAllSectionNames]];
+    
+    
     [self.view addSubview:_collectionView];
+    [self.view addSubview: _tableIndexView];
+    
     _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    _tableIndexView.translatesAutoresizingMaskIntoConstraints = NO;
+    
     [_collectionView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active      = YES;
     [_collectionView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active  = YES;
     [_collectionView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active    = YES;
     [_collectionView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    
+    [_tableIndexView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active      = YES;
+    [_tableIndexView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active  = YES;
+//    [_tableIndexView.widthAnchor constraintEqualToConstant: 50].active                    = YES;
+    [_tableIndexView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    
+    _tableIndexView.delegate = self;
     
     _collectionView.backgroundColor = UIColor.whiteColor;
     _collectionView.delegate        = self;
@@ -168,6 +184,19 @@
 
 - (void) hideKeyboard {
     [self.keyboardAppearanceDelegate hideKeyboard];
+}
+
+
+- (void)tableIndexView:(nonnull TableIndexView *)indexView didSelectAt:(NSInteger)index {
+    while (index < [_viewModel numberOfSection] && [_viewModel numberOfContactInSection:index] == 0) {
+        index++;
+    }
+    
+    if (index < [_viewModel numberOfSection]) {
+        NSIndexPath * indexPath = [NSIndexPath indexPathForItem:0 inSection:index];
+        UICollectionViewLayoutAttributes * attributes = [_collectionView.collectionViewLayout layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath];
+        [_collectionView setContentOffset:CGPointMake(0, attributes.frame.origin.y - _collectionView.contentInset.top) animated:YES];
+    }
 }
 @end
 #endif
