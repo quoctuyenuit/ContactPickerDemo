@@ -83,7 +83,7 @@
         strong_self
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf updateCells:indexsNeedUpdate];
+                [strongSelf reloadTable];
             });
         }
     }];

@@ -114,9 +114,7 @@
                         }
                     }
                 }
-                
-                if (indexsNeedUpdate.count > 0)
-                    strongSelf.contactBookObservable.value = indexsNeedUpdate;
+                strongSelf.contactBookObservable.value = indexsNeedUpdate;
             }
         });
     }];
