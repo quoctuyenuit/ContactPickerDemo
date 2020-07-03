@@ -14,7 +14,7 @@
 #define CLOSE_BTN_WIDTH     20
 
 @interface ContactCollectionCell() {
-    ContactViewEntity * _currentContact;
+    NSString                *_currentIdentifier;
 }
 - (void)initElements;
 @end
@@ -69,16 +69,16 @@
 }
 
 - (void)closeAction:(id)sender {
-    [self.delegate removeCell:self->_currentContact];
+    [self.delegate removeCell:self->_currentIdentifier];
 }
 
 - (void)binding:(ContactViewEntity *)entity{
-    self->_currentContact = entity;
+    _currentIdentifier  = entity.identifier;
     weak_self
     [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
         [imageObservable bindAndFire:^(AvatarObj * imgObj) {
             strong_self
-            if (strongSelf && [strongSelf->_currentContact.identifier isEqualToString:imgObj.identifier]) {
+            if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     strong_self
                     if (strongSelf) {

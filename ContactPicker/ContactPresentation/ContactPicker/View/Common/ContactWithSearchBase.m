@@ -138,7 +138,7 @@
     return [self.viewModel numberOfSelectedContacts];
 }
 
-- (void)removeCellWithContact:(ContactViewEntity *)contact {
-    [self.viewModel removeSelectedContact:contact.identifier];
+- (void)removeCellWithContact:(NSString *)identifier {
+    [self.viewModel removeSelectedContact:identifier];
 }
 @end

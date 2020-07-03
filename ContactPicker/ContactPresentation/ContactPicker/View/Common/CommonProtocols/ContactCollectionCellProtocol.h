@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @protocol ContactCollectionCellDelegate <NSObject>
 
-- (void) removeCell: (ContactViewEntity *) entity;
+- (void) removeCell: (NSString *) identifier;
 
 @end
 

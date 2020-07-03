@@ -17,7 +17,8 @@
 @implementation ContactCollectionCellNode {
     ContactAvatarNode       * _avatarNode;
     ASButtonNode            * _clearBtnNode;
-    ContactViewEntity       * _currentContact;
+    NSString                * _currentIdentifier;
+    NSString                * _currentKeyName;
 }
 
 @synthesize delegate;
@@ -27,7 +28,8 @@
     if (self) {
         _avatarNode             = [[ContactAvatarNode alloc] init];
         _clearBtnNode           = [[ASButtonNode alloc] init];
-        _currentContact         = contact;
+        _currentIdentifier      = contact.identifier;
+        _currentKeyName         = contact.keyName;
         
         UIImage * btnImage = [UIImage imageNamed:@"close_ico"];
         [_clearBtnNode setBackgroundImage:btnImage forState:UIControlStateNormal];
@@ -64,10 +66,10 @@
 - (void)didEnterDisplayState {
     [super didEnterDisplayState];
     weak_self
-    [[ImageManager instance] imageForKey:_currentContact.identifier label:_currentContact.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+    [[ImageManager instance] imageForKey:_currentIdentifier label:_currentKeyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
         [imageObservable bindAndFire:^(AvatarObj * imgObj) {
             strong_self
-            if (strongSelf && [strongSelf->_currentContact.identifier isEqualToString:imgObj.identifier]) {
+            if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     strong_self
                     if (strongSelf) {
@@ -85,7 +87,7 @@
 }
 
 - (void)clearAction:(id) sender {
-    [self.delegate removeCell:_currentContact];
+    [self.delegate removeCell:_currentIdentifier];
 }
 @end
 #endif

@@ -25,7 +25,7 @@
     UILabel                 *_contactDescriptionLabel;
     CheckBoxButtonView      *_checkBox;
     UIView                  *_textBoundView;
-    ContactViewEntity       *_currentContact;
+    NSString                *_currentIdentifier;
     
     
     void (^_block)(void);
@@ -131,7 +131,7 @@
 }
 
 - (void)configForModel:(ContactViewEntity *)entity {
-    _currentContact                         = entity;
+    _currentIdentifier                      = entity.identifier;
     _contactNameLabel.attributedText        = entity.fullName;
     _contactDescriptionLabel.attributedText = entity.phone;
     _checkBox.isChecked                     = entity.isChecked;
@@ -139,16 +139,13 @@
     weak_self
     [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
         [imageObservable bindAndFire:^(AvatarObj * imgObj) {
-            strong_self
-            if (strongSelf && [strongSelf->_currentContact.identifier isEqualToString:imgObj.identifier]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    strong_self
-                    if (strongSelf) {
-                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                        [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
-                    }
-                });
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                strong_self
+                if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
+                    NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                    [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+                }
+            });
         }];
     }];
 }

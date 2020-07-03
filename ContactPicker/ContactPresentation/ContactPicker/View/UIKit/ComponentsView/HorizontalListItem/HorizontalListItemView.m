@@ -165,8 +165,8 @@
 }
 
 #pragma mark - ContactCollectionDelegate methods
-- (void)removeCell:(ContactViewEntity *)entity {
-    [delegate removeCellWithContact:entity];
+- (void)removeCell:(NSString *)identifier {
+    [delegate removeCellWithContact:identifier];
 }
 
 @end

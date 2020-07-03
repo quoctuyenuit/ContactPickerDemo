@@ -80,16 +80,14 @@
 }
 
 #pragma mark - Public methods
-- (void)refreshCache:(NSDictionary<NSString *,UIImage *> *)images {
+- (void)updateCache {
     weak_self
-    dispatch_async(weakSelf.backgroundQueue, ^{
-#if DEBUG_MODE
-        [NSThread sleepForTimeInterval:2];
-#endif
+    [_contactAdapter loadContactImagesWithBlock:^(NSDictionary<NSString *,NSData *> *images, NSError *error) {
         strong_self
         if (strongSelf) {
             for (NSString * key in images.allKeys) {
-                UIImage * image = [images objectForKey:key];
+                NSData * imageData = [images objectForKey:key];
+                UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData] scaledToFillSize:CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)];
 
                 DataBinding * imageObservable = [strongSelf.imageCache objectForKey:key];
                 AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO identififer:key];
@@ -101,7 +99,7 @@
                 }
             }
         }
-    });
+    }];
 }
 
 - (void)imageForKey:(NSString *)key

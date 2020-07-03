@@ -33,7 +33,6 @@
 - (void) _refreshContactOnView;
 - (NSArray<NSIndexPath *> *) _getAllIndexPaths;
 - (NSString *) _makeKeyFromName: (NSString *) name;
-- (void) _refreshImageCache;
 @end
 
 @implementation ContactViewModel
@@ -62,7 +61,7 @@
     
     //    Data binding initialization
     self.searchObservable                   = [[DataBinding<NSString *> alloc] initWithValue:@""];
-    self.contactBookObservable              = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.contactBookObservable              = [[DataBinding alloc] initWithValue:nil];
     self.cellNeedRemoveSelectedObservable   = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
     self.dataSourceNeedReloadObservable     = [[DataBinding alloc] initWithValue:nil];
     self.selectedContactAddedObservable     = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
@@ -92,7 +91,7 @@
         dispatch_async(weakSelf.backgroundSerialQueue, ^{
             strong_self
             if (strongSelf) {
-                [strongSelf _refreshImageCache];
+                [[ImageManager instance] updateCache];
                 NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate = [[NSMutableDictionary alloc] init];
                 
                 for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
@@ -181,15 +180,6 @@
     NSString * firstLetter = [[name substringToIndex:1] uppercaseString];
     int letterNumber = [firstLetter characterAtIndex:0];
     return (letterNumber >= 65 && letterNumber <= 90) ? firstLetter : @"#";
-}
-
-- (void)_refreshImageCache {
-    [_contactBus loadContactImagesWithBlock:^(NSDictionary<NSString *,UIImage *> *images, NSError *error) {
-        if (!error)
-            [[ImageManager instance] refreshCache:images];
-        else
-            DebugLog(@"[%@] %@", LOG_MSG_HEADER, error.localizedDescription);
-    }];
 }
 
 - (ContactViewEntity *)contactOfIdentifier:(NSString *)identifier name:(NSString *)name {

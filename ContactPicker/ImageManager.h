@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 + (instancetype) instance;
-- (void) refreshCache:(NSDictionary<NSString *, UIImage *> *) images;
+- (void) updateCache;
 - (void) imageForKey:(NSString *) key label:(NSString * _Nullable) label block:(void(^)(DataBinding<AvatarObj *> * imageObservable)) block;
 - (UIImage *) imageForKey:(NSString *) key label:(NSString * _Nullable) label;
 @end

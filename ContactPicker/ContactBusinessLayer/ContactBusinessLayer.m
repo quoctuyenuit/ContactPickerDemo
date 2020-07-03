@@ -145,20 +145,6 @@
    
 }
 
-- (void)loadContactImagesWithBlock:(BusinessResponseListImageBlock)block {
-    [_contactAdapter loadContactImagesWithBlock:^(NSDictionary<NSString *,NSData *> *images, NSError *error) {
-        NSMutableDictionary * businessImages = [[NSMutableDictionary alloc] init];
-        for (NSString * key in images.allKeys) {
-            NSData * imageData = [images objectForKey:key];
-            UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData]
-                                     scaledToFillSize:CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)];
-            [businessImages setObject:image forKey:key];
-        }
-        
-        block(businessImages, error);
-    }];
-}
-
 - (void)searchContactByName:(NSString *)name block:(BusinessResponseListBlock)block {
     if (!block)
         return;

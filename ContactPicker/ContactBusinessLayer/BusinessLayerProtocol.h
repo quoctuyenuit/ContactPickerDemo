@@ -25,8 +25,6 @@ typedef void(^BusinessResponseListImageBlock)(NSDictionary<NSString *, UIImage *
 
 - (void) loadContactsWithBlock: (BusinessResponseListBlock) block;
 
-- (void) loadContactImagesWithBlock:(BusinessResponseListImageBlock) block;
-
 - (void) searchContactByName: (NSString *) name
                        block: (BusinessResponseListBlock) block;
 @end

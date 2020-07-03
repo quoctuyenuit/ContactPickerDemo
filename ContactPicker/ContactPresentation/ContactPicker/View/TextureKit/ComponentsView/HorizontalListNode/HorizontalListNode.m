@@ -131,8 +131,8 @@
     return ASCellNodeBlock;
 }
 
-- (void)removeCell:(ContactViewEntity *)entity {
-    [self.delegate removeCellWithContact:entity];
+- (void)removeCell:(NSString *)identifier {
+    [self.delegate removeCellWithContact:identifier];
 }
 
 #pragma - mark HorizontalListItemProtocol methods
