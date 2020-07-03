@@ -60,7 +60,8 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [_viewModel selectectContactAtIndex:indexPath];
-    [self.keyboardAppearanceDelegate hideKeyboard];
+    if (self.keyboardAppearanceDelegate && [self.keyboardAppearanceDelegate respondsToSelector:@selector(hideKeyboard)])
+        [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -104,7 +105,7 @@
     
     [_tableIndexView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active      = YES;
     [_tableIndexView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active  = YES;
-//    [_tableIndexView.widthAnchor constraintEqualToConstant: 50].active                    = YES;
+    [_tableIndexView.widthAnchor constraintEqualToConstant: 15].active                  = YES;
     [_tableIndexView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
     
     _tableIndexView.delegate = self;
@@ -182,8 +183,13 @@
     
 }
 
+- (void)updateCells:(NSMutableDictionary<NSIndexPath *,ContactViewEntity *> *)indexsNeedUpdate {
+    [_collectionView reloadData];
+}
+
 - (void) hideKeyboard {
-    [self.keyboardAppearanceDelegate hideKeyboard];
+    if (self.keyboardAppearanceDelegate && [self.keyboardAppearanceDelegate respondsToSelector:@selector(hideKeyboard)])
+        [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
 

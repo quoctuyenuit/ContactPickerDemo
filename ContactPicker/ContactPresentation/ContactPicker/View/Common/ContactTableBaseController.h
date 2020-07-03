@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities;
 - (void)removeCells:(NSArray<NSIndexPath *> *) indexPaths;
 - (void)contactHadRemoved:(NSIndexPath *) indexPath;
+- (void)updateCells:(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *) indexsNeedUpdate;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -59,11 +59,25 @@
                     __strong typeof(weakSelf) strongSelf = weakSelf;
                     if (strongSelf) {
                         if (!error) {
+                            
                             NSArray<id<ContactBusEntityProtocol>> *businessContacts = [contacts map:^ContactBusEntity * _Nonnull(id<ContactDALProtocol>  _Nonnull contactDAL) {
                                 return [[ContactBusEntity alloc] initWithData:contactDAL];
                             }];
                             
-                            strongSelf.contactDidChangedObservable.value = businessContacts;
+                            NSMutableArray * contactNeedUpdate = [[NSMutableArray alloc] init];
+                            
+                            for (ContactBusEntity * newContact in businessContacts) {
+                                ContactBusEntity * oldContact = [strongSelf.contacts firstObjectWith:^BOOL(ContactBusEntity * _Nonnull obj) {
+                                    return [obj.identifier isEqualToString:newContact.identifier];
+                                }];
+                                
+                                if (oldContact && ![oldContact isEqualToOther:newContact]) {
+                                    [oldContact update:newContact];
+                                    [contactNeedUpdate addObject:oldContact];
+                                }
+                            }
+                            
+                            strongSelf.contactDidChangedObservable.value = contactNeedUpdate;
                         } else {
                             DebugLog(@"[%@] %@", LOG_MSG_HEADER,error.localizedDescription);
                         }

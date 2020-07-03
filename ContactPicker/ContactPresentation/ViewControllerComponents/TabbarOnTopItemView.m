@@ -110,7 +110,8 @@
 }
 
 - (void)tapGestureAction:(id) sender {
-    [self.delegate didTapOnItem:self state:_isHighLight];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didTapOnItem:state:)])
+        [self.delegate didTapOnItem:self state:_isHighLight];
 }
 
 @end

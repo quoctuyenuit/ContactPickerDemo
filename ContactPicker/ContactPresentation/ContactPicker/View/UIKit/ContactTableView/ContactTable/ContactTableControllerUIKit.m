@@ -88,8 +88,8 @@
     [self->_viewModel selectectContactAtIndex:indexPath];
     
     [selectedCell setSelect];
-    
-    [self.keyboardAppearanceDelegate hideKeyboard];
+    if (self.keyboardAppearanceDelegate && [self.keyboardAppearanceDelegate respondsToSelector:@selector(hideKeyboard)])
+        [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
 
@@ -152,8 +152,14 @@
     ContactTableViewCell * cell = [_tableView cellForRowAtIndexPath:indexPath];
     [cell setSelect];
 }
+
+- (void)updateCells:(NSMutableDictionary<NSIndexPath *,ContactViewEntity *> *)indexsNeedUpdate {
+    [_tableView reloadRowsAtIndexPaths:indexsNeedUpdate.allKeys withRowAnimation:UITableViewRowAnimationFade];
+}
+
 - (void)hideKeyboard {
-    [keyboardAppearanceDelegate hideKeyboard];
+    if (self.keyboardAppearanceDelegate && [self.keyboardAppearanceDelegate respondsToSelector:@selector(hideKeyboard)])
+        [self.keyboardAppearanceDelegate hideKeyboard];
 }
 @end
 #endif

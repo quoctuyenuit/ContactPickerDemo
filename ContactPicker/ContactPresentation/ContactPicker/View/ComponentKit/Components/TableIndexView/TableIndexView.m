@@ -68,7 +68,6 @@
     NSInteger index = [_titlesIndex indexOfObject:sender.titleLabel.text];
     if (self.delegate && [self.delegate respondsToSelector: @selector(tableIndexView:didSelectAt:)])
         [self.delegate tableIndexView:self didSelectAt:index];
-    NSLog(@"%@ - %ld", sender.titleLabel.text, index);
 }
 
 @end

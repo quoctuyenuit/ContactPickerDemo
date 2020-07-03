@@ -156,7 +156,8 @@
 }
 
 - (void) tapGestureAction: (UITapGestureRecognizer *) sender {
-    [self.keyboardAppearanceDelegate hideKeyboard];
+    if (self.keyboardAppearanceDelegate && [self.keyboardAppearanceDelegate respondsToSelector:@selector(hideKeyboard)])
+        [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
 - (UIViewController *)wrapToViewController {

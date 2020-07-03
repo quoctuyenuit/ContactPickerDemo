@@ -43,8 +43,8 @@
     
     
     NSString * fullName = [self _parseName:givenName familyName:familyName];
-    _fullName   = [NSAttributedString attributedStringWithString: fullName fontSize:CONTACT_FONT_SIZE color:[UIColor contactNameColor] firstWordColor:nil];
-    _phone      = [NSAttributedString attributedStringWithString: phone fontSize:CONTACT_DESCRIPTION_FONT_SIZE color:[UIColor contactDescriptionColor] firstWordColor:nil];
+    _fullName   = [NSAttributedString attributedStringWithString: fullName font:[UIFont systemFontOfSize:CONTACT_FONT_SIZE weight:UIFontWeightRegular]  color:[UIColor contactNameColor] firstWordColor:nil];
+    _phone      = [NSAttributedString attributedStringWithString: phone font:[UIFont systemFontOfSize:CONTACT_DESCRIPTION_FONT_SIZE weight:UIFontWeightRegular] color:[UIColor contactDescriptionColor] firstWordColor:nil];
     return self;
 }
 

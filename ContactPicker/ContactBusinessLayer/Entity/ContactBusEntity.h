@@ -20,7 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id) initWithData: (id<ContactDALProtocol>) contactDAL;
 
-- (BOOL)compareWithNameQuery:(NSString *) query;
+- (BOOL) compareWithNameQuery:(NSString *) query;
+
+- (BOOL) isEqualToOther:(ContactBusEntity *) other;
+
+- (void) update:(ContactBusEntity *) other;
 @end
 
 NS_ASSUME_NONNULL_END

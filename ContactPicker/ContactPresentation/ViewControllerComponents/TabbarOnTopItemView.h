@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readwrite) BOOL              isHighLight;
 @property(nonatomic, readwrite) UIColor         * itemColor;
 
-@property(weak, readwrite) id<TabbarOnTopItemDelegate> delegate;
+@property(weak, readwrite) id<TabbarOnTopItemDelegate, NSObject> delegate;
 
 - (instancetype)initWithTitle:(NSString *) title image:(UIImage *) image;
 @end

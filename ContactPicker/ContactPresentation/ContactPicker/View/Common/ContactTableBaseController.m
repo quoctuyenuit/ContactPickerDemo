@@ -58,6 +58,10 @@
     NSAssert(NO, @"Subclass must implement this method");
 }
 
+- (void)updateCells:(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *)indexsNeedUpdate {
+    NSAssert(NO, @"Subclass must implement this method");
+}
+
 #pragma mark - Life circle methods
 - (void)loadView {
     [super loadView];
@@ -75,11 +79,11 @@
 #pragma mark - Helper methods
 - (void)setupEvents {
     weak_self
-    [self.viewModel.contactBookObservable binding:^(NSNumber * number) {
+    [self.viewModel.contactBookObservable binding:^(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate) {
         strong_self
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf reloadTable];
+                [strongSelf updateCells:indexsNeedUpdate];
             });
         }
     }];

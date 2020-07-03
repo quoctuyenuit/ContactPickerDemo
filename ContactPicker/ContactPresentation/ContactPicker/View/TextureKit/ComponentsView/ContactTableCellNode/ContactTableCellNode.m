@@ -114,9 +114,9 @@
 }
 
 - (void)configForModel:(ContactViewEntity *)entity {
-    _contactNameLabel.attributedText          = entity.fullName;
-    _contactDescriptionLabel.attributedText   = entity.phone;
-    _checkBox.isChecked = entity.isChecked;
+    _contactNameLabel.attributedText        = entity.fullName;
+    _contactDescriptionLabel.attributedText = entity.phone;
+    _checkBox.isChecked                     = entity.isChecked;
     weak_self
     [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
         [imageObservable bindAndFire:^(AvatarObj * imgObj) {

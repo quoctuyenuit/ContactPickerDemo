@@ -93,14 +93,30 @@
             strong_self
             if (strongSelf) {
                 [strongSelf _refreshImageCache];
+                NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate = [[NSMutableDictionary alloc] init];
+                
                 for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
-                    ContactViewEntity * oldContact = [strongSelf contactOfIdentifier:newContact.identifier];
-                    if (oldContact && ![oldContact isEqualWithBusEntity:newContact]) {
-                        [oldContact updateContactWithBus:newContact];
+                    
+                    for (int section = 0; section < strongSelf.listSectionKeys.count; section++) {
+                        NSString * key = [strongSelf.listSectionKeys objectAtIndex:section];
+                        NSArray * rowsInSection = [strongSelf.contactsOnView objectForKey:key];
+                        for (int row = 0; row < rowsInSection.count; row++) {
+                            ContactViewEntity * oldContact = [rowsInSection objectAtIndex:row];
+                            
+                            if (oldContact &&
+                                [oldContact.identifier isEqualToString:newContact.identifier] &&
+                                ![oldContact isEqualWithBusEntity:newContact]) {
+                                
+                                [oldContact updateContactWithBus:newContact];
+                                [indexsNeedUpdate setObject:oldContact forKey:[NSIndexPath indexPathForRow:row inSection:section]];
+                            }
+                            
+                        }
                     }
                 }
                 
-                strongSelf.contactBookObservable.value = [NSNumber numberWithInt:[strongSelf.contactBookObservable.value intValue] + 1];
+                if (indexsNeedUpdate.count > 0)
+                    strongSelf.contactBookObservable.value = indexsNeedUpdate;
             }
         });
     }];

@@ -16,7 +16,7 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *>                   * searchObservable;
-@property DataBinding<NSNumber *>                   * contactBookObservable;
+@property DataBinding<NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *>     * contactBookObservable;
 
 @property DataBinding<NSNumber *>                   * selectedContactRemoveObservable;
 @property DataBinding<NSNumber *>                   * selectedContactAddedObservable;

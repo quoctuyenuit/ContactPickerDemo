@@ -54,6 +54,28 @@
     return YES;
 }
 
+- (BOOL)isEqualToOther:(ContactBusEntity *)other {
+    BOOL stringCompare = ([self.givenName isEqualToString:other.givenName] &&
+                          [self.familyName isEqualToString:other.familyName] &&
+                          (self.phones.count == other.phones.count));
+    
+    if (!stringCompare)
+        return NO;
+    
+    for (int i = 0; i < self.phones.count; i++) {
+        if (![[self.phones objectAtIndex:i] isEqualToString:[other.phones objectAtIndex:i]] ) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (void)update:(ContactBusEntity *)other {
+    self.givenName  = other.givenName;
+    self.familyName = other.familyName;
+    self.phones     = [[NSArray alloc] initWithArray:other.phones];
+}
+
 @synthesize familyName;
 
 @synthesize givenName;
