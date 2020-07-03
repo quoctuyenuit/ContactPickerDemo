@@ -28,7 +28,7 @@
 
 #define UIKIT_ICO_NAME          @"archivebox.fill"
 #define TEXTURE_ICO_NAME        @"paperplane.fill"
-#define COMPONENTKIT_ICO_NAME   @"paperplane.fill"
+#define COMPONENTKIT_ICO_NAME   @"cube.box.fill"
 
 @interface ContactMainViewController () {
     UIViewController * _contentViewController;

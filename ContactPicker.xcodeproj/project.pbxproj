@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,9 +26,6 @@
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
 		B02A51102487EF2000B9CC1B /* ContactBusinessLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */; };
 		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
-		B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAB024A3082700C86F0E /* CKSwift.framework */; platformFilter = ios; };
-		B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EA9824A3082700C86F0E /* ComponentKit.framework */; platformFilter = ios; };
-		B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B057EAAE24A3082700C86F0E /* RenderCore.framework */; platformFilter = ios; };
 		B057EAB824A3555200C86F0E /* ContactWithSearchComponentKit.m in Sources */ = {isa = PBXBuildFile; fileRef = B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */; };
 		B05CA07824AD7ABF00F68AE4 /* AvatarObj.m in Sources */ = {isa = PBXBuildFile; fileRef = B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */; };
 		B05CA08D24AE08C100F68AE4 /* TableIndexView.m in Sources */ = {isa = PBXBuildFile; fileRef = B05CA08C24AE08C100F68AE4 /* TableIndexView.m */; };
@@ -50,6 +47,12 @@
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
 		B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43B24878BEA00E557E1 /* ContactDAL.m */; };
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
+		B0C1534524AF22BA005D63B7 /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1534224AF22A9005D63B7 /* CKSwift.framework */; };
+		B0C1534624AF22BA005D63B7 /* CKSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1534224AF22A9005D63B7 /* CKSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B0C1534724AF22BA005D63B7 /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1532A24AF22A9005D63B7 /* ComponentKit.framework */; };
+		B0C1534824AF22BA005D63B7 /* ComponentKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1532A24AF22A9005D63B7 /* ComponentKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B0C1534924AF22BA005D63B7 /* RenderCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1534024AF22A9005D63B7 /* RenderCore.framework */; };
+		B0C1534A24AF22BA005D63B7 /* RenderCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1534024AF22A9005D63B7 /* RenderCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
 		B0C1C24A2490F3D800634829 /* ContactBusinessLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */; };
 		B0C254FD2497910000ECA551 /* ContactTableControllerTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FC2497910000ECA551 /* ContactTableControllerTexture.m */; };
@@ -81,105 +84,121 @@
 			remoteGlobalIDString = 193E33272484F31A00C5735D;
 			remoteInfo = ContactPicker;
 		};
-		B057EA9724A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1532924AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D0B47AB51CBD924100BB33CE;
 			remoteInfo = ComponentKit;
 		};
-		B057EA9924A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1532B24AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A273801A1AFD144100E6F222;
 			remoteInfo = ComponentKitTestHelpers;
 		};
-		B057EA9B24A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1532D24AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A1AB4FED23350E45001F41DB;
 			remoteInfo = ComponentKitPerfTests;
 		};
-		B057EA9D24A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1532F24AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = B342DC401AC23E8200ACAC53;
 			remoteInfo = ComponentKitTests;
 		};
-		B057EA9F24A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533124AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = B342DC8B1AC23EC300ACAC53;
 			remoteInfo = ComponentKitApplicationTests;
 		};
-		B057EAA124A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533324AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = B342DCAA1AC23F2A00ACAC53;
 			remoteInfo = ComponentTextKitApplicationTests;
 		};
-		B057EAA324A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533524AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = B3EECEC21AC2366600BFC5DA;
 			remoteInfo = ComponentKitApplicationsTestsHost;
 		};
-		B057EAA524A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533724AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 03B8B56A1D2A346F00EDFF59;
 			remoteInfo = ComponentKitAppleTV;
 		};
-		B057EAA724A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533924AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 03A98A721D2B2BFD00C5BAC2;
 			remoteInfo = ComponentKitTestHelpersAppleTV;
 		};
-		B057EAA924A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533B24AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 03F1AC061D2B2A9B00867584;
 			remoteInfo = ComponentKitTestsAppleTV;
 		};
-		B057EAAB24A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533D24AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D431880023E2056C0024AA12;
 			remoteInfo = RenderCoreAppleTV;
 		};
-		B057EAAD24A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1533F24AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D431881723E2057E0024AA12;
 			remoteInfo = RenderCore;
 		};
-		B057EAAF24A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1534124AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D4BC578023E37A1B0075D688;
 			remoteInfo = CKSwift;
 		};
-		B057EAB124A3082700C86F0E /* PBXContainerItemProxy */ = {
+		B0C1534324AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+			containerPortal = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D4BC578823E37A1B0075D688;
 			remoteInfo = CKSwiftTests;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0C1534B24AF22BA005D63B7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B0C1534624AF22BA005D63B7 /* CKSwift.framework in Embed Frameworks */,
+				B0C1534A24AF22BA005D63B7 /* RenderCore.framework in Embed Frameworks */,
+				B0C1534824AF22BA005D63B7 /* ComponentKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0ACF6912A689C8027B705D5C /* Pods_ContactPickerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactPickerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -225,7 +244,6 @@
 		B02A51112487EFB800B9CC1B /* BusinessLayerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BusinessLayerProtocol.h; sourceTree = "<group>"; };
 		B05179172490861800B0A973 /* ContactCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCell.h; sourceTree = "<group>"; };
 		B05179182490861800B0A973 /* ContactCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionCell.m; sourceTree = "<group>"; };
-		B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ComponentKit.xcodeproj; path = Frameworks/componentkit/ComponentKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		B057EAB624A3555200C86F0E /* ContactWithSearchComponentKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactWithSearchComponentKit.h; sourceTree = "<group>"; };
 		B057EAB724A3555200C86F0E /* ContactWithSearchComponentKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchComponentKit.m; sourceTree = "<group>"; };
 		B05CA07624AD7ABF00F68AE4 /* AvatarObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AvatarObj.h; sourceTree = "<group>"; };
@@ -274,6 +292,7 @@
 		B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapter.m; sourceTree = "<group>"; };
 		B0B0B93524A5FBB80083E24E /* HorizontalListItemProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalListItemProtocol.h; sourceTree = "<group>"; };
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
+		B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ComponentKit.xcodeproj; path = Frameworks/componentkit/ComponentKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		B0C1C24B249101A100634829 /* CheckBoxButtonDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonDelegate.h; sourceTree = "<group>"; };
 		B0C254FB2497910000ECA551 /* ContactTableControllerTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableControllerTexture.h; sourceTree = "<group>"; };
 		B0C254FC2497910000ECA551 /* ContactTableControllerTexture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableControllerTexture.m; sourceTree = "<group>"; };
@@ -305,10 +324,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B057EAB324A3083300C86F0E /* CKSwift.framework in Frameworks */,
-				B057EAB424A3083300C86F0E /* ComponentKit.framework in Frameworks */,
-				B057EAB524A3083300C86F0E /* RenderCore.framework in Frameworks */,
+				B0C1534524AF22BA005D63B7 /* CKSwift.framework in Frameworks */,
+				B0C1534924AF22BA005D63B7 /* RenderCore.framework in Frameworks */,
 				AB47BF2738D1D527DAC5AEC4 /* Pods_ContactPicker.framework in Frameworks */,
+				B0C1534724AF22BA005D63B7 /* ComponentKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,27 +539,6 @@
 			path = ContactCollectionCell;
 			sourceTree = "<group>";
 		};
-		B057EA8524A3082700C86F0E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B057EA9824A3082700C86F0E /* ComponentKit.framework */,
-				B057EA9A24A3082700C86F0E /* libComponentKitTestHelpers.a */,
-				B057EA9C24A3082700C86F0E /* ComponentKitPerfTests.xctest */,
-				B057EA9E24A3082700C86F0E /* ComponentKitTests.xctest */,
-				B057EAA024A3082700C86F0E /* ComponentKitApplicationTests.xctest */,
-				B057EAA224A3082700C86F0E /* ComponentTextKitApplicationTests.xctest */,
-				B057EAA424A3082700C86F0E /* ComponentKitApplicationsTestsHost.app */,
-				B057EAA624A3082700C86F0E /* ComponentKit.framework */,
-				B057EAA824A3082700C86F0E /* libComponentKitTestHelpers.a */,
-				B057EAAA24A3082700C86F0E /* ComponentKitTestsAppleTV.xctest */,
-				B057EAAC24A3082700C86F0E /* RenderCore.framework */,
-				B057EAAE24A3082700C86F0E /* RenderCore.framework */,
-				B057EAB024A3082700C86F0E /* CKSwift.framework */,
-				B057EAB224A3082700C86F0E /* CKSwiftTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		B05CA08A24AE08B200F68AE4 /* TableIndexView */ = {
 			isa = PBXGroup;
 			children = (
@@ -730,6 +728,27 @@
 			path = ContactDAL;
 			sourceTree = "<group>";
 		};
+		B0C1531724AF22A9005D63B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0C1532A24AF22A9005D63B7 /* ComponentKit.framework */,
+				B0C1532C24AF22A9005D63B7 /* libComponentKitTestHelpers.a */,
+				B0C1532E24AF22A9005D63B7 /* ComponentKitPerfTests.xctest */,
+				B0C1533024AF22A9005D63B7 /* ComponentKitTests.xctest */,
+				B0C1533224AF22A9005D63B7 /* ComponentKitApplicationTests.xctest */,
+				B0C1533424AF22A9005D63B7 /* ComponentTextKitApplicationTests.xctest */,
+				B0C1533624AF22A9005D63B7 /* ComponentKitApplicationsTestsHost.app */,
+				B0C1533824AF22A9005D63B7 /* ComponentKit.framework */,
+				B0C1533A24AF22A9005D63B7 /* libComponentKitTestHelpers.a */,
+				B0C1533C24AF22A9005D63B7 /* ComponentKitTestsAppleTV.xctest */,
+				B0C1533E24AF22A9005D63B7 /* RenderCore.framework */,
+				B0C1534024AF22A9005D63B7 /* RenderCore.framework */,
+				B0C1534224AF22A9005D63B7 /* CKSwift.framework */,
+				B0C1534424AF22A9005D63B7 /* CKSwiftTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B0C254F624978F1400ECA551 /* ComponentsView */ = {
 			isa = PBXGroup;
 			children = (
@@ -811,7 +830,7 @@
 		B0FB8C0024A0B6FE00E35B42 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */,
+				B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */,
 				0C453605A6182B184255EEEF /* Pods_ContactPicker.framework */,
 				1E4FD72C5D339BC818BFFF6F /* Pods_ContactPicker_ContactPickerUITests.framework */,
 				0ACF6912A689C8027B705D5C /* Pods_ContactPickerTests.framework */,
@@ -863,6 +882,7 @@
 				193E33252484F31A00C5735D /* Frameworks */,
 				193E33262484F31A00C5735D /* Resources */,
 				1B9EF3DC5BE182613BAE2257 /* [CP] Embed Pods Frameworks */,
+				B0C1534B24AF22BA005D63B7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -947,8 +967,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = B057EA8524A3082700C86F0E /* Products */;
-					ProjectRef = B057EA8424A3082700C86F0E /* ComponentKit.xcodeproj */;
+					ProductGroup = B0C1531724AF22A9005D63B7 /* Products */;
+					ProjectRef = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -961,102 +981,102 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		B057EA9824A3082700C86F0E /* ComponentKit.framework */ = {
+		B0C1532A24AF22A9005D63B7 /* ComponentKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ComponentKit.framework;
-			remoteRef = B057EA9724A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1532924AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EA9A24A3082700C86F0E /* libComponentKitTestHelpers.a */ = {
+		B0C1532C24AF22A9005D63B7 /* libComponentKitTestHelpers.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libComponentKitTestHelpers.a;
-			remoteRef = B057EA9924A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1532B24AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EA9C24A3082700C86F0E /* ComponentKitPerfTests.xctest */ = {
+		B0C1532E24AF22A9005D63B7 /* ComponentKitPerfTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ComponentKitPerfTests.xctest;
-			remoteRef = B057EA9B24A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1532D24AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EA9E24A3082700C86F0E /* ComponentKitTests.xctest */ = {
+		B0C1533024AF22A9005D63B7 /* ComponentKitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ComponentKitTests.xctest;
-			remoteRef = B057EA9D24A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1532F24AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAA024A3082700C86F0E /* ComponentKitApplicationTests.xctest */ = {
+		B0C1533224AF22A9005D63B7 /* ComponentKitApplicationTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ComponentKitApplicationTests.xctest;
-			remoteRef = B057EA9F24A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533124AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAA224A3082700C86F0E /* ComponentTextKitApplicationTests.xctest */ = {
+		B0C1533424AF22A9005D63B7 /* ComponentTextKitApplicationTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ComponentTextKitApplicationTests.xctest;
-			remoteRef = B057EAA124A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533324AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAA424A3082700C86F0E /* ComponentKitApplicationsTestsHost.app */ = {
+		B0C1533624AF22A9005D63B7 /* ComponentKitApplicationsTestsHost.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = ComponentKitApplicationsTestsHost.app;
-			remoteRef = B057EAA324A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533524AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAA624A3082700C86F0E /* ComponentKit.framework */ = {
+		B0C1533824AF22A9005D63B7 /* ComponentKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ComponentKit.framework;
-			remoteRef = B057EAA524A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533724AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAA824A3082700C86F0E /* libComponentKitTestHelpers.a */ = {
+		B0C1533A24AF22A9005D63B7 /* libComponentKitTestHelpers.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libComponentKitTestHelpers.a;
-			remoteRef = B057EAA724A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533924AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAAA24A3082700C86F0E /* ComponentKitTestsAppleTV.xctest */ = {
+		B0C1533C24AF22A9005D63B7 /* ComponentKitTestsAppleTV.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ComponentKitTestsAppleTV.xctest;
-			remoteRef = B057EAA924A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533B24AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAAC24A3082700C86F0E /* RenderCore.framework */ = {
+		B0C1533E24AF22A9005D63B7 /* RenderCore.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RenderCore.framework;
-			remoteRef = B057EAAB24A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533D24AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAAE24A3082700C86F0E /* RenderCore.framework */ = {
+		B0C1534024AF22A9005D63B7 /* RenderCore.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RenderCore.framework;
-			remoteRef = B057EAAD24A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1533F24AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAB024A3082700C86F0E /* CKSwift.framework */ = {
+		B0C1534224AF22A9005D63B7 /* CKSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CKSwift.framework;
-			remoteRef = B057EAAF24A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1534124AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B057EAB224A3082700C86F0E /* CKSwiftTests.xctest */ = {
+		B0C1534424AF22A9005D63B7 /* CKSwiftTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = CKSwiftTests.xctest;
-			remoteRef = B057EAB124A3082700C86F0E /* PBXContainerItemProxy */;
+			remoteRef = B0C1534324AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
