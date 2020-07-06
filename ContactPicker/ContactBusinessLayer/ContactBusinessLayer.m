@@ -91,13 +91,12 @@
 
 #pragma mark - Protocol methods
 - (void)requestPermission:(void (^)(BOOL, NSError *))handler {
+    NSAssert(handler, @"handler is nil");
     [self->_contactAdapter requestPermission:handler];
 }
 
 - (void)loadContactsWithBlock:(BusinessResponseListBlock)block {
-    if (!block) {
-        return;
-    }
+    NSAssert(block, @"block is nil");
     
     weak_self
     dispatch_sync(_loadResponseQueue, ^{
@@ -145,8 +144,7 @@
 }
 
 - (void)searchContactByName:(NSString *)name block:(BusinessResponseListBlock)block {
-    if (!block)
-        return;
+    NSAssert(block, @"block is nil");
     
     if (!name) {
         NSError * error = [[NSError alloc] initWithDomain:BUSINESS_ERROR_DOMAIN type:ErrorTypeEmpty localizeString:@"name is nil"];
