@@ -70,7 +70,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if (kind == UICollectionElementKindSectionHeader) {
         ContactTableHeaderComponentView * headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:HEADER_REUSE_IDENTIFIER forIndexPath:indexPath];
-        headerView.title.text = [[_viewModel getAllSectionNames] objectAtIndex:indexPath.section];
+        headerView.title.text = [[_viewModel sectionIndexTitles] objectAtIndex:indexPath.section];
         return headerView;
     }
     return [[UICollectionReusableView alloc] init];
@@ -88,7 +88,7 @@
     [flowLayout setMinimumLineSpacing:0];
     
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:flowLayout];
-    _tableIndexView = [[TableIndexView alloc] initWithTitlesIndex:[_viewModel getAllSectionNames]];
+    _tableIndexView = [[TableIndexView alloc] initWithTitlesIndex:[_viewModel sectionIndexTitles]];
     
     
     [self.view addSubview:_collectionView];

@@ -16,24 +16,22 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *>                   * searchObservable;
-@property DataBinding<NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *>     * contactBookObservable;
-
-@property DataBinding<NSNumber *>                   * selectedContactRemoveObservable;
-@property DataBinding<NSNumber *>                   * selectedContactAddedObservable;
-
+@property DataBinding<NSMutableDictionary *>        * contactBookObservable;
+@property DataBinding<NSIndexPath *>                * selectedContactRemoveObservable;
+@property DataBinding<NSIndexPath *>                * selectedContactAddedObservable;
 @property DataBinding<NSArray<NSIndexPath *> *>     * dataSourceNeedReloadObservable;
 @property DataBinding<NSIndexPath *>                * cellNeedRemoveSelectedObservable;
 
 #pragma mark - ContactTableDataSource methods
 - (NSInteger) numberOfSection;
 
-- (int) numberOfContactInSection: (NSInteger) section;
+- (NSInteger) numberOfContactInSection: (NSInteger) section;
 
 - (ContactViewEntity *) contactAtIndex: (NSIndexPath *) indexPath;
 
 - (NSString *) titleForHeaderInSection: (NSInteger) section;
 
-- (NSArray *) getAllSectionNames;
+- (NSArray *) sectionIndexTitles;
 
 #pragma mark - Selected Contact CollectionDataSource methods
 - (NSInteger)numberOfSelectedContacts;

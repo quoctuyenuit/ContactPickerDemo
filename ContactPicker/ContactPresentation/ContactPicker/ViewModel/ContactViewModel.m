@@ -59,12 +59,12 @@
     _listSectionKeys        = [[NSMutableArray alloc] init];
     
     //    Data binding initialization
-    self.searchObservable                   = [[DataBinding<NSString *> alloc] initWithValue:@""];
+    self.searchObservable                   = [[DataBinding alloc] initWithValue:@""];
     self.contactBookObservable              = [[DataBinding alloc] initWithValue:nil];
-    self.cellNeedRemoveSelectedObservable   = [[DataBinding<NSIndexPath *> alloc] initWithValue:nil];
+    self.cellNeedRemoveSelectedObservable   = [[DataBinding alloc] initWithValue:nil];
     self.dataSourceNeedReloadObservable     = [[DataBinding alloc] initWithValue:nil];
-    self.selectedContactAddedObservable     = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
-    self.selectedContactRemoveObservable    = [[DataBinding<NSNumber *> alloc] initWithValue:[NSNumber numberWithInt:0]];
+    self.selectedContactAddedObservable     = [[DataBinding alloc] initWithValue:nil];
+    self.selectedContactRemoveObservable    = [[DataBinding alloc] initWithValue:nil];
     
     [self _initContactOnView];
     [self _setupEvents];
@@ -241,9 +241,9 @@
     return [_contactsOnView allKeys].count;
 }
 
-- (int)numberOfContactInSection: (NSInteger) section {
+- (NSInteger)numberOfContactInSection: (NSInteger) section {
     NSString * key = [self parseSectionToKey:(int)section];
-    return  (int)[_contactsOnView objectForKey:key].count;
+    return [_contactsOnView objectForKey:key].count;
 }
 
 - (ContactViewEntity *)contactAtIndex:(NSIndexPath *)indexPath {
@@ -260,7 +260,7 @@
     return [self->_listSectionKeys objectAtIndex:section];
 }
 
-- (NSArray *)getAllSectionNames {
+- (NSArray *)sectionIndexTitles {
     return _listSectionKeys;
 }
 
@@ -354,12 +354,12 @@
     
     if (contact.isChecked) {
         [_listSelectedContacts addObject:contact];
-        self.selectedContactAddedObservable.value = [NSNumber numberWithUnsignedInteger:_listSelectedContacts.count - 1];
+        self.selectedContactAddedObservable.value = [NSIndexPath indexPathForRow:_listSelectedContacts.count - 1 inSection:0];
     } else {
         for (int i = 0; i < _listSelectedContacts.count; i++) {
             if ([contact.identifier isEqualToString:_listSelectedContacts[i].identifier]) {
                 [_listSelectedContacts removeObjectAtIndex:i];
-                self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:i];
+                self.selectedContactRemoveObservable.value = [NSIndexPath indexPathForRow:i inSection:0];
                 return;
             }
         }
@@ -375,7 +375,7 @@
     if ([_listSelectedContacts containsObject:contact]) {
         NSUInteger index = [_listSelectedContacts indexOfObject:contact];
         [_listSelectedContacts removeObjectAtIndex:index];
-        self.selectedContactRemoveObservable.value = [NSNumber numberWithUnsignedInteger:index];
+        self.selectedContactRemoveObservable.value = [NSIndexPath indexPathForRow:index inSection:0];
     }
     
     if (![self isContainContact:contact]) {

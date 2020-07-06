@@ -130,14 +130,12 @@
 }
 
 #pragma mark - HorizontalListItemProtocol methods
-- (void)insertItemAtIndex:(NSInteger)index {
-    NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+- (void)insertItemAtIndex:(NSIndexPath *)indexPath {
     [_collectionView insertItemsAtIndexPaths:@[indexPath]];
     [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
 }
 
-- (void)removeItemAtIndex:(NSInteger)index {
-    NSIndexPath * indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+- (void)removeItemAtIndex:(NSIndexPath *)indexPath {
     [_collectionView deleteItemsAtIndexPaths:@[indexPath]];
 }
 

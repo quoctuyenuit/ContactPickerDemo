@@ -42,6 +42,7 @@
 		B07A8D7C2498B8B400A3B27F /* CheckBoxNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D7B2498B8B400A3B27F /* CheckBoxNode.m */; };
 		B07A8D842498CED700A3B27F /* ContactWithSearchTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D832498CED700A3B27F /* ContactWithSearchTexture.m */; };
 		B07AA26524A4A4A800D6F602 /* ContactTableHeaderComponentView.m in Sources */ = {isa = PBXBuildFile; fileRef = B07AA26424A4A4A800D6F602 /* ContactTableHeaderComponentView.m */; };
+		B088FDAA24B2D16000C893FC /* TableModelSection.m in Sources */ = {isa = PBXBuildFile; fileRef = B088FDA924B2D16000C893FC /* TableModelSection.m */; };
 		B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */; };
 		B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A04B2B24A0F91E00BED688 /* TabbarOnTopItemView.m */; };
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
@@ -277,6 +278,8 @@
 		B07A8D832498CED700A3B27F /* ContactWithSearchTexture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchTexture.m; sourceTree = "<group>"; };
 		B07AA26324A4A4A800D6F602 /* ContactTableHeaderComponentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableHeaderComponentView.h; sourceTree = "<group>"; };
 		B07AA26424A4A4A800D6F602 /* ContactTableHeaderComponentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableHeaderComponentView.m; sourceTree = "<group>"; };
+		B088FDA824B2D16000C893FC /* TableModelSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableModelSection.h; sourceTree = "<group>"; };
+		B088FDA924B2D16000C893FC /* TableModelSection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableModelSection.m; sourceTree = "<group>"; };
 		B08D9CB8248F47BF00B871AE /* ContactDALProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactDALProtocol.h; sourceTree = "<group>"; };
 		B0979AEB24889BB5008D05F4 /* ContactTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
 		B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
@@ -574,6 +577,8 @@
 			children = (
 				193E336624851C7B00C5735D /* ContactViewEntity.h */,
 				193E336724851C8400C5735D /* ContactViewEntity.m */,
+				B088FDA824B2D16000C893FC /* TableModelSection.h */,
+				B088FDA924B2D16000C893FC /* TableModelSection.m */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -1219,6 +1224,7 @@
 				B057EAB824A3555200C86F0E /* ContactWithSearchComponentKit.m in Sources */,
 				B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */,
 				B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */,
+				B088FDAA24B2D16000C893FC /* TableModelSection.m in Sources */,
 				193E336B24851CD000C5735D /* DataBinding.m in Sources */,
 				B0C25506249798DE00ECA551 /* Utilities.m in Sources */,
 				B0F6FD96249E27D7004BA361 /* ContactTableBaseController.m in Sources */,

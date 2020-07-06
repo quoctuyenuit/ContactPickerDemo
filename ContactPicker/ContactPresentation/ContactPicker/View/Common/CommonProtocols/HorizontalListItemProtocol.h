@@ -26,8 +26,8 @@
 @protocol HorizontalListItemProtocol <NSObject>
 
 @property(weak, nonatomic) id<HorizontalListItemDelegate> delegate;
-- (void)insertItemAtIndex:(NSInteger) index;
-- (void)removeItemAtIndex:(NSInteger) index;
+- (void)insertItemAtIndex:(NSIndexPath *) indexPath;
+- (void)removeItemAtIndex:(NSIndexPath *) indexPath;
 
 @end
 

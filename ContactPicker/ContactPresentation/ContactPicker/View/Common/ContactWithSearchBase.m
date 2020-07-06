@@ -42,26 +42,26 @@
 - (void)setupEvents {
     weak_self
     //    Listen contact had added observable
-    [self.viewModel.selectedContactAddedObservable binding:^(NSNumber * index) {
+    [self.viewModel.selectedContactAddedObservable binding:^(NSIndexPath * indexPath) {
         strong_self
         if (strongSelf) {
-            if ([index intValue] == 0) {
+            if (indexPath.row == 0) {
                 [strongSelf showSelectedContactsArea:YES];
             }
-            [strongSelf.selectedContactView insertItemAtIndex: [index integerValue]];
-            [strongSelf.keyboardSearchbarView insertItemAtIndex: [index integerValue]];
+            [strongSelf.selectedContactView insertItemAtIndex: indexPath];
+            [strongSelf.keyboardSearchbarView insertItemAtIndex: indexPath];
         }
     }];
     
     //    Listen contact had removed observable
-    [self.viewModel.selectedContactRemoveObservable binding:^(NSNumber * index) {
+    [self.viewModel.selectedContactRemoveObservable binding:^(NSIndexPath * indexPath) {
         strong_self
         if (strongSelf) {
             if ([strongSelf.viewModel numberOfSelectedContacts] == 0) {
                 [strongSelf showSelectedContactsArea:NO];
             }
-            [strongSelf.selectedContactView removeItemAtIndex: [index integerValue]];
-            [strongSelf.keyboardSearchbarView removeItemAtIndex: [index integerValue]];
+            [strongSelf.selectedContactView removeItemAtIndex: indexPath];
+            [strongSelf.keyboardSearchbarView removeItemAtIndex: indexPath];
         }
     }];
 }
