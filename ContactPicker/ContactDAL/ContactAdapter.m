@@ -318,7 +318,7 @@
 #pragma mark - Create Dummy Data methods
 #if DUMMY_DATA_ENABLE
 - (NSArray<ContactDAL *> *) createDummyDataWithSize:(NSUInteger) size {
-    NSAssert(size < 0, @"Size is negative");
+    NSAssert(size > 0, @"Size is negative");
     
     NSMutableArray * dummyData = [[NSMutableArray alloc] init];
     for (int i = 0; i < size; i++ ) {

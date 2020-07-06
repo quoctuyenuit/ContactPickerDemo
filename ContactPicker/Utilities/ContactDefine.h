@@ -28,9 +28,9 @@
 #define NUMBER_OF_DUMMY                 1000
 
 
-#define BUILD_UIKIT                     0
+#define BUILD_UIKIT                     1
 #define BUILD_TEXTURE                   1
-#define BUILD_COMPONENTKIT              0
+#define BUILD_COMPONENTKIT              1
 
 
 #elif DEBUG_APP_MODE == 0
