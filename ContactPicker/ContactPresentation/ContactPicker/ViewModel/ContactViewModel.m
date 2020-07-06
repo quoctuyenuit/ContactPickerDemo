@@ -119,6 +119,8 @@
 }
 
 - (void)_addContacts:(NSArray<ContactViewEntity *> *) contacts block: (void (^)(NSArray<NSIndexPath *> * updatedIndexPaths)) block {
+    NSAssert(block, @"block is nil");
+    
     weak_self
     dispatch_async(_backgroundSerialQueue, ^{
         strong_self
@@ -182,6 +184,8 @@
 }
 
 - (ContactViewEntity *)contactOfIdentifier:(NSString *)identifier name:(NSString *)name {
+    NSAssert([identifier isEqualToString:@""], @"identifier is empty");
+    
     NSString * key = [self _makeKeyFromName:name];
     NSArray * listContact = [_contactsOnView objectForKey:key];
     return [listContact firstObjectWith:^BOOL(ContactViewEntity * _Nonnull obj) {
@@ -190,12 +194,16 @@
 }
 
 - (BOOL)isContainContact:(ContactViewEntity *)contact {
+    NSAssert(contact, @"Contact is nil");
+    
     NSString * key = [self _makeKeyFromName:contact.fullName.string];
     NSArray * listContacts = [_contactsOnView objectForKey:key];
     return listContacts ? [listContacts containsObject:contact] : NO;
 }
 
 - (NSIndexPath *)indexOfContact:(ContactViewEntity *)contact {
+    NSAssert(contact, @"Contact is nil");
+    
     NSString * key = [self _makeKeyFromName:contact.fullName.string];
     NSInteger section = [self->_listSectionKeys indexOfObject:key];
     NSArray * listContacts = [_contactsOnView objectForKey:key];
@@ -204,6 +212,8 @@
 }
 
 - (ContactViewEntity * _Nullable)contactOfIdentifier:(NSString *)identifier {
+    NSAssert([identifier isEqualToString:@""], @"identifier is empty");
+    
     for (NSString * key in _listSectionKeys) {
         ContactViewEntity * result = [[_contactsOnView objectForKey:key] firstObjectWith:^BOOL(ContactViewEntity * _Nonnull obj) {
             return [obj.identifier isEqualToString:identifier];
@@ -238,10 +248,15 @@
 
 - (ContactViewEntity *)contactAtIndex:(NSIndexPath *)indexPath {
     NSString * key = [self parseSectionToKey:(int)indexPath.section];
+    NSArray * rows = [_contactsOnView objectForKey:key];
+    
+    NSAssert(indexPath.row >= 0 && indexPath.row < rows.count, @"Invalid row in IndexPath");
+    
     return [[_contactsOnView objectForKey:key] objectAtIndex:indexPath.row];
 }
 
 - (NSString *)titleForHeaderInSection:(NSInteger)section {
+    NSAssert(section >= 0 && section < self.listSectionKeys.count, @"invalid section");
     return [self->_listSectionKeys objectAtIndex:section];
 }
 
@@ -255,23 +270,24 @@
 }
 
 - (ContactViewEntity *)selectedContactAtIndex:(NSInteger)index {
+    NSAssert(index >= 0 && index < _listSelectedContacts.count, @"Invalid index");
     return [_listSelectedContacts objectAtIndex:index];
 }
 
 
 - (NSString *) parseSectionToKey: (int) section {
+    NSAssert(section >= 0 && section < self.listSectionKeys.count, @"invalid section");
     return [self->_listSectionKeys objectAtIndex:section];
 }
 
 #pragma mark Public methods
 - (void)requestPermission:(void (^)(BOOL, NSError *))completion {
+    NSAssert(completion, @"completion is nil");
     [self->_contactBus requestPermission:completion];
 }
 
 - (void)loadContactsWithBlock:(ViewModelResponseListBlock)block {
-    if (!block) {
-        return;
-    }
+    NSAssert(block, @"block is nil");
     
     weak_self
     dispatch_async(_backgroundSerialQueue, ^{
@@ -305,6 +321,8 @@
 }
 
 - (void)searchContactWithKeyName:(NSString *)key block:(ViewModelResponseListBlock) block {
+    NSAssert(block, @"block is nil");
+    NSAssert(key, @"key is nil");
     weak_self
     dispatch_async(_backgroundSerialQueue, ^{
         strong_self
@@ -349,7 +367,7 @@
 }
 
 - (void)removeSelectedContact:(NSString *)identifier {
-    
+    NSAssert(identifier, @"identifier is nil");
     ContactViewEntity * contact = [_listSelectedContacts firstObjectWith:^BOOL(ContactViewEntity*  _Nonnull obj) {
         return [obj.identifier isEqualToString:identifier];
     }];
