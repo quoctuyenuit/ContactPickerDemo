@@ -64,6 +64,8 @@
 }
 
 - (NSInteger)tableNode:(ASTableNode *)tableNode numberOfRowsInSection:(NSInteger)section {
+    if (!self.contactHadLoad)
+        return 0;
     return [_viewModel numberOfContactInSection:section];
 }
 

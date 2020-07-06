@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef DataBinding<AvatarObj *> ImageObservable;
+
 @interface ImageManager : NSObject
 @property(atomic, readonly) NSCache<NSString *, DataBinding *>  *imageCache;
 @property(nonatomic, readonly) NSMutableArray                   *colorsTable;
@@ -24,8 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype) instance;
 - (void) updateCache;
-- (void) imageForKey:(NSString *) key label:(NSString * _Nullable) label block:(void(^)(DataBinding<AvatarObj *> * imageObservable)) block;
-- (UIImage *) imageForKey:(NSString *) key label:(NSString * _Nullable) label;
+- (void) imageForKey:(NSString *) key label:(NSString * _Nullable) label block:(void(^)(ImageObservable * imageObservable)) block;
 @end
 
 NS_ASSUME_NONNULL_END

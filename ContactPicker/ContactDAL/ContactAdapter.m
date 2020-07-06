@@ -15,11 +15,14 @@
 #import "NSErrorExtension.h"
 
 #define ADAPTER_ERROR_DOMAIN            @"AdapterError"
+#define DEBUG_TIME_GET_IMAGE            0
 
 #define CHECK_RETAINCYCLE               0
 #if CHECK_RETAINCYCLE
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
 #endif
+
+
 
 @interface ContactAdapter()
 
@@ -274,11 +277,14 @@
 
 - (void)getImageById:(NSString *)identifier block:(void (^)(NSData *imageData, NSError * error))block {
     NSAssert(block, @"block is nil");
-    
     weak_self
     dispatch_async(_loadContactQueue, ^{
         strong_self
         if (strongSelf) {
+#if DEBUG_TIME_GET_IMAGE
+            NSDate *start = [NSDate date];
+#endif
+            
             CNContactStore *addressBook = [[CNContactStore alloc] init];
             
             NSArray *keysToFetch        = @[CNContactImageDataAvailableKey,
@@ -293,6 +299,10 @@
             } else if (contact.imageDataAvailable) {
                 block(contact.thumbnailImageData, nil);
             }
+#if DEBUG_TIME_GET_IMAGE
+            NSDate *end = [NSDate date];
+            DebugLog(@"Get image time: (id, time) = (%@, %f)", identifier, [end timeIntervalSinceDate:start]);
+#endif
         }
     });
 }
