@@ -10,14 +10,14 @@
 #import "ContactDefine.h"
 #import "NSErrorExtension.h"
 #define LOADING_MESSAGE         @"Đang tải..."
-#define LOG_MSG_HEADER          @"ContactBaseTable"
 
 @interface ContactTableBaseController()
 - (void) setupEvents;
 @end
 
 @implementation ContactTableBaseController {
-    UIAlertController               * _loadingController;
+    UIAlertController               *_loadingController;
+    dispatch_once_t                 _onceTokenTableSetup;
 }
 
 @synthesize viewModel;
@@ -26,40 +26,40 @@
 
 #pragma mark - Subclass must implement methods
 - (id<ContactViewModelProtocol>)viewModel {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
     return nil;
 }
 
 - (void)setupBaseViews {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)setupDatasets {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)showErrorView:(ResponseViewType)type {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)reloadTable {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 - (void)updateCells:(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *)indexsNeedUpdate {
-    NSAssert(NO, @"Subclass must implement this method");
+    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
 #pragma mark - Life circle methods
@@ -158,10 +158,5 @@
     [loadingIndicator startAnimating];
     [alert.view addSubview:loadingIndicator];
     return alert;
-}
-
-#pragma mark - Protocol methods
-- (void)resetAllData {
-    
 }
 @end

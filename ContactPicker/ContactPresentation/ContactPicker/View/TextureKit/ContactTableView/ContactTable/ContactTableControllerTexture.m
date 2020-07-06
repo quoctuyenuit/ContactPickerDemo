@@ -19,7 +19,6 @@
 #define DEBUG_MODE                          1
 
 #define LOADING_MSG                         @"Đang tải danh bạ..."
-#define LOG_MSG_HEADER                      @"ContactTableTexture"
 
 @interface ContactTableControllerTexture () <ASTableDelegate, ASTableDataSource, KeyboardAppearanceDelegate>
 @end

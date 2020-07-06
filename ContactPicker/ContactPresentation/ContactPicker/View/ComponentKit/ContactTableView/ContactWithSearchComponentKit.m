@@ -117,10 +117,6 @@
     return _contactSelectedKeyboardView;
 }
 
-- (void)resetAllData {
-    
-}
-
 - (void)showSelectedContactsArea:(BOOL)isShow {
     _contactSelectedHeightConstraint.constant = isShow ? 80 + self.view.safeAreaInsets.bottom : 0;
     [_contactSelectedView layoutIfNeeded];

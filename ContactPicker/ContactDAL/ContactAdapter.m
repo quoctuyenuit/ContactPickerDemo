@@ -73,23 +73,21 @@
 }
 
 #pragma mark - Protocols methods
-- (void)requestPermission:(void (^)(BOOL, NSError * _Nullable)) handler {
+- (void)requestPermission:(void (^)(BOOL, NSError * _Nullable)) block {
+    NSAssert(block, @"block is nil");
 #if DEBUG_PERMISSION_DENIED
-    handler(NO, nil);
+    block(NO, nil);
     return;
 #endif
     CNContactStore *addressBook = [[CNContactStore alloc] init];
     [addressBook requestAccessForEntityType:CNEntityTypeContacts
                           completionHandler:^(BOOL granted, NSError * _Nullable error) {
-        if (handler)
-            handler(granted, error);
+        block(granted, error);
     }];
 }
 
 - (void)loadContactsWithBlock:(void (^)(NSArray<id<ContactDALProtocol>> *, NSError *))block {
-    if (!block) {
-        return;
-    }
+    NSAssert(block, @"block is nil");
     
 #if DEBUG_EMPTY_CONTACT
     NSError * error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeEmpty localizeString:@"Empty contacts"];
@@ -160,9 +158,9 @@
 }
 
 - (void)loadContactById:(NSString *)identifier block:(AdapterResponseContactBlock)block {
-    if (!block) {
-        return;
-    }
+    NSAssert(block, @"block is nil");
+    NSAssert([identifier isEqualToString:@""], @"identifier is empty");
+    
     weak_self
     dispatch_async(_loadContactQueue, ^{
         strong_self
@@ -185,9 +183,8 @@
 }
 
 - (void)loadContactsByBatch:(NSArray<NSString *> *)identifiers block:(AdapterResponseListBlock)block {
-    if (!block) {
-        return;
-    }
+    NSAssert(block, @"block is nil");
+    NSAssert(identifiers, @"identifiers is nil");
     
     if (identifiers.count == 0) {
         NSError *error = [[NSError alloc] initWithDomain:ADAPTER_ERROR_DOMAIN type:ErrorTypeEmpty localizeString:@"Empty contacts"];
@@ -220,9 +217,7 @@
 }
 
 - (void)loadContactImagesWithBlock:(AdapterResponseListImageBlock)block {
-    if (!block) {
-        return;
-    }
+    NSAssert(block, @"block is nil");
     weak_self
     dispatch_sync(_responseLoadImageQueue, ^{
         strong_self
@@ -278,10 +273,8 @@
 }
 
 - (void)getImageById:(NSString *)identifier block:(void (^)(NSData *imageData, NSError * error))block {
+    NSAssert(block, @"block is nil");
     
-    if (!block) {
-        return;
-    }
     weak_self
     dispatch_async(_loadContactQueue, ^{
         strong_self
@@ -306,6 +299,8 @@
 
 #pragma mark Helper methods
 - (ContactDAL *)parseToContactDAL:(CNContact *)contact {
+    NSAssert(contact, @"Contact is nil");
+    
     NSString * contactId                        = contact.identifier;
     NSString * givenName                        = contact.givenName;
     NSString * familyName                       = contact.familyName;
@@ -323,6 +318,8 @@
 #pragma mark - Create Dummy Data methods
 #if DUMMY_DATA_ENABLE
 - (NSArray<ContactDAL *> *) createDummyDataWithSize:(NSUInteger) size {
+    NSAssert(size < 0, @"Size is negative");
+    
     NSMutableArray * dummyData = [[NSMutableArray alloc] init];
     for (int i = 0; i < size; i++ ) {
         NSString * identifier = [[NSProcessInfo processInfo] globallyUniqueString];

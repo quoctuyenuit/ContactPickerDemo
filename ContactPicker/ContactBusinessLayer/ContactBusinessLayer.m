@@ -16,7 +16,6 @@
 #import "NSErrorExtension.h"
 
 #define BUSINESS_ERROR_DOMAIN   @"BusinessError"
-#define LOG_MSG_HEADER          @"ContactBusiness"
 
 #define CHECK_RETAINCYCLE       0
 #if CHECK_RETAINCYCLE

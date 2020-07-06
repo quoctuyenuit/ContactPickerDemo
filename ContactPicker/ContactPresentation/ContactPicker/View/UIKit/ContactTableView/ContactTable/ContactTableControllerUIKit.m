@@ -17,7 +17,6 @@
 
 
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
-#define LOG_MSG_HEADER              @"ContactTableUIKit"
 
 @interface ContactTableControllerUIKit() <UITableViewDelegate, UITableViewDataSource, KeyboardAppearanceDelegate>
 @end

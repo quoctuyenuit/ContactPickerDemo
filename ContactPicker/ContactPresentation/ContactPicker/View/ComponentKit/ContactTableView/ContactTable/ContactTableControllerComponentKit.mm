@@ -18,7 +18,6 @@
 
 #define DEBUG_MODE                          0
 #define AUTO_TAIL_LOADING_NUM_SCREENFULS    2.5
-#define LOG_MSG_HEADER                      @"ContactTableComponentKit"
 #define HEADER_REUSE_IDENTIFIER             @"HeaderReuseIdentifier"
 
 @interface ContactTableControllerComponentKit () <CKComponentProvider, UICollectionViewDelegateFlowLayout, CKSupplementaryViewDataSource ,KeyboardAppearanceDelegate, TableViewIndexDelegate> {

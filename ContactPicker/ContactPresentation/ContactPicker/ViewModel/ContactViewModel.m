@@ -17,7 +17,6 @@
 
 
 #define VIEWMODEL_ERROR_DOMAIN          @"ViewModel Error"
-#define LOG_MSG_HEADER                  @"ViewModel"
 
 #define CHECK_RETAINCYCLE               0
 #if CHECK_RETAINCYCLE
