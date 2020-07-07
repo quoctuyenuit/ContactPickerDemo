@@ -153,7 +153,7 @@
     
     ContactViewEntity * entity = [delegate horizontalListItem:self entityForIndexPath:indexPath];
     
-    [cell binding:entity];
+    [cell binding:entity.identifier label:entity.keyName];
     
     if (cell.delegate == nil) {
         cell.delegate = self;

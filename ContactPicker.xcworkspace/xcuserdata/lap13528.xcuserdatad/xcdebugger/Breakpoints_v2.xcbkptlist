@@ -30,96 +30,96 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "850AC565-0C10-43C3-A14B-208C60CFE497"
+            uuid = "A7CD4218-838A-4777-99EE-F12D967098B6"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/ComponentKit/ContactTableView/ContactWithSearchComponentKit.m"
+            filePath = "../../../Documents/Zalo Received Files/Texture copy/Source/Details/ASDataController.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "-initElements"
+            startingLineNumber = "533"
+            endingLineNumber = "533"
+            landmarkName = "-maintainUpdateWithEnterElements:andExitElement:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D0F74D56-A329-48E7-A556-294C8C2F0462"
+            uuid = "1E350815-0173-401C-A5EB-BEA2E9389DC2"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/Test/TestViewController.m"
+            filePath = "../../../Documents/Zalo Received Files/Texture copy/Source/Details/ASDataController.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "-tableNode:numberOfRowsInSection:"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
+            landmarkName = "-_allocateNodeFromElement:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "EBE95E66-CF0B-46B7-BFFE-B2EE93B2D21E"
+            uuid = "90A8D4DF-FE29-4A96-A592-86AE1B0A9B57"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/Test/TestViewController.m"
+            filePath = "../../../Documents/Zalo Received Files/Texture copy/Source/Details/ASRangeController.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "-tableNode:nodeBlockForRowAtIndexPath:"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "-_updateVisibleNodeIndexPaths"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "EBE95E66-CF0B-46B7-BFFE-B2EE93B2D21E - b9a4dba1063e46e3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[TestViewController tableNode:nodeBlockForRowAtIndexPath:]"
-                  moduleName = "ContactPicker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lap13528/Downloads/projects/ContactPickerDemo/ContactPicker/Test/TestViewController.m"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "156">
-               </Location>
-               <Location
-                  uuid = "EBE95E66-CF0B-46B7-BFFE-B2EE93B2D21E - bcc769390bca7c75"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__59-[TestViewController tableNode:nodeBlockForRowAtIndexPath:]_block_invoke"
-                  moduleName = "ContactPicker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lap13528/Downloads/projects/ContactPickerDemo/ContactPicker/Test/TestViewController.m"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "327CA416-BB3E-40D0-94A4-16152139C95A"
+            uuid = "F5000E66-EB06-4850-87F6-3086D6E842D2"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactPicker/ContactPresentation/ContactPicker/View/Common/ContactTableBaseController.m"
+            filePath = "../../../Documents/Zalo Received Files/Texture copy/Source/Details/ASRangeController.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
-            landmarkName = "-loadView"
+            startingLineNumber = "560"
+            endingLineNumber = "560"
+            landmarkName = "-dataController:checkElementIfStillInMaintainRange:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "40D7EA18-9602-4D8A-87B0-AA30108EB59B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../Documents/Zalo Received Files/Texture copy/Source/ASTableView.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "605"
+            endingLineNumber = "605"
+            landmarkName = "-setTuningParameters:forRangeMode:rangeType:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AD9428B9-38A8-40CF-B6FB-E53840D31DF1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../Documents/Zalo Received Files/Texture copy/Source/Details/ASRangeController.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "536"
+            endingLineNumber = "536"
+            landmarkName = "-setTuningParameters:forRangeMode:rangeType:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

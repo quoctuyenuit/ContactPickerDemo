@@ -156,7 +156,7 @@
     [_collectionView reloadData];
 }
 
-- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     NSInteger indexCount = indexPaths.count;
     NSInteger entityCount = entities.count;
     if (indexCount != entityCount)

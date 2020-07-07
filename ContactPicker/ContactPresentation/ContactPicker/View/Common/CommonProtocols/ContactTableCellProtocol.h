@@ -12,7 +12,8 @@
 
 @protocol ContactTableCellProtocol <NSObject>
 - (void)setSelect;
-- (void)configForModel: (ContactViewEntity *) entity;
+- (void)updateCellWithContact: (ContactViewEntity *) entity;
+
 @end
 
 #endif /* ContactTableCellProtocol_h */

@@ -72,10 +72,10 @@
     [self.delegate removeCell:self->_currentIdentifier];
 }
 
-- (void)binding:(ContactViewEntity *)entity{
-    _currentIdentifier  = entity.identifier;
+- (void)binding:(NSString *)identifier label:(NSString *)label {
+    _currentIdentifier  = identifier;
     weak_self
-    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+    [[ImageManager instance] imageForKey:identifier label:label block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
         [imageObservable bindAndFire:^(AvatarObj * imgObj) {
             strong_self
             if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {

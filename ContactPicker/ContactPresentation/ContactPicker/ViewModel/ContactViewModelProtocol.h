@@ -19,7 +19,7 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 @property DataBinding<NSMutableDictionary *>        * contactBookObservable;
 @property DataBinding<NSIndexPath *>                * selectedContactRemoveObservable;
 @property DataBinding<NSIndexPath *>                * selectedContactAddedObservable;
-@property DataBinding<NSArray<NSIndexPath *> *>     * dataSourceNeedReloadObservable;
+@property DataBinding<NSArray<NSIndexPath *> *>     * removeContactObservable;
 @property DataBinding<NSIndexPath *>                * cellNeedRemoveSelectedObservable;
 
 #pragma mark - ContactTableDataSource methods

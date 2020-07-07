@@ -142,9 +142,9 @@
     }
 }
 
-- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
-    [_tableNode insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [_tableNode reloadData];
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {

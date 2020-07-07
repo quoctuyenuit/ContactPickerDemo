@@ -46,7 +46,7 @@
     NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
-- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
@@ -94,13 +94,13 @@
             [strongSelf.viewModel searchContactWithKeyName:searchText block:^(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (strongSelf && !error) {
-                    [strongSelf insertCells:indexPaths forEntities:contacts];
+                    [strongSelf insertContactFromIndexPath:indexPaths forEntities:contacts];
                 }
             }];
         }
     }];
     
-    [self.viewModel.dataSourceNeedReloadObservable binding:^(NSArray<NSIndexPath *> * removedIndexPaths) {
+    [self.viewModel.removeContactObservable binding:^(NSArray<NSIndexPath *> * removedIndexPaths) {
         strong_self
         if (strongSelf) {
             [strongSelf removeCells:removedIndexPaths];
@@ -129,7 +129,7 @@
             [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
             if (!error) {
                 weakSelf.contactHadLoad = YES;
-                [weakSelf insertCells:indexPaths forEntities:contacts];
+                [weakSelf insertContactFromIndexPath:indexPaths forEntities:contacts];
             } else {
                 switch (error.code) {
                     case NO_CONTENT_ERROR_CODE:

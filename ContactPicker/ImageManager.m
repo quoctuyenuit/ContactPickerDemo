@@ -13,12 +13,15 @@
 
 #define DEBUG_MODE          0
 #define CACHE_SIZE          10 * 1024 * 1024
+#define COLOR_SOURCE_FILE   @"gradient_colors"
+#define JSON_COLOR_KEY      @"colors"
 
 @interface ImageManager ()
-- (UIImage *)_createGradientImageWithSize:(CGSize) size colors:(NSArray *) colors;
 - (instancetype)_initWithSize:(NSInteger) size;
-- (UIImage *)_randomImage;
 - (void)_createColorsTable;
+- (NSDictionary *)_JSONFromFile:(NSString *)filePath;
+- (UIImage *)_randomImage;
+- (UIImage *)_createGradientImageWithSize:(CGSize) size colors:(NSArray *) colors;
 - (ImageObservable *)_generateImageFromLabel:(NSString *) label forKey:(NSString *)key;
 @end
 
@@ -36,17 +39,32 @@
     return sharedInstance;
 }
 
+#pragma mark - Private methods
 - (instancetype)_initWithSize:(NSInteger) size {
     _imageCache                 = [[NSCache alloc] init];
     _contactAdapter             = [[ContactAdapter alloc] init];
-    _colorsTable                = [[NSMutableArray alloc] init];
     _generatedImages            = [[NSMutableArray alloc] init];
     
-    _backgroundQueue            = dispatch_queue_create("ContactBus search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
+    _backgroundQueue            = dispatch_queue_create("ImageManage queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     
     [_imageCache setTotalCostLimit:size];
     [self _createColorsTable];
     return self;
+}
+
+- (void)_createColorsTable {
+    NSDictionary * dict = [self _JSONFromFile:COLOR_SOURCE_FILE];
+    NSAssert([dict.allKeys containsObject:JSON_COLOR_KEY], @"Invalid format of json file");
+    NSArray * colors = [dict objectForKey:JSON_COLOR_KEY];
+    
+    for (NSArray * gradientColor in colors) {
+        NSArray * color = [gradientColor map:^id _Nonnull(NSString * _Nonnull obj) {
+            return (id)[UIColor colorFromHex:obj].CGColor;
+        }];
+        
+        [_generatedImages addObject: [self _createGradientImageWithSize:AVATAR_SIZE
+                                                                 colors:color]];
+    }
 }
 
 - (UIImage *)_randomImage {
@@ -66,20 +84,12 @@
     return image;
 }
 
-- (void)_createColorsTable {
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#7bd5f5"].CGColor, (id)[UIColor colorFromHex:@"#787ff6"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#787ff6"].CGColor, (id)[UIColor colorFromHex:@"#4adede"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#4adede"].CGColor, (id)[UIColor colorFromHex:@"#1ca7ec"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#667db6"].CGColor, (id)[UIColor colorFromHex:@"#0082c8"].CGColor, (id)[UIColor colorFromHex:@"#0082c8"].CGColor, (id)[UIColor colorFromHex:@"#667db6"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#ff9190"].CGColor, (id)[UIColor colorFromHex:@"#fdc094"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#659999"].CGColor, (id)[UIColor colorFromHex:@"#f4791f"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#ff9a9e"].CGColor, (id)[UIColor colorFromHex:@"#fecfef"].CGColor]];
-    [_colorsTable addObject:@[(id)[UIColor colorFromHex:@"#c79081"].CGColor, (id)[UIColor colorFromHex:@"#dfa579"].CGColor]];
-    
-    for (NSArray * colors in _colorsTable) {
-        [_generatedImages addObject: [self _createGradientImageWithSize:CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)
-                                                                  colors:colors]];
-    }
+- (NSDictionary *)_JSONFromFile:(NSString *)filePath
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:filePath ofType:@"json"];
+    NSAssert(path != nil, @"File path: %@ \nnot exists!", filePath);
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    return [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 }
 
 - (ImageObservable *)_generateImageFromLabel:(NSString *) label forKey:(NSString *)key {
@@ -100,8 +110,8 @@
         if (strongSelf) {
             for (NSString * key in images.allKeys) {
                 NSData * imageData = [images objectForKey:key];
-                UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData] scaledToFillSize:CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT)];
-
+                UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData]
+                                         scaledToFillSize:AVATAR_SIZE];
                 ImageObservable * imageObservable = [strongSelf.imageCache objectForKey:key];
                 AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO identififer:key];
                 if (imageObservable) {

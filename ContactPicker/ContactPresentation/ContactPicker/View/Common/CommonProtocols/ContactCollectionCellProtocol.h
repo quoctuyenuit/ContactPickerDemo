@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<ContactCollectionCellDelegate> delegate;
 
-- (void)binding: (ContactViewEntity *) entity;
+- (void)binding:(NSString *) identifier label:(NSString *) label;
 
 @end
 

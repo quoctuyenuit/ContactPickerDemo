@@ -46,7 +46,8 @@
         _boundNode              = [[ASDisplayNode alloc] init];
         self.backgroundColor    = UIColor.whiteColor;
         
-        _collectionNode.showsHorizontalScrollIndicator  = NO;
+//        _collectionNode.showsHorizontalScrollIndicator  = NO;
+        _collectionNode.view.showsHorizontalScrollIndicator = NO;
         _collectionNode.dataSource                      = self;
         _collectionNode.delegate                        = self;
         
@@ -65,6 +66,7 @@
     }
     return self;
 }
+
 
 - (void)layoutInBound {
     __weak typeof(self) weakSelf = self;

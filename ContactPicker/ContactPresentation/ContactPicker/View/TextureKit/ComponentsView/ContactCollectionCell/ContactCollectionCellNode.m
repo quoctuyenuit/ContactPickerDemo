@@ -38,7 +38,7 @@
         
         self.automaticallyManagesSubnodes = YES;
         
-//        [self binding:contact];
+        [self binding:_currentIdentifier label:_currentKeyName];
 #if DEBUG_MODE
         _avatarNode.backgroundColor         = UIColor.greenColor;
         _clearBtnNode.backgroundColor       = UIColor.redColor;
@@ -65,25 +65,24 @@
 
 - (void)didEnterDisplayState {
     [super didEnterDisplayState];
-    weak_self
-    [[ImageManager instance] imageForKey:_currentIdentifier label:_currentKeyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
-        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
-            strong_self
-            if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    strong_self
-                    if (strongSelf) {
-                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                        [strongSelf->_avatarNode configWithImage:imgObj.image withTitle:label];
-                    }
-                });
-            }
-        }];
-    }];
 }
 
-- (void)binding:(nonnull ContactViewEntity *)entity {
-   
+- (void)binding:(NSString *)identifier label:(NSString *)label {
+   weak_self
+   [[ImageManager instance] imageForKey:identifier label:label block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+       [imageObservable bindAndFire:^(AvatarObj * imgObj) {
+           strong_self
+           if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   strong_self
+                   if (strongSelf) {
+                       NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                       [strongSelf->_avatarNode configWithImage:imgObj.image withTitle:label];
+                   }
+               });
+           }
+       }];
+   }];
 }
 
 - (void)clearAction:(id) sender {

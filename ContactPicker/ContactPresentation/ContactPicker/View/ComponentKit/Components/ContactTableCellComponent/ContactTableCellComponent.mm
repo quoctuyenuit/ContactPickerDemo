@@ -39,7 +39,7 @@
     
     ContactTableCellComponent * c = [super newWithComponent:[CKComponent newWithView:{[ContactTableViewCell class], {
         {@selector(setUserInteractionEnabled:), @NO},
-        {@selector(configForModel:), contact},
+        {@selector(updateCellWithContact:), contact},
         {@selector(configCheckBox:), _state},
     }} size:{.height = TABLE_CELL_HEIGHT}]];
     
@@ -55,7 +55,7 @@
     return c;
 }
 
-- (void)configForModel:(ContactViewEntity *)entity {
+- (void)updateCellWithContact:(ContactViewEntity *)entity {
 }
 
 - (void)setSelect {

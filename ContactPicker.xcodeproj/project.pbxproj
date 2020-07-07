@@ -45,6 +45,7 @@
 		B088FDAA24B2D16000C893FC /* TableModelSection.m in Sources */ = {isa = PBXBuildFile; fileRef = B088FDA924B2D16000C893FC /* TableModelSection.m */; };
 		B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */; };
 		B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A04B2B24A0F91E00BED688 /* TabbarOnTopItemView.m */; };
+		B0AAA6F724B464CC00B7E0E3 /* gradient_colors.json in Resources */ = {isa = PBXBuildFile; fileRef = B0AAA6E324B4630300B7E0E3 /* gradient_colors.json */; };
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
 		B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43B24878BEA00E557E1 /* ContactDAL.m */; };
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
@@ -59,6 +60,8 @@
 		B0C254FD2497910000ECA551 /* ContactTableControllerTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FC2497910000ECA551 /* ContactTableControllerTexture.m */; };
 		B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FF2497912300ECA551 /* ContactTableCellNode.m */; };
 		B0C25506249798DE00ECA551 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C25505249798DE00ECA551 /* Utilities.m */; };
+		B0CB450424B33F2A005C085A /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */; };
+		B0CB450524B33F2A005C085A /* AsyncDisplayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */; };
 		B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED99248E266C001E7246 /* ContactBusTests.m */; };
 		B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */; };
@@ -183,6 +186,27 @@
 			remoteGlobalIDString = D4BC578823E37A1B0075D688;
 			remoteInfo = CKSwiftTests;
 		};
+		B0CB44F024B33F1D005C085A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B35061DA1B010EDF0018CF92;
+			remoteInfo = AsyncDisplayKit;
+		};
+		B0CB44F224B33F1D005C085A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 058D09BC195D04C000B7D73C;
+			remoteInfo = AsyncDisplayKitTests;
+		};
+		B0CB44F424B33F1D005C085A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 057D02BF1AC0A66700C7AC3C;
+			remoteInfo = AsyncDisplayKitTestHost;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -193,6 +217,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				B0C1534624AF22BA005D63B7 /* CKSwift.framework in Embed Frameworks */,
+				B0CB450524B33F2A005C085A /* AsyncDisplayKit.framework in Embed Frameworks */,
 				B0C1534A24AF22BA005D63B7 /* RenderCore.framework in Embed Frameworks */,
 				B0C1534824AF22BA005D63B7 /* ComponentKit.framework in Embed Frameworks */,
 			);
@@ -286,6 +311,7 @@
 		B0A04B2A24A0F91E00BED688 /* TabbarOnTopItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopItemView.h; sourceTree = "<group>"; };
 		B0A04B2B24A0F91E00BED688 /* TabbarOnTopItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TabbarOnTopItemView.m; sourceTree = "<group>"; };
 		B0A04B2D24A1036700BED688 /* TabbarOnTopItemDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopItemDelegate.h; sourceTree = "<group>"; };
+		B0AAA6E324B4630300B7E0E3 /* gradient_colors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = gradient_colors.json; sourceTree = "<group>"; };
 		B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonView.h; sourceTree = "<group>"; };
 		B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckBoxButtonView.m; sourceTree = "<group>"; };
 		B0ABD43924878AAF00E557E1 /* ContactAdapterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAdapterProtocol.h; sourceTree = "<group>"; };
@@ -303,6 +329,7 @@
 		B0C254FF2497912300ECA551 /* ContactTableCellNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableCellNode.m; sourceTree = "<group>"; };
 		B0C25504249798DE00ECA551 /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		B0C25505249798DE00ECA551 /* Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AsyncDisplayKit.xcodeproj; path = "../../../Documents/Zalo Received Files/Texture copy/AsyncDisplayKit.xcodeproj"; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
 		B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModelTests.m; sourceTree = "<group>"; };
@@ -331,6 +358,7 @@
 				B0C1534924AF22BA005D63B7 /* RenderCore.framework in Frameworks */,
 				AB47BF2738D1D527DAC5AEC4 /* Pods_ContactPicker.framework in Frameworks */,
 				B0C1534724AF22BA005D63B7 /* ComponentKit.framework in Frameworks */,
+				B0CB450424B33F2A005C085A /* AsyncDisplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,6 +705,7 @@
 				B072C90B24AC3E4E0087BEED /* NSErrorExtension.m */,
 				B05CA07624AD7ABF00F68AE4 /* AvatarObj.h */,
 				B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */,
+				B0AAA6E324B4630300B7E0E3 /* gradient_colors.json */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -795,6 +824,16 @@
 			path = ContactTable;
 			sourceTree = "<group>";
 		};
+		B0CB44E924B33F1D005C085A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */,
+				B0CB44F324B33F1D005C085A /* AsyncDisplayKitTests.xctest */,
+				B0CB44F524B33F1D005C085A /* AsyncDisplayKitTestHost.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B0DAEBCE249091490002A4D0 /* ContactPicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -835,6 +874,7 @@
 		B0FB8C0024A0B6FE00E35B42 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */,
 				B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */,
 				0C453605A6182B184255EEEF /* Pods_ContactPicker.framework */,
 				1E4FD72C5D339BC818BFFF6F /* Pods_ContactPicker_ContactPickerUITests.framework */,
@@ -972,6 +1012,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = B0CB44E924B33F1D005C085A /* Products */;
+					ProjectRef = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
+				},
+				{
 					ProductGroup = B0C1531724AF22A9005D63B7 /* Products */;
 					ProjectRef = B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */;
 				},
@@ -1084,6 +1128,27 @@
 			remoteRef = B0C1534324AF22A9005D63B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AsyncDisplayKit.framework;
+			remoteRef = B0CB44F024B33F1D005C085A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0CB44F324B33F1D005C085A /* AsyncDisplayKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AsyncDisplayKitTests.xctest;
+			remoteRef = B0CB44F224B33F1D005C085A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0CB44F524B33F1D005C085A /* AsyncDisplayKitTestHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = AsyncDisplayKitTestHost.app;
+			remoteRef = B0CB44F424B33F1D005C085A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1094,6 +1159,7 @@
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
 				193E33362484F31A00C5735D /* Main.storyboard in Resources */,
+				B0AAA6F724B464CC00B7E0E3 /* gradient_colors.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

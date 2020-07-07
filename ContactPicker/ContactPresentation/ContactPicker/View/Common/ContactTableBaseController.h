@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setupDatasets;
 - (void)showErrorView:(ResponseViewType) type;
 - (void)reloadTable;
-- (void)insertCells:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities;
+- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *) indexPaths forEntities:(NSArray<ContactViewEntity *> *) entities;
 - (void)removeCells:(NSArray<NSIndexPath *> *) indexPaths;
 - (void)contactHadRemoved:(NSIndexPath *) indexPath;
 - (void)updateCells:(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *) indexsNeedUpdate;

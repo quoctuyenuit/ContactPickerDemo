@@ -46,16 +46,18 @@
         _contactDescriptionLabel  = [[ASTextNode alloc] init];
         _checkBox                 = [[CheckBoxNode alloc] init];
         
-        _avatar.style.preferredSize               = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
-        _checkBox.style.preferredSize             = CGSizeMake(CHECK_BOX_HEIGHT, CHECK_BOX_HEIGHT);
-        _checkBox.userInteractionEnabled          = NO;
+        _avatar.style.preferredSize         = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
+        _checkBox.style.preferredSize       = CGSizeMake(CHECK_BOX_HEIGHT, CHECK_BOX_HEIGHT);
+        _checkBox.userInteractionEnabled    = NO;
         
-        self.automaticallyManagesSubnodes = YES;
-        [self configForModel:_contact];
+        self.automaticallyManagesSubnodes   = YES;
+        
+        [self updateCellWithContact:_contact];
 #if DEBUG_MODE
-        _avatar.backgroundColor                   = UIColor.greenColor;
+        _avatar.backgroundColor                   = UIColor.redColor;
         _contactNameLabel.backgroundColor         = UIColor.grayColor;
         _contactDescriptionLabel.backgroundColor  = UIColor.blueColor;
+        self.backgroundColor                      = UIColor.greenColor;
 #endif
     }
     return self;
@@ -104,34 +106,33 @@
     }]]];
 }
 
-- (void)didEnterPreloadState {
-    [super didEnterPreloadState];
-}
-
 #pragma mark - Subclassing
 - (void)setSelect {
     _checkBox.isChecked = !_checkBox.isChecked;
 }
 
-- (void)configForModel:(ContactViewEntity *)entity {
-    _contactNameLabel.attributedText        = entity.fullName;
-    _contactDescriptionLabel.attributedText = entity.phone;
-    _checkBox.isChecked                     = entity.isChecked;
-    weak_self
-    [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
-        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
-            strong_self
-            if (strongSelf && [strongSelf->_contact.identifier isEqualToString:imgObj.identifier]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    strong_self
-                    if (strongSelf) {
-                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                        [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
-                    }
-                });
-            }
+- (void)updateCellWithContact:(ContactViewEntity *)entity {
+    if (entity) {
+        _contactNameLabel.attributedText        = entity.fullName;
+        _contactDescriptionLabel.attributedText = entity.phone;
+        _checkBox.isChecked                     = entity.isChecked;
+        
+        weak_self
+        [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
+            [imageObservable bindAndFire:^(AvatarObj * imgObj) {
+                strong_self
+                if (strongSelf && [strongSelf->_contact.identifier isEqualToString:imgObj.identifier]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        strong_self
+                        if (strongSelf) {
+                            NSString * label = imgObj.isGenerated ? imgObj.label : @"";
+                            [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
+                        }
+                    });
+                }
+            }];
         }];
-    }];
+    }
 }
 @end
 #endif

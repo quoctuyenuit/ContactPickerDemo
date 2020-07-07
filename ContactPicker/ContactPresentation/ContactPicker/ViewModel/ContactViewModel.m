@@ -26,7 +26,9 @@
 #define CONTACT_BATCH_SIZE              200
 #define STRONG_SELF_DEALLOCATED_MSG     @"strongSelf had deallocated"
 
-@interface ContactViewModel()
+@interface ContactViewModel() {
+    NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> *_contactOnViewBuffer;
+}
 - (void) _setupEvents;
 - (void) _initContactOnView;
 - (void) _refreshContactOnView;
@@ -42,7 +44,7 @@
 
 @synthesize cellNeedRemoveSelectedObservable;
 
-@synthesize dataSourceNeedReloadObservable;
+@synthesize removeContactObservable;
 
 @synthesize selectedContactRemoveObservable;
 
@@ -55,6 +57,7 @@
     
     //    List source initialization
     _contactsOnView         = [[NSMutableDictionary alloc] init];
+    _contactOnViewBuffer    = _contactsOnView;
     _listSelectedContacts   = [[NSMutableArray alloc] init];
     _listSectionKeys        = [[NSMutableArray alloc] init];
     
@@ -62,7 +65,7 @@
     self.searchObservable                   = [[DataBinding alloc] initWithValue:@""];
     self.contactBookObservable              = [[DataBinding alloc] initWithValue:nil];
     self.cellNeedRemoveSelectedObservable   = [[DataBinding alloc] initWithValue:nil];
-    self.dataSourceNeedReloadObservable     = [[DataBinding alloc] initWithValue:nil];
+    self.removeContactObservable     = [[DataBinding alloc] initWithValue:nil];
     self.selectedContactAddedObservable     = [[DataBinding alloc] initWithValue:nil];
     self.selectedContactRemoveObservable    = [[DataBinding alloc] initWithValue:nil];
     
@@ -327,22 +330,48 @@
     dispatch_async(_backgroundSerialQueue, ^{
         strong_self
         if (strongSelf) {
+//            if ([key isEqualToString:@""]) {
+//                [strongSelf _refreshContactOnView];
+//                strongSelf->_contactsOnView = strongSelf->_contactOnViewBuffer;
+//                NSMutableArray * contacts = [NSMutableArray array];
+//                NSMutableArray * indexPaths = [NSMutableArray array];
+//
+//                for (int section = 0; section < strongSelf->_listSectionKeys.count; section++) {
+//                    NSString * key = [strongSelf->_listSectionKeys objectAtIndex:section];
+//                    NSArray * rowsInSection = [strongSelf->_contactsOnView objectForKey:key];
+//                    for (int row = 0; row < rowsInSection.count; row++) {
+//                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+//                        id contact = [rowsInSection objectAtIndex:row];
+//
+//                        [contacts addObject:contact];
+//                        [indexPaths addObject:indexPath];
+//                    }
+//                }
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    block(contacts, indexPaths, nil);
+//                });
+//                return;
+//            }
+            
             NSArray * allIndexes = [strongSelf _getAllIndexPaths];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [strongSelf _refreshContactOnView];
-                strongSelf.dataSourceNeedReloadObservable.value = allIndexes;
+                strongSelf.removeContactObservable.value = allIndexes;
             });
             [strongSelf.contactBus searchContactByName:key block:^(NSArray<id<ContactBusEntityProtocol>> *contacts, NSError *error) {
-                
-                NSArray<ContactViewEntity *> *contactEntity = [contacts map:^ContactViewEntity * _Nonnull(id<ContactBusEntityProtocol> _Nonnull obj) {
-                    return [[ContactViewEntity alloc] initWithBusEntity:obj];
-                }];
-                
-                [strongSelf _addContacts:contactEntity block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        block(contactEntity, updatedIndexPaths, nil);
-                    });
-                }];
+                if (!error) {
+                    NSArray<ContactViewEntity *> *contactEntity = [contacts map:^ContactViewEntity * _Nonnull(id<ContactBusEntityProtocol> _Nonnull obj) {
+                        return [[ContactViewEntity alloc] initWithBusEntity:obj];
+                    }];
+                    
+                    [strongSelf _addContacts:contactEntity block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            block(contactEntity, updatedIndexPaths, nil);
+                        });
+                    }];
+                } else {
+                    block(nil, nil, error);
+                }
             }];
         }
     });

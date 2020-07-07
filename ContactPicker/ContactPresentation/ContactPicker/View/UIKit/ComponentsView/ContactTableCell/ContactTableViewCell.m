@@ -130,7 +130,7 @@
     [self setupViews];
 }
 
-- (void)configForModel:(ContactViewEntity *)entity {
+- (void)updateCellWithContact:(ContactViewEntity *)entity {
     _currentIdentifier                      = entity.identifier;
     _contactNameLabel.attributedText        = entity.fullName;
     _contactDescriptionLabel.attributedText = entity.phone;

@@ -66,7 +66,7 @@
     }
 
     ContactViewEntity *entity = [self->_viewModel contactAtIndex: indexPath];
-    [cell configForModel:entity];
+    [cell updateCellWithContact:entity];
     
     return cell;
 }
@@ -135,11 +135,9 @@
     }
 }
 
-- (void)insertCells:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
     DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
-    [_tableView beginUpdates];
-    [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [_tableView endUpdates];
+    [_tableView reloadData];
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
