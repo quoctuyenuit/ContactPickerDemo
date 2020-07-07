@@ -118,9 +118,6 @@
 }
 
 - (void)showSelectedContactsArea:(BOOL)isShow {
-    _contactSelectedHeightConstraint.constant = isShow ? 80 + self.view.safeAreaInsets.bottom : 0;
-    [_contactSelectedView layoutIfNeeded];
-    
     weak_self
     [UIView animateWithDuration:0.2 animations:^{
         strong_self
@@ -129,6 +126,8 @@
             strongSelf->_contactSelectedKeyboardView.alpha = isShow ? 1 : 0;
         }
     }];
+    _contactSelectedHeightConstraint.constant = isShow ? 80 + self.view.safeAreaInsets.bottom : 0;
+    [_contactSelectedView layoutIfNeeded];
 }
 
 @end

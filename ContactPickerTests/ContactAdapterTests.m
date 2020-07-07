@@ -27,7 +27,7 @@
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    self.contactAdapter = nil;
+//    self.contactAdapter = nil;
     [super tearDown];
 }
 
@@ -45,108 +45,83 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void) testLoadContacts {
+- (void)testLoadContacts {
     XCTestExpectation *expectation = [self expectationWithDescription:@"load contacts"];
     
-    [self.contactAdapter loadContactsWithBatchSize: 20 completion: ^(NSArray<ContactDAL *> * listContacts, NSError * error, BOOL isDone) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            if (isDone) {
-                XCTAssertNotNil(listContacts, @"listContacts return nil");
-                XCTAssertNil(error, @"Error is not nil");
-                [expectation fulfill];
-            }
-        });
+    [self.contactAdapter loadContactsWithBlock:^(NSArray<id<ContactDALProtocol>> *contacts, NSError *error) {
+        XCTAssertNotNil(contacts, @"listContacts return nil");
+        XCTAssertNil(error, @"Error is not nil");
+        [expectation fulfill];
     }];
     
     [self waitForExpectations:@[expectation] timeout:5];
 }
 
-- (void) testLoadContactByIdWithInvalidInput {
-    XCTestExpectation * emptyExpectation = [self expectationWithDescription:@"load contact by id with empty"];
-    XCTestExpectation * wrongDataExpectation = [self expectationWithDescription:@"load contact by id with wrong data"];
+- (void)testStressLoadContacts {
+    int numberStress = 100;
+    NSMutableArray * expectationList = [NSMutableArray array];
     
-    [self.contactAdapter loadContactById:@"" isReload: YES completion:^(ContactDAL * contact, NSError * error) {
-        XCTAssertNotNil(error, @"No error when load empty identifier");
-        [emptyExpectation fulfill];
-    }];
-    
-    [self.contactAdapter loadContactById:@"wrongdata" isReload: YES completion:^(ContactDAL * contact, NSError * error) {
-        XCTAssertNotNil(error, @"No error when load wrong identifier");
-        [wrongDataExpectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:1 handler:nil];
-}
-
-- (void) testLoadContactByIdWithValidInput {
-    XCTestExpectation * loadContactsExpectation = [self expectationWithDescription:@"load contact expectation"];
-    XCTestExpectation * validIdentifierExpectation = [self expectationWithDescription:@"load contact by id with valid data"];
-    
-    [self.contactAdapter loadContactsWithBatchSize: 20 completion: ^(NSArray<ContactDAL *> * listContacts, NSError * error, BOOL isDone) {
-        if (isDone) {
-            XCTAssertNotNil(listContacts, @"listContacts return nil");
+    for (int i = 0; i < numberStress; i++) {
+        NSLog(@"[Test]current i: %d", i);
+        XCTestExpectation * expect = [self expectationWithDescription:@"load contacts"];
+        [expectationList addObject:expect];
+        [self.contactAdapter loadContactsWithBlock:^(NSArray<id<ContactDALProtocol>> *contacts, NSError *error) {
+            XCTAssertNotNil(contacts, @"listContacts return nil");
             XCTAssertNil(error, @"Error is not nil");
-            
-            ContactDAL * exampleContact = listContacts.firstObject;
-            XCTAssertNotNil(exampleContact, @"listContacts is empty");
-            
-            [loadContactsExpectation fulfill];
-            [self.contactAdapter loadContactById:exampleContact.identifier isReload: YES completion:^(ContactDAL * contact, NSError * error) {
-                XCTAssertNotNil(contact, @"Contact from valid id is nil");
-                XCTAssertNil(error, @"Load contact from valid id have error");
-                [validIdentifierExpectation fulfill];
-            }];
-        }
-       }];
+            [expect fulfill];
+        }];
+    }
     
-     [self waitForExpectationsWithTimeout:10 handler:nil];
+    [self waitForExpectations:expectationList timeout:5];
 }
 
-- (void) testLoadBatchOfContactWithInvalidInput {
-    XCTestExpectation * emptyExpectation = [self expectationWithDescription:@"load contact by batch with empty"];
-    XCTestExpectation * wrongDataExpectation = [self expectationWithDescription:@"load contact by batch with wrong data"];
+- (void)testLoadImages {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"load contacts"];
     
-    [self.contactAdapter loadDetailContactByBatch:@[] isReload: YES completion:^(NSArray * contacts, NSError * error) {
-        XCTAssertTrue(contacts.count == 0, @"Load non-empty contacts from empty identifiers");
-        XCTAssertNil(error, @"Load batch contact with empty identifiers have error");
-        [emptyExpectation fulfill];
+    [self.contactAdapter loadContactImagesWithBlock:^(NSDictionary<NSString *,NSData *> *images, NSError *error) {
+        XCTAssertNotNil(images, @"listContacts return nil");
+        XCTAssertNil(error, @"Error is not nil");
+        [expectation fulfill];
     }];
     
-    [self.contactAdapter loadDetailContactByBatch:@[@"123"] isReload: YES completion:^(NSArray * contacts, NSError * error) {
-        XCTAssertTrue(contacts.count == 0, @"Load contact by batch had load wrong infor");
-        XCTAssertNil(error, @"Load contact by batch have error");
-        [wrongDataExpectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:1 handler:nil];
+    [self waitForExpectations:@[expectation] timeout:5];
 }
 
-- (void) testLoadBatchOfContactWithValidInput {
-    XCTestExpectation * loadContactsExpectation = [self expectationWithDescription:@"load contact expectation"];
-    XCTestExpectation * validIdentifierExpectation = [self expectationWithDescription:@"load contact by id with valid data"];
+- (void)testStressLoadImages {
+    int numberStress = 100;
+    NSMutableArray * expectationList = [NSMutableArray array];
     
-    [self.contactAdapter loadContactsWithBatchSize: 20 completion:^(NSArray<ContactDAL *> * listContacts, NSError * error, BOOL isDone) {
-        if (isDone) {
-            XCTAssertNotNil(listContacts, @"listContacts return nil");
+    for (int i = 0; i < numberStress; i++) {
+        NSLog(@"[Test]current i: %d", i);
+        XCTestExpectation * expect = [self expectationWithDescription:@"load contact images"];
+        [expectationList addObject:expect];
+        [self.contactAdapter loadContactImagesWithBlock:^(NSDictionary<NSString *,NSData *> *images, NSError *error) {
+            XCTAssertNotNil(images, @"listContacts return nil");
             XCTAssertNil(error, @"Error is not nil");
-            XCTAssertTrue(listContacts.count >= 3, @"list contact < 3");
-            
-            NSArray * identifiers = [[listContacts subarrayWithRange:NSMakeRange(0, 3)] map:^NSString* _Nonnull(ContactDAL *  _Nonnull obj) {
-                return obj.identifier;
-            }];
-            
-            XCTAssertTrue(identifiers.count == 3, @"Map in NSArray extension is wrong");
-            
-            [loadContactsExpectation fulfill];
-            [self.contactAdapter loadDetailContactByBatch:identifiers isReload: YES completion:^(NSArray * batchOfContact, NSError * error) {
-                XCTAssertNotNil(batchOfContact, @"Contacts from list valid id is nil");
-                XCTAssertTrue(batchOfContact.count == 3, @"Load missing contacts in batch");
-                XCTAssertNil(error, @"Load contact from valid id have error");
-                [validIdentifierExpectation fulfill];
-            }];
-        }
-    }];
-    [self waitForExpectationsWithTimeout:5 handler:nil];
+            [expect fulfill];
+        }];
+    }
+    
+    [self waitForExpectations:expectationList timeout:5];
 }
 
+- (void)testLoadContactByIdWithInvalidInput {
+    XCTestExpectation * expect = [self expectationWithDescription:@"load contact by id"];
+    [self.contactAdapter loadContactById:@"abc" block:^(id<ContactDALProtocol> contact, NSError *error) {
+        XCTAssertNil(contact, @"contact is not nil with invalid input");
+        XCTAssertNotNil(error, @"erorr is not nil with invalid input");
+        [expect fulfill];
+    }];
+    [self waitForExpectations:@[expect] timeout:2];
+}
+
+- (void)testGetImageByIdWithInvalidInput {
+    XCTestExpectation * expect = [self expectationWithDescription:@"load contact by id"];
+    [self.contactAdapter getImageById:nil block:^(NSData *image, NSError *error) {
+        XCTAssertNil(image, @"Return image is not nil with invalid id");
+        XCTAssertNotNil(error, @"erorr is not nil with invalid input");
+        [expect fulfill];
+    }];
+    [self waitForExpectations:@[expect] timeout:2];
+}
 @end

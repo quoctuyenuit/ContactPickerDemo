@@ -13,10 +13,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AvatarObj : NSObject
-@property(nonatomic, readwrite) NSString    *identifier;
-@property(nonatomic, readwrite) UIImage     *image;
-@property(nonatomic, readwrite) NSString    *label;
-@property(nonatomic, readwrite) BOOL        isGenerated;
+@property(nonatomic, readonly) NSString    *identifier;
+@property(nonatomic, readonly) UIImage     *image;
+@property(nonatomic, readonly) NSString    *label;
+@property(nonatomic, assign) BOOL           isGenerated;
 
 - (instancetype) initWithImage:(UIImage *) image label:(NSString *) label isGenerated:(BOOL) isGenerated identififer:(NSString *) identifier;
 @end

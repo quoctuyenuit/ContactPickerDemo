@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DataBinding.h"
 #import "ContactViewEntity.h"
-#import "BusinessLayerProtocol.h"
+#import "ContactBusinessLayerProtocol.h"
 #import "ContactViewModelProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactViewModel : NSObject<ContactViewModelProtocol>
 
-@property(nonatomic, readonly) id<BusinessLayerProtocol>            contactBus;
+@property(nonatomic, readonly) id<ContactBusinessLayerProtocol>            contactBus;
 @property(nonatomic, readonly) NSMutableArray<NSString *>           *listSectionKeys;
 @property(nonatomic, readonly) NSMutableArray<ContactViewEntity *>  *listSelectedContacts;
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readonly) dispatch_queue_t     backgroundConcurrentQueue;
 @property(nonatomic, readonly) dispatch_queue_t     backgroundSerialQueue;
 
-- (id)initWithBus: (id<BusinessLayerProtocol>) bus;
+- (id)initWithBus: (id<ContactBusinessLayerProtocol>) bus;
 
 - (ContactViewEntity *) contactOfIdentifier: (NSString *) identifier name: (NSString *) name;
 

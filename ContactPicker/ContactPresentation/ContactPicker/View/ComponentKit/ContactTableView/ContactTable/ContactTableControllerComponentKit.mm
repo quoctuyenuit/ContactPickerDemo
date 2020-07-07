@@ -191,7 +191,6 @@
         [self.keyboardAppearanceDelegate hideKeyboard];
 }
 
-
 - (void)tableIndexView:(nonnull TableIndexView *)indexView didSelectAt:(NSInteger)index {
     while (index < [_viewModel numberOfSection] && [_viewModel numberOfContactInSection:index] == 0) {
         index++;

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BusinessLayerProtocol.h"
+#import "ContactBusinessLayerProtocol.h"
 #import "ContactAdapterProtocol.h"
 #import "ContactBusEntity.h"
 #import "ContactBusEntityProtocol.h"
@@ -15,7 +15,7 @@
 #import "DataBinding.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactBusinessLayer : NSObject<BusinessLayerProtocol> {
+@interface ContactBusinessLayer : NSObject<ContactBusinessLayerProtocol> {
     id<ContactAdapterProtocol> _contactAdapter; 
 }
 @property(nonatomic, readonly) id<ContactAdapterProtocol>       contactAdapter;

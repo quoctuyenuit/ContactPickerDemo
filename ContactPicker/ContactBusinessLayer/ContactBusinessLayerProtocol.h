@@ -16,7 +16,7 @@ typedef void(^BusinessResponseListBlock)(NSArray<id<ContactBusEntityProtocol>> *
 typedef void(^BusinessResponseContactBlock)(id<ContactBusEntityProtocol> contact, NSError * error);
 typedef void(^BusinessResponseListImageBlock)(NSDictionary<NSString *, UIImage *> * images, NSError * error);
 
-@protocol BusinessLayerProtocol <NSObject>
+@protocol ContactBusinessLayerProtocol <NSObject>
 @property(nonatomic, readwrite) DataBinding< NSArray<id<ContactBusEntityProtocol>> *> *contactDidChangedObservable;
 
 @required

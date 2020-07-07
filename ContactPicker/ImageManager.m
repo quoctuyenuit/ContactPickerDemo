@@ -132,14 +132,12 @@
     NSAssert(key, @"key is nil");
     
     weak_self
-    __weak typeof(key) weakKey = key;
-    __weak typeof(label) weakLabel = label;
     dispatch_async(_backgroundQueue, ^{
         strong_self
         if (strongSelf) {
-            ImageObservable *imageObservable = [strongSelf.imageCache objectForKey:weakKey];
+            ImageObservable *imageObservable = [strongSelf.imageCache objectForKey:key];
             if (!imageObservable) {
-                imageObservable = [strongSelf _generateImageFromLabel:weakLabel forKey:weakKey];
+                imageObservable = [strongSelf _generateImageFromLabel:label forKey:key];
             }
             block(imageObservable);
         }

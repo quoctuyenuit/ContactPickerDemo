@@ -42,6 +42,7 @@
 		B07A8D7C2498B8B400A3B27F /* CheckBoxNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D7B2498B8B400A3B27F /* CheckBoxNode.m */; };
 		B07A8D842498CED700A3B27F /* ContactWithSearchTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A8D832498CED700A3B27F /* ContactWithSearchTexture.m */; };
 		B07AA26524A4A4A800D6F602 /* ContactTableHeaderComponentView.m in Sources */ = {isa = PBXBuildFile; fileRef = B07AA26424A4A4A800D6F602 /* ContactTableHeaderComponentView.m */; };
+		B082372924B48BBB007273D1 /* AsyncDisplayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B082371624B48B98007273D1 /* AsyncDisplayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B088FDAA24B2D16000C893FC /* TableModelSection.m in Sources */ = {isa = PBXBuildFile; fileRef = B088FDA924B2D16000C893FC /* TableModelSection.m */; };
 		B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */; };
 		B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A04B2B24A0F91E00BED688 /* TabbarOnTopItemView.m */; };
@@ -60,8 +61,6 @@
 		B0C254FD2497910000ECA551 /* ContactTableControllerTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FC2497910000ECA551 /* ContactTableControllerTexture.m */; };
 		B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C254FF2497912300ECA551 /* ContactTableCellNode.m */; };
 		B0C25506249798DE00ECA551 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C25505249798DE00ECA551 /* Utilities.m */; };
-		B0CB450424B33F2A005C085A /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */; };
-		B0CB450524B33F2A005C085A /* AsyncDisplayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */; };
 		B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED99248E266C001E7246 /* ContactBusTests.m */; };
 		B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */; };
@@ -87,6 +86,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 193E33272484F31A00C5735D;
 			remoteInfo = ContactPicker;
+		};
+		B082371524B48B98007273D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B082370D24B48B98007273D1 /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B35061DA1B010EDF0018CF92;
+			remoteInfo = AsyncDisplayKit;
+		};
+		B082371724B48B98007273D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B082370D24B48B98007273D1 /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 058D09BC195D04C000B7D73C;
+			remoteInfo = AsyncDisplayKitTests;
+		};
+		B082371924B48B98007273D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B082370D24B48B98007273D1 /* AsyncDisplayKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 057D02BF1AC0A66700C7AC3C;
+			remoteInfo = AsyncDisplayKitTestHost;
 		};
 		B0C1532924AF22A9005D63B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -186,27 +206,6 @@
 			remoteGlobalIDString = D4BC578823E37A1B0075D688;
 			remoteInfo = CKSwiftTests;
 		};
-		B0CB44F024B33F1D005C085A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B35061DA1B010EDF0018CF92;
-			remoteInfo = AsyncDisplayKit;
-		};
-		B0CB44F224B33F1D005C085A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 058D09BC195D04C000B7D73C;
-			remoteInfo = AsyncDisplayKitTests;
-		};
-		B0CB44F424B33F1D005C085A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 057D02BF1AC0A66700C7AC3C;
-			remoteInfo = AsyncDisplayKitTestHost;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -216,8 +215,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				B082372924B48BBB007273D1 /* AsyncDisplayKit.framework in Embed Frameworks */,
 				B0C1534624AF22BA005D63B7 /* CKSwift.framework in Embed Frameworks */,
-				B0CB450524B33F2A005C085A /* AsyncDisplayKit.framework in Embed Frameworks */,
 				B0C1534A24AF22BA005D63B7 /* RenderCore.framework in Embed Frameworks */,
 				B0C1534824AF22BA005D63B7 /* ComponentKit.framework in Embed Frameworks */,
 			);
@@ -267,7 +266,7 @@
 		B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusEntity.m; sourceTree = "<group>"; };
 		B02A510E2487EF2000B9CC1B /* ContactBusinessLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusinessLayer.h; sourceTree = "<group>"; };
 		B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusinessLayer.m; sourceTree = "<group>"; };
-		B02A51112487EFB800B9CC1B /* BusinessLayerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BusinessLayerProtocol.h; sourceTree = "<group>"; };
+		B02A51112487EFB800B9CC1B /* ContactBusinessLayerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactBusinessLayerProtocol.h; sourceTree = "<group>"; };
 		B05179172490861800B0A973 /* ContactCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactCollectionCell.h; sourceTree = "<group>"; };
 		B05179182490861800B0A973 /* ContactCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactCollectionCell.m; sourceTree = "<group>"; };
 		B057EAB624A3555200C86F0E /* ContactWithSearchComponentKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactWithSearchComponentKit.h; sourceTree = "<group>"; };
@@ -303,6 +302,7 @@
 		B07A8D832498CED700A3B27F /* ContactWithSearchTexture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactWithSearchTexture.m; sourceTree = "<group>"; };
 		B07AA26324A4A4A800D6F602 /* ContactTableHeaderComponentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableHeaderComponentView.h; sourceTree = "<group>"; };
 		B07AA26424A4A4A800D6F602 /* ContactTableHeaderComponentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableHeaderComponentView.m; sourceTree = "<group>"; };
+		B082370D24B48B98007273D1 /* AsyncDisplayKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AsyncDisplayKit.xcodeproj; path = "../../../Documents/Zalo Received Files/Texture copy/AsyncDisplayKit.xcodeproj"; sourceTree = "<group>"; };
 		B088FDA824B2D16000C893FC /* TableModelSection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableModelSection.h; sourceTree = "<group>"; };
 		B088FDA924B2D16000C893FC /* TableModelSection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableModelSection.m; sourceTree = "<group>"; };
 		B08D9CB8248F47BF00B871AE /* ContactDALProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactDALProtocol.h; sourceTree = "<group>"; };
@@ -329,7 +329,6 @@
 		B0C254FF2497912300ECA551 /* ContactTableCellNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableCellNode.m; sourceTree = "<group>"; };
 		B0C25504249798DE00ECA551 /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		B0C25505249798DE00ECA551 /* Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
-		B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AsyncDisplayKit.xcodeproj; path = "../../../Documents/Zalo Received Files/Texture copy/AsyncDisplayKit.xcodeproj"; sourceTree = "<group>"; };
 		B0CE78FC248CDB0F00E30F2D /* ContactAdapterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapterTests.m; sourceTree = "<group>"; };
 		B0E7ED99248E266C001E7246 /* ContactBusTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactBusTests.m; sourceTree = "<group>"; };
 		B0E7ED9B248E5AB7001E7246 /* ContactViewModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModelTests.m; sourceTree = "<group>"; };
@@ -358,7 +357,6 @@
 				B0C1534924AF22BA005D63B7 /* RenderCore.framework in Frameworks */,
 				AB47BF2738D1D527DAC5AEC4 /* Pods_ContactPicker.framework in Frameworks */,
 				B0C1534724AF22BA005D63B7 /* ComponentKit.framework in Frameworks */,
-				B0CB450424B33F2A005C085A /* AsyncDisplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,7 +502,7 @@
 			isa = PBXGroup;
 			children = (
 				B0979AF124889E32008D05F4 /* Entity */,
-				B02A51112487EFB800B9CC1B /* BusinessLayerProtocol.h */,
+				B02A51112487EFB800B9CC1B /* ContactBusinessLayerProtocol.h */,
 				B02A510E2487EF2000B9CC1B /* ContactBusinessLayer.h */,
 				B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */,
 			);
@@ -660,6 +658,16 @@
 				B07AA26424A4A4A800D6F602 /* ContactTableHeaderComponentView.m */,
 			);
 			path = HeaderSectionView;
+			sourceTree = "<group>";
+		};
+		B082370E24B48B98007273D1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B082371624B48B98007273D1 /* AsyncDisplayKit.framework */,
+				B082371824B48B98007273D1 /* AsyncDisplayKitTests.xctest */,
+				B082371A24B48B98007273D1 /* AsyncDisplayKitTestHost.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		B083229424A09F490039D424 /* ContactTableView */ = {
@@ -824,16 +832,6 @@
 			path = ContactTable;
 			sourceTree = "<group>";
 		};
-		B0CB44E924B33F1D005C085A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */,
-				B0CB44F324B33F1D005C085A /* AsyncDisplayKitTests.xctest */,
-				B0CB44F524B33F1D005C085A /* AsyncDisplayKitTestHost.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		B0DAEBCE249091490002A4D0 /* ContactPicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -874,7 +872,7 @@
 		B0FB8C0024A0B6FE00E35B42 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */,
+				B082370D24B48B98007273D1 /* AsyncDisplayKit.xcodeproj */,
 				B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */,
 				0C453605A6182B184255EEEF /* Pods_ContactPicker.framework */,
 				1E4FD72C5D339BC818BFFF6F /* Pods_ContactPicker_ContactPickerUITests.framework */,
@@ -1012,8 +1010,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = B0CB44E924B33F1D005C085A /* Products */;
-					ProjectRef = B0CB44E824B33F1D005C085A /* AsyncDisplayKit.xcodeproj */;
+					ProductGroup = B082370E24B48B98007273D1 /* Products */;
+					ProjectRef = B082370D24B48B98007273D1 /* AsyncDisplayKit.xcodeproj */;
 				},
 				{
 					ProductGroup = B0C1531724AF22A9005D63B7 /* Products */;
@@ -1030,6 +1028,27 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		B082371624B48B98007273D1 /* AsyncDisplayKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AsyncDisplayKit.framework;
+			remoteRef = B082371524B48B98007273D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B082371824B48B98007273D1 /* AsyncDisplayKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AsyncDisplayKitTests.xctest;
+			remoteRef = B082371724B48B98007273D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B082371A24B48B98007273D1 /* AsyncDisplayKitTestHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = AsyncDisplayKitTestHost.app;
+			remoteRef = B082371924B48B98007273D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		B0C1532A24AF22A9005D63B7 /* ComponentKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1126,27 +1145,6 @@
 			fileType = wrapper.cfbundle;
 			path = CKSwiftTests.xctest;
 			remoteRef = B0C1534324AF22A9005D63B7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B0CB44F124B33F1D005C085A /* AsyncDisplayKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AsyncDisplayKit.framework;
-			remoteRef = B0CB44F024B33F1D005C085A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B0CB44F324B33F1D005C085A /* AsyncDisplayKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AsyncDisplayKitTests.xctest;
-			remoteRef = B0CB44F224B33F1D005C085A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B0CB44F524B33F1D005C085A /* AsyncDisplayKitTestHost.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = AsyncDisplayKitTestHost.app;
-			remoteRef = B0CB44F424B33F1D005C085A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

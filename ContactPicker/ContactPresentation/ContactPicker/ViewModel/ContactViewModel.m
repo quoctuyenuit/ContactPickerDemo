@@ -50,7 +50,7 @@
 
 @synthesize selectedContactAddedObservable;
 
-- (id)initWithBus:(id<BusinessLayerProtocol>)bus {
+- (id)initWithBus:(id<ContactBusinessLayerProtocol>)bus {
     _contactBus                 = bus;
     _backgroundSerialQueue      = dispatch_queue_create("[ViewModel] searching queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     _backgroundConcurrentQueue  = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
