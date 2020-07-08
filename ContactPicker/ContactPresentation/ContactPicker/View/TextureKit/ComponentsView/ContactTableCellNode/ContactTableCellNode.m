@@ -57,6 +57,7 @@
         _avatar.backgroundColor                   = UIColor.redColor;
         _contactNameLabel.backgroundColor         = UIColor.grayColor;
         _contactDescriptionLabel.backgroundColor  = UIColor.blueColor;
+        _checkBox.backgroundColor                 = UIColor.lightGrayColor;
         self.backgroundColor                      = UIColor.greenColor;
 #endif
     }
@@ -64,7 +65,6 @@
 }
 
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize {
-    
 //    CheckBox layout
     ASLayoutSpec * checkBoxLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForCheckBox
                                                                            child:

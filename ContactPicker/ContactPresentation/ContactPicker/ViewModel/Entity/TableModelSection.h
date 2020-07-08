@@ -7,14 +7,33 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ContactViewEntity.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TableModelSection : NSObject
-+ (instancetype) section;
+
+
 @property(nonatomic, copy) NSString         * headerTitle;
 @property(nonatomic, copy) NSString         * footerTitle;
 @property(nonatomic, strong) NSMutableArray * rows;
+
+- (instancetype)initWithHeaderTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
+
+- (NSInteger)addObject:(id)object;
+
+- (NSInteger)removeObject:(id)object;
+
+- (NSInteger)insertObject:(id)object atIndex:(NSInteger)index;
+
+- (NSInteger)removeAllObject;
+
+- (BOOL)containsObject:(id)object;
+
+- (ContactViewEntity *)contactOfIdentifier:(NSString *)identifier;
+
+- (id)objectAtIndex:(NSInteger)index;
+
 @end
 
 NS_ASSUME_NONNULL_END

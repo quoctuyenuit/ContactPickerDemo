@@ -79,7 +79,7 @@
 #pragma mark - Helper methods
 - (void)setupEvents {
     weak_self
-    [self.viewModel.contactBookObservable binding:^(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate) {
+    [self.viewModel.contactBookObservable binding:^(NSNumber * flag) {
         strong_self
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{

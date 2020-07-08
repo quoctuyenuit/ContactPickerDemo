@@ -2,7 +2,7 @@
 //  ContactTableDataSource.m
 //  ContactPicker
 //
-//  Created by Quốc Tuyến on 7/6/20.
+//  Created by Quốc Tuyến on 7/8/20.
 //  Copyright © 2020 LAP11963. All rights reserved.
 //
 
@@ -10,118 +10,132 @@
 
 @implementation ContactTableDataSource
 
-- (instancetype)initWithSectionHeaderTitle:(NSArray<NSString *> *)titles {
-    NSAssert(titles, @"titles is nil");
-    for (NSString * title in titles) {
-        [self _appendSectionWithHeaderTitle:title footerTitle:@""];
++ (instancetype)dataSource {
+    return [[ContactTableDataSource alloc] _init];
+}
+
+- (instancetype)_init {
+    _sections = [NSMutableDictionary dictionary];
+    _sectionKeys = [NSMutableArray array];
+    for (char i = 'A'; i <= 'Z'; i++) {
+        NSString * key = [NSString stringWithFormat:@"%c", i];
+        [_sectionKeys addObject:key];
     }
+    [_sectionKeys addObject:@"#"];
     return self;
 }
 
-#pragma mark - Private methods
-- (TableModelSection *)_appendSectionWithHeaderTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle {
-    if (_sections == nil) {
-        _sections = [NSMutableArray array];
-    }
+#pragma mark - Helper methods
+- (TableModelSection *)_sectionAtIndex:(NSInteger)index {
+    NSAssert(index >= 0 && index < _sectionKeys.count, @"Invalid section");
+    NSString *key = [_sectionKeys objectAtIndex:index];
+    return [_sections objectForKey:key];
+}
+
+- (NSString *)_makeKeyFromName:(NSString *)name {
+    if (name.length == 0)
+        return @"#";
     
-    TableModelSection *section = [TableModelSection section];
-    section.headerTitle = headerTitle;
-    section.footerTitle = footerTitle;
-    section.rows        = [NSMutableArray array];
-    [_sections addObject:section];
-    return section;
+    NSString * firstLetter = [[name substringToIndex:1] uppercaseString];
+    int letterNumber = [firstLetter characterAtIndex:0];
+    return (letterNumber >= 65 && letterNumber <= 90) ? firstLetter : @"#";
 }
 
-#pragma mark - Adjust datasource methods
-- (NSIndexPath *)addObject:(id)object
-               headerTitle:(nonnull NSString *)headerTitle
-               footerTitle:(nonnull NSString *)footerTitle {
-    TableModelSection *section = _sections.count > 0 ? _sections.lastObject :
-    [self _appendSectionWithHeaderTitle:headerTitle footerTitle:footerTitle];
-    
-    [section.rows addObject:object];
-    
-    return [NSIndexPath indexPathForRow:section.rows.count - 1 inSection:_sections.count - 1];
-}
-
-- (NSIndexPath *)addObject:(id)object toSection:(NSInteger)section {
-    NSAssert(section >= 0 && section < _sections.count, @"Invalid section");
-    TableModelSection *tableSection = [_sections objectAtIndex:section];
-    [tableSection.rows addObject:object];
-    return [NSIndexPath indexPathForRow:tableSection.rows.count - 1 inSection:section];
-}
-
-- (NSArray *)addObjectFromArray:(NSArray *)array
-                    headerTitle:(nonnull NSString *)headerTitle
-                    footerTitle:(nonnull NSString *)footerTitle {
-    NSMutableArray * indices = [NSMutableArray array];
-    for (id object in array) {
-        [indices addObject:[self addObject:object headerTitle:headerTitle footerTitle:footerTitle]];
-    }
-    return indices;
-}
-
-- (NSArray *)addObjectFromArray:(NSArray *)array toSection:(NSInteger)section {
-    NSMutableArray * indices = [NSMutableArray array];
-    for (id object in array) {
-        [indices addObject:[self addObject:object toSection:section]];
-    }
-    return indices;
-}
-
-- (NSIndexPath *)insertObject:(id)object indexPath:(NSIndexPath *)indexPath {
-    NSAssert(indexPath.section >= 0 && indexPath.section < _sections.count, @"Invalid section");
-    TableModelSection *section = [_sections objectAtIndex:indexPath.section];
-    NSAssert(indexPath.row >= 0 && indexPath.row <= section.rows.count, @"Invalid section");
-    [section.rows insertObject:object atIndex:indexPath.row];
-    return indexPath;
-}
-
-- (NSIndexPath *)removeObjectAtIndexPath:(NSIndexPath *)indexPath {
-    NSAssert(indexPath.section >= 0 && indexPath.section < _sections.count, @"Invalid section");
-    TableModelSection *section = [_sections objectAtIndex:indexPath.section];
-    NSAssert(indexPath.row >= 0 && indexPath.row < section.rows.count, @"Invalid section");
-    [section.rows removeObjectAtIndex:indexPath.row];
-    return indexPath;
-}
-
-- (NSArray *)removeAllObjects {
-    NSMutableArray *indices = [[NSMutableArray alloc] init];
-    for (NSInteger sectionIdx = 0; sectionIdx < _sections.count; sectionIdx++) {
-        TableModelSection *section = [_sections objectAtIndex:sectionIdx];
-        for (NSInteger row = 0; row < section.rows.count; row++) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:sectionIdx];
-            [indices addObject:[self removeObjectAtIndexPath:indexPath]];
-        }
-    }
-    return indices;
-}
-
-#pragma mark - Building table methods
+#pragma mark - Public methods
 - (NSInteger)numberOfSection {
-    return _sections.count;
+    return _sectionKeys.count;
 }
 
-- (NSInteger)numberOfRowInSection:(NSInteger)section {
-    NSAssert(section >= 0 && section < _sections.count, @"Invalid section");
-    return [_sections objectAtIndex:section].rows.count;
+- (NSInteger)numberOfRowsInSection:(NSInteger)sectionIdx {
+    return [self _sectionAtIndex:sectionIdx].rows.count;
 }
 
-- (id)rowAtIndexPath:(NSIndexPath *)indexPath {
-    NSAssert(indexPath.section >= 0 && indexPath.section < _sections.count, @"Invalid section");
-    NSArray * rowsInSection = [_sections objectAtIndex:indexPath.section].rows;
-    NSAssert(indexPath.row >= 0 && indexPath.row < rowsInSection.count, @"Invalid row");
-    
-    return [rowsInSection objectAtIndex:indexPath.row];
+- (Entity)objectAtIndexPath:(NSIndexPath *)indexPath {
+    TableModelSection *section = [self _sectionAtIndex:indexPath.section];
+    return [section objectAtIndex:indexPath.row];
 }
 
-- (NSString *)titleForHeaderInSection:(NSInteger)section {
-    NSAssert(section >= 0 && section < _sections.count, @"Invalid section");
-    return [_sections objectAtIndex:section].headerTitle;
+- (NSString *)titleForHeaderInSection:(NSInteger)sectionIndex {
+    return [self _sectionAtIndex:sectionIndex].headerTitle;
 }
 
 - (NSArray *)sectionIndexTitles {
-    return _prefixTitleSections;
+    return _sectionKeys;
+}
+
+- (NSIndexPath *)addObject:(Entity)object {
+    NSString * key = [self _makeKeyFromName:object.fullName.string];
+    TableModelSection *section = [_sections objectForKey:key];
+    if (!section) {
+        section = [[TableModelSection alloc] initWithHeaderTitle:key footerTitle:@""];
+        [_sections setObject:section forKey:key];
+    }
+    
+    NSInteger rowIndex = [section addObject:object];
+    NSInteger sectionindex = [_sectionKeys indexOfObject:key];
+    
+    return [NSIndexPath indexPathForRow:rowIndex inSection:sectionindex];
+}
+
+- (NSIndexPath *)removeObject:(Entity)object {
+    NSString * key = [self _makeKeyFromName:object.fullName.string];
+    TableModelSection *section = [_sections objectForKey:key];
+    if (!section) {
+        return nil;
+    }
+    
+    NSInteger rowIndex = [section removeObject:object];
+    NSInteger sectionindex = [_sectionKeys indexOfObject:key];
+    
+    return [NSIndexPath indexPathForRow:rowIndex inSection:sectionindex];
+}
+
+- (NSIndexPath *)indexPathOfObject:(Entity)object {
+    NSString * key = [self _makeKeyFromName:object.fullName.string];
+    NSInteger sectionIdx = [_sectionKeys indexOfObject:key];
+    TableModelSection *section = [_sections objectForKey:key];
+    if (section) {
+        NSInteger rowIdx = [section.rows indexOfObject:object];
+        return [NSIndexPath indexPathForRow:rowIdx inSection:sectionIdx];
+    }
+    return nil;
+}
+
+- (NSArray *)removeAllObjects {
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    for (NSString * key in _sections.allKeys) {
+        NSInteger sectionIdx = [_sectionKeys indexOfObject:key];
+        TableModelSection *section = [_sections objectForKey:key];
+        for (NSInteger rowIdx = 0; rowIdx < section.rows.count; rowIdx++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIdx inSection:sectionIdx];
+            [indexPaths addObject:indexPath];
+        }
+        [section removeAllObject];
+    }
+    [_sections removeAllObjects];
+    return indexPaths;
+}
+
+- (Entity)objectOfIdentifier:(NSString *)identifier {
+    for (NSString * key in _sections.allKeys) {
+        TableModelSection *section = [_sections objectForKey:key];
+        Entity object = [section.rows firstObjectWith:^BOOL(Entity _Nonnull obj) {
+            return [obj.identifier isEqualToString:identifier];
+        }];
+        if (object) {
+            return object;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)isContainsObject:(Entity)object {
+    for (NSString * key in _sections.allKeys) {
+        TableModelSection *section = [_sections objectForKey:key];
+        if ([section containsObject:object])
+            return YES;
+    }
+    return NO;
 }
 
 @end

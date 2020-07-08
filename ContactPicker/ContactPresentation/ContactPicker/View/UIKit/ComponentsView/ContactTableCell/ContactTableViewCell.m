@@ -61,10 +61,6 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 - (void)setupViews {
     [self addSubview:_checkBox];
     [self addSubview:_avatar];

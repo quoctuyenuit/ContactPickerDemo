@@ -16,7 +16,7 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *>                   * searchObservable;
-@property DataBinding<NSMutableDictionary *>        * contactBookObservable;
+@property DataBinding<NSNumber *>                   * contactBookObservable;
 @property DataBinding<NSIndexPath *>                * selectedContactRemoveObservable;
 @property DataBinding<NSIndexPath *>                * selectedContactAddedObservable;
 @property DataBinding<NSArray<NSIndexPath *> *>     * removeContactObservable;
@@ -39,7 +39,7 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 - (ContactViewEntity *) selectedContactAtIndex: (NSInteger) index;
 
 #pragma mark - Feature methods
-- (void) requestPermission: (void (^)(BOOL granted, NSError * error)) completion;
+- (void) requestPermissionWithBlock: (void (^)(BOOL granted, NSError * error)) block;
 
 - (void) loadContactsWithBlock: (ViewModelResponseListBlock) block;
 
@@ -48,8 +48,6 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 - (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
 
 - (void) removeSelectedContact: (NSString *) identifier;
-
-- (NSIndexPath * _Nullable)firstContactOnView;
 @end
 
 NS_ASSUME_NONNULL_END

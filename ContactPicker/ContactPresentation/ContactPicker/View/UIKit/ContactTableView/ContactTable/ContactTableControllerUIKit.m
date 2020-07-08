@@ -128,11 +128,6 @@
 
 - (void)reloadTable {
     [_tableView reloadData];
-    NSIndexPath * firstIndex = [_viewModel firstContactOnView];
-    if (firstIndex) {
-        DebugLog(@"[%@] reload table - scroll top at: [%ld, %ld], current cell in this section is: %ld", LOG_MSG_HEADER, firstIndex.row, firstIndex.section, [_tableView numberOfRowsInSection:firstIndex.section]);
-        [_tableView scrollToRowAtIndexPath:firstIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    }
 }
 
 - (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {

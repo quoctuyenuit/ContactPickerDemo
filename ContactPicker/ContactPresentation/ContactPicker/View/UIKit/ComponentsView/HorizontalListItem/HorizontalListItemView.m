@@ -60,7 +60,8 @@
     _button             = [[UIButton alloc] init];
     _collectionView     = [[UICollectionView alloc] initWithFrame:self.frame collectionViewLayout:flowLayout];
     [_button setBackgroundImage:[UIImage imageNamed:@"arrow_ico"] forState:UIControlStateNormal];
-
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    
     self.backgroundColor                = UIColor.whiteColor;
     _mainContentView.backgroundColor    = UIColor.whiteColor;
     _collectionView.backgroundColor     = UIColor.whiteColor;

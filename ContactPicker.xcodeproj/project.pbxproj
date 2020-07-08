@@ -22,7 +22,9 @@
 		B0020CFA2490C7DF00899757 /* HorizontalListItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0020CF92490C7DF00899757 /* HorizontalListItemView.m */; };
 		B0076342248610C100239F3D /* ContactTableControllerUIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = B0076341248610C100239F3D /* ContactTableControllerUIKit.m */; };
 		B00763452486167000239F3D /* ContactViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B00763442486167000239F3D /* ContactViewModel.m */; };
+		B0090E4324B5B095007EC2E2 /* ContactTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = B0090E4224B5B095007EC2E2 /* ContactTableDataSource.m */; };
 		B018E65D249884ED00ED55D6 /* ContactAvatarNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B018E65C249884ED00ED55D6 /* ContactAvatarNode.m */; };
+		B022A70824B5C74A00E08C9E /* ContactTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = B0090E4224B5B095007EC2E2 /* ContactTableDataSource.m */; };
 		B02A510D2487EB5500B9CC1B /* ContactBusEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510C2487EB5500B9CC1B /* ContactBusEntity.m */; };
 		B02A51102487EF2000B9CC1B /* ContactBusinessLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A510F2487EF2000B9CC1B /* ContactBusinessLayer.m */; };
 		B051791A2490861800B0A973 /* ContactCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B05179182490861800B0A973 /* ContactCollectionCell.m */; };
@@ -236,6 +238,8 @@
 		B0076341248610C100239F3D /* ContactTableControllerUIKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableControllerUIKit.m; sourceTree = "<group>"; };
 		B00763432486167000239F3D /* ContactViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModel.h; sourceTree = "<group>"; };
 		B00763442486167000239F3D /* ContactViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewModel.m; sourceTree = "<group>"; };
+		B0090E4124B5B095007EC2E2 /* ContactTableDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableDataSource.h; sourceTree = "<group>"; };
+		B0090E4224B5B095007EC2E2 /* ContactTableDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactTableDataSource.m; sourceTree = "<group>"; };
 		B018E65B249884ED00ED55D6 /* ContactAvatarNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAvatarNode.h; sourceTree = "<group>"; };
 		B018E65C249884ED00ED55D6 /* ContactAvatarNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAvatarNode.m; sourceTree = "<group>"; };
 		B01A7EBE24A9899200652FE5 /* ContactPicker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ContactPicker.entitlements; sourceTree = "<group>"; };
@@ -432,6 +436,8 @@
 				B072C90E24AC7B5B0087BEED /* Entity */,
 				B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */,
 				B00763432486167000239F3D /* ContactViewModel.h */,
+				B0090E4124B5B095007EC2E2 /* ContactTableDataSource.h */,
+				B0090E4224B5B095007EC2E2 /* ContactTableDataSource.m */,
 				B00763442486167000239F3D /* ContactViewModel.m */,
 			);
 			path = ViewModel;
@@ -1237,6 +1243,7 @@
 				B0C254FD2497910000ECA551 /* ContactTableControllerTexture.m in Sources */,
 				B0076342248610C100239F3D /* ContactTableControllerUIKit.m in Sources */,
 				B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */,
+				B0090E4324B5B095007EC2E2 /* ContactTableDataSource.m in Sources */,
 				B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */,
 				B072C90924AC278E0087BEED /* ImageManager.m in Sources */,
 				B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */,
@@ -1275,6 +1282,7 @@
 			files = (
 				B0CE78FD248CDB0F00E30F2D /* ContactAdapterTests.m in Sources */,
 				B0C1C24A2490F3D800634829 /* ContactBusinessLayer.m in Sources */,
+				B022A70824B5C74A00E08C9E /* ContactTableDataSource.m in Sources */,
 				B0C1C2492490F3CF00634829 /* ContactViewModel.m in Sources */,
 				B0E7ED9C248E5AB7001E7246 /* ContactViewModelTests.m in Sources */,
 				B0E7ED9A248E266C001E7246 /* ContactBusTests.m in Sources */,

@@ -48,7 +48,7 @@
     self->viewModel = [[ContactViewModel alloc] initWithBus: [[ContactBusinessLayer alloc] initWithAdapter:[[ContactAdapter alloc] init]]];
     
     weak_self
-    [self->viewModel requestPermission:^(BOOL granted, NSError * error) {
+    [self->viewModel requestPermissionWithBlock:^(BOOL granted, NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             strong_self
             if (strongSelf) {
