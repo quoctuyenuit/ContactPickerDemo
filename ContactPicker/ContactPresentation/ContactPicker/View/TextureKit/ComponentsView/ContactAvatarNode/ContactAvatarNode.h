@@ -20,8 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (instancetype) init;
-- (void) showImage;
-- (void) showLabel;
 - (void) configWithImage: (UIImage * _Nullable) image withTitle: (NSString *) label;
 @end
 

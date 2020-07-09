@@ -31,11 +31,9 @@
 - (instancetype)initWithAdapter:(id<ContactAdapterProtocol>)adapter {
     _contactAdapter     = adapter;
     _contacts           = [[NSMutableArray alloc] init];
-    _loadContactRequest = [[NSMutableArray alloc] init];
     _searchReady        = YES;
     
     _backgroundQueue    = dispatch_queue_create("ContactBus search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
-    _loadResponseQueue  = dispatch_queue_create("ContactBus search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     _searchQueue        = dispatch_queue_create("ContactBus search queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     
     self.contactDidChangedObservable = [[DataBinding alloc] initWithValue:nil];
@@ -99,18 +97,6 @@
     NSAssert(block, @"block is nil");
     
     weak_self
-    dispatch_sync(_loadResponseQueue, ^{
-        strong_self
-        if (strongSelf) {
-            [strongSelf.loadContactRequest addObject:block];
-            
-            if (strongSelf.loadInProcessing) {
-                return;
-            }
-            strongSelf->_loadInProcessing = YES;
-            [strongSelf.contacts removeAllObjects];
-        }
-    });
     dispatch_async(weakSelf.backgroundQueue, ^{
         [weakSelf.contactAdapter loadContactsWithBlock:^(NSArray<id<ContactDALProtocol>> *contacts, NSError *error) {
             strong_self
@@ -122,25 +108,13 @@
                     
                     [strongSelf->_contacts addObjectsFromArray:businessContacts];
                 }
-                
-                dispatch_async(strongSelf.loadResponseQueue, ^{
-                    strong_self
-                    if (strongSelf) {
-                        for (BusinessResponseListBlock block in strongSelf.loadContactRequest) {
-                            //add excute queue
-                            block(strongSelf->_contacts, error);
-                        }
-                        [strongSelf.loadContactRequest removeAllObjects];
-                        strongSelf->_loadInProcessing = NO;
-                    }
-                });
+                block(strongSelf->_contacts, error);
             } else {
                 NSError * error = [[NSError alloc] initWithDomain:BUSINESS_ERROR_DOMAIN type:ErrorTypeRetainCycleGone localizeString:@"strongSelf released"];
                 block(nil, error);
             }
         }];
     });
-   
 }
 
 - (void)searchContactByName:(NSString *)name block:(BusinessResponseListBlock)block {
@@ -180,6 +154,7 @@
         }
     });
 }
+
 @synthesize contactDidChangedObservable;
 
 @end

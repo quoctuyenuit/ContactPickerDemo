@@ -15,6 +15,7 @@
 #import "ContactViewEntity.h"
 #import "ContactTableCellNode.h"
 #import "ContactDefine.h"
+#import "ContactGlobalConfigure.h"
 
 #define DEBUG_MODE                          1
 
@@ -107,7 +108,7 @@
     _tableNode.view.showsVerticalScrollIndicator            = NO;
     _tableNode.view.separatorStyle                          = UITableViewScrollPositionNone;
     _tableNode.view.backgroundColor                         = UIColor.whiteColor;
-    _tableNode.view.rowHeight                               = TABLE_CELL_HEIGHT;
+    _tableNode.view.rowHeight                               = [ContactGlobalConfigure globalConfig].contactHeight;
 }
 
 - (void)setupDatasets {

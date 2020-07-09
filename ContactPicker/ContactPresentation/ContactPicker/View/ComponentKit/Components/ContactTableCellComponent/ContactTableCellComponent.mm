@@ -12,6 +12,7 @@
 #import "ContactAvatarView.h"
 #import "ContactTableViewCell.h"
 #import <ComponentKit/CKComponentSubclass.h>
+#import "ContactGlobalConfigure.h"
 
 #define DEBUG_MODE              0
 
@@ -41,7 +42,7 @@
         {@selector(setUserInteractionEnabled:), @NO},
         {@selector(updateCellWithContact:), contact},
         {@selector(configCheckBox:), _state},
-    }} size:{.height = TABLE_CELL_HEIGHT}]];
+    }} size:{.height = [ContactGlobalConfigure globalConfig].contactHeight}]];
     
     if (c) {
         c->_contact = contact;

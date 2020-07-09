@@ -14,6 +14,7 @@
 #import "ContactAvatarNode.h"
 #import "CheckBoxNode.h"
 #import "ImageManager.h"
+#import "ContactGlobalConfigure.h"
 
 #define DEBUG_MODE              0
 
@@ -46,11 +47,15 @@
         _contactDescriptionLabel  = [[ASTextNode alloc] init];
         _checkBox                 = [[CheckBoxNode alloc] init];
         
-        _avatar.style.preferredSize         = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
+        _avatar.style.preferredSize         = [ContactGlobalConfigure globalConfig].avatarSize;
         _checkBox.style.preferredSize       = CGSizeMake(CHECK_BOX_HEIGHT, CHECK_BOX_HEIGHT);
         _checkBox.userInteractionEnabled    = NO;
         
         self.automaticallyManagesSubnodes   = YES;
+        
+        ContactGlobalConfigure *config = [ContactGlobalConfigure globalConfig];
+        _avatar.backgroundColor = config.avatarBackgroundColor;
+        self.backgroundColor    = config.backgroundColor;
         
         [self updateCellWithContact:_contact];
 #if DEBUG_MODE
@@ -75,7 +80,7 @@
 //    Avatar layout
     ASLayoutSpec * avatarLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForAvatar
                                                                          child: [_avatar styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-        style.preferredSize = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
+        style.preferredSize = [ContactGlobalConfigure globalConfig].avatarSize;
     }]];
     
 //    Text layout

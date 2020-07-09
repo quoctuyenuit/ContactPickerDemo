@@ -11,6 +11,7 @@
 #import <AsyncDisplayKit/AsyncDisplayKit.h>
 #import "Utilities.h"
 #import <UIKit/UIKit.h>
+#import "ContactGlobalConfigure.h"
 
 #define DEBUG_MODE      0
 
@@ -29,8 +30,7 @@
 //        _label.attributedText       = [NSAttributedString attributedStringWithString:@"Test" fontSize:FONT_SIZE color: UIColor.whiteColor firstWordColor:nil];
         
         [self->_imageNode setImageModificationBlock:^UIImage * _Nullable(UIImage * _Nonnull image) {
-            CGSize profileImageSize = CGSizeMake(AVATAR_IMAGE_HEIGHT, AVATAR_IMAGE_HEIGHT);
-            return [image makeCircularImageWithSize:profileImageSize backgroundColor:nil];
+            return [image makeCircularImageWithSize:[ContactGlobalConfigure globalConfig].avatarSize backgroundColor:nil];
         }];
         self.automaticallyManagesSubnodes = YES;
         

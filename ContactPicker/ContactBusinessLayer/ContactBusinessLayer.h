@@ -24,11 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(atomic, readonly) BOOL                                searchReady;
 
 @property(nonatomic, readonly) dispatch_queue_t                 backgroundQueue;
-@property(nonatomic, readonly) dispatch_queue_t                 loadResponseQueue;
 @property(nonatomic, readonly) dispatch_queue_t                 searchQueue;
-
-@property(atomic, readonly) NSMutableArray<BusinessResponseListBlock>   *loadContactRequest;
-
 
 - (id) initWithAdapter: (id<ContactAdapterProtocol>) adapter;
 @end

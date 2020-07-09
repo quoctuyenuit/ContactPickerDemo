@@ -10,6 +10,7 @@
 #import "ContactDefine.h"
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
 #import "ImageManager.h"
+#import "ContactGlobalConfigure.h"
 
 #define DEBUG_MODE          0
 #define CHECK_MEM_LEAKS     0
@@ -121,6 +122,10 @@
     _textBoundView              = [[UIView alloc] init];
     _contactNameLabel           = [[UILabel alloc] init];
     _contactDescriptionLabel    = [[UILabel alloc] init];
+    
+    ContactGlobalConfigure *config = [ContactGlobalConfigure globalConfig];
+    _avatar.backgroundColor = config.avatarBackgroundColor;
+    self.backgroundColor    = config.backgroundColor;
     
     [_checkBox setUserInteractionEnabled:NO];
     [self setupViews];

@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef DataBinding<AvatarObj *> ImageObservable;
 
 @interface ImageManager : NSObject
-@property(atomic, readonly) NSCache<NSString *, DataBinding *>  *imageCache;
+@property(nonatomic, readonly) NSCache<NSString *, DataBinding *>  *imageCache;
 @property(nonatomic, readonly) NSMutableArray                   *generatedImages;
 @property(nonatomic, readonly) id<ContactAdapterProtocol>       contactAdapter;
 @property(nonatomic, readonly) dispatch_queue_t                 backgroundQueue;

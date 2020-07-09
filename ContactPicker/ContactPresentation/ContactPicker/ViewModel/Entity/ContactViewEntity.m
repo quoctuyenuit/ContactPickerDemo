@@ -10,7 +10,7 @@
 #import "ContactViewEntity.h"
 #import <UIKit/UIKit.h>
 #import "Utilities.h"
-
+#import "ContactGlobalConfigure.h"
 
 @interface ContactViewEntity()
 - (NSString *) _parseName: (NSString *) givenName familyName:(NSString *) familyName;
@@ -41,10 +41,19 @@
     _isCheckObservable  = [[DataBinding alloc] initWithValue:[NSNumber numberWithBool:isChecked]];
     _isChecked          = isChecked;
     
+    ContactGlobalConfigure *config = [ContactGlobalConfigure globalConfig];
     
     NSString * fullName = [self _parseName:givenName familyName:familyName];
-    _fullName   = [NSAttributedString attributedStringWithString: fullName font:[UIFont systemFontOfSize:CONTACT_FONT_SIZE weight:UIFontWeightRegular]  color:[UIColor contactNameColor] firstWordColor:nil];
-    _phone      = [NSAttributedString attributedStringWithString: phone font:[UIFont systemFontOfSize:CONTACT_DESCRIPTION_FONT_SIZE weight:UIFontWeightRegular] color:[UIColor contactDescriptionColor] firstWordColor:nil];
+    
+    _fullName   = [NSAttributedString attributedStringWithString: fullName
+                                                            font:[UIFont systemFontOfSize:config.mainFontSize weight:UIFontWeightRegular]
+                                                           color:config.textNameColor
+                                                  firstWordColor:nil];
+    
+    _phone      = [NSAttributedString attributedStringWithString: phone
+                                                            font:[UIFont systemFontOfSize:config.descriptionFontSize weight:UIFontWeightRegular]
+                                                           color:config.textDescriptionColor
+                                                  firstWordColor:nil];
     return self;
 }
 
@@ -64,8 +73,17 @@
 - (void)updateContactWithBus:(id<ContactBusEntityProtocol>)entity {
     NSString * fullName = [self _parseName:entity.givenName familyName:entity.familyName];
     NSString * firstPhone = entity.phones.firstObject;
-    _fullName   = [NSAttributedString attributedStringWithString: fullName fontSize:CONTACT_FONT_SIZE color:[UIColor contactNameColor] firstWordColor:nil];
-    _phone      = [NSAttributedString attributedStringWithString: firstPhone fontSize:CONTACT_DESCRIPTION_FONT_SIZE color:[UIColor contactDescriptionColor] firstWordColor:nil];
+    ContactGlobalConfigure *config = [ContactGlobalConfigure globalConfig];
+    
+    _fullName   = [NSAttributedString attributedStringWithString: fullName
+                                                        fontSize:config.mainFontSize
+                                                           color:[UIColor contactNameColor]
+                                                  firstWordColor:nil];
+    
+    _phone      = [NSAttributedString attributedStringWithString: firstPhone
+                                                        fontSize:config.descriptionFontSize
+                                                           color:[UIColor contactDescriptionColor]
+                                                  firstWordColor:nil];
 }
 
 - (void)updateContact:(ContactViewEntity *)entity {

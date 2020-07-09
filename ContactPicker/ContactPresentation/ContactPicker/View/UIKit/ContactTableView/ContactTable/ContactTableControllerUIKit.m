@@ -14,6 +14,7 @@
 #import "ContactTableViewCell.h"
 #import "Utilities.h"
 #import "ContactViewEntity.h"
+#import "ContactGlobalConfigure.h"
 
 
 #define CELL_REUSE_IDENTIFIER       @"ContactViewCell"
@@ -105,7 +106,7 @@
     _tableView.showsVerticalScrollIndicator            = NO;
     _tableView.separatorStyle                          = UITableViewScrollPositionNone;
     _tableView.backgroundColor                         = UIColor.whiteColor;
-    _tableView.rowHeight                               = TABLE_CELL_HEIGHT;
+    _tableView.rowHeight                               = [ContactGlobalConfigure globalConfig].contactHeight;
     _tableView.delegate                                = self;
     _tableView.dataSource                              = self;
 }

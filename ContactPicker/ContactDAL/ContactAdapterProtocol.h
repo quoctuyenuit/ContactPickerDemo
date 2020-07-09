@@ -23,6 +23,7 @@ typedef void(^AdapterResponseListImageBlock)(NSDictionary<NSString *, NSData *> 
 
 @required
 
+
 - (void) requestPermission: (void (^)(BOOL isSuccess, NSError * error)) handler;
 
 //Load all of contacts
@@ -38,9 +39,8 @@ typedef void(^AdapterResponseListImageBlock)(NSDictionary<NSString *, NSData *> 
 
 - (void) loadContactImagesWithBlock:(AdapterResponseListImageBlock) block;
 
-//Get image by id, if image already in cache take it otherwise load it from CNContactStore
 - (void) getImageById: (NSString *) identifier
-                block: (void (^)(NSData * image, NSError * error)) block;
+                block: (void (^)(NSData * imageData, NSError * error)) block;
 @end
 
 #endif /* ContactAdapterProtocol_h */

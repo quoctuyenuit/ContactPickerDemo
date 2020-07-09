@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "ContactAdapter.h"
 #import "ContactDefine.h"
+#import "ContactGlobalConfigure.h"
 
 #define DEBUG_MODE          0
 #define CACHE_SIZE          10 * 1024 * 1024
@@ -62,7 +63,7 @@
             return (id)[UIColor colorFromHex:obj].CGColor;
         }];
         
-        [_generatedImages addObject: [self _createGradientImageWithSize:AVATAR_SIZE
+        [_generatedImages addObject: [self _createGradientImageWithSize:[ContactGlobalConfigure globalConfig].avatarSize
                                                                  colors:color]];
     }
 }
@@ -98,7 +99,6 @@
     AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:label isGenerated:YES identififer:key];
     ImageObservable *imageObservable = [[ImageObservable alloc] initWithValue:imgObj];
     
-    [_imageCache setObject:imageObservable forKey:key];
     return imageObservable;
 }
 
@@ -111,7 +111,7 @@
             for (NSString * key in images.allKeys) {
                 NSData * imageData = [images objectForKey:key];
                 UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData]
-                                         scaledToFillSize:AVATAR_SIZE];
+                                         scaledToFillSize:[ContactGlobalConfigure globalConfig].avatarSize];
                 ImageObservable * imageObservable = [strongSelf.imageCache objectForKey:key];
                 AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO identififer:key];
                 if (imageObservable) {
@@ -131,6 +131,18 @@
     NSAssert(block, @"block is nil");
     NSAssert(key, @"key is nil");
     
+    /** Allow to get image immediately if image in cache.
+     * if have multiple request in once time, we can adapt all one in same time.
+     */
+    ImageObservable *imageObservable = [_imageCache objectForKey:key];
+    if (imageObservable) {
+        block(imageObservable);
+        return;
+    }
+    
+    /** If not, let generate gradient image and push it to cache,
+     * the process will take in serial queue to make sure one identifier is pushed image once time.
+     */
     weak_self
     dispatch_async(_backgroundQueue, ^{
         strong_self
@@ -138,6 +150,7 @@
             ImageObservable *imageObservable = [strongSelf.imageCache objectForKey:key];
             if (!imageObservable) {
                 imageObservable = [strongSelf _generateImageFromLabel:label forKey:key];
+                [strongSelf->_imageCache setObject:imageObservable forKey:key];
             }
             block(imageObservable);
         }
