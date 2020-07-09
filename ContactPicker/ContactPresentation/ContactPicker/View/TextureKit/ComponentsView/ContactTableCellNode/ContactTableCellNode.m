@@ -28,34 +28,36 @@
 #define InsetForText            UIEdgeInsetsMake(0, LEFT_PADDING, 0, 0)
 #define CHECK_BOX_HEIGHT        25
 
+@interface ContactTableCellNode ()
 
-@implementation ContactTableCellNode {
-    ContactViewEntity   * _contact;
-    CheckBoxNode        * _checkBox;
-    ContactAvatarNode   * _avatar;
-    ASTextNode          * _contactNameLabel;
-    ASTextNode          * _contactDescriptionLabel;
-}
+@property(nonatomic) ContactViewEntity   * contact;
+@property(nonatomic) CheckBoxNode        * checkBox;
+@property(nonatomic) ContactAvatarNode   * avatar;
+@property(nonatomic) ASTextNode          * contactNameLabel;
+@property(nonatomic) ASTextNode          * contactDescriptionLabel;
+
+@end
+
+@implementation ContactTableCellNode
 
 - (instancetype)initWithContact:(ContactViewEntity *)contact {
     self = [super init];
     
     if (self) {
-        _contact                  = contact;
-        _avatar                   = [[ContactAvatarNode alloc] init];
-        _contactNameLabel         = [[ASTextNode alloc] init];
-        _contactDescriptionLabel  = [[ASTextNode alloc] init];
-        _checkBox                 = [[CheckBoxNode alloc] init];
+        _contact                            = contact;
+        _avatar                             = [[ContactAvatarNode alloc] init];
+        _contactNameLabel                   = [[ASTextNode alloc] init];
+        _contactDescriptionLabel            = [[ASTextNode alloc] init];
+        _checkBox                           = [[CheckBoxNode alloc] init];
         
         _avatar.style.preferredSize         = [ContactGlobalConfigure globalConfig].avatarSize;
         _checkBox.style.preferredSize       = CGSizeMake(CHECK_BOX_HEIGHT, CHECK_BOX_HEIGHT);
         _checkBox.userInteractionEnabled    = NO;
-        
         self.automaticallyManagesSubnodes   = YES;
         
-        ContactGlobalConfigure *config = [ContactGlobalConfigure globalConfig];
-        _avatar.backgroundColor = config.avatarBackgroundColor;
-        self.backgroundColor    = config.backgroundColor;
+        ContactGlobalConfigure *config      = [ContactGlobalConfigure globalConfig];
+        _avatar.backgroundColor             = config.avatarBackgroundColor;
+        self.backgroundColor                = config.backgroundColor;
         
         [self updateCellWithContact:_contact];
 #if DEBUG_MODE
@@ -70,31 +72,47 @@
 }
 
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize {
-//    CheckBox layout
+    //------------------------------------------------------------
+    //    CheckBox layout
+    //------------------------------------------------------------
     ASLayoutSpec * checkBoxLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForCheckBox
                                                                            child:
                                      [ASCenterLayoutSpec centerLayoutSpecWithCenteringOptions:ASCenterLayoutSpecCenteringY
                                                                                 sizingOptions:ASCenterLayoutSpecSizingOptionDefault
                                                                                         child:_checkBox]];
-    
-//    Avatar layout
+    //------------------------------------------------------------
+    //    Avatar layout
+    //------------------------------------------------------------
     ASLayoutSpec * avatarLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForAvatar
                                                                          child: [_avatar styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
         style.preferredSize = [ContactGlobalConfigure globalConfig].avatarSize;
     }]];
     
-//    Text layout
-    ASLayoutSpec * textLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForText child:[ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionVertical
-                                                                        spacing:5
-                                                                 justifyContent:ASStackLayoutJustifyContentCenter
-                                                                     alignItems:ASStackLayoutAlignItemsStart
-                                                                       children: @[[_contactNameLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-                                                                           style.flexShrink = 1.0;
-                                                                       }],
-                                                                                                                                              [_contactDescriptionLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
-                                                                           style.flexShrink = 1.0;
-                                                                       }]]]];
+    //------------------------------------------------------------
+    //    Text layout
+    //------------------------------------------------------------
+    ASLayoutSpec *textCenterLayout = [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionVertical
+                                                                             spacing:5
+                                                                      justifyContent:ASStackLayoutJustifyContentCenter
+                                                                          alignItems:ASStackLayoutAlignItemsStart
+                                                                            children:
+                                      [_contact.phone.string isEqualToString:@""] ?
+                                      @[[_contactNameLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+        style.flexShrink = 1.0;
+    }],
+                                        [_contactDescriptionLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+        style.flexShrink = 1.0;
+    }]] :
+                                      @[[_contactNameLabel styledWithBlock:^(__kindof ASLayoutElementStyle * _Nonnull style) {
+        style.flexShrink = 1.0;
+    }]]];
     
+    ASLayoutSpec * textLayout = [ASInsetLayoutSpec insetLayoutSpecWithInsets:InsetForText
+                                                                       child:textCenterLayout];
+    
+    //------------------------------------------------------------
+    //    Combine
+    //------------------------------------------------------------
     return [ASStackLayoutSpec stackLayoutSpecWithDirection:ASStackLayoutDirectionHorizontal
                                                    spacing:SPACE_BETWEEN_ELEMENT
                                             justifyContent:ASStackLayoutJustifyContentStart
