@@ -42,11 +42,11 @@
     NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
-- (void)reloadTable {
+- (void)reloadTableWithDeletedIndexes:(NSArray<NSIndexPath *> *)deletedIndexPaths addedIndexes:(NSArray<NSIndexPath *> *)addedIndexPaths {
     NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
-- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
+- (void)reloadTable {
     NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
@@ -55,10 +55,6 @@
 }
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
-    NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
-}
-
-- (void)updateCells:(NSMutableDictionary<NSIndexPath *, ContactViewEntity *> *)indexsNeedUpdate {
     NSAssert(NO, @"Subclass must implement this method: %@", NSStringFromSelector(_cmd));
 }
 
@@ -91,11 +87,13 @@
     [self.viewModel.searchObservable binding:^(NSString * searchText) {
         strong_self
         if (strongSelf) {
-            [strongSelf.viewModel searchContactWithKeyName:searchText block:^(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error) {
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (strongSelf && !error) {
-                    [strongSelf insertContactFromIndexPath:indexPaths forEntities:contacts];
-                }
+            [strongSelf.viewModel searchContactWithKeyName:searchText block:^(NSArray<ContactViewEntity *> * _Nullable contacts,
+                                                                              NSError * _Nullable error) {
+                strong_self
+                [strongSelf.viewModel refreshTableWithNewData:contacts completion:^(NSArray<NSIndexPath *> * _Nonnull deletedIndexes, NSArray<NSIndexPath *> * _Nonnull addedIndexes) {
+                    strong_self
+                    [strongSelf reloadTableWithDeletedIndexes:deletedIndexes addedIndexes:addedIndexes];
+                }];
             }];
         }
     }];
@@ -121,15 +119,13 @@
     
     DebugLog(@"[%@] begin load contact", LOG_MSG_HEADER);
     weak_self
-    [self.viewModel loadContactsWithBlock:^(NSArray<ContactViewEntity *> * _Nullable contacts,
-                                            NSArray<NSIndexPath *> * _Nullable indexPaths,
+    [self.viewModel loadContactsWithBlock:^(NSArray<NSIndexPath *> * _Nullable indexPaths,
                                             NSError * _Nullable error) {
         strong_self
         if (strongSelf) {
-            [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
             if (!error) {
                 weakSelf.contactHadLoad = YES;
-                [weakSelf insertContactFromIndexPath:indexPaths forEntities:contacts];
+                [strongSelf reloadTableWithDeletedIndexes:@[] addedIndexes:indexPaths];
             } else {
                 switch (error.code) {
                     case NO_CONTENT_ERROR_CODE:
@@ -143,6 +139,7 @@
                         break;
                 }
             }
+            [strongSelf->_loadingController dismissViewControllerAnimated:YES completion:nil];
         }
     }];
 }

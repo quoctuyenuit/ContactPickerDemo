@@ -131,23 +131,18 @@
     [_tableView reloadData];
 }
 
-- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
-    DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+- (void)reloadTableWithDeletedIndexes:(NSArray<NSIndexPath *> *)deletedIndexPaths addedIndexes:(NSArray<NSIndexPath *> *)addedIndexPaths {
     [_tableView reloadData];
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
     DebugLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
-    [_tableView reloadData];
+    [_tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
     ContactTableViewCell * cell = [_tableView cellForRowAtIndexPath:indexPath];
     [cell setSelect];
-}
-
-- (void)updateCells:(NSMutableDictionary<NSIndexPath *,ContactViewEntity *> *)indexsNeedUpdate {
-    [_tableView reloadRowsAtIndexPaths:indexsNeedUpdate.allKeys withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)hideKeyboard {

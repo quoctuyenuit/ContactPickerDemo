@@ -28,7 +28,6 @@
 #define STRONG_SELF_DEALLOCATED_MSG     @"strongSelf had deallocated"
 
 @interface ContactViewModel() {
-    NSMutableDictionary<NSString *, NSMutableArray<ContactViewEntity *> *> *_contactOnViewBuffer;
 }
 - (void) _setupEvents;
 @end
@@ -173,7 +172,7 @@
                     
                     [strongSelf _addContacts:contactEntity block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            block(contactEntity, updatedIndexPaths, nil);
+                            block(updatedIndexPaths, nil);
                         });
                     }];
                     
@@ -183,7 +182,7 @@
                         error = [[NSError alloc] initWithDomain:VIEWMODEL_ERROR_DOMAIN type:ErrorTypeRetainCycleGone localizeString:@"StrongSelf is released"];
                     }
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        block(nil, nil, error);
+                        block(nil, error);
                     });
                 }
             }];
@@ -191,29 +190,34 @@
     });
 }
 
-- (void)searchContactWithKeyName:(NSString *)key block:(ViewModelResponseListBlock) block {
+- (void)refreshTableWithNewData:(NSArray *)contacts
+                     completion:(nonnull UpdateTableResponseBlock)block {
+    weak_self
+    ASPerformBlockOnMainThread(^{
+        NSMutableArray * deletedIndexPaths = [NSMutableArray arrayWithArray:[weakSelf.dataSource removeAllObjects]];
+        [self _addContacts:contacts block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
+            ASPerformBlockOnMainThread(^{
+                block(deletedIndexPaths, updatedIndexPaths);
+            });
+        }];
+    });
+}
+
+- (void)searchContactWithKeyName:(NSString *)key block:(SearchResponseBlock)block {
     NSAssert(block, @"block is nil");
     NSAssert(key, @"key is nil");
     weak_self
     dispatch_async(_backgroundSerialQueue, ^{
         strong_self
         if (strongSelf) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                strongSelf.removeContactObservable.value = [strongSelf.dataSource removeAllObjects];
-            });
             [strongSelf.contactBus searchContactByName:key block:^(NSArray<id<ContactBusEntityProtocol>> *contacts, NSError *error) {
                 if (!error) {
-                    NSArray<ContactViewEntity *> *contactEntity = [contacts map:^ContactViewEntity * _Nonnull(id<ContactBusEntityProtocol> _Nonnull obj) {
+                    NSArray<ContactViewEntity *> *contactsModel = [contacts map:^ContactViewEntity * _Nonnull(id<ContactBusEntityProtocol> _Nonnull obj) {
                         return [[ContactViewEntity alloc] initWithBusEntity:obj];
                     }];
-                    
-                    [strongSelf _addContacts:contactEntity block:^(NSArray<NSIndexPath *> *updatedIndexPaths) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            block(contactEntity, updatedIndexPaths, nil);
-                        });
-                    }];
+                    block(contactsModel, nil);
                 } else {
-                    block(nil, nil, error);
+                    block(nil, error);
                 }
             }];
         }

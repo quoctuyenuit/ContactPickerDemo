@@ -17,6 +17,15 @@
 
 #define BUSINESS_ERROR_DOMAIN   @"BusinessError"
 
+#define LOG_ADAPTER                     0
+#if LOG_ADAPTER
+#define LogBusiness(...)                 NSLog(__VA_ARGS__)
+#define SEARCH_HEADER                     @"search"
+#else
+#define LogAdapter(...)
+#endif
+
+
 #define CHECK_RETAINCYCLE       0
 #if CHECK_RETAINCYCLE
 #import <FBRetainCycleDetector/FBRetainCycleDetector.h>
@@ -127,8 +136,10 @@
     }
     
     _searchReady = NO;
+    LogBusiness(@"[%@]new request search: %@", SEARCH_HEADER, name);
     weak_self
-    dispatch_sync(_searchQueue, ^{
+    dispatch_async(_searchQueue, ^{
+        LogBusiness(@"[%@]begin search: %@", SEARCH_HEADER, name);
         strong_self
         if (strongSelf) {
             strongSelf->_searchReady = YES;
@@ -148,7 +159,7 @@
             }
 //            if while statement stop by searching all of contact --> call block
 //            if while statement stop by searchReady --> not call block
-            if (i >= strongSelf.contacts.count) {
+            if (i >= strongSelf.contacts.count && strongSelf.searchReady) {
                 block(result, nil);
             }
         }

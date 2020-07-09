@@ -138,23 +138,18 @@
     [_tableNode reloadData];
 }
 
-- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
-    DebugLog(@"[%@] begin insert cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
+- (void)reloadTableWithDeletedIndexes:(NSArray<NSIndexPath *> *)deletedIndexPaths addedIndexes:(NSArray<NSIndexPath *> *)addedIndexPaths {
     [_tableNode reloadData];
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
     DebugLog(@"[%@] begin remove cell from %ld indexs", LOG_MSG_HEADER, indexPaths.count);
-    [_tableNode reloadData];
+    [_tableNode deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
     ContactTableCellNode * cell = [_tableNode nodeForRowAtIndexPath:indexPath];
     [cell setSelect];
-}
-
-- (void)updateCells:(NSMutableDictionary<NSIndexPath *,ContactViewEntity *> *)indexsNeedUpdate {
-    [_tableNode reloadRowsAtIndexPaths:indexsNeedUpdate.allKeys withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark - KeyboardAppearanceDelegate methods

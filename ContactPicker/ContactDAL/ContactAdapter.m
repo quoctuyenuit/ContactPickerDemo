@@ -17,7 +17,7 @@
 #define ADAPTER_ERROR_DOMAIN            @"AdapterError"
 #define DEBUG_TIME_GET_IMAGE            0
 #define TEST_STRESS                     0
-#define LOG_ADAPTER                     1
+#define LOG_ADAPTER                     0
 #if LOG_ADAPTER
 #define LogAdapter(...)                 NSLog(__VA_ARGS__)
 #define LOAD_HEADER                     @"LoadContact"

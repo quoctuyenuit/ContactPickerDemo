@@ -156,20 +156,22 @@
     [_collectionView reloadData];
 }
 
-- (void)insertContactFromIndexPath:(NSArray<NSIndexPath *> *)indexPaths forEntities:(NSArray<ContactViewEntity *> *)entities {
-    NSInteger indexCount = indexPaths.count;
-    NSInteger entityCount = entities.count;
-    if (indexCount != entityCount)
-        return;
+- (void)reloadTableWithDeletedIndexes:(NSArray<NSIndexPath *> *)deletedIndexPaths addedIndexes:(NSArray<NSIndexPath *> *)addedIndexPaths {
     
-    DebugLog(@"[%@] begin insert cell from %ld indexpaths", LOG_MSG_HEADER, indexPaths.count);
     NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * items = [[NSMutableDictionary alloc] init];
-    for (int i = 0; i < indexCount; i++) {
-        [items setObject:entities[i] forKey:indexPaths[i]];
+    for (NSIndexPath * indexPath in addedIndexPaths) {
+        NSInteger section = indexPath.section;
+        NSInteger row = indexPath.row;
+        
+        id data = [self.viewModel contactAtIndex:indexPath];
+        [items setObject:data forKey:[NSIndexPath indexPathForItem:row inSection:section]];
     }
     
-    CKDataSourceChangeset *changeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withInsertedItems:items] build];
-    [_dataSource applyChangeset:changeset mode:CKUpdateModeAsynchronous userInfo:nil];
+    
+    CKDataSourceChangeset *deleteChangeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withRemovedItems:[NSSet setWithArray:deletedIndexPaths]] build];
+    CKDataSourceChangeset *addChangeset = [[[CKDataSourceChangesetBuilder dataSourceChangeset] withInsertedItems:items] build];
+    [_dataSource applyChangeset:deleteChangeset mode:CKUpdateModeAsynchronous userInfo:nil];
+    [_dataSource applyChangeset:addChangeset mode:CKUpdateModeAsynchronous userInfo:nil];
 }
 
 - (void)removeCells:(NSArray<NSIndexPath *> *)indexPaths {
@@ -180,10 +182,6 @@
 
 - (void)contactHadRemoved:(NSIndexPath *)indexPath {
     
-}
-
-- (void)updateCells:(NSMutableDictionary<NSIndexPath *,ContactViewEntity *> *)indexsNeedUpdate {
-    [_collectionView reloadData];
 }
 
 - (void) hideKeyboard {

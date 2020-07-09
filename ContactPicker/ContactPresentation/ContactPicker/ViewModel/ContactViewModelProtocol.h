@@ -12,7 +12,11 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullable contacts, NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error);
+typedef void(^ViewModelResponseListBlock)(NSArray<NSIndexPath *> * _Nullable indexPaths, NSError * _Nullable error);
+
+typedef void(^SearchResponseBlock)(NSArray<ContactViewEntity *> * _Nullable contacts, NSError * _Nullable error);
+
+typedef void(^UpdateTableResponseBlock)(NSArray<NSIndexPath *> *deletedIndexes, NSArray<NSIndexPath *> *addedIndexes);
 
 @protocol ContactViewModelProtocol <NSObject>
 @property DataBinding<NSString *>                   * searchObservable;
@@ -43,11 +47,14 @@ typedef void(^ViewModelResponseListBlock)(NSArray<ContactViewEntity *> * _Nullab
 
 - (void) loadContactsWithBlock: (ViewModelResponseListBlock) block;
 
-- (void) searchContactWithKeyName: (NSString *) key block:(ViewModelResponseListBlock) block;
+- (void) searchContactWithKeyName: (NSString *) key block:(SearchResponseBlock) block;
 
 - (void) selectectContactAtIndex: (NSIndexPath *) indexPath;
 
 - (void) removeSelectedContact: (NSString *) identifier;
+
+- (void) refreshTableWithNewData: (NSArray *) contacts
+                      completion:(UpdateTableResponseBlock)block;
 @end
 
 NS_ASSUME_NONNULL_END
