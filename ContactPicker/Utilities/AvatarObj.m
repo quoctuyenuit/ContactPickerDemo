@@ -9,11 +9,10 @@
 #import "AvatarObj.h"
 
 @implementation AvatarObj
-- (instancetype)initWithImage:(UIImage *)image label:(NSString *)label isGenerated:(BOOL)isGenerated identififer:(nonnull NSString *)identifier {
+- (instancetype)initWithImage:(UIImage *)image label:(NSString *)label isGenerated:(BOOL)isGenerated {
     _image          = image;
     _label          = label;
     _isGenerated    = isGenerated;
-    _identifier     = identifier;
     return self;
 }
 @end

@@ -68,21 +68,16 @@
 }
 
 - (void)binding:(NSString *)identifier label:(NSString *)label {
-   weak_self
-   [[ImageManager instance] imageForKey:identifier label:label block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
-       [imageObservable bindAndFire:^(AvatarObj * imgObj) {
-           strong_self
-           if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
-               dispatch_async(dispatch_get_main_queue(), ^{
-                   strong_self
-                   if (strongSelf) {
-                       NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                       [strongSelf->_avatarNode configWithImage:imgObj.image withTitle:label];
-                   }
-               });
-           }
-       }];
-   }];
+    weak_self
+    [[ImageManager instance] imageForKey:identifier label:label block:^(AvatarObj * _Nonnull image, NSString * _Nonnull identifier) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            strong_self
+            if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:identifier]) {
+                NSString * label = image.isGenerated ? image.label : @"";
+                [strongSelf->_avatarNode configWithImage:image.image withTitle:label];
+            }
+        });
+    }];
 }
 
 - (void)clearAction:(id) sender {

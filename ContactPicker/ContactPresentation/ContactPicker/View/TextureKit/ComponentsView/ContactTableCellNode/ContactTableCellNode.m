@@ -141,19 +141,14 @@
         _checkBox.isChecked                     = entity.isChecked;
         
         weak_self
-        [[ImageManager instance] imageForKey:entity.identifier label:entity.keyName block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
-            [imageObservable bindAndFire:^(AvatarObj * imgObj) {
+        [[ImageManager instance] imageForKey:entity.identifier  label:entity.keyName block:^(AvatarObj * _Nonnull image, NSString * _Nonnull identifier) {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 strong_self
-                if (strongSelf && [strongSelf->_contact.identifier isEqualToString:imgObj.identifier]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        strong_self
-                        if (strongSelf) {
-                            NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                            [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
-                        }
-                    });
+                if (strongSelf && [strongSelf->_contact.identifier isEqualToString:identifier]) {
+                    NSString * label = image.isGenerated ? image.label : @"";
+                    [strongSelf->_avatar configWithImage:image.image withTitle:label];
                 }
-            }];
+            });
         }];
     }
 }

@@ -23,7 +23,7 @@
 - (NSDictionary *)_JSONFromFile:(NSString *)filePath;
 - (UIImage *)_randomImage;
 - (UIImage *)_createGradientImageWithSize:(CGSize) size colors:(NSArray *) colors;
-- (ImageObservable *)_generateImageFromLabel:(NSString *) label forKey:(NSString *)key;
+- (AvatarObj *)_generateImageFromLabel:(NSString *) label forKey:(NSString *)key;
 @end
 
 @implementation ImageManager
@@ -35,7 +35,7 @@
     dispatch_once(&once, ^
     {
         sharedInstance = [[ImageManager alloc] _initWithSize:CACHE_SIZE];
-        [sharedInstance updateCache];
+        [sharedInstance updateCacheWithComplete:nil];
     });
     return sharedInstance;
 }
@@ -45,6 +45,9 @@
     _imageCache                 = [[NSCache alloc] init];
     _contactAdapter             = [[ContactAdapter alloc] init];
     _generatedImages            = [[NSMutableArray alloc] init];
+    _isLoaded                   = NO;
+    
+    _requestedBlock             = [[NSMutableDictionary alloc] init];
     
     _backgroundQueue            = dispatch_queue_create("ImageManage queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     
@@ -93,50 +96,56 @@
     return [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 }
 
-- (ImageObservable *)_generateImageFromLabel:(NSString *) label forKey:(NSString *)key {
+- (AvatarObj *)_generateImageFromLabel:(NSString *) label forKey:(NSString *)key {
     NSAssert(key, @"key is nil");
     UIImage * image = [self _randomImage];
-    AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:label isGenerated:YES identififer:key];
-    ImageObservable *imageObservable = [[ImageObservable alloc] initWithValue:imgObj];
-    
-    return imageObservable;
+    return [[AvatarObj alloc] initWithImage:image label:label isGenerated:YES];
 }
 
 #pragma mark - Public methods
-- (void)updateCache {
+- (void)updateCacheWithComplete:(void (^)(void))block {
     weak_self
     [_contactAdapter loadContactImagesWithBlock:^(NSDictionary<NSString *,NSData *> *images, NSError *error) {
-        strong_self
-        if (strongSelf) {
-            for (NSString * key in images.allKeys) {
-                NSData * imageData = [images objectForKey:key];
-                UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData]
-                                         scaledToFillSize:[ContactGlobalConfigure globalConfig].avatarSize];
-                ImageObservable * imageObservable = [strongSelf.imageCache objectForKey:key];
-                AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO identififer:key];
-                if (imageObservable) {
-                    imageObservable.value = imgObj;
-                } else {
-                    imageObservable = [[ImageObservable alloc] initWithValue:imgObj];
-                    [strongSelf.imageCache setObject:imageObservable forKey:key];
+        dispatch_async(weakSelf.backgroundQueue, ^{
+            strong_self
+            if (strongSelf) {
+                for (NSString * key in images.allKeys) {
+                    NSData * imageData = [images objectForKey:key];
+                    UIImage * image = [UIImage imageWithImage:[UIImage imageWithData:imageData]
+                                             scaledToFillSize:[ContactGlobalConfigure globalConfig].avatarSize];
+                    
+                    AvatarObj * imgObj = [[AvatarObj alloc] initWithImage:image label:@"" isGenerated:NO];
+                    [strongSelf.imageCache setObject:imgObj forKey:key];
+                    
+                    NSMutableArray *queue = [strongSelf->_requestedBlock objectForKey:key];
+                    for (ResponseImageBlock block in queue) {
+                        block(imgObj, key);
+                    }
                 }
+                strongSelf->_isLoaded = YES;
             }
-        }
+            if (block) {
+                block();
+            }
+        });
     }];
 }
 
 - (void)imageForKey:(NSString *)key
               label:(NSString *)label
-              block:(void (^)(ImageObservable * _Nonnull imageObservable))block {
+              block:(ResponseImageBlock)block {
     NSAssert(block, @"block is nil");
     NSAssert(key, @"key is nil");
-    
     /** Allow to get image immediately if image in cache.
      * if have multiple request in once time, we can adapt all one in same time.
      */
-    ImageObservable *imageObservable = [_imageCache objectForKey:key];
-    if (imageObservable) {
-        block(imageObservable);
+    AvatarObj *img = [_imageCache objectForKey:key];
+    if (!img) {
+        img = [self _generateImageFromLabel:label forKey:key];
+    }
+    block(img, key);
+    
+    if (_isLoaded) {
         return;
     }
     
@@ -147,12 +156,19 @@
     dispatch_async(_backgroundQueue, ^{
         strong_self
         if (strongSelf) {
-            ImageObservable *imageObservable = [strongSelf.imageCache objectForKey:key];
-            if (!imageObservable) {
-                imageObservable = [strongSelf _generateImageFromLabel:label forKey:key];
-                [strongSelf->_imageCache setObject:imageObservable forKey:key];
+            AvatarObj *imgInCache = [strongSelf.imageCache objectForKey:key];
+            if (!imgInCache) {
+                [strongSelf->_imageCache setObject:img forKey:key];
+                
+                NSMutableArray *queue = [strongSelf->_requestedBlock objectForKey:key];
+                if (!queue) {
+                    queue = [NSMutableArray array];
+                    [strongSelf->_requestedBlock setObject:queue forKey:key];
+                }
+                [queue addObject:block];
+            } else {
+                block(imgInCache, key);
             }
-            block(imageObservable);
         }
     });
 }

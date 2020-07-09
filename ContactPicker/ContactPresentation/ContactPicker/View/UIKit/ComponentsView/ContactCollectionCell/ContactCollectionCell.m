@@ -74,20 +74,16 @@
 
 - (void)binding:(NSString *)identifier label:(NSString *)label {
     _currentIdentifier  = identifier;
+    
     weak_self
-    [[ImageManager instance] imageForKey:identifier label:label block:^(DataBinding<AvatarObj *> * _Nonnull imageObservable) {
-        [imageObservable bindAndFire:^(AvatarObj * imgObj) {
+    [[ImageManager instance] imageForKey:identifier label:label block:^(AvatarObj * _Nonnull image, NSString * _Nonnull identifier) {
+        dispatch_async(dispatch_get_main_queue(), ^{
             strong_self
-            if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:imgObj.identifier]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    strong_self
-                    if (strongSelf) {
-                        NSString * label = imgObj.isGenerated ? imgObj.label : @"";
-                        [strongSelf->_avatar configWithImage:imgObj.image withTitle:label];
-                    }
-                });
+            if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:identifier]) {
+                NSString * label = image.isGenerated ? image.label : @"";
+                [strongSelf->_avatar configWithImage:image.image withTitle:label];
             }
-        }];
+        });
     }];
 }
 

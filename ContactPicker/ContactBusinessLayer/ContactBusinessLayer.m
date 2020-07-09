@@ -16,11 +16,11 @@
 #import "NSErrorExtension.h"
 
 #define BUSINESS_ERROR_DOMAIN   @"BusinessError"
+#define SEARCH_HEADER                     @"search"
 
 #define LOG_ADAPTER                     0
 #if LOG_ADAPTER
 #define LogBusiness(...)                 NSLog(__VA_ARGS__)
-#define SEARCH_HEADER                     @"search"
 #else
 #define LogAdapter(...)
 #endif
@@ -136,10 +136,8 @@
     }
     
     _searchReady = NO;
-    LogBusiness(@"[%@]new request search: %@", SEARCH_HEADER, name);
     weak_self
     dispatch_async(_searchQueue, ^{
-        LogBusiness(@"[%@]begin search: %@", SEARCH_HEADER, name);
         strong_self
         if (strongSelf) {
             strongSelf->_searchReady = YES;

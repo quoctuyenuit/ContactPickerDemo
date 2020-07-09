@@ -73,21 +73,23 @@
     weak_self
     [_contactBus.contactDidChangedObservable binding:^(NSArray<id<ContactBusEntityProtocol>> * updatedContacts) {
         dispatch_async(weakSelf.backgroundSerialQueue, ^{
-            strong_self
-            if (strongSelf) {
-                [[ImageManager instance] updateCache];
-                NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate = [[NSMutableDictionary alloc] init];
-                
-                for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
+            [[ImageManager instance] updateCacheWithComplete:^{
+                strong_self
+                if (strongSelf) {
+                    NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate = [[NSMutableDictionary alloc] init];
                     
-                    ContactViewEntity * oldContact = [strongSelf.dataSource objectOfIdentifier:newContact.identifier];
-                    if (![oldContact isEqualWithBusEntity:newContact]) {
-                        [oldContact updateContactWithBus:newContact];
-                        [indexsNeedUpdate setObject:oldContact forKey: [NSIndexPath indexPathForRow:0 inSection:0]];
+                    for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
+                        
+                        ContactViewEntity * oldContact = [strongSelf.dataSource objectOfIdentifier:newContact.identifier];
+                        if (![oldContact isEqualWithBusEntity:newContact]) {
+                            [oldContact updateContactWithBus:newContact];
+                            [indexsNeedUpdate setObject:oldContact forKey: [NSIndexPath indexPathForRow:0 inSection:0]];
+                        }
                     }
+                    strongSelf.contactBookObservable.value = [NSNumber numberWithInt:0];
                 }
-                strongSelf.contactBookObservable.value = [NSNumber numberWithInt:0];
-            }
+            }];
+            
         });
     }];
 }
