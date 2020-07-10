@@ -48,10 +48,11 @@
 		B08F268F24B6BA0400AF7F6F /* ContactGlobalConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = B08F268E24B6BA0400AF7F6F /* ContactGlobalConfigure.m */; };
 		B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0979AEC24889BB5008D05F4 /* ContactTableViewCell.m */; };
 		B0A04B2C24A0F91E00BED688 /* TabbarOnTopItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A04B2B24A0F91E00BED688 /* TabbarOnTopItemView.m */; };
-		B0AAA6F724B464CC00B7E0E3 /* gradient_colors.json in Resources */ = {isa = PBXBuildFile; fileRef = B0AAA6E324B4630300B7E0E3 /* gradient_colors.json */; };
 		B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */; };
 		B0ABD43C24878BEA00E557E1 /* ContactDAL.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43B24878BEA00E557E1 /* ContactDAL.m */; };
 		B0ABD43F24878DFB00E557E1 /* ContactAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */; };
+		B0BA6C3124B80E000063B568 /* ImageRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BA6C3024B80E000063B568 /* ImageRequestHandler.m */; };
+		B0BA6C4224B81CE30063B568 /* TableChangeset.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BA6C4124B81CE30063B568 /* TableChangeset.m */; };
 		B0C1534524AF22BA005D63B7 /* CKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1534224AF22A9005D63B7 /* CKSwift.framework */; };
 		B0C1534624AF22BA005D63B7 /* CKSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1534224AF22A9005D63B7 /* CKSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B0C1534724AF22BA005D63B7 /* ComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C1532A24AF22A9005D63B7 /* ComponentKit.framework */; };
@@ -294,7 +295,6 @@
 		B0A04B2A24A0F91E00BED688 /* TabbarOnTopItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopItemView.h; sourceTree = "<group>"; };
 		B0A04B2B24A0F91E00BED688 /* TabbarOnTopItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TabbarOnTopItemView.m; sourceTree = "<group>"; };
 		B0A04B2D24A1036700BED688 /* TabbarOnTopItemDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TabbarOnTopItemDelegate.h; sourceTree = "<group>"; };
-		B0AAA6E324B4630300B7E0E3 /* gradient_colors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = gradient_colors.json; sourceTree = "<group>"; };
 		B0ABD43224873F6100E557E1 /* CheckBoxButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonView.h; sourceTree = "<group>"; };
 		B0ABD43324873F6100E557E1 /* CheckBoxButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckBoxButtonView.m; sourceTree = "<group>"; };
 		B0ABD43924878AAF00E557E1 /* ContactAdapterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactAdapterProtocol.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -304,6 +304,10 @@
 		B0ABD43E24878DFB00E557E1 /* ContactAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactAdapter.m; sourceTree = "<group>"; };
 		B0B0B93524A5FBB80083E24E /* HorizontalListItemProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalListItemProtocol.h; sourceTree = "<group>"; };
 		B0B5900D248B502700BDB0CC /* ContactViewModelProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewModelProtocol.h; sourceTree = "<group>"; };
+		B0BA6C2F24B80E000063B568 /* ImageRequestHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageRequestHandler.h; sourceTree = "<group>"; };
+		B0BA6C3024B80E000063B568 /* ImageRequestHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageRequestHandler.m; sourceTree = "<group>"; };
+		B0BA6C4024B81CE30063B568 /* TableChangeset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableChangeset.h; sourceTree = "<group>"; };
+		B0BA6C4124B81CE30063B568 /* TableChangeset.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableChangeset.m; sourceTree = "<group>"; };
 		B0C1531624AF22A9005D63B7 /* ComponentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ComponentKit.xcodeproj; path = Frameworks/componentkit/ComponentKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		B0C1C24B249101A100634829 /* CheckBoxButtonDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckBoxButtonDelegate.h; sourceTree = "<group>"; };
 		B0C254FB2497910000ECA551 /* ContactTableControllerTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactTableControllerTexture.h; sourceTree = "<group>"; };
@@ -590,6 +594,8 @@
 				193E336724851C8400C5735D /* ContactViewEntity.m */,
 				B088FDA824B2D16000C893FC /* TableModelSection.h */,
 				B088FDA924B2D16000C893FC /* TableModelSection.m */,
+				B0BA6C4024B81CE30063B568 /* TableChangeset.h */,
+				B0BA6C4124B81CE30063B568 /* TableChangeset.m */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -688,9 +694,10 @@
 				B072C90B24AC3E4E0087BEED /* NSErrorExtension.m */,
 				B05CA07624AD7ABF00F68AE4 /* AvatarObj.h */,
 				B05CA07724AD7ABF00F68AE4 /* AvatarObj.m */,
-				B0AAA6E324B4630300B7E0E3 /* gradient_colors.json */,
 				B08F268D24B6BA0400AF7F6F /* ContactGlobalConfigure.h */,
 				B08F268E24B6BA0400AF7F6F /* ContactGlobalConfigure.m */,
+				B0BA6C2F24B80E000063B568 /* ImageRequestHandler.h */,
+				B0BA6C3024B80E000063B568 /* ImageRequestHandler.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1108,7 +1115,6 @@
 				193E333B2484F31C00C5735D /* LaunchScreen.storyboard in Resources */,
 				193E33382484F31C00C5735D /* Assets.xcassets in Resources */,
 				193E33362484F31A00C5735D /* Main.storyboard in Resources */,
-				B0AAA6F724B464CC00B7E0E3 /* gradient_colors.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1251,6 +1257,7 @@
 				B0090E4324B5B095007EC2E2 /* ContactTableDataSource.m in Sources */,
 				B0C255002497912300ECA551 /* ContactTableCellNode.m in Sources */,
 				B072C90924AC278E0087BEED /* ImageManager.m in Sources */,
+				B0BA6C4224B81CE30063B568 /* TableChangeset.m in Sources */,
 				B060EAA124A0D51A00F367FC /* ContactTableControllerComponentKit.mm in Sources */,
 				B05CA08D24AE08C100F68AE4 /* TableIndexView.m in Sources */,
 				B0ABD43424873F6100E557E1 /* CheckBoxButtonView.m in Sources */,
@@ -1274,6 +1281,7 @@
 				B08F268F24B6BA0400AF7F6F /* ContactGlobalConfigure.m in Sources */,
 				B0F12CE82499FE6C00D038EC /* HorizontalListNode.m in Sources */,
 				B0979AEE24889BB5008D05F4 /* ContactTableViewCell.m in Sources */,
+				B0BA6C3124B80E000063B568 /* ImageRequestHandler.m in Sources */,
 				B0FC11EC2499DAC10056F586 /* ContactCollectionCellNode.m in Sources */,
 				B02A51102487EF2000B9CC1B /* ContactBusinessLayer.m in Sources */,
 				B05CA07824AD7ABF00F68AE4 /* AvatarObj.m in Sources */,

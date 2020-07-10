@@ -9,6 +9,7 @@
 #ifndef ContactViewModelProtocol_h
 #define ContactViewModelProtocol_h
 #import "ContactViewEntity.h"
+#import "TableChangeset.h"
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -19,12 +20,12 @@ typedef void(^SearchResponseBlock)(NSArray<ContactViewEntity *> * _Nullable cont
 typedef void(^UpdateTableResponseBlock)(NSArray<NSIndexPath *> *deletedIndexes, NSArray<NSIndexPath *> *addedIndexes);
 
 @protocol ContactViewModelProtocol <NSObject>
-@property DataBinding<NSString *>                   * searchObservable;
-@property DataBinding<NSNumber *>                   * contactBookObservable;
-@property DataBinding<NSIndexPath *>                * selectedContactRemoveObservable;
-@property DataBinding<NSIndexPath *>                * selectedContactAddedObservable;
-@property DataBinding<NSArray<NSIndexPath *> *>     * removeContactObservable;
-@property DataBinding<NSIndexPath *>                * cellNeedRemoveSelectedObservable;
+@property DataBinding<NSString *> *                 searchObservable;
+@property DataBinding<TableChangeset *> *           contactBookObservable;
+@property DataBinding<NSIndexPath *> *              selectedContactRemoveObservable;
+@property DataBinding<NSIndexPath *> *              selectedContactAddedObservable;
+@property DataBinding<NSArray<NSIndexPath *> *> *   removeContactObservable;
+@property DataBinding<NSIndexPath *> *              cellNeedRemoveSelectedObservable;
 
 #pragma mark - ContactTableDataSource methods
 - (NSInteger) numberOfSection;

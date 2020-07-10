@@ -30,7 +30,7 @@
 
 - (void) testRequestPermission {
     XCTestExpectation * permissionExpectation = [self expectationWithDescription:@"request permission expectation"];
-    [self.contactBus requestPermission:^(BOOL granted, NSError * error) {
+    [self.contactBus requestPermissionWithBlock:^(BOOL granted, NSError * error) {
         if (granted) {
             XCTAssertNil(error, @"Have error when user granted permission");
         } else {

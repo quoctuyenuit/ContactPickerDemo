@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TableModelSection : NSObject
 
 
-@property(nonatomic, copy) NSString         * headerTitle;
-@property(nonatomic, copy) NSString         * footerTitle;
-@property(nonatomic, strong) NSMutableArray * rows;
+@property(nonatomic, copy) NSString *           headerTitle;
+@property(nonatomic, copy) NSString *           footerTitle;
+@property(nonatomic, strong) NSMutableArray *   rows;
 
 - (instancetype)initWithHeaderTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
 

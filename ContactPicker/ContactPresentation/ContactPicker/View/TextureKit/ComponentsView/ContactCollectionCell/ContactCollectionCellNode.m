@@ -69,12 +69,12 @@
 
 - (void)binding:(NSString *)identifier label:(NSString *)label {
     weak_self
-    [[ImageManager instance] imageForKey:identifier label:label block:^(AvatarObj * _Nonnull image, NSString * _Nonnull identifier) {
+    [[ImageManager instance] imageForKey:identifier block:^(AvatarObj * _Nonnull image, NSString * _Nonnull identifier) {
         dispatch_async(dispatch_get_main_queue(), ^{
             strong_self
             if (strongSelf && [strongSelf->_currentIdentifier isEqualToString:identifier]) {
-                NSString * label = image.isGenerated ? image.label : @"";
-                [strongSelf->_avatarNode configWithImage:image.image withTitle:label];
+                NSString * inlabel = image.isGenerated ? label : @"";
+                [strongSelf->_avatarNode configWithImage:image.image withTitle:inlabel];
             }
         });
     }];

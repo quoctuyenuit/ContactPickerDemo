@@ -27,9 +27,14 @@
 #define CONTACT_BATCH_SIZE              200
 #define STRONG_SELF_DEALLOCATED_MSG     @"strongSelf had deallocated"
 
-@interface ContactViewModel() {
-}
-- (void) _setupEvents;
+@interface ContactViewModel() <ContactBusinessLayerDelegate>
+
+@property(nonatomic) id<ContactBusinessLayerProtocol>       contactBus;
+@property(nonatomic) NSMutableArray<ContactViewEntity *> *  listSelectedContacts;
+@property(nonatomic) ContactTableDataSource *               dataSource;
+@property(nonatomic) dispatch_queue_t                       backgroundConcurrentQueue;
+@property(nonatomic) dispatch_queue_t                       backgroundSerialQueue;
+
 @end
 
 @implementation ContactViewModel
@@ -48,6 +53,7 @@
 
 - (id)initWithBus:(id<ContactBusinessLayerProtocol>)bus {
     _contactBus                 = bus;
+    _contactBus.delegate        = self;
     _backgroundSerialQueue      = dispatch_queue_create("[ViewModel] searching queue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0));
     _backgroundConcurrentQueue  = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
@@ -62,37 +68,11 @@
     self.removeContactObservable            = [[DataBinding alloc] initWithValue:nil];
     self.selectedContactAddedObservable     = [[DataBinding alloc] initWithValue:nil];
     self.selectedContactRemoveObservable    = [[DataBinding alloc] initWithValue:nil];
-    [self _setupEvents];
     
     return self;
 }
 
 #pragma mark - Helper methods
-
-- (void)_setupEvents {
-    weak_self
-    [_contactBus.contactDidChangedObservable binding:^(NSArray<id<ContactBusEntityProtocol>> * updatedContacts) {
-        dispatch_async(weakSelf.backgroundSerialQueue, ^{
-            [[ImageManager instance] updateCacheWithComplete:^{
-                strong_self
-                if (strongSelf) {
-                    NSMutableDictionary<NSIndexPath *, ContactViewEntity *> * indexsNeedUpdate = [[NSMutableDictionary alloc] init];
-                    
-                    for (id<ContactBusEntityProtocol> newContact in updatedContacts) {
-                        
-                        ContactViewEntity * oldContact = [strongSelf.dataSource objectOfIdentifier:newContact.identifier];
-                        if (![oldContact isEqualWithBusEntity:newContact]) {
-                            [oldContact updateContactWithBus:newContact];
-                            [indexsNeedUpdate setObject:oldContact forKey: [NSIndexPath indexPathForRow:0 inSection:0]];
-                        }
-                    }
-                    strongSelf.contactBookObservable.value = [NSNumber numberWithInt:0];
-                }
-            }];
-            
-        });
-    }];
-}
 
 - (void)_addContacts:(NSArray<ContactViewEntity *> *) contacts block: (void (^)(NSArray<NSIndexPath *> * updatedIndexPaths)) block {
     NSAssert(block, @"block is nil");
@@ -155,7 +135,7 @@
 #pragma mark Public methods
 - (void)requestPermissionWithBlock:(void (^)(BOOL, NSError *))block {
     NSAssert(block, @"completion is nil");
-    [self->_contactBus requestPermission:block];
+    [self->_contactBus requestPermissionWithBlock:block onQueue:dispatch_get_main_queue()];
 }
 
 - (void)loadContactsWithBlock:(ViewModelResponseListBlock)block {
@@ -187,7 +167,7 @@
                         block(nil, error);
                     });
                 }
-            }];
+            } onQueue:strongSelf.backgroundSerialQueue];
         }
     });
 }
@@ -221,7 +201,7 @@
                 } else {
                     block(nil, error);
                 }
-            }];
+            } onQueue:strongSelf.backgroundSerialQueue];
         }
     });
 }
@@ -264,6 +244,26 @@
     NSIndexPath * index = [self.dataSource indexPathOfObject:contact];
     
     self.cellNeedRemoveSelectedObservable.value = index;
+}
+
+#pragma mark - ContactBusinessLayerDelegate methods
+- (void)contactDidChangedWithBusiness:(id<ContactBusinessLayerProtocol>)business
+                        contactsAdded:(NSArray *)contactsAdded
+                      contactsRemoved:(NSArray *)contactsRemoved
+                      contactsUpdated:(NSArray *)contactsUpdated {
+    weak_self
+    dispatch_async(weakSelf.backgroundSerialQueue, ^{
+        [[ImageManager instance] updateCacheWithCompletion:^{
+            NSArray * viewContacts = [contactsUpdated map:^ContactViewEntity* _Nonnull(id<ContactBusEntityProtocol>  _Nonnull obj) {
+                return [[ContactViewEntity alloc] initWithBusEntity:obj];
+            }];
+            
+            [weakSelf refreshTableWithNewData:viewContacts completion:^(NSArray<NSIndexPath *> * _Nonnull deletedIndexes, NSArray<NSIndexPath *> * _Nonnull addedIndexes) {
+                weakSelf.contactBookObservable.value = [[TableChangeset alloc] initWithDeletedIndexes:deletedIndexes addedIndexes:addedIndexes];
+            }];
+        }];
+        
+    });
 }
 
 @end

@@ -75,11 +75,11 @@
 #pragma mark - Helper methods
 - (void)setupEvents {
     weak_self
-    [self.viewModel.contactBookObservable binding:^(NSNumber * flag) {
+    [self.viewModel.contactBookObservable binding:^(TableChangeset * changeset) {
         strong_self
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf reloadTable];
+                [strongSelf reloadTableWithDeletedIndexes:changeset.deletedIndexs addedIndexes:changeset.addedIndexes];
             });
         }
     }];

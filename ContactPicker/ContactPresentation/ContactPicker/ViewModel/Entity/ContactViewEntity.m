@@ -25,8 +25,14 @@
 
 - (NSString *)keyName {
     NSArray * names = [_fullName.string componentsSeparatedByString:@" "];
-    NSString * first = [[names firstObject] substringToIndex: 1];
-    NSString * last = [[names lastObject] substringToIndex: 1];
+    if (names.count == 0)
+        return @"";
+    
+    NSString * first = [names firstObject];
+    first = (first != nil && first.length >= 1) ? [first substringToIndex:1] : @"";
+    
+    NSString * last = [names lastObject];
+    last = (last != nil && last.length >= 1) ? [last substringToIndex:1] : @"";
 
     return [NSString stringWithFormat:@"%@%@", first ? first : @"", last ? last : @""];
 }

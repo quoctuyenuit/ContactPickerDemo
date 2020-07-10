@@ -23,7 +23,7 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>13</integer>
+			<integer>14</integer>
 		</dict>
 		<key>PINRemoteImage.xcscheme</key>
 		<dict>
@@ -37,7 +37,7 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>11</integer>
+			<integer>12</integer>
 		</dict>
 		<key>Pods-ContactPicker.xcscheme</key>
 		<dict>
@@ -51,7 +51,7 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>12</integer>
+			<integer>13</integer>
 		</dict>
 		<key>Texture.xcscheme</key>
 		<dict>

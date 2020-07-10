@@ -117,7 +117,7 @@
 
 - (void)testGetImageByIdWithInvalidInput {
     XCTestExpectation * expect = [self expectationWithDescription:@"load contact by id"];
-    [self.contactAdapter getImageById:nil block:^(NSData *image, NSError *error) {
+    [self.contactAdapter loadImageWithIdentifier:nil block:^(NSData *image, NSError *error) {
         XCTAssertNil(image, @"Return image is not nil with invalid id");
         XCTAssertNotNil(error, @"erorr is not nil with invalid input");
         [expect fulfill];

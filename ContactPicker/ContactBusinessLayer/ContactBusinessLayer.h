@@ -15,17 +15,7 @@
 #import "DataBinding.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ContactBusinessLayer : NSObject<ContactBusinessLayerProtocol> {
-    id<ContactAdapterProtocol> _contactAdapter; 
-}
-@property(nonatomic, readonly) id<ContactAdapterProtocol>       contactAdapter;
-@property(atomic, readonly) NSMutableArray<ContactBusEntity *>  *contacts;
-@property(atomic, readonly) BOOL                                loadInProcessing;
-@property(atomic, readonly) BOOL                                searchReady;
-
-@property(nonatomic, readonly) dispatch_queue_t                 backgroundQueue;
-@property(nonatomic, readonly) dispatch_queue_t                 searchQueue;
-
+@interface ContactBusinessLayer : NSObject<ContactBusinessLayerProtocol>
 - (id) initWithAdapter: (id<ContactAdapterProtocol>) adapter;
 @end
 

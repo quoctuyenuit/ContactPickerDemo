@@ -29,7 +29,7 @@
 
 - (NSComparisonResult)compare:(ContactBusEntity *)other
 {
-    return [self.givenName compare:other.givenName];
+    return [self.identifier isEqualToString: other.identifier];
 }
 
 - (BOOL)compareWithNameQuery:(NSString *)query {

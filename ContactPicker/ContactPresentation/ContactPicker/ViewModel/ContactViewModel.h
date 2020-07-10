@@ -19,13 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ContactViewModel : NSObject<ContactViewModelProtocol>
 
-@property(nonatomic, readonly) id<ContactBusinessLayerProtocol>     contactBus;
-@property(nonatomic, readonly) NSMutableArray<ContactViewEntity *>  *listSelectedContacts;
-@property(atomic, readonly) ContactTableDataSource                  *dataSource;
-
-@property(nonatomic, readonly) dispatch_queue_t     backgroundConcurrentQueue;
-@property(nonatomic, readonly) dispatch_queue_t     backgroundSerialQueue;
-
 - (id)initWithBus: (id<ContactBusinessLayerProtocol>) bus;
 @end
 

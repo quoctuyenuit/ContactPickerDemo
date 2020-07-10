@@ -13,34 +13,57 @@
 #import "DataBinding.h"
 #import "ContactDALProtocol.h"
 
+@protocol ContactAdapterDelegate;
+
 typedef void(^AdapterResponseListBlock)(NSArray<id<ContactDALProtocol>> * contacts, NSError * error);
 typedef void(^AdapterResponseContactBlock)(id<ContactDALProtocol> contact, NSError * error);
 typedef void(^AdapterResponseListImageBlock)(NSDictionary<NSString *, NSData *> * images, NSError * error);
 
 @protocol ContactAdapterProtocol <NSObject>
 
-@property DataBinding<NSNumber *> * contactChangedObservable;
+@property(nonatomic, weak) id<ContactAdapterDelegate> delegate;
 
 @required
 
+/**
+ * Request contact permission and return result asynchronus through block
+ * @param block call back block to return result
+ * @param queue the queue that result will dispatch result on it
+ */
+- (void) requestPermission:(void (^)(BOOL isSuccess, NSError * error)) block
+                   onQueue:(dispatch_queue_t)queue;
 
-- (void) requestPermission: (void (^)(BOOL isSuccess, NSError * error)) handler;
+/**
+ * Load all of contact and return result asynchronus through block
+ * @param block call back block to return result
+ * @param queue the queue that result will dispatch result on it
+ */
+- (void) loadContactsWithBlock:(AdapterResponseListBlock) block
+                       onQueue:(dispatch_queue_t)queue;
 
-//Load all of contacts
-- (void) loadContactsWithBlock: (AdapterResponseListBlock) block;
-
-//Load one contact by identifier
-- (void) loadContactById: (NSString *) identifier
-                   block: (AdapterResponseContactBlock) block;
-
-//Load batch of contacts by list of identifiers
-- (void) loadContactsByBatch: (NSArray<NSString *> *) identifiers
-                      block: (AdapterResponseListBlock) block;
-
-- (void) loadContactImagesWithBlock:(AdapterResponseListImageBlock) block;
-
-- (void) getImageById: (NSString *) identifier
-                block: (void (^)(NSData * imageData, NSError * error)) block;
+/**
+ * Load contact by batch, take a list of identifiers and return result asynchronus through block
+ * @param identifiers list of identifiers that need to load detail contact
+ * @param block call back block to return result
+ * @param queue the queue that result will dispatch result on it
+ */
+- (void) loadContactsByBatch:(NSArray<NSString *> *) identifiers
+                       block:(AdapterResponseListBlock) block
+                     onQueue:(dispatch_queue_t)queue;
+/**
+ * Load contact by batch, take a list of identifiers and return result asynchronus through block
+ * @param identifier identifier of image that need to load
+ * @param block call back block to return result
+ * @param queue the queue that result will dispatch result on it
+ */
+- (void) loadImageWithIdentifier:(NSString *) identifier
+                           block:(void (^)(NSData * imageData, NSError * error)) block
+                         onQueue:(dispatch_queue_t)queue;
 @end
 
+@protocol ContactAdapterDelegate <NSObject>
+
+- (void)contactDidChangeWithAdapter:(id<ContactAdapterProtocol>)adapter;
+
+@end
 #endif /* ContactAdapterProtocol_h */
